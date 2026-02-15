@@ -37,7 +37,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BookmarkItem item = list.get(position);
         holder.tvTitle.setText(item.title);
-        
+
         if (item.type == BookmarkItem.Type.FOLDER) {
             holder.ivIcon.setImageResource(R.drawable.ic_folder);
             holder.tvUrl.setVisibility(View.GONE);

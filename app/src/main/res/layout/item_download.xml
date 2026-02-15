@@ -40,7 +40,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical">
-            
+
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_width="0dp"
@@ -65,7 +65,7 @@
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
                 app:tint="#757575" />
-                
+
         </LinearLayout>
 
     </LinearLayout>

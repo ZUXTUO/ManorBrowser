@@ -63,9 +63,24 @@ public class SettingsActivity extends AppCompatActivity {
         containerSearchEngine.setOnClickListener(v -> showSearchEngineDialog());
 
         View containerBgEffect = findViewById(R.id.container_background_effect_select);
+
         if (containerBgEffect != null) {
             containerBgEffect.setOnClickListener(v -> showBackgroundEffectDialog());
             updateCurrentBackgroundEffectText();
+        }
+
+        View containerLanguage = findViewById(R.id.container_language_select);
+        if (containerLanguage != null) {
+            containerLanguage.setOnClickListener(v -> showLanguageDialog());
+            updateCurrentLanguageText();
+        }
+
+        View containerAbout = findViewById(R.id.container_about);
+        if (containerAbout != null) {
+            containerAbout.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
+                startActivity(intent);
+            });
         }
     }
     
@@ -194,6 +209,62 @@ public class SettingsActivity extends AppCompatActivity {
                 containerSolid.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void showLanguageDialog() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentLang = prefs.getString(Config.PREF_KEY_LANGUAGE, "");
+        
+        int checkedItem = 0;
+        if ("en".equals(currentLang)) checkedItem = 1;
+        else if ("zh".equals(currentLang)) checkedItem = 2;
+
+        String[] languages = {
+            getString(R.string.language_system),
+            getString(R.string.language_en),
+            getString(R.string.language_zh)
+        };
+        String[] values = {"", "en", "zh"};
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.title_language)
+                .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(Config.PREF_KEY_LANGUAGE, values[which]);
+                    editor.apply();
+                    
+                    com.olsc.manorbrowser.utils.LocaleHelper.setLocale(this, values[which]);
+                    
+                    dialog.dismiss();
+                    
+                    android.content.Intent intent = new android.content.Intent(this, MainActivity.class);
+                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    
+                    finish();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void updateCurrentLanguageText() {
+        android.widget.TextView tvLanguage = findViewById(R.id.tv_current_language);
+        if (tvLanguage == null) return;
+        
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentLang = prefs.getString(Config.PREF_KEY_LANGUAGE, "");
+        
+        String display;
+        if ("en".equals(currentLang)) display = getString(R.string.language_en);
+        else if ("zh".equals(currentLang)) display = getString(R.string.language_zh);
+        else display = getString(R.string.language_system);
+        
+        tvLanguage.setText(display);
+    }
+
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
     }
 
     @Override

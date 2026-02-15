@@ -155,8 +155,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_home"
-                android:contentDescription="@string/desc_home"
+                android:src="@drawable/ic_bookmark"
+                android:contentDescription="@string/action_bookmarks"
                 app:tint="@color/icon_main" />
 
             <FrameLayout

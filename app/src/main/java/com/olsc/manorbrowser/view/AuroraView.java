@@ -26,11 +26,11 @@ public class AuroraView extends View {
     private final Random random = new Random();
     private final List<AuroraCurtain> curtains = new ArrayList<>();
     private final List<Star> stars = new ArrayList<>();
-    
+
     private float time = 0;
 
     private boolean isPureColorMode = false;
-    private int solidColor = 0xFF00FF99; 
+    private int solidColor = 0xFF00FF99;
     private ColorWheel colorWheel;
     private boolean showColorWheel = false;
 
@@ -62,7 +62,7 @@ public class AuroraView extends View {
         auroraPaint.setAntiAlias(true);
         auroraPaint.setStyle(Paint.Style.FILL);
         auroraPaint.setMaskFilter(new BlurMaskFilter(30 * density, BlurMaskFilter.Blur.NORMAL));
-        
+
         colorWheel = new ColorWheel();
     }
 
@@ -70,7 +70,7 @@ public class AuroraView extends View {
         this.isPureColorMode = enabled;
         invalidate();
     }
-    
+
     public void setSolidColor(int color) {
         this.solidColor = color;
         if (colorWheel != null) {
@@ -78,11 +78,11 @@ public class AuroraView extends View {
         }
         invalidate();
     }
-    
+
     public int getSolidColor() {
         return solidColor;
     }
-    
+
     public void setShowColorWheel(boolean show) {
         this.showColorWheel = show;
         invalidate();
@@ -96,7 +96,7 @@ public class AuroraView extends View {
 
         LinearGradient bgGradient = new LinearGradient(
                 0, 0, 0, height,
-                new int[]{0xFF000000, 0xFF0B1026}, 
+                new int[]{0xFF000000, 0xFF0B1026},
                 null, Shader.TileMode.CLAMP);
         bgPaint.setShader(bgGradient);
 
@@ -111,9 +111,9 @@ public class AuroraView extends View {
 
     private void regenerateCurtains() {
         curtains.clear();
-        curtains.add(new AuroraCurtain(0xFF00FF99, height * 0.3f, 1.0f)); 
-        curtains.add(new AuroraCurtain(0xFF00CCFF, height * 0.4f, 0.8f)); 
-        curtains.add(new AuroraCurtain(0xFF9900FF, height * 0.5f, 0.6f)); 
+        curtains.add(new AuroraCurtain(0xFF00FF99, height * 0.3f, 1.0f));
+        curtains.add(new AuroraCurtain(0xFF00CCFF, height * 0.4f, 0.8f));
+        curtains.add(new AuroraCurtain(0xFF9900FF, height * 0.5f, 0.6f));
     }
 
     @Override
@@ -135,7 +135,7 @@ public class AuroraView extends View {
                 curtain.draw(canvas, auroraPaint);
             }
         }
-        
+
         if (showColorWheel && isPureColorMode) {
             colorWheel.draw(canvas);
         }
@@ -144,7 +144,7 @@ public class AuroraView extends View {
             postInvalidateOnAnimation();
         }
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (showColorWheel && isPureColorMode) {
@@ -155,7 +155,7 @@ public class AuroraView extends View {
                  return true;
              }
              if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                 return false; 
+                 return false;
              }
         }
         return super.onTouchEvent(event);
@@ -168,7 +168,7 @@ public class AuroraView extends View {
 
         Star(int w, int h) {
             x = random.nextFloat() * w;
-            y = random.nextFloat() * h * 0.7f; 
+            y = random.nextFloat() * h * 0.7f;
             size = (0.5f + random.nextFloat()) * density;
             baseAlpha = 100 + random.nextInt(155);
             alpha = baseAlpha;
@@ -184,7 +184,7 @@ public class AuroraView extends View {
 
     private class AuroraCurtain {
         private final int color;
-        private final float baseHeight; 
+        private final float baseHeight;
         private final Path path = new Path();
         private final float speedFactor;
         private final float[] offsets = new float[5];
@@ -198,7 +198,7 @@ public class AuroraView extends View {
 
         void update(float t) {
             path.reset();
-            path.moveTo(-100, -100); 
+            path.moveTo(-100, -100);
             for (int x = -50; x <= width + 50; x += (int)(20 * density)) {
                 float wave1 = (float)Math.sin(x * 0.0015f + t * speedFactor + offsets[0]) * (80 * density);
                 float wave2 = (float)Math.sin(x * 0.004f + t * 0.5f * speedFactor + offsets[1]) * (50 * density);
@@ -214,13 +214,13 @@ public class AuroraView extends View {
             LinearGradient shader = new LinearGradient(
                     0, 0, 0, baseHeight + 100 * density,
                     new int[]{ Color.TRANSPARENT, color, Color.TRANSPARENT },
-                    new float[]{ 0.1f, 0.6f, 1.0f }, 
+                    new float[]{ 0.1f, 0.6f, 1.0f },
                     Shader.TileMode.CLAMP);
             paint.setShader(shader);
             canvas.drawPath(path, paint);
         }
     }
-    
+
     private class ColorWheel {
         float cx, cy, radius;
         Paint wheelPaint;
@@ -228,28 +228,27 @@ public class AuroraView extends View {
         int selectedColor = 0xFF00FF99;
         boolean isDraggingWheel = false;
         boolean isDraggingValue = false;
-        
+
         float currentHue = 150f;
         float currentValue = 1f;
 
-        
         float sx, sy, sw, sh;
-        
+
         ColorWheel() {
             wheelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             wheelPaint.setStyle(Paint.Style.STROKE);
-            
+
             valueSliderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             valueSliderPaint.setStyle(Paint.Style.FILL);
         }
-        
+
         void updateBounds(int w, int h, float density) {
             this.radius = 80 * density;
             this.cx = w / 2f;
-            this.cy = h / 2f - 40 * density; 
-            
-            int[] colors = new int[] { 
-                0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000 
+            this.cy = h / 2f - 40 * density;
+
+            int[] colors = new int[] {
+                0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000
             };
             android.graphics.SweepGradient sweep = new android.graphics.SweepGradient(cx, cy, colors, null);
             wheelPaint.setShader(sweep);
@@ -260,15 +259,15 @@ public class AuroraView extends View {
             this.sx = cx - sw / 2f;
             this.sy = cy + radius + 40 * density;
         }
-        
+
         void draw(Canvas canvas) {
               canvas.drawCircle(cx, cy, radius, wheelPaint);
-             
+
              Paint centerP = new Paint(Paint.ANTI_ALIAS_FLAG);
              centerP.setColor(selectedColor);
              centerP.setStyle(Paint.Style.FILL);
              canvas.drawCircle(cx, cy, radius * 0.6f, centerP);
-             
+
              Paint borderP = new Paint(Paint.ANTI_ALIAS_FLAG);
              borderP.setColor(Color.WHITE);
              borderP.setStyle(Paint.Style.STROKE);
@@ -280,27 +279,25 @@ public class AuroraView extends View {
              LinearGradient valueGradient = new LinearGradient(sx, sy, sx + sw, sy,
                      new int[]{ Color.BLACK, hueColor }, null, Shader.TileMode.CLAMP);
              valueSliderPaint.setShader(valueGradient);
-             
-             
+
              canvas.drawRoundRect(sx, sy, sx + sw, sy + sh, sh/2, sh/2, valueSliderPaint);
-             
-             
+
              float handleX = sx + currentValue * sw;
              Paint handleP = new Paint(Paint.ANTI_ALIAS_FLAG);
              handleP.setColor(Color.WHITE);
              handleP.setStyle(Paint.Style.FILL);
              canvas.drawCircle(handleX, sy + sh / 2f, sh * 0.7f, handleP);
-             
+
              handleP.setStyle(Paint.Style.STROKE);
              handleP.setColor(Color.LTGRAY);
              handleP.setStrokeWidth(2 * density);
              canvas.drawCircle(handleX, sy + sh / 2f, sh * 0.7f, handleP);
         }
-        
+
         boolean onTouch(MotionEvent event) {
             float x = event.getX();
             float y = event.getY();
-            
+
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 float dx = x - cx;
                 float dy = y - cy;
@@ -310,7 +307,7 @@ public class AuroraView extends View {
                     updateFromWheel(dx, dy);
                     return true;
                 }
-                if (x >= sx - 20*density && x <= sx + sw + 20*density && 
+                if (x >= sx - 20*density && x <= sx + sw + 20*density &&
                     y >= sy - 20*density && y <= sy + sh + 20*density) {
                     isDraggingValue = true;
                     updateFromSlider(x);
@@ -350,7 +347,7 @@ public class AuroraView extends View {
         private void updateSelectedColor() {
             selectedColor = Color.HSVToColor(new float[]{ currentHue, 1f, currentValue });
         }
-        
+
         void setColor(int color) {
             this.selectedColor = color;
             float[] hsv = new float[3];

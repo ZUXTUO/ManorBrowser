@@ -13,8 +13,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
-
 public class PasswordStorage {
     private static final String FILE_NAME = "passwords.json";
 
@@ -35,7 +33,7 @@ public class PasswordStorage {
                     items.add(item);
                 }
             }
-            
+
             Collections.sort(items, (p1, p2) -> Long.compare(p2.timestamp, p1.timestamp));
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,10 +43,9 @@ public class PasswordStorage {
 
     public static void savePassword(Context context, PasswordItem newItem) {
         List<PasswordItem> items = loadPasswords(context);
-        
-        
+
         items.removeIf(item -> item.url.equals(newItem.url) && item.username.equals(newItem.username));
-        
+
         items.add(0, newItem);
         saveAll(context, items);
     }
@@ -60,7 +57,7 @@ public class PasswordStorage {
                 JSONObject obj = item.toJson();
                 if (obj != null) array.put(obj);
             }
-            
+
             File file = new File(context.getFilesDir(), FILE_NAME);
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 fos.write(array.toString().getBytes(StandardCharsets.UTF_8));
@@ -74,10 +71,9 @@ public class PasswordStorage {
         List<PasswordItem> all = loadPasswords(context);
         List<PasswordItem> matches = new ArrayList<>();
         if (url == null) return matches;
-        
-        
+
         String domain = getDomain(url);
-        
+
         for (PasswordItem item : all) {
             if (item.url != null && getDomain(item.url).equals(domain)) {
                 matches.add(item);

@@ -35,16 +35,19 @@ public class DownloadsActivity extends AppCompatActivity {
     private Runnable refreshRunnable;
 
     @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ?
             androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
 
-        
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        
-        
+
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
             controller.setAppearanceLightStatusBars(!isDarkMode);
@@ -61,7 +64,6 @@ public class DownloadsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -72,7 +74,7 @@ public class DownloadsActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rv_downloads);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
         adapter = new DownloadAdapter(this, downloadList);
         recyclerView.setAdapter(adapter);
 
@@ -81,7 +83,7 @@ public class DownloadsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 loadDownloads();
-                handler.postDelayed(this, 1000); 
+                handler.postDelayed(this, 1000);
             }
         };
     }
@@ -107,7 +109,7 @@ public class DownloadsActivity extends AppCompatActivity {
                     downloadList.clear();
                     downloadList.addAll(info);
                     adapter.notifyDataSetChanged();
-                    
+
                     findViewById(R.id.rv_downloads).setVisibility(downloadList.isEmpty() ? View.GONE : View.VISIBLE);
                 });
             }

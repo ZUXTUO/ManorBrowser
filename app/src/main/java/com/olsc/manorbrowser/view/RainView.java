@@ -23,7 +23,7 @@ public class RainView extends View {
     private Paint rainPaint;
     private Paint glassDropPaint;
     private Paint mistPaint;
-    
+
     private int width, height;
     private float density;
     private final Random random = new Random();
@@ -52,14 +52,14 @@ public class RainView extends View {
         bgPaint.setStyle(Paint.Style.FILL);
 
         rainPaint = new Paint();
-        rainPaint.setColor(0x88AACCFF); 
+        rainPaint.setColor(0x88AACCFF);
         rainPaint.setStyle(Paint.Style.STROKE);
         rainPaint.setStrokeCap(Paint.Cap.BUTT);
         rainPaint.setAntiAlias(true);
 
         glassDropPaint = new Paint();
         glassDropPaint.setStyle(Paint.Style.FILL);
-        glassDropPaint.setColor(0xCCFFFFFF); 
+        glassDropPaint.setColor(0xCCFFFFFF);
         glassDropPaint.setAntiAlias(true);
 
         mistPaint = new Paint();
@@ -75,7 +75,7 @@ public class RainView extends View {
 
         LinearGradient bgGradient = new LinearGradient(
                 0, 0, 0, height,
-                new int[]{0xFF1A2A3A, 0xFF2C3E50, 0xFF4B6584}, 
+                new int[]{0xFF1A2A3A, 0xFF2C3E50, 0xFF4B6584},
                 new float[]{0f, 0.6f, 1f},
                 Shader.TileMode.CLAMP);
         bgPaint.setShader(bgGradient);
@@ -104,7 +104,7 @@ public class RainView extends View {
 
         for (MistShape mist : mists) {
             mist.update();
-            mistPaint.setColor(0x33B0BEC5); 
+            mistPaint.setColor(0x33B0BEC5);
             mistPaint.setAlpha(mist.alpha);
             canvas.drawCircle(mist.x, mist.y, mist.radius, mistPaint);
         }
@@ -118,16 +118,16 @@ public class RainView extends View {
 
         for (GlassDrop drop : glassDrops) {
             drop.update();
-            
+
             glassDropPaint.setAlpha(drop.alpha);
-            
+
             if (drop.speed > 0.1) {
                 canvas.drawCircle(drop.x, drop.y - drop.size * 1.5f, drop.size * 0.5f, glassDropPaint);
                 canvas.drawCircle(drop.x, drop.y, drop.size, glassDropPaint);
             } else {
                 canvas.drawCircle(drop.x, drop.y, drop.size, glassDropPaint);
             }
-            
+
             glassDropPaint.setAlpha(200);
             canvas.drawCircle(drop.x - drop.size*0.3f, drop.y - drop.size*0.3f, drop.size*0.25f, glassDropPaint);
         }
@@ -162,7 +162,7 @@ public class RainView extends View {
     private class GlassDrop {
         float x, y, size, speed;
         int alpha;
-        int state; 
+        int state;
 
         GlassDrop(int w, int h, float density) {
             reset(w, h, density, true);
@@ -180,7 +180,7 @@ public class RainView extends View {
         void update() {
             if (state == 0) {
                 if (random.nextInt(1000) < 10) {
-                    state = 1; 
+                    state = 1;
                     speed = (0.5f + random.nextFloat()) * density;
                 }
             } else {
@@ -208,12 +208,12 @@ public class RainView extends View {
 
         void reset(int w, int h, float density) {
              x = random.nextInt(w);
-             y = h * 0.8f + random.nextInt((int)(h * 0.4f)); 
+             y = h * 0.8f + random.nextInt((int)(h * 0.4f));
              radius = (100 + random.nextInt(300)) * density;
              speed = (0.2f + random.nextFloat() * 0.3f) * density * (random.nextBoolean() ? 1 : -1);
              alpha = 20 + random.nextInt(20);
         }
-        
+
         void update() {
             x += speed;
             if (x - radius > width) x = -radius;

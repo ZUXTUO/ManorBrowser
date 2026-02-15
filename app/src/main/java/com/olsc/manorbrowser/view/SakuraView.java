@@ -18,7 +18,7 @@ public class SakuraView extends View {
 
     private Paint skyPaint;
     private Paint groundPaint;
-    private Paint petalPaint; 
+    private Paint petalPaint;
 
     private int width, height;
     private float density;
@@ -64,17 +64,17 @@ public class SakuraView extends View {
 
         LinearGradient skyGradient = new LinearGradient(
                 0, 0, 0, height,
-                new int[]{0xFFE3F2FD, 0xFFF3E5F5, 0xFFFFFDE7}, 
+                new int[]{0xFFE3F2FD, 0xFFF3E5F5, 0xFFFFFDE7},
                 new float[]{0f, 0.6f, 1f},
                 Shader.TileMode.CLAMP);
         skyPaint.setShader(skyGradient);
-        
+
         LinearGradient groundGradient = new LinearGradient(
                 0, height * 0.8f, 0, height,
-                new int[]{0xFFFCE4EC, 0xFFF8BBD0}, 
+                new int[]{0xFFFCE4EC, 0xFFF8BBD0},
                 null, Shader.TileMode.CLAMP);
         groundPaint.setShader(groundGradient);
-        
+
         groundPath = new Path();
         groundPath.moveTo(0, height);
         groundPath.lineTo(0, height * 0.85f);
@@ -82,40 +82,40 @@ public class SakuraView extends View {
         groundPath.lineTo(width, height);
         groundPath.close();
 
-        generateTreeBitmap(); 
+        generateTreeBitmap();
         generatePetals();
     }
-    
+
     private void generateTreeBitmap() {
         if (width <= 0 || height <= 0) return;
-        
+
         if (treeBitmap != null && !treeBitmap.isRecycled()) {
             treeBitmap.recycle();
         }
         treeBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas treeCanvas = new Canvas(treeBitmap); 
-        
+        Canvas treeCanvas = new Canvas(treeBitmap);
+
         Paint branchPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         branchPaint.setColor(0xFF5D4037);
         branchPaint.setStyle(Paint.Style.STROKE);
-        branchPaint.setStrokeCap(Paint.Cap.ROUND); 
+        branchPaint.setStrokeCap(Paint.Cap.ROUND);
 
         Paint flowerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         flowerPaint.setStyle(Paint.Style.FILL);
 
-        float startX = -10 * density; 
-        float startY = height * 0.05f; 
-        
+        float startX = -10 * density;
+        float startY = height * 0.05f;
+
         float trunkLen = height * 0.12f;
         float angle = 25;
-        float startThickness = 20 * density; 
+        float startThickness = 20 * density;
 
         growBranch(treeCanvas, branchPaint, flowerPaint, startX, startY, trunkLen, angle, startThickness);
     }
 
-    private void growBranch(Canvas canvas, Paint branchPaint, Paint flowerPaint, 
+    private void growBranch(Canvas canvas, Paint branchPaint, Paint flowerPaint,
                             float x, float y, float length, float angle, float thickness) {
-        
+
         if (thickness < 1.0 * density || length < 5 * density) {
              placeFlowerCluster(canvas, flowerPaint, x, y);
              return;
@@ -135,18 +135,17 @@ public class SakuraView extends View {
             placeFlowerCluster(canvas, flowerPaint, fx, fy);
         }
 
-        
-        int numChildren = 2; 
+        int numChildren = 2;
 
         for (int i = 0; i < numChildren; i++) {
-            float newLen = length * (0.6f + random.nextFloat() * 0.2f); 
+            float newLen = length * (0.6f + random.nextFloat() * 0.2f);
             float newThick = thickness * 0.7f;
-            
-            float angleDev = (random.nextFloat() - 0.5f) * 60f; 
-            float newAngle = angle + angleDev; 
+
+            float angleDev = (random.nextFloat() - 0.5f) * 60f;
+            float newAngle = angle + angleDev;
 
             if (thickness < 8 * density) {
-                newAngle += 20 * random.nextFloat(); 
+                newAngle += 20 * random.nextFloat();
             }
 
             growBranch(canvas, branchPaint, flowerPaint, endX, endY, newLen, newAngle, newThick);
@@ -154,24 +153,24 @@ public class SakuraView extends View {
     }
 
     private void placeFlowerCluster(Canvas canvas, Paint paint, float x, float y) {
-        int count = 4 + random.nextInt(4); 
+        int count = 4 + random.nextInt(4);
         for(int i=0; i<count; i++) {
             float r = (4 + random.nextFloat() * 5) * density;
             float ox = (random.nextFloat() - 0.5f) * 35 * density;
             float oy = (random.nextFloat() - 0.5f) * 35 * density;
-            
+
             float roll = random.nextFloat();
-            if (roll > 0.9) paint.setColor(0xFFFFFFFF); 
-            else if (roll > 0.6) paint.setColor(0xFFFF80AB); 
-            else paint.setColor(0xFFFFCDD2); 
-            
+            if (roll > 0.9) paint.setColor(0xFFFFFFFF);
+            else if (roll > 0.6) paint.setColor(0xFFFF80AB);
+            else paint.setColor(0xFFFFCDD2);
+
             canvas.drawCircle(x + ox, y + oy, r, paint);
         }
     }
 
     private void generatePetals() {
         petals.clear();
-        int count = 50; 
+        int count = 50;
         for (int i=0; i<count; i++) {
             petals.add(new Petal(width, height, density));
         }
@@ -179,7 +178,7 @@ public class SakuraView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas); 
+        super.onDraw(canvas);
 
         canvas.drawRect(0, 0, width, height, skyPaint);
         canvas.drawPath(groundPath, groundPaint);
@@ -190,12 +189,11 @@ public class SakuraView extends View {
 
         for (Petal petal : petals) {
             petal.update();
-            petal.draw(canvas, petalPaint); 
+            petal.draw(canvas, petalPaint);
         }
 
         postInvalidateOnAnimation();
     }
-
 
     private class Petal {
         float x, y;
@@ -204,7 +202,7 @@ public class SakuraView extends View {
         float rotation, rotationSpeed;
         int alpha;
         int color;
-        float wobblePhase; 
+        float wobblePhase;
 
         Petal(int w, int h, float density) {
             reset(w, h, density, true);
@@ -213,24 +211,24 @@ public class SakuraView extends View {
         void reset(int w, int h, float density, boolean randomStart) {
             x = random.nextInt(w);
             y = randomStart ? random.nextInt(h) : -30;
-            size = (4 + random.nextFloat() * 4) * density; 
-            
-            speedY = (0.8f + random.nextFloat() * 1.5f); 
-            speedX = (random.nextFloat() - 0.5f) * 1.5f; 
-            
+            size = (4 + random.nextFloat() * 4) * density;
+
+            speedY = (0.8f + random.nextFloat() * 1.5f);
+            speedX = (random.nextFloat() - 0.5f) * 1.5f;
+
             rotation = random.nextFloat() * 360;
             rotationSpeed = (random.nextFloat() - 0.5f) * 3f;
             wobblePhase = random.nextFloat() * 100;
-            
+
             alpha = 150 + random.nextInt(105);
-            
+
             if (random.nextBoolean()) color = 0xFFFF80AB;
             else color = 0xFFFFCDD2;
         }
 
         void update() {
             y += speedY;
-            x += speedX + (float)Math.sin(y * 0.015f + wobblePhase) * 1.5f; 
+            x += speedX + (float)Math.sin(y * 0.015f + wobblePhase) * 1.5f;
             rotation += rotationSpeed;
 
             if (y > height + 30) {
@@ -241,7 +239,7 @@ public class SakuraView extends View {
         void draw(Canvas canvas, Paint paint) {
             paint.setColor(color);
             paint.setAlpha(alpha);
-            
+
             canvas.save();
             canvas.translate(x, y);
             canvas.rotate(rotation);

@@ -33,6 +33,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.navigation.NavigationView;
 
+import org.mozilla.geckoview.GeckoResult;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 import org.mozilla.geckoview.GeckoSession;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private int currentTabIndex = -1;
 
     private boolean isTabSwitcherVisible = false;
+    private int lastX, lastY;
+    private long lastBackTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +150,11 @@ public class MainActivity extends AppCompatActivity {
         setupSwipeRefresh();
         checkDownloadPermissions();
     }
+    
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
+    }
 
     private void checkDownloadPermissions() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
@@ -201,6 +209,10 @@ public class MainActivity extends AppCompatActivity {
         session.open(sRuntime);
         tab.session = session; 
         applyThemeToSession(session);
+        
+        if (Config.URL_BLANK.equals(tab.url)) {
+            tab.title = getString(R.string.title_new_tab);
+        }
 
         session.setProgressDelegate(new GeckoSession.ProgressDelegate() {
             @Override
@@ -360,8 +372,23 @@ public class MainActivity extends AppCompatActivity {
 
              @Override
              public void onContextMenu(@NonNull GeckoSession session, int screenX, int screenY, @NonNull ContextElement element) {
+                 lastX = screenX;
+                 lastY = screenY;
                  runOnUiThread(() -> showWebContextMenu(element));
              }
+        });
+
+        session.setPromptDelegate(new GeckoSession.PromptDelegate() {
+            @Override
+            public GeckoResult<PromptResponse> onAlertPrompt(@NonNull GeckoSession session, @NonNull AlertPrompt prompt) {
+                String message = prompt.message;
+                if (message != null && message.startsWith("COPY_TEXT:")) {
+                    String textToCopy = message.substring("COPY_TEXT:".length());
+                    runOnUiThread(() -> copyToClipboard(textToCopy));
+                    return GeckoResult.fromValue(prompt.dismiss());
+                }
+                return null; 
+            }
         });
 
         session.setScrollDelegate(new GeckoSession.ScrollDelegate() {
@@ -375,6 +402,32 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (session == getCurrentSession() && swipeRefresh != null) {
                     swipeRefresh.setEnabled(scrollY <= 0);
+                }
+            }
+        });
+
+        session.setNavigationDelegate(new GeckoSession.NavigationDelegate() {
+            @Override
+            public void onCanGoBack(@NonNull GeckoSession session, boolean canGoBack) {
+                tab.canGoBack = canGoBack;
+                if (session == getCurrentSession()) {
+                    runOnUiThread(() -> {
+                        btnBack.setEnabled(canGoBack);
+                        btnBack.setAlpha(canGoBack ? 1.0f : 0.3f);
+                    });
+                }
+            }
+        });
+
+        session.setHistoryDelegate(new GeckoSession.HistoryDelegate() {
+            @Override
+            public void onHistoryStateChange(@NonNull GeckoSession session, @NonNull HistoryList historyList) {
+                tab.canGoBack = historyList.getCurrentIndex() > 0;
+                if (session == getCurrentSession()) {
+                    runOnUiThread(() -> {
+                        btnBack.setEnabled(tab.canGoBack);
+                        btnBack.setAlpha(tab.canGoBack ? 1.0f : 0.3f);
+                    });
                 }
             }
         });
@@ -491,6 +544,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        urlInput.setSelectAllOnFocus(true);
+        urlInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                urlInput.post(() -> {
+                    urlInput.selectAll();
+                });
+            }
+        });
+        urlInput.setOnClickListener(v -> {
+            if (urlInput.isFocused()) {
+                urlInput.selectAll();
+            }
+        });
+        // Also handle long click to make sure it doesn't break selection
+        urlInput.setOnLongClickListener(v -> {
+            urlInput.selectAll();
+            return false;
+        });
+
         urlInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
@@ -510,6 +582,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         EditText homeSearch = findViewById(R.id.et_home_search);
+        if (homeSearch != null) {
+            homeSearch.setSelectAllOnFocus(true);
+            homeSearch.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    homeSearch.post(() -> homeSearch.selectAll());
+                }
+            });
+            homeSearch.setOnClickListener(v -> {
+                if (homeSearch.isFocused()) {
+                    homeSearch.selectAll();
+                }
+            });
+            homeSearch.setOnLongClickListener(v -> {
+                homeSearch.selectAll();
+                return false;
+            });
+        }
         homeSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
@@ -541,10 +630,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnHome.setOnClickListener(v -> {
-            loadUrlInCurrentTab(Config.URL_BLANK);
-            if (isTabSwitcherVisible) {
-                toggleTabSwitcher();
-            }
+            android.content.Intent intent = new android.content.Intent(MainActivity.this, BookmarkActivity.class);
+            startActivity(intent);
         });
 
         btnTabs.setOnClickListener(v -> toggleTabSwitcher());
@@ -579,15 +666,53 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             } else if (id == R.id.nav_theme) {
                 navigationView.postDelayed(this::toggleTheme, 300);
+            } else if (id == R.id.nav_about) {
+                 android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
+                 startActivity(intent);
             }
             if (isTabSwitcherVisible && id != R.id.nav_theme) toggleTabSwitcher();
             return true;
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return;
+                }
+
+                if (isTabSwitcherVisible) {
+                    toggleTabSwitcher();
+                    return;
+                }
+
+                TabInfo currentTab = null;
+                if (currentTabIndex >= 0 && currentTabIndex < tabs.size()) {
+                    currentTab = tabs.get(currentTabIndex);
+                }
+
+                if (currentTab != null && currentTab.session != null && currentTab.canGoBack) {
+                    currentTab.session.goBack();
+                } else {
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - lastBackTime < 2000) {
+                        finish();
+                    } else {
+                        lastBackTime = currentTime;
+                        Toast.makeText(MainActivity.this, R.string.msg_exit_confirm, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         });
     }
 
     private void createNewTab(String url) {
         TabInfo info = new TabInfo(null);
         info.url = url;
+        if (Config.URL_BLANK.equals(url)) {
+            info.title = getString(R.string.title_new_tab);
+        }
         tabs.add(info);
 
         initializeSessionForTab(info);
@@ -1040,19 +1165,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (isTabSwitcherVisible) {
-            toggleTabSwitcher();
-        } else if (getCurrentSession() != null) {
-             getCurrentSession().goBack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private void applyThemeToSession(GeckoSession session) {
         if (sRuntime == null) return;
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
@@ -1061,15 +1173,30 @@ public class MainActivity extends AppCompatActivity {
             GeckoRuntimeSettings.COLOR_SCHEME_DARK : GeckoRuntimeSettings.COLOR_SCHEME_LIGHT);
     }
 
-    private void showWebContextMenu(ContextElement element) {
+     private void showWebContextMenu(ContextElement element) {
         final List<String> items = new ArrayList<>();
-        final List<Integer> actions = new ArrayList<>(); 
+        final List<Integer> actions = new ArrayList<>(); // 0: new tab, 1: download, 2: download link, 3: copy link, 4: copy image src, 5: free copy, 6: copy text
 
         String url = element.linkUri != null ? element.linkUri : element.srcUri;
-        if (url == null) return;
+        
+        if (url != null) {
+            items.add(getString(R.string.action_open_new_tab));
+            actions.add(0);
+        }
 
-        items.add(getString(R.string.action_open_new_tab));
-        actions.add(0);
+        boolean isLink = element.linkUri != null;
+        if (isLink) {
+            items.add(getString(R.string.action_copy_link));
+            actions.add(3);
+            items.add(getString(R.string.action_copy_text));
+            actions.add(6);
+
+            String lowerLink = element.linkUri.toLowerCase();
+            if (lowerLink.matches(".*\\.(mp4|mkv|webm|avi|mov|3gp|mp3|wav|ogg|m4a|aac|flac|jpg|jpeg|png|gif|webp|bmp|svg)$")) {
+                items.add(getString(R.string.action_download_link));
+                actions.add(2); 
+            }
+        }
 
         boolean isMedia = (element.type == ContextElement.TYPE_IMAGE || 
                           element.type == ContextElement.TYPE_VIDEO || 
@@ -1080,30 +1207,87 @@ public class MainActivity extends AppCompatActivity {
         if (isMedia && downloadUrl != null) {
             items.add(getString(R.string.action_download));
             actions.add(1);
+            items.add(getString(R.string.action_copy_image_link));
+            actions.add(4);
         }
-
-        if (element.linkUri != null) {
-            String lowerLink = element.linkUri.toLowerCase();
-            if (lowerLink.matches(".*\\.(mp4|mkv|webm|avi|mov|3gp|mp3|wav|ogg|m4a|aac|flac|jpg|jpeg|png|gif|webp|bmp|svg)$")) {
-                items.add(getString(R.string.action_download_link));
-                actions.add(2); 
-            }
-        }
+        
+        items.add(getString(R.string.action_free_copy));
+        actions.add(5);
 
         new androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle(url)
+            .setTitle(url != null ? url : getString(R.string.app_name))
             .setItems(items.toArray(new String[0]), (dialog, which) -> {
                 int action = actions.get(which);
                 if (action == 0) {
                     createNewTab(url);
-                    Toast.makeText(this, R.string.title_new_tab, Toast.LENGTH_SHORT).show();
                 } else if (action == 1) {
                     startManualDownload(downloadUrl);
                 } else if (action == 2) {
                     startManualDownload(element.linkUri);
+                } else if (action == 3) {
+                    copyToClipboard(element.linkUri);
+                } else if (action == 4) {
+                    copyToClipboard(element.srcUri);
+                } else if (action == 5) {
+                    enableFreeCopyMode();
+                } else if (action == 6) {
+                    copyLinkTextAtPoint();
                 }
             })
             .show();
+    }
+
+    private void copyLinkTextAtPoint() {
+        GeckoSession session = getCurrentSession();
+        if (session != null) {
+            int[] location = new int[2];
+            geckoView.getLocationOnScreen(location);
+            int x = lastX - location[0];
+            int y = lastY - location[1];
+
+            String script = "javascript:(function(){" +
+                "var el = document.elementFromPoint(" + x + ", " + y + ");" +
+                "while(el && el.tagName !== 'A' && el.parentElement) el = el.parentElement;" +
+                "if(el) { alert('COPY_TEXT:' + el.innerText); }" +
+                "})()";
+            session.loadUri(script);
+        }
+    }
+
+    private void enableFreeCopyMode() {
+        GeckoSession session = getCurrentSession();
+        if (session != null) {
+            int[] location = new int[2];
+            geckoView.getLocationOnScreen(location);
+            int x = lastX - location[0];
+            int y = lastY - location[1];
+
+            String script = "javascript:(function(){" +
+                "var style = document.createElement('style');" +
+                "style.innerHTML = '* { user-select: text !important; -webkit-user-select: text !important; }';" +
+                "document.head.appendChild(style);" +
+                "var el = document.elementFromPoint(" + x + ", " + y + ");" +
+                "if(el) {" +
+                "  var range = document.createRange();" +
+                "  range.selectNodeContents(el);" +
+                "  var sel = window.getSelection();" +
+                "  sel.removeAllRanges();" +
+                "  sel.addRange(range);" +
+                "}" +
+                "})()";
+            session.loadUri(script);
+            Toast.makeText(this, R.string.msg_free_copy_on, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void copyToClipboard(String text) {
+        if (text == null) return;
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+        android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, R.string.msg_copied, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startManualDownload(String url) {
@@ -1213,6 +1397,65 @@ public class MainActivity extends AppCompatActivity {
         etUrl.setText(url);
         layout.addView(etUrl);
 
+        final android.widget.TextView tvFolderLabel = new android.widget.TextView(this);
+        tvFolderLabel.setText(R.string.label_select_folder);
+        tvFolderLabel.setPadding(0, 24, 0, 8);
+        layout.addView(tvFolderLabel);
+
+        final android.widget.Spinner spinnerFolder = new android.widget.Spinner(this);
+        layout.addView(spinnerFolder);
+        
+        final List<com.olsc.manorbrowser.data.BookmarkItem> folders = com.olsc.manorbrowser.data.BookmarkStorage.getAllFolders(this);
+        com.olsc.manorbrowser.data.BookmarkItem root = new com.olsc.manorbrowser.data.BookmarkItem(getString(R.string.root_folder));
+        root.id = -1;
+        folders.add(0, root);
+        
+        final java.util.List<String> folderNames = new java.util.ArrayList<>();
+        for(com.olsc.manorbrowser.data.BookmarkItem f : folders) {
+            folderNames.add(f.title);
+        }
+        
+        final android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(this, android.R.layout.simple_spinner_item, folderNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFolder.setAdapter(adapter);
+
+        final android.widget.Button btnNewFolder = new android.widget.Button(this);
+        btnNewFolder.setText(R.string.title_new_folder);
+        layout.addView(btnNewFolder);
+        
+        btnNewFolder.setOnClickListener(v -> {
+            android.widget.EditText input = new android.widget.EditText(this);
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.title_new_folder)
+                .setView(input)
+                .setPositiveButton(android.R.string.ok, (d, w) -> {
+                    String newFolderTitle = input.getText().toString();
+                    if(!newFolderTitle.isEmpty()) {
+                        com.olsc.manorbrowser.data.BookmarkItem newFolder = new com.olsc.manorbrowser.data.BookmarkItem(newFolderTitle);
+                        com.olsc.manorbrowser.data.BookmarkStorage.addBookmark(this, newFolder);
+                        
+                        folders.clear();
+                        folders.addAll(com.olsc.manorbrowser.data.BookmarkStorage.getAllFolders(this));
+                        folders.add(0, root);
+                        
+                        folderNames.clear();
+                        for(com.olsc.manorbrowser.data.BookmarkItem f : folders) {
+                            folderNames.add(f.title);
+                        }
+                        adapter.notifyDataSetChanged();
+                        
+                        for(int i=0; i<folders.size(); i++) {
+                            if(folders.get(i).id == newFolder.id) {
+                                spinnerFolder.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+        });
+
         new androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle(R.string.title_add_bookmark)
             .setView(layout)
@@ -1220,8 +1463,15 @@ public class MainActivity extends AppCompatActivity {
                 String finalTitle = etTitle.getText().toString();
                 String finalUrl = etUrl.getText().toString();
                 if (!finalUrl.isEmpty()) {
-                    com.olsc.manorbrowser.data.BookmarkStorage.addBookmark(this, 
-                        new com.olsc.manorbrowser.data.BookmarkItem(finalTitle, finalUrl));
+                    
+                    long folderId = -1;
+                    if(spinnerFolder.getSelectedItemPosition() >= 0 && spinnerFolder.getSelectedItemPosition() < folders.size()) {
+                        folderId = folders.get(spinnerFolder.getSelectedItemPosition()).id;
+                    }
+
+                    com.olsc.manorbrowser.data.BookmarkStorage.addBookmarkToFolder(this, 
+                        new com.olsc.manorbrowser.data.BookmarkItem(finalTitle, finalUrl), folderId);
+                    
                     android.widget.Toast.makeText(this, R.string.msg_bookmark_added, android.widget.Toast.LENGTH_SHORT).show();
                 }
             })

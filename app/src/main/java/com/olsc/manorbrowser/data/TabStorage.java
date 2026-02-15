@@ -62,7 +62,7 @@ public class TabStorage {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
-                TabInfo tab = new TabInfo(null); 
+                TabInfo tab = new TabInfo(null);
                 tab.id = json.optLong("id", System.currentTimeMillis());
                 tab.url = json.optString("url", Config.URL_BLANK);
                 tab.title = json.optString("title", "New Tab");
@@ -102,4 +102,3 @@ public class TabStorage {
         return null;
     }
 }
-

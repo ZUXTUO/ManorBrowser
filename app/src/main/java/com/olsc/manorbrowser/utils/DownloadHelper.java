@@ -26,7 +26,7 @@ public class DownloadHelper {
 
         final String finalUrl = url.trim();
         final Context appContext = context.getApplicationContext();
-        
+
         Toast.makeText(appContext, R.string.msg_download_starting, Toast.LENGTH_SHORT).show();
 
         new Thread(() -> {
@@ -46,11 +46,11 @@ public class DownloadHelper {
                 if (!TextUtils.isEmpty(userAgent)) {
                     request.addRequestHeader("User-Agent", sanitize(userAgent));
                 }
-                
+
                 if (!TextUtils.isEmpty(cookie) && cookie.length() > 2) {
                     request.addRequestHeader("Cookie", sanitize(cookie));
                 }
-                
+
                 if (!TextUtils.isEmpty(referer) && !referer.startsWith("about:")) {
                     request.addRequestHeader("Referer", sanitize(referer));
                 }
@@ -58,11 +58,11 @@ public class DownloadHelper {
                 request.setTitle(originalFilename);
                 request.setDescription(finalUrl);
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                
+
                 request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
                 request.setAllowedOverMetered(true);
                 request.setAllowedOverRoaming(true);
-                
+
                 request.allowScanningByMediaScanner();
 
                 try {
@@ -73,19 +73,19 @@ public class DownloadHelper {
 
                 long id = dm.enqueue(request);
                 Log.d(TAG, "Download enqueued with ID: " + id);
-                
+
                 dm.query(new DownloadManager.Query().setFilterById(id));
-                
+
                 cleanOldTasks(appContext, finalUrl);
             } catch (Exception e) {
                 Log.e(TAG, "Enqueue failed", e);
-                new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> 
+                new android.os.Handler(android.os.Looper.getMainLooper()).post(() ->
                     Toast.makeText(appContext, R.string.msg_download_start_failed, Toast.LENGTH_SHORT).show()
                 );
             }
         }).start();
 
-        return 0; 
+        return 0;
     }
 
     private static String sanitize(String value) {
@@ -97,7 +97,7 @@ public class DownloadHelper {
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
         query.setFilterByStatus(DownloadManager.STATUS_FAILED | DownloadManager.STATUS_PAUSED);
-        
+
         try (Cursor cursor = dm.query(query)) {
             if (cursor != null && cursor.moveToFirst()) {
                 int urlIdx = cursor.getColumnIndex(DownloadManager.COLUMN_URI);
@@ -117,11 +117,11 @@ public class DownloadHelper {
     public static String guessFileName(String url, String contentDisposition, String mimeType) {
         String decodedUrl = android.net.Uri.decode(url);
         String filename = URLUtil.guessFileName(decodedUrl, contentDisposition, mimeType);
-        
+
         if (filename != null) {
             filename = filename.replaceAll("[\\\\/:*?\"<>|]", "_");
         }
-        
+
         if (TextUtils.isEmpty(filename) || filename.endsWith(".bin")) {
              String path = Uri.parse(url).getLastPathSegment();
              if (!TextUtils.isEmpty(path)) filename = path;
@@ -134,7 +134,7 @@ public class DownloadHelper {
         List<DownloadInfo> list = new ArrayList<>();
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
-        
+
         try (Cursor cursor = dm.query(query)) {
             if (cursor != null && cursor.moveToFirst()) {
                  int idIdx = cursor.getColumnIndex(DownloadManager.COLUMN_ID);
@@ -165,7 +165,7 @@ public class DownloadHelper {
                      info.currentBytes = current;
                      info.timestamp = date;
                      info.reason = reason;
-                     
+
                      switch (status) {
                          case DownloadManager.STATUS_PENDING: info.status = 0; break;
                          case DownloadManager.STATUS_RUNNING: info.status = 1; break;

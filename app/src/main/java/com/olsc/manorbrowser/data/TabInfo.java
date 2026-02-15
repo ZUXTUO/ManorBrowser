@@ -10,6 +10,7 @@ public class TabInfo {
 
     public long id;
     public int scrollY = 0;
+    public boolean canGoBack = false;
 
     public TabInfo(GeckoSession session) {
         this.id = System.currentTimeMillis();

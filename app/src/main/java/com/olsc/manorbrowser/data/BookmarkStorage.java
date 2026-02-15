@@ -53,4 +53,66 @@ public class BookmarkStorage {
         bookmarks.add(item);
         saveBookmarks(context, bookmarks);
     }
+
+    public static void removeBookmark(Context context, long id) {
+        List<BookmarkItem> bookmarks = loadBookmarks(context);
+        removeRecursive(bookmarks, id);
+        saveBookmarks(context, bookmarks);
+    }
+
+    private static boolean removeRecursive(List<BookmarkItem> items, long id) {
+        for (int i = 0; i < items.size(); i++) {
+            BookmarkItem item = items.get(i);
+            if (item.id == id) {
+                items.remove(i);
+                return true;
+            }
+            if (item.children != null && !item.children.isEmpty()) {
+                if (removeRecursive(item.children, id)) return true;
+            }
+        }
+        return false;
+    }
+
+    public static void addBookmarkToFolder(Context context, BookmarkItem item, long folderId) {
+        List<BookmarkItem> bookmarks = loadBookmarks(context);
+        if (folderId == -1) {
+            bookmarks.add(item);
+        } else {
+            addToFolderRecursive(bookmarks, item, folderId);
+        }
+        saveBookmarks(context, bookmarks);
+    }
+
+    private static void addToFolderRecursive(List<BookmarkItem> items, BookmarkItem itemToAdd, long folderId) {
+        for (BookmarkItem folder : items) {
+           if (folder.id == folderId) {
+               if (folder.children == null) folder.children = new ArrayList<>();
+               itemToAdd.parentId = folderId;
+               folder.children.add(itemToAdd);
+               return;
+           }
+           if (folder.children != null && !folder.children.isEmpty()) {
+               addToFolderRecursive(folder.children, itemToAdd, folderId);
+           }
+        }
+    }
+
+    public static List<BookmarkItem> getAllFolders(Context context) {
+        List<BookmarkItem> allBookmarks = loadBookmarks(context);
+        List<BookmarkItem> folders = new ArrayList<>();
+        collectFolders(allBookmarks, folders);
+        return folders;
+    }
+
+    private static void collectFolders(List<BookmarkItem> items, List<BookmarkItem> result) {
+        for (BookmarkItem item : items) {
+            if (item.type == BookmarkItem.Type.FOLDER) {
+                result.add(item);
+                if (item.children != null && !item.children.isEmpty()) {
+                    collectFolders(item.children, result);
+                }
+            }
+        }
+    }
 }
