@@ -69,5 +69,8 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x gradlew
+
       - name: Run Lint
         run: ./gradlew lintDebug

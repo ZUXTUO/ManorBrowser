@@ -110,6 +110,17 @@
     <string name="msg_free_copy_on">Free Copy Mode On. You can now select text freely.</string>
     <string name="msg_exit_confirm">Press back again to exit</string>
     <string name="title_about">About</string>
+    
+    <string name="title_external_app_redirect">External App Redirect</string>
+    <string name="msg_external_app_redirect">Do you want to open this link in an external app?
+
+URL: %1$s</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_deny">Deny</string>
+    <string name="error_no_app_found">No app found to handle this link</string>
+    <string name="error_invalid_uri">Invalid URI format</string>
+    
+
     <string name="label_author">Author</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">License</string>
@@ -117,4 +128,17 @@
     <string name="app_introduction">A modern browser based on the Firefox engine.</string>
     <string name="label_source_code">Source Code</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
+    
+    <string name="label_app_version">App Version</string>
+    <string name="label_gecko_version">GeckoView Version</string>
+    <string name="label_sdk_version">Android SDK Version</string>
+    <string name="label_app_version_value">App Version: %1$s</string>
+    <string name="label_gecko_version_value">GeckoView: %1$s</string>
+    <string name="label_sdk_version_value">Android: %1$s</string>
+    <string name="default_gecko_version">GeckoView</string>
+
+    <string name="title_privacy_policy">Privacy Policy</string>
+    <string name="msg_privacy_policy">Welcome to Manor Browser.\n\nTo protect your rights, please read our Privacy Policy carefully before using.\n\n1. We prioritize your privacy and do not collect sensitive personal information without consent.\n2. We use local storage for your bookmarks, history, and settings.\n3. We may request permissions (Storage, Notifications) only when necessary for features like downloading.\n\nPlease agree to continue using the app.</string>
+    <string name="action_agree">Agree and Continue</string>
+    <string name="action_disagree">Disagree and Exit</string>
 </resources>

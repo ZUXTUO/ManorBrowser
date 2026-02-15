@@ -117,4 +117,26 @@
     <string name="app_introduction">一款基于火狐内核的开源现代化浏览器。</string>
     <string name="label_source_code">开源链接</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
+    
+    <string name="label_app_version">应用版本</string>
+    <string name="label_gecko_version">GeckoView 版本</string>
+    <string name="label_sdk_version">安卓 SDK 版本</string>
+    <string name="label_app_version_value">应用版本: %1$s</string>
+    <string name="label_gecko_version_value">GeckoView: %1$s</string>
+    <string name="label_sdk_version_value">安卓: %1$s</string>
+    <string name="default_gecko_version">GeckoView</string>
+    
+    <string name="title_external_app_redirect">外部应用跳转</string>
+    <string name="msg_external_app_redirect">您是否要在外部应用中打开此链接？
+
+URL: %1$s</string>
+    <string name="action_allow">允许</string>
+    <string name="action_deny">拒绝</string>
+    <string name="error_no_app_found">未找到可处理此链接的应用</string>
+    <string name="error_invalid_uri">无效的URI格式</string>
+
+    <string name="title_privacy_policy">隐私政策</string>
+    <string name="msg_privacy_policy">欢迎使用领域浏览器！\n\n为了更好地保护您的权益，请您在使用前仔细阅读并同意《隐私政策》。\n\n1. 我们重视您的隐私，不会在未经同意的情况下收集您的个人敏感信息。\n2. 我们使用本地存储来保存您的书签、历史记录和设置。\n3. 我们仅在必要时请求权限（如存储、通知）以提供下载等功能。\n\n请您同意并继续使用本应用。</string>
+    <string name="action_agree">同意并继续</string>
+    <string name="action_disagree">不同意并退出</string>
 </resources>
