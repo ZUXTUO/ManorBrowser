@@ -4,9 +4,11 @@ import com.olsc.manorbrowser.R;
 import com.olsc.manorbrowser.Config;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +17,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.core.graphics.Insets;
+
+import org.mozilla.geckoview.BuildConfig;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -58,6 +65,61 @@ public class AboutActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             });
+        }
+        
+        // 设置版本信息
+        setupVersionInfo();
+    }
+    
+    private void setupVersionInfo() {
+        try {
+            // 获取应用版本
+            String appVersion = getAppVersion();
+            TextView appVersionText = findViewById(R.id.tv_app_version);
+            if (appVersionText != null) {
+                appVersionText.setText(getString(R.string.label_app_version_value, appVersion));
+            }
+            
+            // 获取 GeckoView 版本
+            String geckoVersion = getGeckoViewVersion();
+            TextView geckoVersionText = findViewById(R.id.tv_gecko_version);
+            if (geckoVersionText != null) {
+                geckoVersionText.setText(getString(R.string.label_gecko_version_value, geckoVersion));
+            }
+            
+            // 获取 Android SDK 版本
+            String sdkVersion = android.os.Build.VERSION.RELEASE;
+            TextView sdkVersionText = findViewById(R.id.tv_sdk_version);
+            if (sdkVersionText != null) {
+                sdkVersionText.setText(getString(R.string.label_sdk_version_value, sdkVersion));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private String getAppVersion() {
+        try {
+            String packageName = getPackageName();
+            return getPackageManager().getPackageInfo(packageName, 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "Unknown";
+        }
+    }
+    
+    private String getGeckoViewVersion() {
+        try {
+            // 从 GeckoView BuildConfig 获取版本信息
+            String fullVersion = BuildConfig.MOZ_APP_VERSION;
+            if (fullVersion != null && !fullVersion.isEmpty()) {
+                return fullVersion;
+            } else {
+                // 如果无法获取完整版本，尝试从 GeckoView 类获取一些信息
+                return "GeckoView";
+            }
+        } catch (Exception e) {
+            // 如果无法获取 GeckoView 版本，则返回编译时的版本号
+            return getString(R.string.default_gecko_version); // fallback
         }
     }
 

@@ -41,7 +41,10 @@ import org.mozilla.geckoview.GeckoView;
 
 import org.mozilla.geckoview.WebResponse;
 import org.mozilla.geckoview.GeckoSession.ContentDelegate.ContextElement;
+import org.mozilla.geckoview.GeckoSession.NavigationDelegate.LoadRequest;
+import org.mozilla.geckoview.AllowOrDeny;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         swipeRefresh = findViewById(R.id.swipe_refresh);
+        navigationView = findViewById(R.id.nav_view);
 
         btnBack = findViewById(R.id.btn_back);
         btnRefresh = findViewById(R.id.btn_refresh);
@@ -118,14 +122,48 @@ public class MainActivity extends AppCompatActivity {
         btnHome = findViewById(R.id.btn_home);
         btnTabs = findViewById(R.id.btn_tabs);
         btnMenu = findViewById(R.id.btn_menu);
-        ImageButton btnAddTab = findViewById(R.id.btn_add_tab);
+        if (isPrivacyAgreed()) {
+            initializeApp();
+        } else {
+            showPrivacyDialog();
+        }
+    }
 
-        btnAddTab.setOnClickListener(v -> {
-            captureScreenshot(() -> {
-                createNewTab(Config.URL_BLANK);
-                toggleTabSwitcher();
+    private boolean isPrivacyAgreed() {
+        android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
+        return prefs.getBoolean(Config.PREF_KEY_PRIVACY_AGREED, false);
+    }
+    
+    private void setPrivacyAgreed(boolean agreed) {
+        android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
+        prefs.edit().putBoolean(Config.PREF_KEY_PRIVACY_AGREED, agreed).apply();
+    }
+
+    private void showPrivacyDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(R.string.title_privacy_policy)
+            .setMessage(R.string.msg_privacy_policy)
+            .setCancelable(false)
+            .setPositiveButton(R.string.action_agree, (dialog, which) -> {
+                setPrivacyAgreed(true);
+                initializeApp();
+            })
+            .setNegativeButton(R.string.action_disagree, (dialog, which) -> {
+                finish();
+            })
+            .show();
+    }
+
+    private void initializeApp() {
+        ImageButton btnAddTab = findViewById(R.id.btn_add_tab);
+        if (btnAddTab != null) {
+            btnAddTab.setOnClickListener(v -> {
+                captureScreenshot(() -> {
+                    createNewTab(Config.URL_BLANK);
+                    toggleTabSwitcher();
+                });
             });
-        });
+        }
 
         navigationView = findViewById(R.id.nav_view);
 
@@ -416,6 +454,25 @@ public class MainActivity extends AppCompatActivity {
                         btnBack.setAlpha(canGoBack ? 1.0f : 0.3f);
                     });
                 }
+            }
+            
+            @Override
+            public GeckoResult<AllowOrDeny> onLoadRequest(
+                    @NonNull GeckoSession session,
+                    @NonNull LoadRequest request) {
+                String uri = request.uri;
+                
+                if (uri.startsWith("intent:")) {
+                    handleExternalAppRedirect(uri);
+                    return GeckoResult.fromValue(AllowOrDeny.DENY);
+                }
+                
+                if (isExternalAppLink(uri)) {
+                    handleExternalAppRedirect(uri);
+                    return GeckoResult.fromValue(AllowOrDeny.DENY);
+                }
+                
+                return GeckoResult.fromValue(AllowOrDeny.ALLOW);
             }
         });
 
@@ -1536,6 +1593,185 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.msg_password_saved, Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.action_never, null)
+                .show();
+        });
+    }
+    
+    private boolean isExternalAppLink(String uri) {
+        String[] externalSchemes = {
+            "mailto:",
+            "tel:",
+            "sms:",
+            "market:",
+            "play.google.com",
+            "maps:",
+            "geo:",
+            "youtube:",
+            "twitter:",
+            "facebook:",
+            "instagram:",
+            "whatsapp:",
+            "tg:",
+            "snapchat:",
+            "pinterest:",
+            "linkedin:",
+            "skype:",
+            "slack:",
+            "discord:",
+            "spotify:",
+            "paypal:",
+            "fb-messenger:",
+            "viber:",
+            "telegram:",
+            "signal:",
+            "teams:",
+            "zoomus:",
+            "tiktok:",
+            "twitch:",
+            "etsy:",
+            "ebay:",
+            "amazon:",
+            "netflix:",
+            "primevideo:",
+            "hulu:",
+            "disneyplus:",
+            "apple-music:",
+            "itunes:",
+            "calshow:",
+            "caladd:",
+            "itms-apps:",
+            "itms-books:",
+            "itms-itunes:",
+            "itms-podcasts:",
+            "itms-music:",
+            "google.streetview:",
+            "comgooglemaps:",
+            "comgooglecalendar:",
+            "gmm:",
+            "fb:",
+            "line:",
+            "kakaotalk:",
+            "kakaoplus:",
+            "navermap:",
+            "nmap:",
+            "daummap:",
+            "viki:",
+            "watcha:",
+            "wavve:",
+            "tving:",
+            "genie:",
+            "bugs:",
+            "melon:",
+            "flo:",
+            "yes24:",
+            "aladdin:",
+            "kyobo:",
+            "ridibooks:",
+            "bookcube:",
+            "mangabox:",
+            "cartoon365:",
+            "watchmart:",
+            "auction:",
+            "gmarket:",
+            "11st:",
+            "wemakeprice:",
+            "coupang:",
+            "tmon:",
+            "hottracksonline:",
+            "yes24movie:",
+            "lottecinema:",
+            "megabox:",
+            "cgv:",
+            "watcha-party:",
+            "netmarble:",
+            "com.nhnent.wannaplay:",
+            "com.gamevil.nary:",
+            // Chinese Apps
+            "bilibili:",
+            "zhihu:",
+            "csdn:",
+            "weixin:",
+            "wechat:",
+            "alipays:",
+            "alipay:",
+            "taobao:",
+            "tbopen:",
+            "openapp.jdmobile:",
+            "jd:",
+            "snssdk1128:",
+            "douyin:",
+            "mqq:",
+            "mqqapi:",
+            "tim:",
+            "sinaweibo:",
+            "weibo:",
+            "imeituan:",
+            "meituan:",
+            "dianping:",
+            "orpheus:",
+            "neteasemusic:",
+            "fleamarket:",
+            "xianyu:",
+            "youku:",
+            "iqiyi:",
+            "tudou:",
+            "sohuvideo:",
+            "baiduyun:",
+            "baidunetdisk:",
+            "wangpan:",
+            "kwai:",
+            "gifshow:",
+            "pinduoduo:",
+            "pddopen:",
+            "xiaohongshu:",
+            "xhsdiscover:",
+            "qqmusic:",
+            "kugou:",
+            "kuwo:",
+            "baidumap:",
+            "bdapp:",
+            "iosamap:",
+            "androidamap:",
+            "autonavi:"
+        };
+        
+        for (String scheme : externalSchemes) {
+            if (uri.toLowerCase().startsWith(scheme)) {
+                return true;
+            }
+        }
+        
+        if (uri.contains("//play.google.com/store/apps/details?id=") || 
+            uri.contains("//play.google.com/store/search?q=") ||
+            uri.contains("//apps.apple.com/") ||
+            uri.contains("//itunes.apple.com/")) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private void handleExternalAppRedirect(String uri) {
+        runOnUiThread(() -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.title_external_app_redirect)
+                .setMessage(getString(R.string.msg_external_app_redirect, uri))
+                .setPositiveButton(R.string.action_allow, (dialog, which) -> {
+                    try {
+                        android.content.Intent intent = android.content.Intent.parseUri(uri, android.content.Intent.URI_INTENT_SCHEME);
+                        
+                        android.content.pm.PackageManager pm = getPackageManager();
+                        if (intent.resolveActivity(pm) != null) {
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(this, R.string.error_no_app_found, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (java.net.URISyntaxException e) {
+                        Toast.makeText(this, R.string.error_invalid_uri, Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton(R.string.action_deny, null)
                 .show();
         });
     }

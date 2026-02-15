@@ -25,4 +25,6 @@ public class Config {
     public static final int DEFAULT_SOLID_BG_COLOR = 0xFF00FF99;
 
     public static final String PREF_KEY_LANGUAGE = "language_preference";
+    
+    public static final String PREF_KEY_PRIVACY_AGREED = "privacy_agreed";
 }
