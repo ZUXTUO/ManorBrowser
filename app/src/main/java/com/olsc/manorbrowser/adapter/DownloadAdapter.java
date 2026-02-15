@@ -59,28 +59,28 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         boolean enableAction = true;
         
         switch (info.status) {
-            case 0: // Pending
+            case 0: 
                 statusText = context.getString(R.string.download_status_waiting);
                 holder.progressBar.setIndeterminate(true);
                 break;
-            case 1: // Running
+            case 1: 
                 statusText = context.getString(R.string.download_status_running, percent);
                 holder.progressBar.setIndeterminate(info.totalBytes <= 0);
                 break;
-            case 2: // Paused
+            case 2: 
                 statusText = context.getString(R.string.download_status_paused) + ": " + getPausedReason(info.reason);
                 holder.progressBar.setIndeterminate(false);
                 break;
-            case 3: // Success
+            case 3: 
                 statusText = context.getString(R.string.download_status_completed);
                 holder.progressBar.setIndeterminate(false);
                 holder.progressBar.setProgress(100);
-                actionIcon = android.R.drawable.ic_menu_view; // Open
+                actionIcon = android.R.drawable.ic_menu_view; 
                 break;
-            case 4: // Failed
+            case 4: 
                 statusText = context.getString(R.string.download_status_failed) + ": " + getErrorReason(info.reason);
                 holder.progressBar.setIndeterminate(false);
-                actionIcon = android.R.drawable.ic_menu_revert; // Retry? Or just show fail
+                actionIcon = android.R.drawable.ic_menu_revert; 
                 break;
             default:
                 statusText = context.getString(R.string.download_status_unknown);
@@ -102,13 +102,13 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         
         holder.btnAction.setOnClickListener(v -> {
              if (info.status == 1 || info.status == 0) {
-                 // Cancel
+                 
                  cancelDownload(info.id);
              } else if (info.status == 3) {
-                 // Open
+                 
                  openFile(info);
              } else if (info.status == 4) {
-                 // Retry (not easily supported via ID, usually re-download URL)
+                 
                  Toast.makeText(context, R.string.msg_retry_download, Toast.LENGTH_SHORT).show();
              }
         });
@@ -156,13 +156,13 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
     private void openFile(DownloadInfo info) {
         try {
             Uri uri = Uri.parse(info.filePath);
-            // If local path is file://, convert to content:// via FileProvider if targeting N+
-            // But DownloadManager usually gives content:// if queried via COLUMN_LOCAL_URI?
-            // Actually COLUMN_LOCAL_URI returns file path or content uri.
-            // Let's rely on stored uri or filePath.
             
-            // If filePath starts with file://, use simple intent (might fail on N+)
-            // Better use DownloadManager to open
+            
+            
+            
+            
+            
+            
             DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri fileUri = dm.getUriForDownloadedFile(info.id);
             if (fileUri != null) {

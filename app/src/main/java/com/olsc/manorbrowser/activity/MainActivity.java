@@ -69,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
         AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
-        // Enable edge-to-edge
+        
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         
-        // Set status bar and navigation bar icon colors
+        
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
             controller.setAppearanceLightStatusBars(!isDarkMode);
@@ -89,20 +89,20 @@ public class MainActivity extends AppCompatActivity {
         topBar = findViewById(R.id.top_bar);
         progressBar = findViewById(R.id.progress_bar);
 
-        // Handle window insets for status bar and navigation bar
+        
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, windowInsets) -> {
             Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             
-            // Top bar padding for status bar
+            
             topBar.setPadding(topBar.getPaddingLeft(), systemBars.top, topBar.getPaddingRight(), 0);
             
-            // Bottom bar padding for navigation bar
+            
             View bottomBar = findViewById(R.id.bottom_bar);
             bottomBar.setPadding(bottomBar.getPaddingLeft(), bottomBar.getPaddingTop(), bottomBar.getPaddingRight(), systemBars.bottom);
             
-            // NavigationView padding
+            
             navigationView.setPadding(0, 0, 0, systemBars.bottom);
-            // Header padding handled by the full-width background now
+            
             
             return windowInsets;
         });
@@ -258,31 +258,17 @@ public class MainActivity extends AppCompatActivity {
                    if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
                    if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                });
-               // Inject password detection logic
+               
                if (success) {
                     session.loadUri("javascript:" + com.olsc.manorbrowser.utils.JSInjector.INJECT_LOGIN_DETECT);
                     checkAndAutofill(session);
                }
             }
-            // @Override public void onSecurityChange(@NonNull GeckoSession session, @NonNull SecurityInformation securityInfo) {}
+            
             @Override public void onSessionStateChange(@NonNull GeckoSession session, @NonNull GeckoSession.SessionState sessionState) {}
         });
 
-        /*
-        session.setPromptDelegate(new GeckoSession.PromptDelegate() {
-            @Override
-            public GeckoResult<PromptResponse> onPrompt(@NonNull GeckoSession session, @NonNull PromptRequest request) {
-                if (request.type == PromptRequest.TYPE_PROMPT_TEXT) { // Actually JS prompt()
-                    String msg = request.message;
-                    if (msg != null && msg.startsWith("MANOR_SAVE_PASS|")) {
-                        handleSavePasswordRequest(msg);
-                        return GeckoResult.fromValue(new PromptResponse.Builder(PromptRequest.TYPE_PROMPT_TEXT).dismiss().build());
-                    }
-                }
-                return GeckoResult.fromValue(null);
-            }
-        });
-        */
+        
 
         session.setContentDelegate(new GeckoSession.ContentDelegate() {
             @Override
@@ -1077,7 +1063,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showWebContextMenu(ContextElement element) {
         final List<String> items = new ArrayList<>();
-        final List<Integer> actions = new ArrayList<>(); // 0: new tab, 1: download
+        final List<Integer> actions = new ArrayList<>(); 
 
         String url = element.linkUri != null ? element.linkUri : element.srcUri;
         if (url == null) return;
@@ -1100,7 +1086,7 @@ public class MainActivity extends AppCompatActivity {
             String lowerLink = element.linkUri.toLowerCase();
             if (lowerLink.matches(".*\\.(mp4|mkv|webm|avi|mov|3gp|mp3|wav|ogg|m4a|aac|flac|jpg|jpeg|png|gif|webp|bmp|svg)$")) {
                 items.add(getString(R.string.action_download_link));
-                actions.add(2); // 2: download link
+                actions.add(2); 
             }
         }
 
@@ -1261,7 +1247,7 @@ public class MainActivity extends AppCompatActivity {
             com.olsc.manorbrowser.data.PasswordItem item = passwords.get(0);
             session.loadUri("javascript:" + com.olsc.manorbrowser.utils.JSInjector.getFillScript(item.username, item.password));
         } else {
-            // Multiple accounts: prompt user
+            
             runOnUiThread(() -> showSelectAccountDialog(session, passwords));
         }
     }
@@ -1282,7 +1268,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleSavePasswordRequest(String msg) {
-        // Msg format: MANOR_SAVE_PASS|url|user|pass
+        
         String[] parts = msg.split("\\|", 4);
         if (parts.length < 4) return;
 

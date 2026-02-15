@@ -30,7 +30,7 @@ public class AuroraView extends View {
     private float time = 0;
 
     private boolean isPureColorMode = false;
-    private int solidColor = 0xFF00FF99; // Default Green
+    private int solidColor = 0xFF00FF99; 
     private ColorWheel colorWheel;
     private boolean showColorWheel = false;
 
@@ -155,7 +155,7 @@ public class AuroraView extends View {
                  return true;
              }
              if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                 return false; // Don't consume if not on wheel
+                 return false; 
              }
         }
         return super.onTouchEvent(event);
@@ -232,7 +232,7 @@ public class AuroraView extends View {
         float currentHue = 150f;
         float currentValue = 1f;
 
-        // Slider Bounds
+        
         float sx, sy, sw, sh;
         
         ColorWheel() {
@@ -246,7 +246,7 @@ public class AuroraView extends View {
         void updateBounds(int w, int h, float density) {
             this.radius = 80 * density;
             this.cx = w / 2f;
-            this.cy = h / 2f - 40 * density; // Move up a bit to fit slider
+            this.cy = h / 2f - 40 * density; 
             
             int[] colors = new int[] { 
                 0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000 
@@ -281,10 +281,10 @@ public class AuroraView extends View {
                      new int[]{ Color.BLACK, hueColor }, null, Shader.TileMode.CLAMP);
              valueSliderPaint.setShader(valueGradient);
              
-             // Round rect for the slider track
+             
              canvas.drawRoundRect(sx, sy, sx + sw, sy + sh, sh/2, sh/2, valueSliderPaint);
              
-             // Draw slider handle
+             
              float handleX = sx + currentValue * sw;
              Paint handleP = new Paint(Paint.ANTI_ALIAS_FLAG);
              handleP.setColor(Color.WHITE);

@@ -35,11 +35,11 @@ public class TabSwitcherAdapter extends RecyclerView.Adapter<TabSwitcherAdapter.
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tab_card, parent, false);
         
-        // Adjust card width based on screen aspect ratio
+        
         android.util.DisplayMetrics metrics = parent.getContext().getResources().getDisplayMetrics();
         float screenRatio = (float) metrics.widthPixels / metrics.heightPixels;
         
-        // The card height is match_parent minus vertical margins (32dp * 2 = 64dp)
+        
         float density = metrics.density;
         int parentHeight = parent.getHeight();
         if (parentHeight <= 0) {
@@ -48,7 +48,7 @@ public class TabSwitcherAdapter extends RecyclerView.Adapter<TabSwitcherAdapter.
         int cardHeight = parentHeight - (int) (64 * density);
         int targetWidth = (int) (cardHeight * screenRatio);
         
-        // Ensure it doesn't exceed a reasonable max (e.g. 85% of screen width)
+        
         int maxWidth = (int) (metrics.widthPixels * 0.85f);
         if (targetWidth > maxWidth) {
             targetWidth = maxWidth;
