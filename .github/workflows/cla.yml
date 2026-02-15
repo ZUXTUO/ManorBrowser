@@ -19,7 +19,10 @@ jobs:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           path-to-signatures: ".github/signatures/cla.json"
-          path-to-document: "https://github.com/Olsc/ManorBrowser/blob/main/docs/ContributorLicenseAgreement.md" # e.g. a CLA or a DCO document
-          # branch should not be protected
+          path-to-document: "https://github.com/Olsc/ManorBrowser/blob/main/.github/ContributorLicenseAgreement.md" # e.g. a CLA or a DCO document
+          # branch should not be protected - change this to a non-protected branch if needed
           branch: "main"
           allowlist: Olsc,bot*
+          use-dco-flag: false
+          lock-pullrequest-aftermerge: true
+          suggest-recheck: true
