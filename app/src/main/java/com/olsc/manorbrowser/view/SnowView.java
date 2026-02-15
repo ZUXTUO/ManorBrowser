@@ -54,9 +54,9 @@ public class SnowView extends View {
         skyPaint = new Paint();
         skyPaint.setStyle(Paint.Style.FILL);
 
-        // Mountain Paints
+        
         mountainPaint = new Paint();
-        mountainPaint.setColor(0xFFFFFFFF); // Pure White
+        mountainPaint.setColor(0xFFFFFFFF); 
         mountainPaint.setStyle(Paint.Style.FILL);
         mountainPaint.setAntiAlias(true);
 
@@ -65,27 +65,27 @@ public class SnowView extends View {
         mountainShadowPaint.setStyle(Paint.Style.FILL);
         mountainShadowPaint.setAntiAlias(true);
 
-        // Ground Paints
+        
         groundPaint = new Paint();
-        groundPaint.setColor(0xFFFFFFFF); // Pure White
+        groundPaint.setColor(0xFFFFFFFF); 
         groundPaint.setStyle(Paint.Style.FILL);
         groundPaint.setAntiAlias(true);
 
         groundShadowPaint = new Paint();
-        groundShadowPaint.setColor(0xFFE8F1F6); // Very subtle cool white/blue
+        groundShadowPaint.setColor(0xFFE8F1F6); 
         groundShadowPaint.setStyle(Paint.Style.STROKE);
         groundShadowPaint.setStrokeWidth(2 * density);
         groundShadowPaint.setStrokeCap(Paint.Cap.ROUND);
         groundShadowPaint.setAntiAlias(true);
 
-        // Snowflake Paint
+        
         snowFlakePaint = new Paint();
-        snowFlakePaint.setColor(0xE6FFFFFF); // White, high opacity
+        snowFlakePaint.setColor(0xE6FFFFFF); 
         snowFlakePaint.setStyle(Paint.Style.FILL);
         snowFlakePaint.setAntiAlias(true);
     }
 
-    // Cached static background
+    
     private Bitmap landscapeBitmap;
 
     @Override
@@ -96,13 +96,13 @@ public class SnowView extends View {
 
         LinearGradient skyGradient = new LinearGradient(
                 0, 0, 0, height,
-                new int[]{0xFFE1F5FE, 0xFFF0F9FF, 0xFFFFFDE7}, // Pale Blue -> Very Pale -> Hint of Warmth
+                new int[]{0xFFE1F5FE, 0xFFF0F9FF, 0xFFFFFDE7}, 
                 new float[]{0f, 0.6f, 1f},
                 Shader.TileMode.CLAMP);
         skyPaint.setShader(skyGradient);
 
         generateLandscape();
-        generateLandscapeBitmap(); // Cache the static scene
+        generateLandscapeBitmap(); 
         generateSnowflakes();
     }
 
@@ -129,7 +129,7 @@ public class SnowView extends View {
         float p2Y = horizonY - 200 * density; 
         
         mountainPath.cubicTo(width * 0.55f, horizonY - 40*density, p2X - 60*density, p2Y + 100*density, p2X, p2Y);
-        // Slope down to right
+        
         mountainPath.cubicTo(p2X + 60*density, p2Y + 100*density, width * 0.9f, horizonY, width, horizonY);
         
         createMountainShadow(mountainShadowPath, p2X, p2Y, 200*density);
@@ -172,7 +172,7 @@ public class SnowView extends View {
         path.moveTo(peakX, peakY);
         
         float rightBaseX = peakX + h * 0.6f; 
-        float rightBaseY = peakY + h * 1.0f; // Down the slope
+        float rightBaseY = peakY + h * 1.0f; 
  
         path.lineTo(rightBaseX, rightBaseY);
 

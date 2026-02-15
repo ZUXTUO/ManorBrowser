@@ -13,8 +13,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-// 简单的明文存储。实际应用应加密。
-// Simple password storage (plain text for now). 
+
+
 public class PasswordStorage {
     private static final String FILE_NAME = "passwords.json";
 
@@ -35,7 +35,7 @@ public class PasswordStorage {
                     items.add(item);
                 }
             }
-            // Sort by most recent
+            
             Collections.sort(items, (p1, p2) -> Long.compare(p2.timestamp, p1.timestamp));
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class PasswordStorage {
     public static void savePassword(Context context, PasswordItem newItem) {
         List<PasswordItem> items = loadPasswords(context);
         
-        // Remove old entry for same url+username if exists (update)
+        
         items.removeIf(item -> item.url.equals(newItem.url) && item.username.equals(newItem.username));
         
         items.add(0, newItem);
@@ -75,7 +75,7 @@ public class PasswordStorage {
         List<PasswordItem> matches = new ArrayList<>();
         if (url == null) return matches;
         
-        // Simplified domain check
+        
         String domain = getDomain(url);
         
         for (PasswordItem item : all) {

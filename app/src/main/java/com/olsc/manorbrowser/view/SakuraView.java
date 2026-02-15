@@ -135,18 +135,18 @@ public class SakuraView extends View {
             placeFlowerCluster(canvas, flowerPaint, fx, fy);
         }
 
-        // Recursive branching
-        int numChildren = 2; // Keep at 2 for performance/aesthetics
+        
+        int numChildren = 2; 
 
         for (int i = 0; i < numChildren; i++) {
-            float newLen = length * (0.6f + random.nextFloat() * 0.2f); // Shorter decay
+            float newLen = length * (0.6f + random.nextFloat() * 0.2f); 
             float newThick = thickness * 0.7f;
             
             float angleDev = (random.nextFloat() - 0.5f) * 60f; 
             float newAngle = angle + angleDev; 
 
             if (thickness < 8 * density) {
-                newAngle += 20 * random.nextFloat(); // Bias downwards (positive angle increases y)
+                newAngle += 20 * random.nextFloat(); 
             }
 
             growBranch(canvas, branchPaint, flowerPaint, endX, endY, newLen, newAngle, newThick);
@@ -161,9 +161,9 @@ public class SakuraView extends View {
             float oy = (random.nextFloat() - 0.5f) * 35 * density;
             
             float roll = random.nextFloat();
-            if (roll > 0.9) paint.setColor(0xFFFFFFFF); // White
-            else if (roll > 0.6) paint.setColor(0xFFFF80AB); // Deep Pink
-            else paint.setColor(0xFFFFCDD2); // Standard
+            if (roll > 0.9) paint.setColor(0xFFFFFFFF); 
+            else if (roll > 0.6) paint.setColor(0xFFFF80AB); 
+            else paint.setColor(0xFFFFCDD2); 
             
             canvas.drawCircle(x + ox, y + oy, r, paint);
         }
@@ -171,7 +171,7 @@ public class SakuraView extends View {
 
     private void generatePetals() {
         petals.clear();
-        int count = 50; // Performance friendly count
+        int count = 50; 
         for (int i=0; i<count; i++) {
             petals.add(new Petal(width, height, density));
         }

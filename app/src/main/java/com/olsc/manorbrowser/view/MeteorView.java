@@ -62,12 +62,12 @@ public class MeteorView extends View {
 
         LinearGradient bgGradient = new LinearGradient(
                 0, 0, 0, height,
-                new int[]{0xFF050510, 0xFF101530}, // Deep dark blue -> Lighter dark blue
+                new int[]{0xFF050510, 0xFF101530}, 
                 null, Shader.TileMode.CLAMP);
         bgPaint.setShader(bgGradient);
 
         stars.clear();
-        int starCount = 80 + random.nextInt(40); // Random number of stars
+        int starCount = 80 + random.nextInt(40); 
         float density = getResources().getDisplayMetrics().density;
         
         for (int i = 0; i < starCount; i++) {
@@ -116,8 +116,8 @@ public class MeteorView extends View {
 
 
 
-        int colorHead = Color.argb(255, 255, 255, 255); // Solid White Head
-        int colorTail = Color.argb(0, 255, 255, 255); // Transparent Tail
+        int colorHead = Color.argb(255, 255, 255, 255); 
+        int colorTail = Color.argb(0, 255, 255, 255); 
 
         LinearGradient gradient = new LinearGradient(
                 meteor.x - meteor.lengthX, meteor.y - meteor.lengthY,
@@ -148,9 +148,9 @@ public class MeteorView extends View {
         Star(int w, int h, float density) {
             x = random.nextFloat() * w;
             y = random.nextFloat() * h;
-            // Base radius 0.5 to 1.5 dp
+            
             radius = (0.5f + random.nextFloat() * 1.5f) * density; 
-            maxAlpha = 150 + random.nextInt(105); // Max opacity 150-255
+            maxAlpha = 150 + random.nextInt(105); 
             alpha = random.nextInt(maxAlpha);
             fadingOut = random.nextBoolean();
             twinkleSpeed = 2 + random.nextInt(3);
@@ -180,15 +180,15 @@ public class MeteorView extends View {
         float thickness;
 
         Meteor(int w, int h, float density) {
-            // Angle: Moving towards bottom-right (simulating typical meteor shower angle)
-            // Let's fix angle somewhat to be uniform-ish but with variance
-            // 45 degrees + random variance (-15 to +15)
+            
+            
+            
             double angle = Math.toRadians(35 + random.nextInt(20));
             
-            // Speed: 15-30 dp per frame (very fast)
+            
             float speed = (15 + random.nextFloat() * 15) * density; 
             
-            // Length: 100-300 dp
+            
             float length = (100 + random.nextFloat() * 200) * density; 
 
             speedX = (float) (speed * Math.cos(angle));
@@ -197,18 +197,18 @@ public class MeteorView extends View {
             lengthX = (float) (length * Math.cos(angle));
             lengthY = (float) (length * Math.sin(angle));
 
-            // Thickness: 1-3 dp
+            
             thickness = (1 + random.nextFloat() * 2) * density;
 
-            // Start Position: Either Top edge or Left edge
-            // We expand the "start zone" so they can start well off screen
+            
+            
             if (random.nextBoolean()) {
-                // Top edge
+                
                 x = random.nextInt(w);
-                y = -lengthY - 50; // Start fully offscreen
+                y = -lengthY - 50; 
             } else {
-                // Left edge (limit to upper half so it crosses screen nicely)
-                x = -lengthX - 50; // Start fully offscreen
+                
+                x = -lengthX - 50; 
                 y = random.nextInt(h / 2); 
             }
         }
@@ -219,7 +219,7 @@ public class MeteorView extends View {
         }
 
         boolean isOffScreen(int w, int h) {
-            // Check if meteor has completely passed the screen
+            
             return x - lengthX > w || y - lengthY > h;
         }
     }

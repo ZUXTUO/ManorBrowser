@@ -52,14 +52,14 @@ public class RainView extends View {
         bgPaint.setStyle(Paint.Style.FILL);
 
         rainPaint = new Paint();
-        rainPaint.setColor(0x88AACCFF); // Light blue-ish grey
+        rainPaint.setColor(0x88AACCFF); 
         rainPaint.setStyle(Paint.Style.STROKE);
         rainPaint.setStrokeCap(Paint.Cap.BUTT);
         rainPaint.setAntiAlias(true);
 
         glassDropPaint = new Paint();
         glassDropPaint.setStyle(Paint.Style.FILL);
-        glassDropPaint.setColor(0xCCFFFFFF); // Semi-transparent white
+        glassDropPaint.setColor(0xCCFFFFFF); 
         glassDropPaint.setAntiAlias(true);
 
         mistPaint = new Paint();
@@ -104,7 +104,7 @@ public class RainView extends View {
 
         for (MistShape mist : mists) {
             mist.update();
-            mistPaint.setColor(0x33B0BEC5); // Very faint blue-grey
+            mistPaint.setColor(0x33B0BEC5); 
             mistPaint.setAlpha(mist.alpha);
             canvas.drawCircle(mist.x, mist.y, mist.radius, mistPaint);
         }
@@ -162,7 +162,7 @@ public class RainView extends View {
     private class GlassDrop {
         float x, y, size, speed;
         int alpha;
-        int state; // 0=Wait, 1=Slide
+        int state; 
 
         GlassDrop(int w, int h, float density) {
             reset(w, h, density, true);
@@ -180,7 +180,7 @@ public class RainView extends View {
         void update() {
             if (state == 0) {
                 if (random.nextInt(1000) < 10) {
-                    state = 1; // Start sliding
+                    state = 1; 
                     speed = (0.5f + random.nextFloat()) * density;
                 }
             } else {

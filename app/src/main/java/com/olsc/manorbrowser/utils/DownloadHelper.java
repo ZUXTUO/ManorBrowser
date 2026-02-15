@@ -85,7 +85,7 @@ public class DownloadHelper {
             }
         }).start();
 
-        return 0; // 由于异步，返回值不再可靠，但在本项目中调用方不使用该返回值
+        return 0; 
     }
 
     private static String sanitize(String value) {

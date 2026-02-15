@@ -9,10 +9,10 @@ public class BookmarkItem {
     public enum Type { LINK, FOLDER }
 
     public String title;
-    public String url; // Only for LINK
+    public String url; 
     public long id;
     public Type type;
-    public List<BookmarkItem> children; // Only for FOLDER
+    public List<BookmarkItem> children; 
     public long parentId;
 
     public BookmarkItem(String title, String url) {
