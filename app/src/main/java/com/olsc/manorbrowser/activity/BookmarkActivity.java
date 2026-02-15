@@ -36,6 +36,11 @@ public class BookmarkActivity extends AppCompatActivity {
     private Stack<BookmarkItem> folderStack = new Stack<>();
 
     @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
@@ -88,7 +93,7 @@ public class BookmarkActivity extends AppCompatActivity {
 
             @Override
             public void onBookmarkLongClick(BookmarkItem item) {
-                showDeleteConfirm(item);
+                showActionDialog(item);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -153,6 +158,100 @@ public class BookmarkActivity extends AppCompatActivity {
             })
             .setNegativeButton(android.R.string.cancel, null)
             .show();
+    }
+
+    private void showActionDialog(BookmarkItem item) {
+        String[] options = {
+            getString(R.string.action_delete),
+            getString(R.string.action_move_to)
+        };
+        new AlertDialog.Builder(this)
+            .setTitle(item.title)
+            .setItems(options, (dialog, which) -> {
+                if (which == 0) {
+                    showDeleteConfirm(item);
+                } else if (which == 1) {
+                    showMoveDialog(item);
+                }
+            })
+            .show();
+    }
+
+    private void showMoveDialog(BookmarkItem item) {
+        List<BookmarkItem> allFolders = BookmarkStorage.getAllFolders(this);
+        
+        List<BookmarkItem> validFolders = new ArrayList<>();
+        validFolders.add(new BookmarkItem(getString(R.string.root_folder))); 
+        validFolders.get(0).id = -1;
+
+        for (BookmarkItem folder : allFolders) {
+            if (isValidMoveTarget(folder, item)) {
+                validFolders.add(folder);
+            }
+        }
+
+        if (validFolders.isEmpty()) {
+            Toast.makeText(this, R.string.msg_no_folders, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] folderNames = new String[validFolders.size()];
+        for (int i = 0; i < validFolders.size(); i++) {
+            folderNames[i] = validFolders.get(i).title;
+        }
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle(R.string.action_move_to);
+        builder.setItems(folderNames, (dialog, which) -> {
+                BookmarkItem target = validFolders.get(which);
+                
+                if (folderStack.isEmpty()) {
+                    rootList.remove(item);
+                } else {
+                    folderStack.peek().children.remove(item);
+                }
+                
+                BookmarkStorage.addBookmarkToFolder(BookmarkActivity.this, item, target.id);
+                
+                Toast.makeText(BookmarkActivity.this, R.string.msg_move_success, Toast.LENGTH_SHORT).show();
+                
+                rootList = BookmarkStorage.loadBookmarks(BookmarkActivity.this);
+                if (!folderStack.isEmpty()) {
+                    rebuildStack();
+                }
+                refreshList();
+            });
+            
+            builder.show();
+    }
+    
+    private boolean isValidMoveTarget(BookmarkItem target, BookmarkItem item) {
+        if (target.id == item.id) return false;
+        if (item.type != BookmarkItem.Type.FOLDER) return true;
+        
+        return true; 
+    }
+
+    private void rebuildStack() {
+        
+        List<Long> ids = new ArrayList<>();
+        for(BookmarkItem item : folderStack) {
+            ids.add(item.id);
+        }
+        folderStack.clear();
+        
+        List<BookmarkItem> currentLevel = rootList;
+        for(Long id : ids) {
+            for(BookmarkItem item : currentLevel) {
+                if(item.id == id && item.type == BookmarkItem.Type.FOLDER) {
+                    folderStack.push(item);
+                    if(item.children != null) {
+                       currentLevel = item.children; 
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     private void showDeleteConfirm(BookmarkItem item) {

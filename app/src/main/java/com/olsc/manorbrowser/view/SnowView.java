@@ -29,7 +29,7 @@ public class SnowView extends View {
     private final Random random = new Random();
 
     private final List<SnowFlake> snowFlakes = new ArrayList<>();
-    
+
     private Path mountainPath;
     private Path mountainShadowPath;
     private Path groundPath;
@@ -54,38 +54,34 @@ public class SnowView extends View {
         skyPaint = new Paint();
         skyPaint.setStyle(Paint.Style.FILL);
 
-        
         mountainPaint = new Paint();
-        mountainPaint.setColor(0xFFFFFFFF); 
+        mountainPaint.setColor(0xFFFFFFFF);
         mountainPaint.setStyle(Paint.Style.FILL);
         mountainPaint.setAntiAlias(true);
 
         mountainShadowPaint = new Paint();
-        mountainShadowPaint.setColor(0xFFD6E6F2); 
+        mountainShadowPaint.setColor(0xFFD6E6F2);
         mountainShadowPaint.setStyle(Paint.Style.FILL);
         mountainShadowPaint.setAntiAlias(true);
 
-        
         groundPaint = new Paint();
-        groundPaint.setColor(0xFFFFFFFF); 
+        groundPaint.setColor(0xFFFFFFFF);
         groundPaint.setStyle(Paint.Style.FILL);
         groundPaint.setAntiAlias(true);
 
         groundShadowPaint = new Paint();
-        groundShadowPaint.setColor(0xFFE8F1F6); 
+        groundShadowPaint.setColor(0xFFE8F1F6);
         groundShadowPaint.setStyle(Paint.Style.STROKE);
         groundShadowPaint.setStrokeWidth(2 * density);
         groundShadowPaint.setStrokeCap(Paint.Cap.ROUND);
         groundShadowPaint.setAntiAlias(true);
 
-        
         snowFlakePaint = new Paint();
-        snowFlakePaint.setColor(0xE6FFFFFF); 
+        snowFlakePaint.setColor(0xE6FFFFFF);
         snowFlakePaint.setStyle(Paint.Style.FILL);
         snowFlakePaint.setAntiAlias(true);
     }
 
-    
     private Bitmap landscapeBitmap;
 
     @Override
@@ -96,13 +92,13 @@ public class SnowView extends View {
 
         LinearGradient skyGradient = new LinearGradient(
                 0, 0, 0, height,
-                new int[]{0xFFE1F5FE, 0xFFF0F9FF, 0xFFFFFDE7}, 
+                new int[]{0xFFE1F5FE, 0xFFF0F9FF, 0xFFFFFDE7},
                 new float[]{0f, 0.6f, 1f},
                 Shader.TileMode.CLAMP);
         skyPaint.setShader(skyGradient);
 
         generateLandscape();
-        generateLandscapeBitmap(); 
+        generateLandscapeBitmap();
         generateSnowflakes();
     }
 
@@ -112,12 +108,12 @@ public class SnowView extends View {
         groundPath = new Path();
         groundShadowPath = new Path();
 
-        float horizonY = height * 0.7f; 
+        float horizonY = height * 0.7f;
 
         mountainPath.reset();
         mountainPath.moveTo(0, height);
         mountainPath.lineTo(0, horizonY);
-        
+
         float p1X = width * 0.25f;
         float p1Y = horizonY - 120 * density;
         mountainPath.cubicTo(width * 0.05f, horizonY, p1X - 40*density, p1Y + 60*density, p1X, p1Y);
@@ -126,18 +122,17 @@ public class SnowView extends View {
         createMountainShadow(mountainShadowPath, p1X, p1Y, 120*density);
 
         float p2X = width * 0.7f;
-        float p2Y = horizonY - 200 * density; 
-        
+        float p2Y = horizonY - 200 * density;
+
         mountainPath.cubicTo(width * 0.55f, horizonY - 40*density, p2X - 60*density, p2Y + 100*density, p2X, p2Y);
-        
+
         mountainPath.cubicTo(p2X + 60*density, p2Y + 100*density, width * 0.9f, horizonY, width, horizonY);
-        
+
         createMountainShadow(mountainShadowPath, p2X, p2Y, 200*density);
 
         mountainPath.lineTo(width, height);
         mountainPath.lineTo(0, height);
         mountainPath.close();
-
 
         float groundStart = horizonY - 20 * density;
         groundPath.moveTo(0, groundStart);
@@ -149,16 +144,16 @@ public class SnowView extends View {
         groundShadowPath.moveTo(width * 0.2f, height * 0.82f);
         groundShadowPath.cubicTo(width * 0.3f, height * 0.85f, width * 0.4f, height * 0.80f, width * 0.5f, height * 0.82f);
     }
-    
+
     private void generateLandscapeBitmap() {
         if (width <= 0 || height <= 0) return;
-        
+
         if (landscapeBitmap != null && !landscapeBitmap.isRecycled()) {
             landscapeBitmap.recycle();
         }
         landscapeBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(landscapeBitmap);
-        
+
         canvas.drawRect(0, 0, width, height, skyPaint);
 
         canvas.drawPath(mountainPath, mountainPaint);
@@ -170,10 +165,10 @@ public class SnowView extends View {
 
     private void createMountainShadow(Path path, float peakX, float peakY, float h) {
         path.moveTo(peakX, peakY);
-        
-        float rightBaseX = peakX + h * 0.6f; 
-        float rightBaseY = peakY + h * 1.0f; 
- 
+
+        float rightBaseX = peakX + h * 0.6f;
+        float rightBaseY = peakY + h * 1.0f;
+
         path.lineTo(rightBaseX, rightBaseY);
 
         path.cubicTo(
@@ -186,7 +181,7 @@ public class SnowView extends View {
 
     private void generateSnowflakes() {
         snowFlakes.clear();
-        int count = 70; 
+        int count = 70;
         for (int i = 0; i < count; i++) {
             snowFlakes.add(new SnowFlake(width, height, density));
         }
@@ -208,7 +203,6 @@ public class SnowView extends View {
         postInvalidateOnAnimation();
     }
 
-
     private class SnowFlake {
         float x, y, radius;
         float speedY, speedX;
@@ -221,13 +215,13 @@ public class SnowView extends View {
         void reset(int w, int h, float density, boolean randomStart) {
             x = random.nextInt(w);
             y = randomStart ? random.nextInt(h) : -20;
-            
+
             radius = (2f + random.nextFloat() * 2f) * density;
-            
-            float speedFactor = 0.5f + random.nextFloat() * 0.5f; 
+
+            float speedFactor = 0.5f + random.nextFloat() * 0.5f;
             speedY = (1f + random.nextFloat()) * density * speedFactor;
             speedX = (random.nextFloat() - 0.5f) * 0.4f * density;
-            
+
             wobble = random.nextFloat() * 100;
         }
 

@@ -22,7 +22,7 @@ import com.olsc.manorbrowser.data.DownloadInfo;
 import java.util.List;
 
 public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.DownloadViewHolder> {
-    
+
     private final List<DownloadInfo> list;
     private final Context context;
 
@@ -41,46 +41,46 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
     @Override
     public void onBindViewHolder(@NonNull DownloadViewHolder holder, int position) {
         DownloadInfo info = list.get(position);
-        
+
         holder.tvFilename.setText(info.title);
-        
+
         int percent = 0;
         if (info.totalBytes > 0) {
             percent = (int) ((info.currentBytes * 100) / info.totalBytes);
         }
         holder.progressBar.setProgress(percent);
-        
-        String sizeStr = Formatter.formatFileSize(context, info.currentBytes) + " / " + 
+
+        String sizeStr = Formatter.formatFileSize(context, info.currentBytes) + " / " +
                          Formatter.formatFileSize(context, info.totalBytes);
         holder.tvSize.setText(sizeStr);
-        
+
         String statusText;
         int actionIcon = android.R.drawable.ic_menu_close_clear_cancel;
         boolean enableAction = true;
-        
+
         switch (info.status) {
-            case 0: 
+            case 0:
                 statusText = context.getString(R.string.download_status_waiting);
                 holder.progressBar.setIndeterminate(true);
                 break;
-            case 1: 
+            case 1:
                 statusText = context.getString(R.string.download_status_running, percent);
                 holder.progressBar.setIndeterminate(info.totalBytes <= 0);
                 break;
-            case 2: 
+            case 2:
                 statusText = context.getString(R.string.download_status_paused) + ": " + getPausedReason(info.reason);
                 holder.progressBar.setIndeterminate(false);
                 break;
-            case 3: 
+            case 3:
                 statusText = context.getString(R.string.download_status_completed);
                 holder.progressBar.setIndeterminate(false);
                 holder.progressBar.setProgress(100);
-                actionIcon = android.R.drawable.ic_menu_view; 
+                actionIcon = android.R.drawable.ic_menu_view;
                 break;
-            case 4: 
+            case 4:
                 statusText = context.getString(R.string.download_status_failed) + ": " + getErrorReason(info.reason);
                 holder.progressBar.setIndeterminate(false);
-                actionIcon = android.R.drawable.ic_menu_revert; 
+                actionIcon = android.R.drawable.ic_menu_revert;
                 break;
             default:
                 statusText = context.getString(R.string.download_status_unknown);
@@ -99,16 +99,16 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             showDeleteDialog(info);
             return true;
         });
-        
+
         holder.btnAction.setOnClickListener(v -> {
              if (info.status == 1 || info.status == 0) {
-                 
+
                  cancelDownload(info.id);
              } else if (info.status == 3) {
-                 
+
                  openFile(info);
              } else if (info.status == 4) {
-                 
+
                  Toast.makeText(context, R.string.msg_retry_download, Toast.LENGTH_SHORT).show();
              }
         });
@@ -152,17 +152,11 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
     public int getItemCount() {
         return list.size();
     }
-    
+
     private void openFile(DownloadInfo info) {
         try {
             Uri uri = Uri.parse(info.filePath);
-            
-            
-            
-            
-            
-            
-            
+
             DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri fileUri = dm.getUriForDownloadedFile(info.id);
             if (fileUri != null) {
@@ -177,7 +171,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             Toast.makeText(context, context.getString(R.string.msg_file_open_error, e.getMessage()), Toast.LENGTH_SHORT).show();
         }
     }
-    
+
     private void cancelDownload(long id) {
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         dm.remove(id);

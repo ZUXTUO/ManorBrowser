@@ -2,7 +2,7 @@ package com.olsc.manorbrowser.utils;
 
 public class JSInjector {
 
-    public static final String INJECT_LOGIN_DETECT = 
+    public static final String INJECT_LOGIN_DETECT =
         "(function() {" +
         "    if (window.manorInjected) return;" +
         "    window.manorInjected = true;" +
