@@ -1,5 +1,7 @@
+/**
+ * 密码持久化存储类，负责登录凭据的加密保存和读取。
+ */
 package com.olsc.manorbrowser.data;
-
 import android.content.Context;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,15 +14,12 @@ import java.util.Comparator;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 public class PasswordStorage {
     private static final String FILE_NAME = "passwords.json";
-
     public static List<PasswordItem> loadPasswords(Context context) {
         List<PasswordItem> items = new ArrayList<>();
         File file = new File(context.getFilesDir(), FILE_NAME);
         if (!file.exists()) return items;
-
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
@@ -33,23 +32,18 @@ public class PasswordStorage {
                     items.add(item);
                 }
             }
-
             Collections.sort(items, (p1, p2) -> Long.compare(p2.timestamp, p1.timestamp));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return items;
     }
-
     public static void savePassword(Context context, PasswordItem newItem) {
         List<PasswordItem> items = loadPasswords(context);
-
         items.removeIf(item -> item.url.equals(newItem.url) && item.username.equals(newItem.username));
-
         items.add(0, newItem);
         saveAll(context, items);
     }
-
     public static void deletePassword(Context context, PasswordItem itemToDelete) {
         List<PasswordItem> items = loadPasswords(context);
         items.removeIf(item -> 
@@ -58,7 +52,6 @@ public class PasswordStorage {
             item.timestamp == itemToDelete.timestamp);
         saveAll(context, items);
     }
-
     private static void saveAll(Context context, List<PasswordItem> items) {
         try {
             JSONArray array = new JSONArray();
@@ -66,7 +59,6 @@ public class PasswordStorage {
                 JSONObject obj = item.toJson();
                 if (obj != null) array.put(obj);
             }
-
             File file = new File(context.getFilesDir(), FILE_NAME);
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 fos.write(array.toString().getBytes(StandardCharsets.UTF_8));
@@ -75,14 +67,11 @@ public class PasswordStorage {
             e.printStackTrace();
         }
     }
-
     public static List<PasswordItem> getPasswordsForUrl(Context context, String url) {
         List<PasswordItem> all = loadPasswords(context);
         List<PasswordItem> matches = new ArrayList<>();
         if (url == null) return matches;
-
         String domain = getDomain(url);
-
         for (PasswordItem item : all) {
             if (item.url != null && getDomain(item.url).equals(domain)) {
                 matches.add(item);
@@ -90,7 +79,6 @@ public class PasswordStorage {
         }
         return matches;
     }
-
     private static String getDomain(String url) {
         try {
             java.net.URI uri = new java.net.URI(url);

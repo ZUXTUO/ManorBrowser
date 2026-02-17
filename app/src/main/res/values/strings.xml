@@ -199,4 +199,8 @@ URL: %1$s</string>
     
     <string name="msg_desktop_mode_on">Switched to Desktop Mode</string>
     <string name="msg_desktop_mode_off">Switched to Mobile Mode</string>
+    
+    <string name="title_file_exists">File Already Exists</string>
+    <string name="msg_file_exists">File "%1$s" already exists. Download a new copy?</string>
+    <string name="action_download_new">Download New Copy</string>
 </resources>

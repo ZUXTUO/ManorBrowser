@@ -1,38 +1,31 @@
+/**
+ * 动态背景基类/容器。
+ */
 package com.olsc.manorbrowser.view;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
-
 public class DynamicBackgroundView extends FrameLayout {
-
     public enum EffectMode {
         METEOR, RAIN, SNOW, AURORA, SAKURA, SOLID
     }
-
     private EffectMode currentMode = EffectMode.METEOR;
-
     public DynamicBackgroundView(Context context) {
         this(context, null);
     }
-
     public DynamicBackgroundView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
     public DynamicBackgroundView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
-
     private void init() {
         setMode(currentMode);
     }
-
     public void setMode(EffectMode mode) {
         this.currentMode = mode;
         removeAllViews();
-
         Context context = getContext();
         switch (mode) {
             case RAIN:
@@ -59,4 +52,3 @@ public class DynamicBackgroundView extends FrameLayout {
         }
     }
 }
-

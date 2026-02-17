@@ -1,13 +1,13 @@
+/**
+ * 设置界面，允许用户配置浏览器环境和个人偏好。
+ */
 package com.olsc.manorbrowser.activity;
-
 import com.olsc.manorbrowser.R;
 import com.olsc.manorbrowser.Config;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowCompat;
@@ -15,18 +15,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.core.graphics.Insets;
-
 public class SettingsActivity extends AppCompatActivity {
-
     private android.widget.TextView tvCurrentEngine;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
         androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
             androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
-
         
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         
@@ -36,16 +32,13 @@ public class SettingsActivity extends AppCompatActivity {
             controller.setAppearanceLightStatusBars(!isDarkMode);
             controller.setAppearanceLightNavigationBars(!isDarkMode);
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
@@ -54,27 +47,20 @@ public class SettingsActivity extends AppCompatActivity {
             v.setPadding(v.getPaddingLeft(), 0, v.getPaddingRight(), insets.bottom);
             return windowInsets;
         });
-
         View containerSearchEngine = findViewById(R.id.container_search_engine_select);
         tvCurrentEngine = findViewById(R.id.tv_current_engine);
-
         updateCurrentEngineText();
-
         containerSearchEngine.setOnClickListener(v -> showSearchEngineDialog());
-
         View containerBgEffect = findViewById(R.id.container_background_effect_select);
-
         if (containerBgEffect != null) {
             containerBgEffect.setOnClickListener(v -> showBackgroundEffectDialog());
             updateCurrentBackgroundEffectText();
         }
-
         View containerLanguage = findViewById(R.id.container_language_select);
         if (containerLanguage != null) {
             containerLanguage.setOnClickListener(v -> showLanguageDialog());
             updateCurrentLanguageText();
         }
-
         View containerAbout = findViewById(R.id.container_about);
         if (containerAbout != null) {
             containerAbout.setOnClickListener(v -> {
@@ -125,8 +111,7 @@ public class SettingsActivity extends AppCompatActivity {
         layout.addView(auroraView, new android.widget.FrameLayout.LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT, 
                 size)); 
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_pick_color)
                 .setView(layout)
                 .setPositiveButton(R.string.action_select, (dialog, which) -> {
@@ -136,16 +121,13 @@ public class SettingsActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
-
     private void showSearchEngineDialog() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
         int checkedItem = Config.ENGINE_GOOGLE.equals(currentEngine) ? 1 : 0;
-
         String[] engines = {getString(R.string.engine_baidu), getString(R.string.engine_google)};
         String[] values = {Config.ENGINE_BAIDU, Config.ENGINE_GOOGLE};
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.label_default_search_engine)
                 .setSingleChoiceItems(engines, checkedItem, (dialog, which) -> {
                     SharedPreferences.Editor editor = prefs.edit();
@@ -157,15 +139,12 @@ public class SettingsActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
-
     private void updateCurrentEngineText() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
         String engineName = Config.ENGINE_GOOGLE.equals(currentEngine) ? getString(R.string.engine_google) : getString(R.string.engine_baidu);
-
         tvCurrentEngine.setText(engineName);
     }
-
     private void showBackgroundEffectDialog() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentEffect = prefs.getString(Config.PREF_KEY_BG_EFFECT, Config.BG_EFFECT_METEOR);
@@ -179,7 +158,6 @@ public class SettingsActivity extends AppCompatActivity {
             case Config.BG_EFFECT_SOLID: checkedItem = 5; break;
             default: checkedItem = 0; break;
         }
-
         String[] effects = {
             getString(R.string.bg_effect_meteor),
             getString(R.string.bg_effect_rain),
@@ -189,8 +167,7 @@ public class SettingsActivity extends AppCompatActivity {
             getString(R.string.bg_effect_solid)
         };
         String[] values = {Config.BG_EFFECT_METEOR, Config.BG_EFFECT_RAIN, Config.BG_EFFECT_SNOW, Config.BG_EFFECT_AURORA, Config.BG_EFFECT_SAKURA, Config.BG_EFFECT_SOLID};
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.title_background_effect)
                 .setSingleChoiceItems(effects, checkedItem, (dialog, which) -> {
                     SharedPreferences.Editor editor = prefs.edit();
@@ -202,11 +179,9 @@ public class SettingsActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
-
     private void updateCurrentBackgroundEffectText() {
         android.widget.TextView tvCurrentEffect = findViewById(R.id.tv_current_bg_effect);
         if (tvCurrentEffect == null) return;
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentEffect = prefs.getString(Config.PREF_KEY_BG_EFFECT, Config.BG_EFFECT_METEOR);
         String effectName;
@@ -222,7 +197,6 @@ public class SettingsActivity extends AppCompatActivity {
         
         View containerSolid = findViewById(R.id.container_solid_settings);
         View btnPickColor = findViewById(R.id.btn_bg_pick_color);
-
         if (containerSolid != null) {
             boolean isSolidEffect = Config.BG_EFFECT_SOLID.equals(currentEffect);
             if (isSolidEffect) {
@@ -235,7 +209,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
-
     private void showLanguageDialog() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentLang = prefs.getString(Config.PREF_KEY_LANGUAGE, "");
@@ -243,15 +216,13 @@ public class SettingsActivity extends AppCompatActivity {
         int checkedItem = 0;
         if ("en".equals(currentLang)) checkedItem = 1;
         else if ("zh".equals(currentLang)) checkedItem = 2;
-
         String[] languages = {
             getString(R.string.language_system),
             getString(R.string.language_en),
             getString(R.string.language_zh)
         };
         String[] values = {"", "en", "zh"};
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.title_language)
                 .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
                     SharedPreferences.Editor editor = prefs.edit();
@@ -271,7 +242,6 @@ public class SettingsActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
-
     private void updateCurrentLanguageText() {
         android.widget.TextView tvLanguage = findViewById(R.id.tv_current_language);
         if (tvLanguage == null) return;
@@ -286,12 +256,10 @@ public class SettingsActivity extends AppCompatActivity {
         
         tvLanguage.setText(display);
     }
-
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
         super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
     }
-
     @Override
     public boolean onSupportNavigateUp() {
         finish();

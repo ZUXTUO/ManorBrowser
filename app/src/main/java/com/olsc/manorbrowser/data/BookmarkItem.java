@@ -1,20 +1,19 @@
+/**
+ * 书签信息的实体类。
+ */
 package com.olsc.manorbrowser.data;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
-
 public class BookmarkItem {
     public enum Type { LINK, FOLDER }
-
     public String title;
     public String url;
     public long id;
     public Type type;
     public List<BookmarkItem> children;
     public long parentId;
-
     public BookmarkItem(String title, String url) {
         this.title = title;
         this.url = url;
@@ -22,7 +21,6 @@ public class BookmarkItem {
         this.type = Type.LINK;
         this.parentId = -1;
     }
-
     public BookmarkItem(String title) {
         this.title = title;
         this.id = System.currentTimeMillis() + (long)(Math.random() * 1000);
@@ -30,7 +28,6 @@ public class BookmarkItem {
         this.children = new ArrayList<>();
         this.parentId = -1;
     }
-
     public JSONObject toJson() throws Exception {
         JSONObject json = new JSONObject();
         json.put("id", id);
@@ -48,7 +45,6 @@ public class BookmarkItem {
         }
         return json;
     }
-
     public static BookmarkItem fromJson(JSONObject json) throws Exception {
         Type type = Type.valueOf(json.getString("type"));
         BookmarkItem item;

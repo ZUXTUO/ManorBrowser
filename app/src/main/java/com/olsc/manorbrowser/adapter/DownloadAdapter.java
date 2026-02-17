@@ -1,5 +1,7 @@
+/**
+ * 下载列表的适配器，显示下载进度和状态。
+ */
 package com.olsc.manorbrowser.adapter;
-
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,52 +14,39 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.olsc.manorbrowser.R;
 import com.olsc.manorbrowser.data.DownloadInfo;
-
 import java.util.List;
-
 public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.DownloadViewHolder> {
-
     private final List<DownloadInfo> list;
     private final Context context;
-
     public DownloadAdapter(Context context, List<DownloadInfo> list) {
         this.context = context;
         this.list = list;
     }
-
     @NonNull
     @Override
     public DownloadViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_download, parent, false);
         return new DownloadViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull DownloadViewHolder holder, int position) {
         DownloadInfo info = list.get(position);
-
         holder.tvFilename.setText(info.title);
-
         int percent = 0;
         if (info.totalBytes > 0) {
             percent = (int) ((info.currentBytes * 100) / info.totalBytes);
         }
         holder.progressBar.setProgress(percent);
-
         String sizeStr = Formatter.formatFileSize(context, info.currentBytes) + " / " +
                          Formatter.formatFileSize(context, info.totalBytes);
         holder.tvSize.setText(sizeStr);
-
         String statusText;
         int actionIcon = android.R.drawable.ic_menu_close_clear_cancel;
         boolean enableAction = true;
-
         switch (info.status) {
             case 0:
                 statusText = context.getString(R.string.download_status_waiting);
@@ -88,34 +77,27 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         }
         holder.tvStatus.setText(statusText);
         holder.btnAction.setImageResource(actionIcon);
-
         holder.itemView.setOnClickListener(v -> {
             if (info.status == 3 && info.filePath != null) {
                 openFile(info);
             }
         });
-
         holder.itemView.setOnLongClickListener(v -> {
             showDeleteDialog(info);
             return true;
         });
-
         holder.btnAction.setOnClickListener(v -> {
              if (info.status == 1 || info.status == 0) {
-
                  cancelDownload(info.id);
              } else if (info.status == 3) {
-
                  openFile(info);
              } else if (info.status == 4) {
-
                  Toast.makeText(context, R.string.msg_retry_download, Toast.LENGTH_SHORT).show();
              }
         });
     }
-
     private void showDeleteDialog(DownloadInfo info) {
-        new androidx.appcompat.app.AlertDialog.Builder(context)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
             .setTitle(R.string.action_delete)
             .setMessage(R.string.msg_confirm_delete_download)
             .setPositiveButton(R.string.action_delete_with_file, (dialog, which) -> {
@@ -127,7 +109,6 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             .setNegativeButton(android.R.string.cancel, null)
             .show();
     }
-
     private void deleteDownload(DownloadInfo info, boolean deleteFile) {
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         if (!deleteFile && info.filePath != null) {
@@ -147,16 +128,13 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         dm.remove(info.id);
         Toast.makeText(context, R.string.msg_download_cancelled, Toast.LENGTH_SHORT).show();
     }
-
     @Override
     public int getItemCount() {
         return list.size();
     }
-
     private void openFile(DownloadInfo info) {
         try {
             Uri uri = Uri.parse(info.filePath);
-
             DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri fileUri = dm.getUriForDownloadedFile(info.id);
             if (fileUri != null) {
@@ -171,13 +149,11 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             Toast.makeText(context, context.getString(R.string.msg_file_open_error, e.getMessage()), Toast.LENGTH_SHORT).show();
         }
     }
-
     private void cancelDownload(long id) {
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         dm.remove(id);
         Toast.makeText(context, R.string.msg_download_cancelled, Toast.LENGTH_SHORT).show();
     }
-
     private String getPausedReason(int reason) {
         switch (reason) {
             case DownloadManager.PAUSED_WAITING_TO_RETRY: return context.getString(R.string.paused_waiting_to_retry);
@@ -186,7 +162,6 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             default: return context.getString(R.string.download_status_unknown);
         }
     }
-
     private String getErrorReason(int reason) {
         switch (reason) {
             case DownloadManager.ERROR_CANNOT_RESUME: return context.getString(R.string.error_cannot_resume);
@@ -200,12 +175,10 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             default: return context.getString(R.string.error_unknown, reason);
         }
     }
-
     static class DownloadViewHolder extends RecyclerView.ViewHolder {
         TextView tvFilename, tvStatus, tvSize;
         ProgressBar progressBar;
         ImageView btnAction;
-
         public DownloadViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFilename = itemView.findViewById(R.id.tv_filename);

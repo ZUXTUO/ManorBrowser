@@ -1,5 +1,7 @@
+/**
+ * 书签管理界面，允许用户查看、添加、删除和编辑书签。
+ */
 package com.olsc.manorbrowser.activity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -26,27 +28,22 @@ import com.olsc.manorbrowser.data.BookmarkStorage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 public class BookmarkActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private BookmarkAdapter adapter;
     private List<BookmarkItem> displayList = new ArrayList<>();
     private List<BookmarkItem> rootList;
     private Stack<BookmarkItem> folderStack = new Stack<>();
-
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
         super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
         androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
             androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
-
         
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         
@@ -56,16 +53,13 @@ public class BookmarkActivity extends AppCompatActivity {
             controller.setAppearanceLightStatusBars(!isDarkMode);
             controller.setAppearanceLightNavigationBars(!isDarkMode);
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
@@ -74,13 +68,10 @@ public class BookmarkActivity extends AppCompatActivity {
             v.setPadding(v.getPaddingLeft(), 0, v.getPaddingRight(), insets.bottom);
             return windowInsets;
         });
-
         recyclerView = findViewById(R.id.rv_bookmarks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         rootList = BookmarkStorage.loadBookmarks(this);
         refreshList();
-
         adapter = new BookmarkAdapter(displayList, new BookmarkAdapter.OnBookmarkClickListener() {
             @Override
             public void onBookmarkClick(BookmarkItem item) {
@@ -90,17 +81,14 @@ public class BookmarkActivity extends AppCompatActivity {
                     openBookmark(item);
                 }
             }
-
             @Override
             public void onBookmarkLongClick(BookmarkItem item) {
                 showActionDialog(item);
             }
         });
         recyclerView.setAdapter(adapter);
-
         findViewById(R.id.fab_add_folder).setOnClickListener(v -> showAddFolderDialog());
     }
-
     private void refreshList() {
         displayList.clear();
         if (folderStack.isEmpty()) {
@@ -117,12 +105,10 @@ public class BookmarkActivity extends AppCompatActivity {
         }
         if (adapter != null) adapter.notifyDataSetChanged();
     }
-
     private void enterFolder(BookmarkItem folder) {
         folderStack.push(folder);
         refreshList();
     }
-
     private void openBookmark(BookmarkItem item) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("url", item.url);
@@ -130,7 +116,6 @@ public class BookmarkActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
     private void showAddFolderDialog() {
         EditText input = new EditText(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -139,8 +124,7 @@ public class BookmarkActivity extends AppCompatActivity {
         input.setLayoutParams(lp);
         input.setHint(R.string.label_bookmark_title);
         input.setPadding(48, 24, 48, 24);
-
-        new AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(R.string.title_new_folder)
             .setView(input)
             .setPositiveButton(android.R.string.ok, (dialog, which) -> {
@@ -159,7 +143,6 @@ public class BookmarkActivity extends AppCompatActivity {
             .setNegativeButton(android.R.string.cancel, null)
             .show();
     }
-
     private void showActionDialog(BookmarkItem item) {
         String[] options;
         if (item.type == BookmarkItem.Type.FOLDER) {
@@ -176,7 +159,7 @@ public class BookmarkActivity extends AppCompatActivity {
             };
         }
         
-        new AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(item.title)
             .setItems(options, (dialog, which) -> {
                 if (which == 0) {
@@ -189,7 +172,6 @@ public class BookmarkActivity extends AppCompatActivity {
             })
             .show();
     }
-
     private void showEditDialog(BookmarkItem item) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_password, null);
         EditText titleInput = dialogView.findViewById(R.id.input_url);
@@ -214,8 +196,7 @@ public class BookmarkActivity extends AppCompatActivity {
         // 隐藏密码输入框
         View passwordLayout = (View) passwordInput.getParent().getParent();
         passwordLayout.setVisibility(View.GONE);
-
-        new AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(item.type == BookmarkItem.Type.FOLDER ? 
                 R.string.title_edit_folder : R.string.title_edit_bookmark)
             .setView(dialogView)
@@ -241,31 +222,26 @@ public class BookmarkActivity extends AppCompatActivity {
             .setNegativeButton(android.R.string.cancel, null)
             .show();
     }
-
     private void showMoveDialog(BookmarkItem item) {
         List<BookmarkItem> allFolders = BookmarkStorage.getAllFolders(this);
         
         List<BookmarkItem> validFolders = new ArrayList<>();
         validFolders.add(new BookmarkItem(getString(R.string.root_folder))); 
         validFolders.get(0).id = -1;
-
         for (BookmarkItem folder : allFolders) {
             if (isValidMoveTarget(folder, item)) {
                 validFolders.add(folder);
             }
         }
-
         if (validFolders.isEmpty()) {
             Toast.makeText(this, R.string.msg_no_folders, Toast.LENGTH_SHORT).show();
             return;
         }
-
         String[] folderNames = new String[validFolders.size()];
         for (int i = 0; i < validFolders.size(); i++) {
             folderNames[i] = validFolders.get(i).title;
         }
-
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        androidx.appcompat.app.AlertDialog.Builder builder = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this);
         builder.setTitle(R.string.action_move_to);
         builder.setItems(folderNames, (dialog, which) -> {
                 BookmarkItem target = validFolders.get(which);
@@ -296,7 +272,6 @@ public class BookmarkActivity extends AppCompatActivity {
         
         return true; 
     }
-
     private void rebuildStack() {
         
         List<Long> ids = new ArrayList<>();
@@ -318,9 +293,8 @@ public class BookmarkActivity extends AppCompatActivity {
             }
         }
     }
-
     private void showDeleteConfirm(BookmarkItem item) {
-        new AlertDialog.Builder(this)
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(R.string.action_delete)
             .setMessage(item.title)
             .setPositiveButton(R.string.action_delete, (dialog, which) -> {
@@ -335,11 +309,9 @@ public class BookmarkActivity extends AppCompatActivity {
             .setNegativeButton(android.R.string.cancel, null)
             .show();
     }
-
     private void saveAll() {
         BookmarkStorage.saveBookmarks(this, rootList);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -348,7 +320,6 @@ public class BookmarkActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public void onBackPressed() {
         if (!folderStack.isEmpty()) {
