@@ -1,5 +1,7 @@
+/**
+ * 书签持久化存储类，负责书签的保存和读取。
+ */
 package com.olsc.manorbrowser.data;
-
 import android.content.Context;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,21 +10,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 public class BookmarkStorage {
     private static final String FILE_NAME = "bookmarks.json";
-
     public static List<BookmarkItem> loadBookmarks(Context context) {
         List<BookmarkItem> bookmarks = new ArrayList<>();
         try {
             File file = new File(context.getFilesDir(), FILE_NAME);
             if (!file.exists()) return bookmarks;
-
             FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
             fis.close();
-
             JSONArray arr = new JSONArray(new String(data));
             for (int i = 0; i < arr.length(); i++) {
                 bookmarks.add(BookmarkItem.fromJson(arr.getJSONObject(i)));
@@ -32,7 +30,6 @@ public class BookmarkStorage {
         }
         return bookmarks;
     }
-
     public static void saveBookmarks(Context context, List<BookmarkItem> bookmarks) {
         try {
             JSONArray arr = new JSONArray();
@@ -47,19 +44,16 @@ public class BookmarkStorage {
             e.printStackTrace();
         }
     }
-
     public static void addBookmark(Context context, BookmarkItem item) {
         List<BookmarkItem> bookmarks = loadBookmarks(context);
         bookmarks.add(item);
         saveBookmarks(context, bookmarks);
     }
-
     public static void removeBookmark(Context context, long id) {
         List<BookmarkItem> bookmarks = loadBookmarks(context);
         removeRecursive(bookmarks, id);
         saveBookmarks(context, bookmarks);
     }
-
     private static boolean removeRecursive(List<BookmarkItem> items, long id) {
         for (int i = 0; i < items.size(); i++) {
             BookmarkItem item = items.get(i);
@@ -73,7 +67,6 @@ public class BookmarkStorage {
         }
         return false;
     }
-
     public static void addBookmarkToFolder(Context context, BookmarkItem item, long folderId) {
         List<BookmarkItem> bookmarks = loadBookmarks(context);
         if (folderId == -1) {
@@ -83,7 +76,6 @@ public class BookmarkStorage {
         }
         saveBookmarks(context, bookmarks);
     }
-
     private static void addToFolderRecursive(List<BookmarkItem> items, BookmarkItem itemToAdd, long folderId) {
         for (BookmarkItem folder : items) {
            if (folder.id == folderId) {
@@ -97,14 +89,12 @@ public class BookmarkStorage {
            }
         }
     }
-
     public static List<BookmarkItem> getAllFolders(Context context) {
         List<BookmarkItem> allBookmarks = loadBookmarks(context);
         List<BookmarkItem> folders = new ArrayList<>();
         collectFolders(allBookmarks, folders);
         return folders;
     }
-
     private static void collectFolders(List<BookmarkItem> items, List<BookmarkItem> result) {
         for (BookmarkItem item : items) {
             if (item.type == BookmarkItem.Type.FOLDER) {

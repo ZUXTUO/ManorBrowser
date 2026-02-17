@@ -1,5 +1,7 @@
+/**
+ * Intent处理辅助类，简化Activity跳转和数据传递。
+ */
 package com.olsc.manorbrowser.utils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,39 +11,31 @@ import android.widget.Toast;
 import com.olsc.manorbrowser.R;
 import java.net.URISyntaxException;
 import java.util.List;
-
 public class IntentHelper {
-
     /**
      * 尝试打开外部应用链接
      * @return true 如果成功处理，false 如果应该在浏览器中打开
      */
     public static boolean tryOpenExternalApp(Context context, String url) {
         if (url == null || url.isEmpty()) return false;
-
         // 1. 检查是否是特殊scheme
         if (isSpecialScheme(url)) {
             return handleSpecialScheme(context, url);
         }
-
         // 2. 检查是否是intent scheme
         if (url.startsWith("intent://")) {
             return handleIntentScheme(context, url);
         }
-
         // 3. 检查是否是应用商店链接
         if (isAppStoreLink(url)) {
             return handleAppStoreLink(context, url);
         }
-
         // 4. 检查是否是已知的应用deep link
         if (isKnownAppDeepLink(url)) {
             return handleDeepLink(context, url);
         }
-
         return false;
     }
-
     private static boolean isSpecialScheme(String url) {
         String[] schemes = {
             "mailto:", "tel:", "sms:", "market:", "geo:",
@@ -51,7 +45,6 @@ public class IntentHelper {
             "facebook:", "instagram:", "snapchat:", "tiktok:",
             "spotify:", "netflix:", "maps:"
         };
-
         String lowerUrl = url.toLowerCase();
         for (String scheme : schemes) {
             if (lowerUrl.startsWith(scheme)) {
@@ -60,7 +53,6 @@ public class IntentHelper {
         }
         return false;
     }
-
     private static boolean handleSpecialScheme(Context context, String url) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -82,7 +74,6 @@ public class IntentHelper {
             return true;
         }
     }
-
     private static boolean handleIntentScheme(Context context, String url) {
         try {
             Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
@@ -121,13 +112,11 @@ public class IntentHelper {
             return false;
         }
     }
-
     private static boolean isAppStoreLink(String url) {
         return url.contains("play.google.com/store/apps") ||
                url.contains("apps.apple.com") ||
                url.contains("itunes.apple.com");
     }
-
     private static boolean handleAppStoreLink(Context context, String url) {
         try {
             // 提取包名
@@ -138,7 +127,6 @@ public class IntentHelper {
                 if (end == -1) end = url.length();
                 packageName = url.substring(start, end);
             }
-
             if (packageName != null && !packageName.isEmpty()) {
                 openAppStore(context, packageName);
                 return true;
@@ -150,7 +138,6 @@ public class IntentHelper {
         // 如果提取失败，在浏览器中打开
         return false;
     }
-
     private static void openAppStore(Context context, String packageName) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -165,7 +152,6 @@ public class IntentHelper {
             context.startActivity(intent);
         }
     }
-
     private static boolean isKnownAppDeepLink(String url) {
         String[] patterns = {
             "://open", "://launch", "://app", "://share",
@@ -173,7 +159,6 @@ public class IntentHelper {
             "jd://", "douyin://", "bilibili://", "zhihu://",
             "weibo://", "qq://", "mqqapi://", "tim://"
         };
-
         String lowerUrl = url.toLowerCase();
         for (String pattern : patterns) {
             if (lowerUrl.contains(pattern)) {
@@ -182,7 +167,6 @@ public class IntentHelper {
         }
         return false;
     }
-
     private static boolean handleDeepLink(Context context, String url) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -211,7 +195,6 @@ public class IntentHelper {
             return false;
         }
     }
-
     /**
      * 检查URL是否应该被拦截并在外部应用中打开
      */

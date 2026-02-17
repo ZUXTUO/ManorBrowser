@@ -1,44 +1,37 @@
+/**
+ * 搜索建议和搜索引擎辅助类，处理地址栏搜索逻辑。
+ */
 package com.olsc.manorbrowser.utils;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Patterns;
 import android.webkit.URLUtil;
-
 import com.olsc.manorbrowser.Config;
-
 public class SearchHelper {
-
     public static String getSearchUrl(Context context, String query) {
         query = query.trim();
-
         // 如果已经是完整的URL（包含协议），直接返回
         if (URLUtil.isValidUrl(query)) {
             return query;
         }
-
         // 检查是否是IP地址（支持IPv4和带端口号的情况）
         if (isIpAddress(query)) {
             return "http://" + query;
         }
-
         // 检查是否是域名格式
         if (Patterns.WEB_URL.matcher(query).matches()) {
              return "https://" + query;
         }
-
         // 否则作为搜索关键词处理
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String engine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
-
         if (Config.ENGINE_GOOGLE.equals(engine)) {
             return "https://www.google.com/search?q=" + query;
         } else {
             return "https://www.baidu.com/s?wd=" + query;
         }
     }
-
     /**
      * 检查是否是IP地址（支持IPv4和带端口号的情况）
      */

@@ -198,4 +198,8 @@ URL: %1$s</string>
     
     <string name="msg_desktop_mode_on">已切换到桌面模式</string>
     <string name="msg_desktop_mode_off">已切换到移动模式</string>
+    
+    <string name="title_file_exists">文件已存在</string>
+    <string name="msg_file_exists">文件 "%1$s" 已存在，是否下载新副本？</string>
+    <string name="action_download_new">下载新副本</string>
 </resources>

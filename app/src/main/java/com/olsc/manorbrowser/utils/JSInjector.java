@@ -1,7 +1,8 @@
+/**
+ * JavaScript 脚本注入辅助类，用于向网页注入自定义功能。
+ */
 package com.olsc.manorbrowser.utils;
-
 public class JSInjector {
-
     // 改进的登录检测脚本，支持更多表单格式
     public static final String INJECT_LOGIN_DETECT =
         "(function() {" +
@@ -48,7 +49,6 @@ public class JSInjector {
         "    setTimeout(detectAndSave, 1000);" +
         "    setTimeout(detectAndSave, 3000);" +
         "})();";
-
     // 改进的自动填充脚本，支持更多输入框格式
     public static String getFillScript(String username, String password) {
         String escapedUser = escape(username);
@@ -111,7 +111,6 @@ public class JSInjector {
                "    }" +
                "})();";
     }
-
     private static String escape(String s) {
         if (s == null) return "";
         return s.replace("\\", "\\\\")
