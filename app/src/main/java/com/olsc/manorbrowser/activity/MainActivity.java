@@ -37,6 +37,7 @@ import org.mozilla.geckoview.GeckoResult;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 import org.mozilla.geckoview.GeckoSession;
+import org.mozilla.geckoview.GeckoSessionSettings;
 import org.mozilla.geckoview.GeckoView;
 
 import org.mozilla.geckoview.WebResponse;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTabSwitcherVisible = false;
     private int lastX, lastY;
     private long lastBackTime = 0;
+    private boolean urlInputFirstClick = true; // 跟踪URL输入框是否是第一次点击
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
         if (sRuntime == null) {
             sRuntime = GeckoRuntime.create(getApplicationContext());
         }
-        applyThemeToSession(null);
 
         setupTabSwitcher();
 
@@ -508,6 +509,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         refreshBackgroundEffect();
+        
+        // 重新应用桌面模式设置到所有session
+        for (TabInfo tab : tabs) {
+            if (tab.session != null) {
+                applyThemeToSession(tab.session);
+            }
+        }
     }
 
     @Override
@@ -616,23 +624,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        urlInput.setSelectAllOnFocus(true);
+        urlInput.setSelectAllOnFocus(false); // 禁用自动全选
+        
         urlInput.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                urlInput.post(() -> {
-                    urlInput.selectAll();
-                });
+                // 获得焦点时，重置为第一次点击状态
+                urlInputFirstClick = true;
+            } else {
+                // 失去焦点时，重置状态
+                urlInputFirstClick = true;
             }
         });
+        
         urlInput.setOnClickListener(v -> {
-            if (urlInput.isFocused()) {
-                urlInput.selectAll();
+            if (urlInput.isFocused() && urlInputFirstClick) {
+                // 第一次点击时全选
+                urlInput.post(() -> urlInput.selectAll());
+                urlInputFirstClick = false;
             }
+            // 第二次及之后的点击不做处理，使用默认行为（定位光标）
         });
-        // Also handle long click to make sure it doesn't break selection
+        
+        // 长按时全选
         urlInput.setOnLongClickListener(v -> {
             urlInput.selectAll();
-            return false;
+            return true; // 返回true表示已处理，不再执行默认行为
         });
 
         urlInput.setOnEditorActionListener((v, actionId, event) -> {
@@ -741,6 +757,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             } else if (id == R.id.nav_theme) {
                 navigationView.postDelayed(this::toggleTheme, 300);
+            } else if (id == R.id.nav_desktop_mode) {
+                toggleDesktopMode();
             } else if (id == R.id.nav_about) {
                  android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
                  startActivity(intent);
@@ -780,6 +798,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        
+        // 初始化桌面模式菜单项的选中状态
+        if (navigationView != null) {
+            android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+            boolean isDesktopMode = prefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
+            android.view.Menu menu = navigationView.getMenu();
+            android.view.MenuItem desktopItem = menu.findItem(R.id.nav_desktop_mode);
+            if (desktopItem != null) {
+                desktopItem.setChecked(isDesktopMode);
+            }
+        }
     }
 
     private void createNewTab(String url) {
@@ -1241,11 +1270,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyThemeToSession(GeckoSession session) {
-        if (sRuntime == null) return;
+        if (sRuntime == null || session == null) return;
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
         sRuntime.getSettings().setPreferredColorScheme(isDarkMode ? 
             GeckoRuntimeSettings.COLOR_SCHEME_DARK : GeckoRuntimeSettings.COLOR_SCHEME_LIGHT);
+        
+        // 应用桌面模式设置
+        android.content.SharedPreferences defaultPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isDesktopMode = defaultPrefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
+        
+        if (isDesktopMode) {
+            session.getSettings().setUserAgentMode(GeckoSessionSettings.USER_AGENT_MODE_DESKTOP);
+            session.getSettings().setViewportMode(GeckoSessionSettings.VIEWPORT_MODE_DESKTOP);
+        } else {
+            session.getSettings().setUserAgentMode(GeckoSessionSettings.USER_AGENT_MODE_MOBILE);
+            session.getSettings().setViewportMode(GeckoSessionSettings.VIEWPORT_MODE_MOBILE);
+        }
     }
 
      private void showWebContextMenu(ContextElement element) {
@@ -1416,6 +1457,38 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
+    
+    private void toggleDesktopMode() {
+        android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isDesktopMode = prefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
+        prefs.edit().putBoolean(Config.PREF_KEY_DESKTOP_MODE, !isDesktopMode).apply();
+        
+        // 更新所有session的桌面模式设置
+        for (TabInfo tab : tabs) {
+            if (tab.session != null) {
+                applyThemeToSession(tab.session);
+            }
+        }
+        
+        // 刷新当前页面以应用新的User-Agent
+        GeckoSession currentSession = getCurrentSession();
+        if (currentSession != null) {
+            currentSession.reload();
+        }
+        
+        // 更新菜单项的选中状态
+        if (navigationView != null) {
+            android.view.Menu menu = navigationView.getMenu();
+            android.view.MenuItem desktopItem = menu.findItem(R.id.nav_desktop_mode);
+            if (desktopItem != null) {
+                desktopItem.setChecked(!isDesktopMode);
+            }
+        }
+        
+        int messageId = !isDesktopMode ? R.string.msg_desktop_mode_on : R.string.msg_desktop_mode_off;
+        Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show();
+    }
+    
     private void refreshBackgroundEffect() {
         android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
         String effect = prefs.getString(Config.PREF_KEY_BG_EFFECT, Config.BG_EFFECT_METEOR);
