@@ -18,6 +18,11 @@
             android:icon="@drawable/ic_theme"
             android:title="@string/action_theme" />
         <item
+            android:id="@+id/nav_desktop_mode"
+            android:icon="@drawable/ic_menu"
+            android:title="@string/title_desktop_mode"
+            android:checkable="true" />
+        <item
             android:id="@+id/nav_add_bookmark"
             android:icon="@drawable/ic_bookmark"
             android:title="@string/action_add_bookmark" />

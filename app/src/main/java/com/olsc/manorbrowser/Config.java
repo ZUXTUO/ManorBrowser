@@ -27,4 +27,9 @@ public class Config {
     public static final String PREF_KEY_LANGUAGE = "language_preference";
     
     public static final String PREF_KEY_PRIVACY_AGREED = "privacy_agreed";
+    
+    public static final String PREF_KEY_USE_SYSTEM_DOWNLOADER = "use_system_downloader";
+    public static final String PREF_KEY_DESKTOP_MODE = "desktop_mode";
+    
+    public static final String DESKTOP_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0";
 }

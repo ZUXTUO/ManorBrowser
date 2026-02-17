@@ -82,6 +82,31 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+
+        // 获取SharedPreferences实例供后续使用
+        SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // 桌面模式开关
+        androidx.appcompat.widget.SwitchCompat switchDesktopMode = findViewById(R.id.switch_desktop_mode);
+        if (switchDesktopMode != null) {
+            boolean isDesktopMode = defaultPrefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
+            switchDesktopMode.setChecked(isDesktopMode);
+            
+            switchDesktopMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                defaultPrefs.edit().putBoolean(Config.PREF_KEY_DESKTOP_MODE, isChecked).apply();
+            });
+        }
+
+        // 系统下载器开关
+        androidx.appcompat.widget.SwitchCompat switchSystemDownloader = findViewById(R.id.switch_system_downloader);
+        if (switchSystemDownloader != null) {
+            boolean useSystemDownloader = defaultPrefs.getBoolean(Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, false);
+            switchSystemDownloader.setChecked(useSystemDownloader);
+            
+            switchSystemDownloader.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                defaultPrefs.edit().putBoolean(Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, isChecked).apply();
+            });
+        }
     }
     
     private void showColorPickerDialog() {

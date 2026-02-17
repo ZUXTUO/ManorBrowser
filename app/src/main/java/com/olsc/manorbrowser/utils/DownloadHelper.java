@@ -24,6 +24,25 @@ public class DownloadHelper {
     public static long startDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
         if (TextUtils.isEmpty(url)) return -1;
 
+        // 检查是否使用系统下载器
+        android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        boolean useSystemDownloader = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, false);
+        
+        if (!useSystemDownloader) {
+            // 使用浏览器内置下载器（默认）
+            return startBrowserDownload(context, url, userAgent, contentDisposition, mimeType, cookie, referer);
+        } else {
+            // 使用系统下载器
+            return startSystemDownload(context, url, userAgent, contentDisposition, mimeType, cookie, referer);
+        }
+    }
+
+    private static long startBrowserDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
+        // 浏览器内置下载器实现（当前就是使用系统DownloadManager）
+        return startSystemDownload(context, url, userAgent, contentDisposition, mimeType, cookie, referer);
+    }
+
+    private static long startSystemDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
         final String finalUrl = url.trim();
         final Context appContext = context.getApplicationContext();
 
