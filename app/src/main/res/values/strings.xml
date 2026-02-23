@@ -203,4 +203,14 @@ URL: %1$s</string>
     <string name="title_file_exists">File Already Exists</string>
     <string name="msg_file_exists">File "%1$s" already exists. Download a new copy?</string>
     <string name="action_download_new">Download New Copy</string>
+    <string name="title_cookies">Cookies &amp; Site Data</string>
+    <string name="msg_clear_all_cookies">Clear all cookies and site data?</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="msg_cookies_cleared">All cookies and site data cleared</string>
+    <string name="msg_cookie_deleted">Cookie deleted</string>
+    <string name="label_domain">Domain: %s</string>
+    <string name="label_path">Path: %s</string>
+    <string name="label_value">Value: %s</string>
+    <string name="msg_no_cookies">No cookies found</string>
+    <string name="msg_confirm_delete_domain">Delete all cookies and site data for %s?</string>
 </resources>

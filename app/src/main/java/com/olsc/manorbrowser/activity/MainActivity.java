@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private android.widget.ProgressBar progressBar;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh;
-    private static GeckoRuntime sRuntime;
+    public static GeckoRuntime sRuntime;
     private List<TabInfo> tabs = new ArrayList<>();
     private TabSwitcherAdapter tabSwitcherAdapter;
     private int currentTabIndex = -1;
@@ -479,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (geckoView != null) {
-            geckoView.releaseSession();
+            geckoView.setSession(null);
         }
         for (TabInfo tab : tabs) {
             if (tab.session != null) {
@@ -531,6 +531,7 @@ public class MainActivity extends AppCompatActivity {
         tabSwitcher.setPadding(padding, 0, padding, 0);
         final int overlapPx = (int) (110 * displayMetrics.density);
         tabSwitcher.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @SuppressWarnings("deprecation")
             @Override
             public void getItemOffsets(@NonNull android.graphics.Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 int position = parent.getChildAdapterPosition(view);
@@ -680,6 +681,9 @@ public class MainActivity extends AppCompatActivity {
                 navigationView.postDelayed(this::toggleTheme, 300);
             } else if (id == R.id.nav_desktop_mode) {
                 toggleDesktopMode();
+            } else if (id == R.id.nav_cookies) {
+                 android.content.Intent intent = new android.content.Intent(this, CookieManagerActivity.class);
+                 startActivity(intent);
             } else if (id == R.id.nav_about) {
                  android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
                  startActivity(intent);
@@ -775,7 +779,7 @@ public class MainActivity extends AppCompatActivity {
             toggleTabSwitcher();
         }
         TabInfo tab = tabs.get(index);
-        geckoView.releaseSession();
+        geckoView.setSession(null);
         geckoView.setSession(tab.session);
         currentTabIndex = index;
         if (swipeRefresh != null) {
@@ -830,6 +834,7 @@ public class MainActivity extends AppCompatActivity {
         updateTabCount();
         updateBottomTabCounter();
     }
+    @SuppressWarnings("deprecation")
     private void updateTabAnimations() {
         if (tabSwitcher.getChildCount() == 0) return;
         float centerX = tabSwitcher.getWidth() / 2f;
@@ -1249,6 +1254,7 @@ public class MainActivity extends AppCompatActivity {
             refererFinal
         );
     }
+    @SuppressWarnings("deprecation")
     private void toggleTheme() {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
@@ -1256,20 +1262,20 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean(Config.PREF_KEY_DARK_MODE, !isDarkMode);
         editor.apply();
         if (geckoView != null) {
-            geckoView.releaseSession();
+            geckoView.setSession(null);
         }
         AppCompatDelegate.setDefaultNightMode(!isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         android.content.Intent intent = getIntent();
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
         if (android.os.Build.VERSION.SDK_INT >= 34) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, 0, 0);
+            overrideActivityTransition(android.app.Activity.OVERRIDE_TRANSITION_CLOSE, 0, 0);
         } else {
             overridePendingTransition(0, 0);
         }
         startActivity(intent);
         if (android.os.Build.VERSION.SDK_INT >= 34) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out);
+            overrideActivityTransition(android.app.Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out);
         } else {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
