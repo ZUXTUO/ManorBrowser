@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -153,13 +154,21 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         if (sRuntime == null) {
             sRuntime = GeckoRuntime.create(getApplicationContext());
+            sRuntime.getWebExtensionController().setPromptDelegate(new com.olsc.manorbrowser.utils.ExtensionPromptDelegate(this));
         }
         setupTabSwitcher();
-        if (getIntent() != null && getIntent().hasExtra("url")) {
-            restoreTabsOrInit();
-            String url = getIntent().getStringExtra("url");
-            if (url != null && !url.isEmpty()) {
-                loadUrlInCurrentTab(url);
+        if (getIntent() != null) {
+            if (getIntent().hasExtra("url")) {
+                restoreTabsOrInit();
+                String url = getIntent().getStringExtra("url");
+                if (url != null && !url.isEmpty()) {
+                    loadUrlInCurrentTab(url);
+                }
+            } else if (android.content.Intent.ACTION_VIEW.equals(getIntent().getAction()) && getIntent().getData() != null) {
+                restoreTabsOrInit();
+                handleViewIntent(getIntent());
+            } else {
+                restoreTabsOrInit();
             }
         } else {
             restoreTabsOrInit();
@@ -310,6 +319,27 @@ public class MainActivity extends AppCompatActivity {
             public void onExternalResponse(@NonNull GeckoSession session, @NonNull WebResponse response) {
                 final String url = response.uri;
                 if (url == null) return;
+                
+                String lowerUrl = url.toLowerCase();
+                String contentType = null;
+                if (response.headers != null) {
+                    contentType = response.headers.get("Content-Type");
+                    if (contentType == null) contentType = response.headers.get("content-type");
+                }
+                if (lowerUrl.endsWith(".xpi") || "application/x-xpinstall".equals(contentType)) {
+                    final String extensionUrl = url;
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, R.string.msg_installing_extension, Toast.LENGTH_SHORT).show();
+                        if (sRuntime != null) {
+                            sRuntime.getWebExtensionController().install(extensionUrl).accept(
+                                ext -> runOnUiThread(() -> Toast.makeText(MainActivity.this, getString(R.string.msg_extension_installed, ext.metaData.name), Toast.LENGTH_SHORT).show()),
+                                e -> runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_extension_install_failed, Toast.LENGTH_SHORT).show())
+                            );
+                        }
+                    });
+                    return;
+                }
+
                 String tempMime = null;
                 String tempDisp = null;
                 if (response.headers != null) {
@@ -472,6 +502,83 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    
+    @Override
+    protected void onNewIntent(android.content.Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (android.content.Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            handleViewIntent(intent);
+        } else if (intent.hasExtra("url")) {
+            String url = intent.getStringExtra("url");
+            if (url != null && !url.isEmpty()) {
+                loadUrlInCurrentTab(url);
+            }
+        }
+    }
+    
+    private void handleViewIntent(android.content.Intent intent) {
+        android.net.Uri data = intent.getData();
+        if (data == null) return;
+        String url = data.toString();
+        String type = intent.getType();
+        
+        String filename = url;
+        if ("content".equals(data.getScheme())) {
+            try (android.database.Cursor cursor = getContentResolver().query(data, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        filename = cursor.getString(nameIndex);
+                    }
+                }
+            } catch (Exception e) {}
+        }
+        
+        final String finalFilename = filename;
+
+        boolean isXpi = false;
+        String mimeType = type;
+        if (mimeType == null && "content".equals(data.getScheme())) {
+            mimeType = getContentResolver().getType(data);
+        }
+        
+        if ("application/x-xpinstall".equalsIgnoreCase(mimeType) || "application/xpi".equalsIgnoreCase(mimeType)) {
+            isXpi = true;
+        } else if (filename != null && (filename.toLowerCase().endsWith(".xpi") || filename.toLowerCase().contains(".xpi"))) {
+            isXpi = true;
+        } else if (url != null && (url.toLowerCase().endsWith(".xpi") || url.toLowerCase().contains(".xpi"))) {
+            isXpi = true;
+        }
+
+        if (isXpi) {
+            Toast.makeText(this, R.string.msg_installing_extension, Toast.LENGTH_SHORT).show();
+            Runnable installRunnable = () -> {
+                String tempUrl = url;
+                if ("content".equals(data.getScheme())) {
+                    java.io.File tempFile = com.olsc.manorbrowser.utils.FileUtil.copyContentUriToTempFile(this, data, finalFilename != null ? finalFilename : "temp.xpi");
+                    if (tempFile != null) {
+                        tempUrl = "file://" + tempFile.getAbsolutePath();
+                    }
+                } else if ("file".equals(data.getScheme()) && !url.startsWith("file://")) {
+                    tempUrl = "file://" + data.getPath();
+                }
+                final String finalUrl = tempUrl;
+                runOnUiThread(() -> {
+                    if (sRuntime != null) {
+                        sRuntime.getWebExtensionController().install(finalUrl).accept(
+                            ext -> runOnUiThread(() -> Toast.makeText(MainActivity.this, getString(R.string.msg_extension_installed, ext.metaData.name), Toast.LENGTH_SHORT).show()),
+                            e -> runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_extension_install_failed, Toast.LENGTH_SHORT).show())
+                        );
+                    }
+                });
+            };
+            new Thread(installRunnable).start();
+        } else {
+            loadUrlInCurrentTab(url);
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -646,6 +753,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         btnTabs.setOnClickListener(v -> toggleTabSwitcher());
+        btnTabs.setOnLongClickListener(v -> {
+            showTabManagerOptionsDialog();
+            return true;
+        });
         btnMenu.setOnClickListener(v -> {
             if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -684,6 +795,13 @@ public class MainActivity extends AppCompatActivity {
                  startActivity(intent);
             } else if (id == R.id.nav_about) {
                  android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
+                 startActivity(intent);
+            } else if (id == R.id.nav_extensions_action) {
+                 navigationView.postDelayed(this::showExtensionActionDialog, 250);
+            } else if (id == R.id.nav_extensions_browse) {
+                 createNewTab("https://addons.mozilla.org/");
+            } else if (id == R.id.nav_extensions_manager) {
+                 android.content.Intent intent = new android.content.Intent(this, ExtensionManagerActivity.class);
                  startActivity(intent);
             }
             if (isTabSwitcherVisible && id != R.id.nav_theme) toggleTabSwitcher();
@@ -826,12 +944,12 @@ public class MainActivity extends AppCompatActivity {
             tab.session.close();
         }
         tabs.remove(position);
-        if (tabSwitcherAdapter != null) {
-            tabSwitcherAdapter.notifyItemRemoved(position);
-            tabSwitcherAdapter.notifyItemRangeChanged(position, tabs.size() - position);
-        }
+        
         if (tabs.isEmpty()) {
             createNewTab("about:blank");
+            if (tabSwitcherAdapter != null) {
+                tabSwitcherAdapter.notifyDataSetChanged();
+            }
         } else {
             int newFocusIndex = position;
             if (newFocusIndex >= tabs.size()) {
@@ -839,13 +957,44 @@ public class MainActivity extends AppCompatActivity {
             }
             currentTabIndex = newFocusIndex;
             final int targetIndex = newFocusIndex;
-            tabSwitcher.post(() -> {
-                if (tabSwitcher.getLayoutManager() != null) {
-                   tabSwitcher.scrollToPosition(targetIndex);
-                   updateTabAnimations();
-                   updateTabCount();
+            
+            // 当标签页数量较少时（<=2），使用notifyDataSetChanged确保布局完全重建
+            // 避免notifyItemRemoved导致的布局状态不一致问题
+            if (tabs.size() <= 2) {
+                if (tabSwitcherAdapter != null) {
+                    tabSwitcherAdapter.notifyDataSetChanged();
                 }
-            });
+                // 等待布局完全重建后再滚动到目标位置
+                tabSwitcher.post(() -> {
+                    tabSwitcher.post(() -> {
+                        if (tabSwitcher.getLayoutManager() != null) {
+                            tabSwitcher.smoothScrollToPosition(targetIndex);
+                            tabSwitcher.postDelayed(() -> {
+                                updateTabAnimations();
+                                updateTabCount();
+                            }, 100);
+                        }
+                    });
+                });
+            } else {
+                // 标签页数量较多时，使用增量更新提高性能
+                if (tabSwitcherAdapter != null) {
+                    tabSwitcherAdapter.notifyItemRemoved(position);
+                    tabSwitcherAdapter.notifyItemRangeChanged(position, tabs.size() - position);
+                }
+                // 使用多次post确保布局完全更新后再滚动
+                tabSwitcher.post(() -> {
+                    if (tabSwitcher.getLayoutManager() != null) {
+                        tabSwitcher.post(() -> {
+                            tabSwitcher.smoothScrollToPosition(targetIndex);
+                            tabSwitcher.postDelayed(() -> {
+                                updateTabAnimations();
+                                updateTabCount();
+                            }, 50);
+                        });
+                    }
+                });
+            }
         }
         updateTabCount();
         updateBottomTabCounter();
@@ -860,6 +1009,7 @@ public class MainActivity extends AppCompatActivity {
             if (adapterPos == RecyclerView.NO_POSITION) continue;
             View cardView = itemView.findViewById(R.id.tab_card_view);
             if (cardView != null) {
+                // 恢复标准Z序逻辑：索引越大（越靠右），Z值越高，确保新添加的/靠右的网页浮在最上方
                 itemView.setTranslationZ(adapterPos * 10f);
                 float childCenterX = (itemView.getLeft() + itemView.getRight()) / 2f;
                 float distFromCenter = Math.abs(centerX - childCenterX);
@@ -883,6 +1033,60 @@ public class MainActivity extends AppCompatActivity {
                 cardView.setTranslationX(direction * maxSqueeze * squeezeFactor);
             }
         }
+    }
+    private void showTabManagerOptionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String[] options = {getString(R.string.action_close_all_tabs)};
+        
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                // 关闭所有标签页
+                showCloseAllTabsConfirmDialog();
+            }
+        });
+        
+        builder.show();
+    }
+    
+    private void showCloseAllTabsConfirmDialog() {
+        new AlertDialog.Builder(this)
+            .setMessage(R.string.msg_confirm_close_all_tabs)
+            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                closeAllTabs();
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .show();
+    }
+    
+    private void closeAllTabs() {
+        if (tabs == null || tabs.isEmpty()) {
+            return;
+        }
+        
+        // 关闭所有标签页的session
+        for (TabInfo tab : tabs) {
+            if (tab.session != null) {
+                tab.session.close();
+            }
+        }
+        
+        // 清空标签页列表
+        tabs.clear();
+        currentTabIndex = -1;
+        
+        // 保存空的标签页状态
+        TabStorage.saveTabs(this, tabs);
+        
+        // 创建一个新的空白标签页
+        createNewTab(Config.URL_BLANK);
+        
+        // 如果当前在标签页切换器界面，关闭它
+        if (isTabSwitcherVisible) {
+            toggleTabSwitcher();
+        }
+        
+        // 显示提示消息
+        Toast.makeText(this, R.string.msg_all_tabs_closed, Toast.LENGTH_SHORT).show();
     }
     private void toggleTabSwitcher() {
         if (isTabSwitcherVisible) {
@@ -916,16 +1120,17 @@ public class MainActivity extends AppCompatActivity {
                         tabSwitcherAdapter.notifyDataSetChanged();
                     }
                     if (tabSwitcher.getLayoutManager() != null) {
-                        tabSwitcher.scrollToPosition(currentTabIndex);
+                        // 使用smoothScrollToPosition确保正确居中，修复标签页无法居中的BUG
+                        tabSwitcher.smoothScrollToPosition(currentTabIndex);
                     }
-                    tabSwitcher.post(() -> {
+                    tabSwitcher.postDelayed(() -> {
                          updateTabAnimations();
                          updateTabCount();
                          tabSwitcher.animate()
                              .alpha(1f)
                              .setDuration(200)
                              .start();
-                    });
+                    }, 100);
                 });
             } else {
                  tabSwitcher.animate().alpha(1f).setDuration(200).start();
@@ -1108,17 +1313,7 @@ public class MainActivity extends AppCompatActivity {
         }
         tab.thumbnail = bitmap;
     }
-    @Override
-    protected void onNewIntent(android.content.Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        if (intent != null && intent.hasExtra("url")) {
-            String url = intent.getStringExtra("url");
-            if (url != null && !url.isEmpty()) {
-                loadUrlInCurrentTab(url);
-            }
-        }
-    }
+
     private void applyThemeToSession(GeckoSession session) {
         if (sRuntime == null || session == null) return;
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
@@ -1803,5 +1998,67 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("title", title);
         intent.putExtra("content", content);
         startActivity(intent);
+    }
+    
+    private void showExtensionActionDialog() {
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        android.view.View view = getLayoutInflater().inflate(R.layout.dialog_extension_list, null);
+        dialog.setContentView(view);
+        
+        androidx.recyclerview.widget.RecyclerView rv = view.findViewById(R.id.rv_extensions);
+        android.widget.TextView tvEmpty = view.findViewById(R.id.tv_empty_extensions);
+        
+        rv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+        
+        if (sRuntime != null) {
+            sRuntime.getWebExtensionController().list().accept(extensions -> {
+                runOnUiThread(() -> {
+                    if (extensions == null || extensions.isEmpty()) {
+                        tvEmpty.setVisibility(android.view.View.VISIBLE);
+                        rv.setVisibility(android.view.View.GONE);
+                    } else {
+                        tvEmpty.setVisibility(android.view.View.GONE);
+                        rv.setVisibility(android.view.View.VISIBLE);
+                        rv.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+                            @androidx.annotation.NonNull
+                            @Override
+                            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
+                                android.view.View v = getLayoutInflater().inflate(R.layout.item_extension_action, parent, false);
+                                return new androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {};
+                            }
+                            @Override
+                            public void onBindViewHolder(@androidx.annotation.NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder holder, int position) {
+                                org.mozilla.geckoview.WebExtension ext = extensions.get(position);
+                                android.widget.TextView tvName = holder.itemView.findViewById(R.id.tv_ext_name);
+                                tvName.setText(ext.metaData.name != null ? ext.metaData.name : "Unknown Extension");
+                                holder.itemView.setOnClickListener(v -> {
+                                    dialog.dismiss();
+                                    triggerExtensionAction(ext);
+                                });
+                            }
+                            @Override
+                            public int getItemCount() {
+                                return extensions.size();
+                            }
+                        });
+                    }
+                });
+            }, e -> {
+                runOnUiThread(() -> {
+                    tvEmpty.setVisibility(android.view.View.VISIBLE);
+                    rv.setVisibility(android.view.View.GONE);
+                });
+            });
+        }
+        
+        dialog.show();
+    }
+
+    private void triggerExtensionAction(org.mozilla.geckoview.WebExtension extension) {
+         if (extension.metaData != null && extension.metaData.optionsPageUrl != null) {
+              createNewTab(extension.metaData.optionsPageUrl);
+         } else {
+              Toast.makeText(this, getString(R.string.action_extension_options) + "\n" + extension.metaData.name, Toast.LENGTH_SHORT).show();
+         }
     }
 }

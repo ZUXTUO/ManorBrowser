@@ -8,7 +8,7 @@ public class CookieDisplayItem {
     public Type type;
     public String domain;
     public CookieItem cookie;
-    public int count; // For groups
+    public int count;
     
     public CookieDisplayItem(String domain, int count) {
         this.type = Type.GROUP;
