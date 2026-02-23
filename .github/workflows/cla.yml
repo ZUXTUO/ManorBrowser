@@ -8,6 +8,12 @@ on:
 jobs:
   CLAssistant:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      pull-requests: write
+      statuses: write
+
     steps:
       - name: "CLA Assistant"
         if: ( github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA' || github.event_name == 'pull_request_target' ) && github.repository == 'Olsc/ManorBrowser'
@@ -21,7 +27,7 @@ jobs:
           path-to-signatures: ".github/signatures/cla.json"
           path-to-document: "https://github.com/Olsc/ManorBrowser/blob/main/.github/ContributorLicenseAgreement.md" # e.g. a CLA or a DCO document
           # branch should not be protected - change this to a non-protected branch if needed
-          branch: "main"
+          branch: "cla-signatures"
           allowlist: Olsc,bot*
           use-dco-flag: false
           lock-pullrequest-aftermerge: true

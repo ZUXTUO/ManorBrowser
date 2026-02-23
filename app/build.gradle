@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace 'com.olsc.manorbrowser'
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.olsc.manorbrowser"
@@ -39,6 +37,7 @@ dependencies {
     implementation libs.material
     implementation libs.geckoview
     implementation libs.swiperefreshlayout
+    implementation libs.preference
     implementation libs.okhttp
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

@@ -31,7 +31,7 @@ public class SwipeCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         if (direction == ItemTouchHelper.UP) {
-            listener.onSwiped(viewHolder.getAdapterPosition());
+            listener.onSwiped(viewHolder.getBindingAdapterPosition());
         }
     }
     @Override
