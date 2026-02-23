@@ -35,8 +35,36 @@ public class DownloadHelper {
     }
 
     private static long startBrowserDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
-        // 浏览器内置下载器实现（当前就是使用系统DownloadManager）
-        return startSystemDownload(context, url, userAgent, contentDisposition, mimeType, cookie, referer);
+        final String finalUrl = url.trim();
+        String originalFilename = guessFileName(finalUrl, contentDisposition, mimeType);
+        
+        new Thread(() -> {
+            try {
+                java.io.File downloadDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
+                java.io.File existingFile = new java.io.File(downloadDir, originalFilename);
+                
+                if (existingFile.exists()) {
+                    new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.title_file_exists)
+                            .setMessage(context.getString(R.string.msg_file_exists, originalFilename))
+                            .setPositiveButton(R.string.action_download_new, (dialog, which) -> {
+                                String newFilename = getUniqueFilename(downloadDir, originalFilename);
+                                BrowserDownloader.download(context, url, userAgent, cookie, referer, newFilename);
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                    });
+                } else {
+                    BrowserDownloader.download(context, url, userAgent, cookie, referer, originalFilename);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error checking existing file", e);
+                BrowserDownloader.download(context, url, userAgent, cookie, referer, originalFilename);
+            }
+        }).start();
+
+        return 0;
     }
 
     private static long startSystemDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {

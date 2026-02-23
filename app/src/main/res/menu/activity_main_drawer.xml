@@ -11,7 +11,7 @@
             android:title="@string/action_history" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu"
+            android:icon="@drawable/ic_settings"
             android:title="@string/action_settings" />
         <item
             android:id="@+id/nav_theme"
@@ -19,16 +19,16 @@
             android:title="@string/action_theme" />
         <item
             android:id="@+id/nav_desktop_mode"
-            android:icon="@drawable/ic_menu"
+            android:icon="@drawable/ic_desktop"
             android:title="@string/title_desktop_mode"
             android:checkable="true" />
         <item
             android:id="@+id/nav_add_bookmark"
-            android:icon="@drawable/ic_bookmark"
+            android:icon="@drawable/ic_bookmark_add"
             android:title="@string/action_add_bookmark" />
         <item
             android:id="@+id/nav_bookmarks"
-            android:icon="@drawable/ic_bookmark"
+            android:icon="@drawable/ic_bookmarks"
             android:title="@string/action_bookmarks" />
         <item
             android:id="@+id/nav_downloads"
@@ -36,15 +36,33 @@
             android:title="@string/action_downloads" />
         <item
             android:id="@+id/nav_passwords"
-            android:icon="@drawable/ic_menu"
+            android:icon="@drawable/ic_password"
             android:title="@string/title_password_manager" />
         <item
             android:id="@+id/nav_cookies"
-            android:icon="@drawable/ic_menu"
+            android:icon="@drawable/ic_cookie"
             android:title="@string/title_cookies" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_bookmark"
+            android:icon="@drawable/ic_info"
             android:title="@string/title_about" />
     </group>
+
+    <item
+        android:title="@string/title_extensions">
+        <menu>
+            <item
+                android:id="@+id/nav_extensions_action"
+                android:icon="@drawable/ic_extension"
+                android:title="@string/action_extensions" />
+            <item
+                android:id="@+id/nav_extensions_browse"
+                android:icon="@drawable/ic_store"
+                android:title="@string/action_browse_extensions" />
+            <item
+                android:id="@+id/nav_extensions_manager"
+                android:icon="@drawable/ic_settings"
+                android:title="@string/action_manage_extensions" />
+        </menu>
+    </item>
 </menu>
