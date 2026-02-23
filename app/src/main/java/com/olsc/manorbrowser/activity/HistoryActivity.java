@@ -97,6 +97,19 @@ public class HistoryActivity extends AppCompatActivity {
         btnSelectAll.setOnClickListener(v -> adapter.selectAll());
         
         btnCancel.setOnClickListener(v -> exitSelectionMode());
+
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (adapter != null && adapter.isSelectionMode()) {
+                    exitSelectionMode();
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
     }
     private void showDeleteDialog(HistoryStorage.HistoryItem item, int position) {
         new AlertDialog.Builder(this)
@@ -189,14 +202,7 @@ public class HistoryActivity extends AppCompatActivity {
             }
         }
     }
-    @Override
-    public void onBackPressed() {
-        if (adapter.isSelectionMode()) {
-            exitSelectionMode();
-        } else {
-            super.onBackPressed();
-        }
-    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

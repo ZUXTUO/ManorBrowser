@@ -88,6 +88,20 @@ public class BookmarkActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
         findViewById(R.id.fab_add_folder).setOnClickListener(v -> showAddFolderDialog());
+
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!folderStack.isEmpty()) {
+                    folderStack.pop();
+                    refreshList();
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
     }
     private void refreshList() {
         displayList.clear();
@@ -320,13 +334,5 @@ public class BookmarkActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public void onBackPressed() {
-        if (!folderStack.isEmpty()) {
-            folderStack.pop();
-            refreshList();
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 }

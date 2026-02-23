@@ -202,4 +202,14 @@ URL: %1$s</string>
     <string name="title_file_exists">文件已存在</string>
     <string name="msg_file_exists">文件 "%1$s" 已存在，是否下载新副本？</string>
     <string name="action_download_new">下载新副本</string>
+    <string name="title_cookies">Cookies 与 网站数据</string>
+    <string name="msg_clear_all_cookies">清除所有 Cookies 和网站数据吗？</string>
+    <string name="action_clear_all">清除全部</string>
+    <string name="msg_cookies_cleared">已清除所有 Cookies 和网站数据</string>
+    <string name="msg_cookie_deleted">Cookie 已删除</string>
+    <string name="label_domain">域名: %s</string>
+    <string name="label_path">路径: %s</string>
+    <string name="label_value">值: %s</string>
+    <string name="msg_no_cookies">未找到 Cookies</string>
+    <string name="msg_confirm_delete_domain">确定删除 %s 的所有 Cookies 和网站数据吗？</string>
 </resources>

@@ -138,6 +138,12 @@
             android:parentActivityName=".activity.SettingsActivity"
             android:theme="@style/Theme.ManorBrowser" />
 
+        <activity
+            android:name=".activity.CookieManagerActivity"
+            android:label="@string/title_cookies"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/Theme.ManorBrowser" />
+
     </application>
 
 </manifest>
