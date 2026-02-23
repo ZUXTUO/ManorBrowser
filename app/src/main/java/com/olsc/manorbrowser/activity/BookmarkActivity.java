@@ -260,13 +260,8 @@ public class BookmarkActivity extends AppCompatActivity {
         builder.setItems(folderNames, (dialog, which) -> {
                 BookmarkItem target = validFolders.get(which);
                 
-                if (folderStack.isEmpty()) {
-                    rootList.remove(item);
-                } else {
-                    folderStack.peek().children.remove(item);
-                }
-                
-                BookmarkStorage.addBookmarkToFolder(BookmarkActivity.this, item, target.id);
+                BookmarkStorage.moveBookmark(BookmarkActivity.this, item.id, target.id);
+
                 
                 Toast.makeText(BookmarkActivity.this, R.string.msg_move_success, Toast.LENGTH_SHORT).show();
                 
