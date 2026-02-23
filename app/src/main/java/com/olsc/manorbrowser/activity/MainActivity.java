@@ -479,9 +479,6 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onDestroy() {
-        if (geckoView != null) {
-            geckoView.setSession(null);
-        }
         for (TabInfo tab : tabs) {
             if (tab.session != null) {
                 tab.session.setProgressDelegate(null);
@@ -1280,9 +1277,9 @@ public class MainActivity extends AppCompatActivity {
         android.content.SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(Config.PREF_KEY_DARK_MODE, !isDarkMode);
         editor.apply();
-        if (geckoView != null) {
-            geckoView.setSession(null);
+        if (geckoView != null && geckoView.getSession() != null) {
         }
+
         AppCompatDelegate.setDefaultNightMode(!isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         android.content.Intent intent = getIntent();
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION);

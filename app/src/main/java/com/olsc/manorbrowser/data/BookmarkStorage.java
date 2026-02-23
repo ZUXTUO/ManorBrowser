@@ -105,4 +105,32 @@ public class BookmarkStorage {
             }
         }
     }
+
+    public static void moveBookmark(Context context, long bookmarkId, long targetFolderId) {
+        List<BookmarkItem> bookmarks = loadBookmarks(context);
+        BookmarkItem itemToMove = findAndRemoveRecursive(bookmarks, bookmarkId);
+        if (itemToMove != null) {
+            if (targetFolderId == -1) {
+                itemToMove.parentId = -1;
+                bookmarks.add(itemToMove);
+            } else {
+                addToFolderRecursive(bookmarks, itemToMove, targetFolderId);
+            }
+            saveBookmarks(context, bookmarks);
+        }
+    }
+
+    private static BookmarkItem findAndRemoveRecursive(List<BookmarkItem> items, long id) {
+        for (int i = 0; i < items.size(); i++) {
+            BookmarkItem item = items.get(i);
+            if (item.id == id) {
+                return items.remove(i);
+            }
+            if (item.children != null && !item.children.isEmpty()) {
+                BookmarkItem found = findAndRemoveRecursive(item.children, id);
+                if (found != null) return found;
+            }
+        }
+        return null;
+    }
 }
