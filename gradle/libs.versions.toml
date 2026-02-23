@@ -7,6 +7,7 @@ appcompat = "1.7.1"
 material = "1.13.0"
 geckoview = "147.0.20260203002554"
 swiperefreshlayout = "1.2.0"
+preference = "1.2.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +17,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 geckoview = { module = "org.mozilla.geckoview:geckoview", version.ref = "geckoview" }
 swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version = "5.3.2" }
 
 [plugins]

@@ -6,7 +6,7 @@ import com.olsc.manorbrowser.R;
 import com.olsc.manorbrowser.Config;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

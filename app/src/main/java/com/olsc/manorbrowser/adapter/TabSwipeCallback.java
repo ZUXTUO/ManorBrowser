@@ -24,7 +24,7 @@ public class TabSwipeCallback extends ItemTouchHelper.SimpleCallback {
     }
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        listener.onSwiped(viewHolder.getAdapterPosition());
+        listener.onSwiped(viewHolder.getBindingAdapterPosition());
     }
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,

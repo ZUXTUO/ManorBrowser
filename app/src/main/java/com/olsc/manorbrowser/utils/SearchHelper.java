@@ -4,7 +4,7 @@
 package com.olsc.manorbrowser.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Patterns;
 import android.webkit.URLUtil;
 import com.olsc.manorbrowser.Config;

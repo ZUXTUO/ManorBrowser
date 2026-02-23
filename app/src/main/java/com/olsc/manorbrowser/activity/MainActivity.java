@@ -45,6 +45,7 @@ import org.mozilla.geckoview.AllowOrDeny;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import androidx.preference.PreferenceManager;
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private GeckoView geckoView;
@@ -717,7 +718,7 @@ public class MainActivity extends AppCompatActivity {
         
         // 初始化桌面模式菜单项的选中状态
         if (navigationView != null) {
-            android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+            android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean isDesktopMode = prefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
             android.view.Menu menu = navigationView.getMenu();
             android.view.MenuItem desktopItem = menu.findItem(R.id.nav_desktop_mode);
@@ -1105,7 +1106,7 @@ public class MainActivity extends AppCompatActivity {
             GeckoRuntimeSettings.COLOR_SCHEME_DARK : GeckoRuntimeSettings.COLOR_SCHEME_LIGHT);
         
         // 应用桌面模式设置
-        android.content.SharedPreferences defaultPrefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        android.content.SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isDesktopMode = defaultPrefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
         
         if (isDesktopMode) {
@@ -1261,13 +1262,21 @@ public class MainActivity extends AppCompatActivity {
         android.content.Intent intent = getIntent();
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
-        overridePendingTransition(0, 0);
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, 0, 0);
+        } else {
+            overridePendingTransition(0, 0);
+        }
         startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out);
+        } else {
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
     }
     
     private void toggleDesktopMode() {
-        android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isDesktopMode = prefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
         prefs.edit().putBoolean(Config.PREF_KEY_DESKTOP_MODE, !isDesktopMode).apply();
         
@@ -1298,7 +1307,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void refreshBackgroundEffect() {
-        android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String effect = prefs.getString(Config.PREF_KEY_BG_EFFECT, Config.BG_EFFECT_METEOR);
         DynamicBackgroundView dynamicBgView = findViewById(R.id.dynamic_background_view);
         if (dynamicBgView != null) {
