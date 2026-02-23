@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private int lastX, lastY;
     private long lastBackTime = 0;
     private boolean urlInputFirstClick = true; // 跟踪URL输入框是否是第一次点击
+    private boolean isSwitchingTab = false; // 防止switchToTab重入导致的崩溃和逻辑混乱
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
@@ -720,7 +721,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
-        // 初始化桌面模式菜单项的选中状态
+        // 初始化桌面模式菜单项的状态
         if (navigationView != null) {
             android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean isDesktopMode = prefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
@@ -728,6 +729,7 @@ public class MainActivity extends AppCompatActivity {
             android.view.MenuItem desktopItem = menu.findItem(R.id.nav_desktop_mode);
             if (desktopItem != null) {
                 desktopItem.setChecked(isDesktopMode);
+                desktopItem.setTitle(isDesktopMode ? R.string.title_mobile_mode : R.string.title_desktop_mode);
             }
         }
     }
@@ -766,27 +768,44 @@ public class MainActivity extends AppCompatActivity {
     }
     private void switchToTab(int index) {
         if (index < 0 || index >= tabs.size()) return;
-        if (index != tabs.size() - 1) {
-            TabInfo tab = tabs.remove(index);
-            tabs.add(tab);
-            if (tabSwitcherAdapter != null) {
-                tabSwitcherAdapter.notifyItemMoved(index, tabs.size() - 1);
-                tabSwitcherAdapter.notifyItemRangeChanged(0, tabs.size());
+        if (isSwitchingTab) return;
+        isSwitchingTab = true;
+        
+        try {
+            if (index != tabs.size() - 1) {
+                TabInfo t = tabs.remove(index);
+                tabs.add(t);
+                if (tabSwitcherAdapter != null) {
+                    tabSwitcherAdapter.notifyItemMoved(index, tabs.size() - 1);
+                    tabSwitcherAdapter.notifyItemRangeChanged(0, tabs.size());
+                }
+                index = tabs.size() - 1;
             }
-            index = tabs.size() - 1;
+            
+            final int targetIndex = index;
+            currentTabIndex = targetIndex;
+            
+            if (isTabSwitcherVisible) {
+                toggleTabSwitcher();
+            }
+            
+            TabInfo tab = tabs.get(targetIndex);
+            if (tab.session != null) {
+                // 直接设置Session，GeckoView内部会处理断开旧Session的操作
+                // 移除 setSession(null) 以防止在某些生命周期状态下触发内部 NPE
+                if (geckoView.getSession() != tab.session) {
+                    geckoView.setSession(tab.session);
+                }
+            }
+            
+            if (swipeRefresh != null) {
+                swipeRefresh.setEnabled(tab.scrollY <= 0);
+            }
+            updateUrlBar();
+            updateViewVisibility();
+        } finally {
+            isSwitchingTab = false;
         }
-        if (isTabSwitcherVisible) {
-            toggleTabSwitcher();
-        }
-        TabInfo tab = tabs.get(index);
-        geckoView.setSession(null);
-        geckoView.setSession(tab.session);
-        currentTabIndex = index;
-        if (swipeRefresh != null) {
-            swipeRefresh.setEnabled(tab.scrollY <= 0);
-        }
-        updateUrlBar();
-        updateViewVisibility();
     }
     private void updateViewVisibility() {
         if (isTabSwitcherVisible) return;
@@ -1299,12 +1318,14 @@ public class MainActivity extends AppCompatActivity {
             currentSession.reload();
         }
         
-        // 更新菜单项的选中状态
+        // 更新菜单项的状态
         if (navigationView != null) {
             android.view.Menu menu = navigationView.getMenu();
             android.view.MenuItem desktopItem = menu.findItem(R.id.nav_desktop_mode);
             if (desktopItem != null) {
-                desktopItem.setChecked(!isDesktopMode);
+                boolean newMode = !isDesktopMode;
+                desktopItem.setChecked(newMode);
+                desktopItem.setTitle(newMode ? R.string.title_mobile_mode : R.string.title_desktop_mode);
             }
         }
         

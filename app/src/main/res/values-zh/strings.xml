@@ -193,6 +193,7 @@ URL: %1$s</string>
     <string name="pref_use_builtin_downloader_desc">使用浏览器内置下载管理器</string>
     
     <string name="title_desktop_mode">桌面模式</string>
+    <string name="title_mobile_mode">移动模式</string>
     <string name="pref_desktop_mode">请求桌面网站</string>
     <string name="pref_desktop_mode_desc">以桌面版本加载网页</string>
     
