@@ -227,4 +227,7 @@ URL: %1$s</string>
     <string name="action_close_all_tabs">关闭所有标签页</string>
     <string name="msg_confirm_close_all_tabs">确定要关闭所有标签页吗？</string>
     <string name="msg_all_tabs_closed">已关闭所有标签页</string>
+    <string name="title_default_browser">默认浏览器设置</string>
+    <string name="desc_default_browser">将领域浏览器设置为您的默认浏览器</string>
+    <string name="action_set_default_browser">去设置</string>
 </resources>
