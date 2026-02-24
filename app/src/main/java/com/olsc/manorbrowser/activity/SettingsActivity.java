@@ -68,6 +68,11 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+        
+        View containerDefaultBrowser = findViewById(R.id.container_default_browser);
+        if (containerDefaultBrowser != null) {
+            containerDefaultBrowser.setOnClickListener(v -> requestDefaultBrowserRole());
+        }
 
         // 获取SharedPreferences实例供后续使用
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -95,6 +100,29 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     
+    private void requestDefaultBrowserRole() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            android.app.role.RoleManager roleManager = getSystemService(android.app.role.RoleManager.class);
+            if (roleManager != null && roleManager.isRoleAvailable(android.app.role.RoleManager.ROLE_BROWSER)) {
+                if (!roleManager.isRoleHeld(android.app.role.RoleManager.ROLE_BROWSER)) {
+                    android.content.Intent intent = roleManager.createRequestRoleIntent(android.app.role.RoleManager.ROLE_BROWSER);
+                    startActivityForResult(intent, 1003);
+                    return;
+                }
+            }
+        }
+        
+        android.content.Intent intent = new android.content.Intent(android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS);
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            try {
+                android.content.Intent intentFallback = new android.content.Intent(android.provider.Settings.ACTION_SETTINGS);
+                startActivity(intentFallback);
+            } catch (Exception ex) {}
+        }
+    }
+
     private void showColorPickerDialog() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String prefKey = Config.PREF_KEY_SOLID_BG_COLOR;

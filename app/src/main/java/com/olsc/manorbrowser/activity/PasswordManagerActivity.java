@@ -15,6 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.graphics.Insets;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.olsc.manorbrowser.R;
@@ -31,10 +36,33 @@ public class PasswordManagerActivity extends AppCompatActivity {
     private TextView emptyView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.content.SharedPreferences prefs = getSharedPreferences(com.olsc.manorbrowser.Config.PREF_NAME_THEME, MODE_PRIVATE);
+        boolean isDarkMode = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_DARK_MODE, false);
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+        
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (controller != null) {
+            controller.setAppearanceLightStatusBars(!isDarkMode);
+            controller.setAppearanceLightNavigationBars(!isDarkMode);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_manager);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
+        
+        View mainView = findViewById(android.R.id.content);
+        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            toolbar.setPadding(toolbar.getPaddingLeft(), insets.top, toolbar.getPaddingRight(), 0);
+            v.setPadding(v.getPaddingLeft(), 0, v.getPaddingRight(), insets.bottom);
+            return windowInsets;
+        });
         recyclerView = findViewById(R.id.recycler_view);
         emptyView = findViewById(R.id.empty_view);
         FloatingActionButton fab = findViewById(R.id.fab_add);
