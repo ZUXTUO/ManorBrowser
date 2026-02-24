@@ -15,6 +15,19 @@ jobs:
       statuses: write
 
     steps:
+      - name: "Create CLA branch if not exists"
+        if: ( github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA' || github.event_name == 'pull_request_target' ) && github.repository == 'Olsc/ManorBrowser'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/branches/cla-signatures")
+          if [ "$STATUS" = "404" ]; then
+            MAIN_SHA=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/main" | jq -r .object.sha)
+            if [ -n "$MAIN_SHA" ] && [ "$MAIN_SHA" != "null" ]; then
+              curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" -d "{\"ref\":\"refs/heads/cla-signatures\",\"sha\":\"$MAIN_SHA\"}" "https://api.github.com/repos/${{ github.repository }}/git/refs"
+            fi
+          fi
+
       - name: "CLA Assistant"
         if: ( github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA' || github.event_name == 'pull_request_target' ) && github.repository == 'Olsc/ManorBrowser'
         # Beta Release
