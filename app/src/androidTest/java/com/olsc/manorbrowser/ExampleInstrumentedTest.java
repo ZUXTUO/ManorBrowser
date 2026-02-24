@@ -9,15 +9,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 /**
- * Instrumented test, which will execute on an Android device.
+ * 仪表化测试，将在 Android 设备上执行。
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @see <a href="http://d.android.com/tools/testing">测试文档</a>
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
+        // 被测应用程序的 Context。
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.olsc.manorbrowser", appContext.getPackageName());
     }
