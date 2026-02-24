@@ -14,6 +14,11 @@ import android.widget.TextView;
 import android.widget.SeekBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.graphics.Insets;
 import com.olsc.manorbrowser.R;
 public class ReaderActivity extends AppCompatActivity {
     private TextView contentTextView;
@@ -34,10 +39,32 @@ public class ReaderActivity extends AppCompatActivity {
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.content.SharedPreferences prefs = getSharedPreferences(com.olsc.manorbrowser.Config.PREF_NAME_THEME, MODE_PRIVATE);
+        boolean isDarkMode = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_DARK_MODE, false);
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+        
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (controller != null) {
+            controller.setAppearanceLightStatusBars(!isDarkMode);
+            controller.setAppearanceLightNavigationBars(!isDarkMode);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reader);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
+
+        View mainView = findViewById(android.R.id.content);
+        ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            toolbar.setPadding(toolbar.getPaddingLeft(), insets.top, toolbar.getPaddingRight(), 0);
+            v.setPadding(v.getPaddingLeft(), 0, v.getPaddingRight(), insets.bottom);
+            return windowInsets;
+        });
         contentTextView = findViewById(R.id.reader_content);
         readerContainer = findViewById(R.id.reader_container);
         fontSizeSeekBar = findViewById(R.id.font_size_seekbar);
