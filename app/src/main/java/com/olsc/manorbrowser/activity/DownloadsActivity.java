@@ -24,12 +24,16 @@ import com.olsc.manorbrowser.data.DownloadInfo;
 import com.olsc.manorbrowser.utils.DownloadHelper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class DownloadsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DownloadAdapter adapter;
     private List<DownloadInfo> downloadList = new ArrayList<>();
     private Handler handler;
     private Runnable refreshRunnable;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
         super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
@@ -86,7 +90,7 @@ public class DownloadsActivity extends AppCompatActivity {
         handler.removeCallbacks(refreshRunnable);
     }
     private void loadDownloads() {
-        new Thread(() -> {
+        executor.execute(() -> {
             List<DownloadInfo> info = DownloadHelper.getDownloads(this);
             if (info != null) {
                 handler.post(() -> {
@@ -96,7 +100,13 @@ public class DownloadsActivity extends AppCompatActivity {
                     findViewById(R.id.rv_downloads).setVisibility(downloadList.isEmpty() ? View.GONE : View.VISIBLE);
                 });
             }
-        }).start();
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdown();
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
