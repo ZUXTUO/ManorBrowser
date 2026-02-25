@@ -36,7 +36,18 @@ public class LocaleHelper {
         editor.apply();
     }
     private static Context updateResources(Context context, String language) {
-        Locale locale = new Locale(language);
+        Locale locale;
+        if (language.contains("-")) {
+            String[] parts = language.split("-");
+            if (parts.length > 1) {
+                locale = new Locale(parts[0], parts[1]);
+            } else {
+                locale = new Locale(language);
+            }
+        } else {
+            locale = new Locale(language);
+        }
+        
         Locale.setDefault(locale);
         Resources res = context.getResources();
         Configuration config = new Configuration(res.getConfiguration());
