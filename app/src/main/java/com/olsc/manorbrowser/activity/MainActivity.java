@@ -496,7 +496,6 @@ public class MainActivity extends AppCompatActivity {
                     String[] parts = data.split("\\|\\|\\|", 2);
                     String title = parts.length > 0 ? parts[0] : "";
                     String content = parts.length > 1 ? parts[1] : "";
-                    
                     if (content.trim().isEmpty()) {
                         runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_reader_mode_failed, Toast.LENGTH_SHORT).show());
                     } else {
@@ -504,7 +503,187 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return GeckoResult.fromValue(prompt.dismiss());
                 }
-                return null; 
+                // 显示真实的网页 alert 对话框
+                GeckoResult<PromptResponse> result = new GeckoResult<>();
+                final java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean(false);
+                runOnUiThread(() -> {
+                    String dlgTitle = (prompt.title != null && !prompt.title.isEmpty()) ? prompt.title : getString(R.string.dialog_title_alert);
+                    String msg = prompt.message != null ? prompt.message : "";
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle(dlgTitle)
+                        .setMessage(msg)
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.dismiss());
+                            }
+                        })
+                        .setOnDismissListener(d -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.dismiss());
+                            }
+                        })
+                        .show();
+                });
+                return result;
+            }
+
+            @Override
+            public GeckoResult<PromptResponse> onTextPrompt(@NonNull GeckoSession session, @NonNull PromptDelegate.TextPrompt prompt) {
+                GeckoResult<PromptResponse> result = new GeckoResult<>();
+                final java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean(false);
+                runOnUiThread(() -> {
+                    String dlgTitle = (prompt.title != null && !prompt.title.isEmpty()) ? prompt.title : getString(R.string.dialog_title_prompt);
+                    String msg = prompt.message != null ? prompt.message : "";
+                    android.widget.EditText editText = new android.widget.EditText(MainActivity.this);
+                    if (!msg.isEmpty()) editText.setHint(msg);
+                    if (prompt.defaultValue != null) {
+                        editText.setText(prompt.defaultValue);
+                        editText.setSelection(prompt.defaultValue.length());
+                    }
+                    int paddingPx = (int)(24 * getResources().getDisplayMetrics().density);
+                    android.widget.LinearLayout container = new android.widget.LinearLayout(MainActivity.this);
+                    container.setPadding(paddingPx, paddingPx / 2, paddingPx, 0);
+                    container.addView(editText);
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle(dlgTitle)
+                        .setMessage(msg.isEmpty() ? null : msg)
+                        .setView(container)
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.confirm(editText.getText().toString()));
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.dismiss());
+                            }
+                        })
+                        .setOnDismissListener(d -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.dismiss());
+                            }
+                        })
+                        .show();
+                });
+                return result;
+            }
+
+            @Override
+            public GeckoResult<PromptResponse> onButtonPrompt(@NonNull GeckoSession session, @NonNull PromptDelegate.ButtonPrompt prompt) {
+                GeckoResult<PromptResponse> result = new GeckoResult<>();
+                final java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean(false);
+                runOnUiThread(() -> {
+                    String dlgTitle = (prompt.title != null && !prompt.title.isEmpty()) ? prompt.title : getString(R.string.dialog_title_confirm);
+                    String msg = prompt.message != null ? prompt.message : "";
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle(dlgTitle)
+                        .setMessage(msg)
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.confirm(PromptDelegate.ButtonPrompt.Type.POSITIVE));
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.confirm(PromptDelegate.ButtonPrompt.Type.NEGATIVE));
+                            }
+                        })
+                        .setOnDismissListener(d -> {
+                            if (completed.compareAndSet(false, true)) {
+                                result.complete(prompt.dismiss());
+                            }
+                        })
+                        .show();
+                });
+                return result;
+            }
+
+            @Override
+            public GeckoResult<PromptResponse> onChoicePrompt(@NonNull GeckoSession session, @NonNull PromptDelegate.ChoicePrompt prompt) {
+                GeckoResult<PromptResponse> result = new GeckoResult<>();
+                final java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean(false);
+                runOnUiThread(() -> {
+                    String dlgTitle = (prompt.title != null && !prompt.title.isEmpty()) ? prompt.title : getString(R.string.dialog_title_select);
+                    PromptDelegate.ChoicePrompt.Choice[] choices = prompt.choices;
+                    if (choices == null || choices.length == 0) {
+                        result.complete(prompt.dismiss());
+                        return;
+                    }
+                    String[] labels = new String[choices.length];
+                    for (int i = 0; i < choices.length; i++) {
+                        labels[i] = choices[i].label != null ? choices[i].label : "";
+                    }
+                    if (prompt.type == PromptDelegate.ChoicePrompt.Type.SINGLE ||
+                        prompt.type == PromptDelegate.ChoicePrompt.Type.MENU) {
+                        // 单选列表
+                        final int[] selectedIdx = {-1};
+                        for (int i = 0; i < choices.length; i++) {
+                            if (choices[i].selected) { selectedIdx[0] = i; break; }
+                        }
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(dlgTitle)
+                            .setSingleChoiceItems(labels, selectedIdx[0], (dialog, which) -> selectedIdx[0] = which)
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    if (selectedIdx[0] >= 0) {
+                                        result.complete(prompt.confirm(choices[selectedIdx[0]]));
+                                    } else {
+                                        result.complete(prompt.dismiss());
+                                    }
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    result.complete(prompt.dismiss());
+                                }
+                            })
+                            .setOnDismissListener(d -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    result.complete(prompt.dismiss());
+                                }
+                            })
+                            .show();
+                    } else if (prompt.type == PromptDelegate.ChoicePrompt.Type.MULTIPLE) {
+                        // 多选列表
+                        boolean[] checkedItems = new boolean[choices.length];
+                        for (int i = 0; i < choices.length; i++) {
+                            checkedItems[i] = choices[i].selected;
+                        }
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(dlgTitle)
+                            .setMultiChoiceItems(labels, checkedItems, (dialog, which, isChecked) -> checkedItems[which] = isChecked)
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    List<PromptDelegate.ChoicePrompt.Choice> selected = new ArrayList<>();
+                                    for (int i = 0; i < choices.length; i++) {
+                                        if (checkedItems[i]) selected.add(choices[i]);
+                                    }
+                                    result.complete(prompt.confirm(selected.toArray(new PromptDelegate.ChoicePrompt.Choice[0])));
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    result.complete(prompt.dismiss());
+                                }
+                            })
+                            .setOnDismissListener(d -> {
+                                if (completed.compareAndSet(false, true)) {
+                                    result.complete(prompt.dismiss());
+                                }
+                            })
+                            .show();
+                    } else {
+                        if (completed.compareAndSet(false, true)) {
+                            result.complete(prompt.dismiss());
+                        }
+                    }
+                });
+                return result;
             }
         });
         session.setScrollDelegate(new GeckoSession.ScrollDelegate() {
