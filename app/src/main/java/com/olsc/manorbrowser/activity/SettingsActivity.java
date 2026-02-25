@@ -244,12 +244,47 @@ public class SettingsActivity extends AppCompatActivity {
         int checkedItem = 0;
         if ("en".equals(currentLang)) checkedItem = 1;
         else if ("zh".equals(currentLang)) checkedItem = 2;
+        else if ("zh-TW".equals(currentLang)) checkedItem = 3;
+        else if ("ko".equals(currentLang)) checkedItem = 4;
+        else if ("ru".equals(currentLang)) checkedItem = 5;
+        else if ("ja".equals(currentLang)) checkedItem = 6;
+        else if ("ko-KP".equals(currentLang)) checkedItem = 7;
+        else if ("es".equals(currentLang)) checkedItem = 8;
+        else if ("de".equals(currentLang)) checkedItem = 9;
+        else if ("fr".equals(currentLang)) checkedItem = 10;
+        else if ("it".equals(currentLang)) checkedItem = 11;
+        else if ("pt".equals(currentLang)) checkedItem = 12;
+        else if ("ar".equals(currentLang)) checkedItem = 13;
+        else if ("hi".equals(currentLang)) checkedItem = 14;
+        else if ("tr".equals(currentLang)) checkedItem = 15;
+        else if ("vi".equals(currentLang)) checkedItem = 16;
+        else if ("id".equals(currentLang)) checkedItem = 17;
+        else if ("pl".equals(currentLang)) checkedItem = 18;
+        else if ("nl".equals(currentLang)) checkedItem = 19;
+
         String[] languages = {
             getString(R.string.language_system),
             getString(R.string.language_en),
-            getString(R.string.language_zh)
+            getString(R.string.language_zh),
+            getString(R.string.language_zh_tw),
+            getString(R.string.language_ko),
+            getString(R.string.language_ru),
+            getString(R.string.language_ja),
+            getString(R.string.language_ko_rkp),
+            getString(R.string.language_es),
+            getString(R.string.language_de),
+            getString(R.string.language_fr),
+            getString(R.string.language_it),
+            getString(R.string.language_pt),
+            getString(R.string.language_ar),
+            getString(R.string.language_hi),
+            getString(R.string.language_tr),
+            getString(R.string.language_vi),
+            getString(R.string.language_id),
+            getString(R.string.language_pl),
+            getString(R.string.language_nl)
         };
-        String[] values = {"", "en", "zh"};
+        String[] values = {"", "en", "zh", "zh-TW", "ko", "ru", "ja", "ko-KP", "es", "de", "fr", "it", "pt", "ar", "hi", "tr", "vi", "id", "pl", "nl"};
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.title_language)
                 .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
@@ -280,6 +315,23 @@ public class SettingsActivity extends AppCompatActivity {
         String display;
         if ("en".equals(currentLang)) display = getString(R.string.language_en);
         else if ("zh".equals(currentLang)) display = getString(R.string.language_zh);
+        else if ("zh-TW".equals(currentLang)) display = getString(R.string.language_zh_tw);
+        else if ("ko".equals(currentLang)) display = getString(R.string.language_ko);
+        else if ("ru".equals(currentLang)) display = getString(R.string.language_ru);
+        else if ("ja".equals(currentLang)) display = getString(R.string.language_ja);
+        else if ("ko-KP".equals(currentLang)) display = getString(R.string.language_ko_rkp);
+        else if ("es".equals(currentLang)) display = getString(R.string.language_es);
+        else if ("de".equals(currentLang)) display = getString(R.string.language_de);
+        else if ("fr".equals(currentLang)) display = getString(R.string.language_fr);
+        else if ("it".equals(currentLang)) display = getString(R.string.language_it);
+        else if ("pt".equals(currentLang)) display = getString(R.string.language_pt);
+        else if ("ar".equals(currentLang)) display = getString(R.string.language_ar);
+        else if ("hi".equals(currentLang)) display = getString(R.string.language_hi);
+        else if ("tr".equals(currentLang)) display = getString(R.string.language_tr);
+        else if ("vi".equals(currentLang)) display = getString(R.string.language_vi);
+        else if ("id".equals(currentLang)) display = getString(R.string.language_id);
+        else if ("pl".equals(currentLang)) display = getString(R.string.language_pl);
+        else if ("nl".equals(currentLang)) display = getString(R.string.language_nl);
         else display = getString(R.string.language_system);
         
         tvLanguage.setText(display);
