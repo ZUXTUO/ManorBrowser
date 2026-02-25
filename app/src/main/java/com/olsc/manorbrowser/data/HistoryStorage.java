@@ -12,9 +12,15 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class HistoryStorage {
     private static final String FILE_NAME = "history.json";
     private static final int MAX_HISTORY_SIZE = 500;
+    
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+
     public static class HistoryItem {
         public String title;
         public String url;
@@ -27,7 +33,7 @@ public class HistoryStorage {
     }
     public static void addHistory(Context context, String title, String url) {
         if (url == null || url.isEmpty() || url.equals(Config.URL_BLANK)) return;
-        new Thread(() -> {
+        executor.execute(() -> {
             List<HistoryItem> history = loadHistory(context);
             history.removeIf(item -> item.url.equals(url));
             history.add(0, new HistoryItem(title, url, System.currentTimeMillis()));
@@ -35,7 +41,7 @@ public class HistoryStorage {
                 history = history.subList(0, MAX_HISTORY_SIZE);
             }
             saveHistory(context, history);
-        }).start();
+        });
     }
     public static List<HistoryItem> loadHistory(Context context) {
         List<HistoryItem> history = new ArrayList<>();
@@ -44,17 +50,19 @@ public class HistoryStorage {
             if (!file.exists()) return history;
             FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
-            fis.read(data);
+            int readBytes = fis.read(data);
             fis.close();
-            String jsonStr = new String(data);
-            JSONArray jsonArray = new JSONArray(jsonStr);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject json = jsonArray.getJSONObject(i);
-                history.add(new HistoryItem(
-                        json.optString("title"),
-                        json.optString("url"),
-                        json.optLong("timestamp")
-                ));
+            if (readBytes > 0) {
+                String jsonStr = new String(data, 0, readBytes);
+                JSONArray jsonArray = new JSONArray(jsonStr);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    history.add(new HistoryItem(
+                            json.optString("title"),
+                            json.optString("url"),
+                            json.optLong("timestamp")
+                    ));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,16 +88,18 @@ public class HistoryStorage {
         }
     }
     public static void clearHistory(Context context) {
-         File file = new File(context.getFilesDir(), FILE_NAME);
-         if (file.exists()) file.delete();
+        executor.execute(() -> {
+            File file = new File(context.getFilesDir(), FILE_NAME);
+            if (file.exists()) file.delete();
+        });
     }
     public static void deleteHistoryItem(Context context, HistoryItem itemToDelete) {
-        new Thread(() -> {
+        executor.execute(() -> {
             List<HistoryItem> history = loadHistory(context);
             history.removeIf(item -> 
                 item.url.equals(itemToDelete.url) && 
                 item.timestamp == itemToDelete.timestamp);
             saveHistory(context, history);
-        }).start();
+        });
     }
 }

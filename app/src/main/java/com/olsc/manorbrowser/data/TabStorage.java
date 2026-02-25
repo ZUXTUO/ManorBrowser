@@ -14,11 +14,23 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import android.os.Handler;
+import android.os.Looper;
+
 public class TabStorage {
     private static final String FILE_NAME = "tabs.json";
     private static final String THUMB_DIR = "thumbnails";
+    
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    public interface ThumbnailCallback {
+        void onLoaded(Bitmap bitmap);
+    }
+
     public static void saveTabs(Context context, List<TabInfo> tabs) {
-        new Thread(() -> {
+        executor.execute(() -> {
             try {
                 JSONArray jsonArray = new JSONArray();
                 for (TabInfo tab : tabs) {
@@ -36,8 +48,9 @@ public class TabStorage {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
+
     public static List<TabInfo> loadTabs(Context context) {
         List<TabInfo> tabs = new ArrayList<>();
         try {
@@ -45,24 +58,38 @@ public class TabStorage {
             if (!file.exists()) return tabs;
             FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
-            fis.read(data);
+            int readBytes = fis.read(data);
             fis.close();
-            String jsonStr = new String(data);
-            JSONArray jsonArray = new JSONArray(jsonStr);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject json = jsonArray.getJSONObject(i);
-                TabInfo tab = new TabInfo(null);
-                tab.id = json.optLong("id", System.currentTimeMillis());
-                tab.url = json.optString("url", Config.URL_BLANK);
-                tab.title = json.optString("title", "New Tab");
-                tab.thumbnail = loadThumbnail(context, tab.id);
-                tabs.add(tab);
+            if (readBytes > 0) {
+                String jsonStr = new String(data, 0, readBytes);
+                JSONArray jsonArray = new JSONArray(jsonStr);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    TabInfo tab = new TabInfo(null);
+                    tab.id = json.optLong("id", System.currentTimeMillis());
+                    tab.url = json.optString("url", Config.URL_BLANK);
+                    tab.title = json.optString("title", "New Tab");
+                    tab.thumbnail = null; 
+                    tabs.add(tab);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return tabs;
     }
+
+    public static void loadThumbnailAsync(Context context, long id, ThumbnailCallback callback) {
+        executor.execute(() -> {
+            Bitmap bmp = loadThumbnail(context, id);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (callback != null) {
+                    callback.onLoaded(bmp);
+                }
+            });
+        });
+    }
+
     private static void saveThumbnail(Context context, TabInfo tab) {
         if (tab.thumbnail == null) return;
         try {
@@ -76,6 +103,7 @@ public class TabStorage {
             e.printStackTrace();
         }
     }
+
     private static Bitmap loadThumbnail(Context context, long id) {
         try {
             File file = new File(new File(context.getFilesDir(), THUMB_DIR), id + ".png");

@@ -89,6 +89,16 @@ public class TabSwitcherAdapter extends RecyclerView.Adapter<TabSwitcherAdapter.
             } else {
                 preview.setImageResource(0);
                 preview.setBackgroundColor(0xFFF5F5F5);
+                com.olsc.manorbrowser.data.TabStorage.loadThumbnailAsync(itemView.getContext(), tab.id, bitmap -> {
+                    if (bitmap != null && (tab.thumbnail == null || tab.thumbnail.isRecycled())) {
+                        tab.thumbnail = bitmap;
+                        if (getBindingAdapterPosition() == position) {
+                            preview.setImageBitmap(bitmap);
+                            preview.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            preview.setBackgroundColor(0xFFE0E0E0);
+                        }
+                    }
+                });
             }
             itemView.setOnClickListener(v -> {
                 int pos = getBindingAdapterPosition();
