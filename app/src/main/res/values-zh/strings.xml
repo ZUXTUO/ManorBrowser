@@ -230,4 +230,9 @@ URL: %1$s</string>
     <string name="title_default_browser">默认浏览器设置</string>
     <string name="desc_default_browser">将领域浏览器设置为您的默认浏览器</string>
     <string name="action_set_default_browser">去设置</string>
+
+    <string name="dialog_title_alert">提示</string>
+    <string name="dialog_title_confirm">确认</string>
+    <string name="dialog_title_prompt">请输入</string>
+    <string name="dialog_title_select">请选择</string>
 </resources>
