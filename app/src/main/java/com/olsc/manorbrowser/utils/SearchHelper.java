@@ -28,8 +28,9 @@ public class SearchHelper {
             return query;
         }
 
-        // 2. 检查是否是 IP 地址格式（支持 IPv4 以及带端口号的情况，如 192.168.1.1:8080）
-        if (isIpAddress(query)) {
+        // 2. 检查是否是 IP 地址格式（支持带端口和路径，如 192.168.1.1:8080/admin）
+        // 关键：必须在常规 WEB_URL 前拦截，防止 IP 被误认为域名
+        if (isIpAddressFormat(query)) {
             return "http://" + query;
         }
 
@@ -50,30 +51,28 @@ public class SearchHelper {
     }
 
     /**
-     * 识别输入字符串是否符合 IPv4 地址格式（含端口支持）
+     * 更严谨地识别 IPv4 地址（含可选端口与路径）
      */
-    private static boolean isIpAddress(String input) {
-        // 分离 IP 部分和端口部分
-        String ipPart = input;
-        if (input.contains(":")) {
-            String[] parts = input.split(":");
-            if (parts.length == 2) {
-                ipPart = parts[0];
-                // 验证端口号范围是否符合标准 [1, 65535]
-                try {
-                    int port = Integer.parseInt(parts[1]);
-                    if (port < 1 || port > 65535) {
-                        return false;
-                    }
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
+    private static boolean isIpAddressFormat(String input) {
+        if (input == null || input.isEmpty()) return false;
         
-        // 使用系统正则表达式匹配 IP 结构
-        return Patterns.IP_ADDRESS.matcher(ipPart).matches();
+        // 分离 Host 和 路径
+        String hostPart = input.split("/")[0].trim();
+        
+        // 移除可选的端口号
+        String ipOnly = hostPart;
+        if (hostPart.contains(":")) {
+            String[] parts = hostPart.split(":");
+            ipOnly = parts[0];
+        }
+
+        // 匹配 IPv4 正则
+        // 为确保兼容性，使用标准正则取代 Patterns.IP_ADDRESS（某些 OEM 系统中此常量定义可能不同）
+        String ipv4Pattern = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\." +
+                             "(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\." +
+                             "(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\." +
+                             "(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$";
+        
+        return ipOnly.matches(ipv4Pattern);
     }
 }
