@@ -24,6 +24,9 @@ import java.util.List;
 
 public class DownloadHelper {
     private static final String TAG = "DownloadHelper";
+    
+    /** 存储内置下载器正在进行的任务，用于在下载列表中实时展示 */
+    public static final List<DownloadInfo> sInternalDownloads = java.util.Collections.synchronizedList(new ArrayList<>());
 
     /**
      * 开始下载任务
@@ -32,9 +35,9 @@ public class DownloadHelper {
     public static long startDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
         if (TextUtils.isEmpty(url)) return -1;
 
-        // 获取用户偏好：是否使用系统下载器
-        android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
-        boolean useSystemDownloader = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, true);
+        // 获取用户偏好：是否使用系统下载器（默认设为 false，推荐使用内置下载器）
+        android.content.SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        boolean useSystemDownloader = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, false);
 
         if (!useSystemDownloader) {
             // 使用浏览器内置下载器
@@ -49,36 +52,9 @@ public class DownloadHelper {
      * 调用浏览器内置下载器逻辑
      */
     private static long startBrowserDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
-        final String finalUrl = url.trim();
-        String originalFilename = guessFileName(finalUrl, contentDisposition, mimeType);
-
-        new Thread(() -> {
-            try {
-                java.io.File downloadDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
-                java.io.File existingFile = new java.io.File(downloadDir, originalFilename);
-
-                if (existingFile.exists()) {
-                    // 若文件已存在，则弹窗询问是否下载为新副本
-                    new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
-                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
-                                .setTitle(R.string.title_file_exists)
-                                .setMessage(context.getString(R.string.msg_file_exists, originalFilename))
-                                .setPositiveButton(R.string.action_download_new, (dialog, which) -> {
-                                    String newFilename = getUniqueFilename(downloadDir, originalFilename);
-                                    BrowserDownloader.download(context, url, userAgent, cookie, referer, newFilename);
-                                })
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .show();
-                    });
-                } else {
-                    BrowserDownloader.download(context, url, userAgent, cookie, referer, originalFilename);
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Error checking existing file", e);
-                BrowserDownloader.download(context, url, userAgent, cookie, referer, originalFilename);
-            }
-        }).start();
-
+        String filename = guessFileName(url, contentDisposition, mimeType);
+        // 内置下载器直接开始，不弹出重复警告，由其内部处理同名覆盖/重命名
+        BrowserDownloader.download(context, url, userAgent, cookie, referer, filename);
         return 0;
     }
 
@@ -86,12 +62,8 @@ public class DownloadHelper {
      * 使用 Android 系统下载器开始下载
      */
     private static long startSystemDownload(Context context, String url, String userAgent, String contentDisposition, String mimeType, String cookie, String referer) {
-        final String finalUrl = url.trim();
-
-        // 预估文件名并检查冲突
-        String originalFilename = guessFileName(finalUrl, contentDisposition, mimeType);
-        checkExistingFileAndDownload(context, finalUrl, originalFilename, userAgent, contentDisposition, mimeType, cookie, referer);
-
+        String filename = guessFileName(url, contentDisposition, mimeType);
+        performDownload(context, url, userAgent, contentDisposition, mimeType, cookie, referer, filename);
         return 0;
     }
 
@@ -177,8 +149,15 @@ public class DownloadHelper {
                     return;
                 }
 
-                // 强制添加系统时间前缀防止覆盖
-                String finalFilename = System.currentTimeMillis() + "_" + filename;
+                // 系统下载器会自动处理同名文件（通常是添加后缀），我们手动添加一个时间戳确保唯一性，避免覆盖
+                String extension = "";
+                String baseName = filename;
+                int dot = filename.lastIndexOf('.');
+                if (dot > 0) {
+                    baseName = filename.substring(0, dot);
+                    extension = filename.substring(dot);
+                }
+                String finalFilename = baseName + "_" + (System.currentTimeMillis() % 100000) + extension;
 
                 // 配置请求头
                 if (!TextUtils.isEmpty(userAgent)) {
@@ -203,11 +182,20 @@ public class DownloadHelper {
                 try {
                     request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFilename);
                 } catch (Exception e) {
+                    // 若公共目录不可写，尝试私有目录
                     request.setDestinationInExternalFilesDir(appContext, Environment.DIRECTORY_DOWNLOADS, finalFilename);
                 }
 
                 long id = dm.enqueue(request);
                 Log.d(TAG, "Download enqueued with ID: " + id);
+                
+                // 将系统任务也存入本地持久化历史，增加双重保险
+                com.olsc.manorbrowser.data.DownloadInfo sysInfo = new com.olsc.manorbrowser.data.DownloadInfo(
+                    id, filename, url, null, mimeType);
+                sysInfo.status = 1; // 正在运行
+                sysInfo.isInternal = false;
+                com.olsc.manorbrowser.data.DownloadStorage.saveDownload(appContext, sysInfo);
+
                 dm.query(new DownloadManager.Query().setFilterById(id));
                 cleanOldTasks(appContext, url);
             } catch (Exception e) {
@@ -228,21 +216,20 @@ public class DownloadHelper {
     }
 
     /**
-     * 清理同一 URL 之下已失败或暂停的旧任务
+     * 清理同一 URL 之下已失败的旧任务（避免列表堆积无效任务）
      */
     private static void cleanOldTasks(Context context, String url) {
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
-        query.setFilterByStatus(DownloadManager.STATUS_FAILED | DownloadManager.STATUS_PAUSED);
+        // 仅清理失败任务，不要清理暂停任务（暂停可能是因为系统流量保护等原因）
+        query.setFilterByStatus(DownloadManager.STATUS_FAILED);
         try (Cursor cursor = dm.query(query)) {
             if (cursor != null && cursor.moveToFirst()) {
                 int urlIdx = cursor.getColumnIndex(DownloadManager.COLUMN_URI);
                 int idIdx = cursor.getColumnIndex(DownloadManager.COLUMN_ID);
-                int statusIdx = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
                 do {
                     String rowUrl = cursor.getString(urlIdx);
-                    int status = cursor.getInt(statusIdx);
-                    if (url.equals(rowUrl) && (status == DownloadManager.STATUS_FAILED || status == DownloadManager.STATUS_PAUSED)) {
+                    if (url.equals(rowUrl)) {
                         dm.remove(cursor.getLong(idIdx));
                     }
                 } while (cursor.moveToNext());
@@ -271,7 +258,23 @@ public class DownloadHelper {
      * 获取系统下载管理器中的所有下载记录
      */
     public static List<DownloadInfo> getDownloads(Context context) {
-        List<DownloadInfo> list = new ArrayList<>();
+        // 使用 Map 进行去重，Key 为下载 ID
+        java.util.Map<Long, DownloadInfo> allInfoMap = new java.util.HashMap<>();
+
+        // 1. 加载已持久化的历史记录（包含内置和部分已持久化的系统记录）
+        List<DownloadInfo> stored = com.olsc.manorbrowser.data.DownloadStorage.getAllDownloads(context);
+        for (DownloadInfo info : stored) {
+            allInfoMap.put(info.id, info);
+        }
+
+        // 2. 覆盖/补充内存中正活跃的内置任务（进度最实时）
+        synchronized (sInternalDownloads) {
+            for (DownloadInfo info : sInternalDownloads) {
+                allInfoMap.put(info.id, info);
+            }
+        }
+
+        // 3. 补充/覆盖系统下载管理器的任务（获取系统任务的最新状态）
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
         try (Cursor cursor = dm.query(query)) {
@@ -303,30 +306,23 @@ public class DownloadHelper {
                     info.currentBytes = current;
                     info.timestamp = date;
                     info.reason = reason;
+                    info.isInternal = false;
 
                     switch (status) {
-                        case DownloadManager.STATUS_PENDING:
-                            info.status = 0;
-                            break;
-                        case DownloadManager.STATUS_RUNNING:
-                            info.status = 1;
-                            break;
-                        case DownloadManager.STATUS_PAUSED:
-                            info.status = 2;
-                            break;
-                        case DownloadManager.STATUS_SUCCESSFUL:
-                            info.status = 3;
-                            break;
-                        case DownloadManager.STATUS_FAILED:
-                            info.status = 4;
-                            break;
+                        case DownloadManager.STATUS_PENDING: info.status = 0; break;
+                        case DownloadManager.STATUS_RUNNING: info.status = 1; break;
+                        case DownloadManager.STATUS_PAUSED:  info.status = 2; break;
+                        case DownloadManager.STATUS_SUCCESSFUL: info.status = 3; break;
+                        case DownloadManager.STATUS_FAILED:  info.status = 4; break;
                     }
-                    list.add(info);
+                    allInfoMap.put(id, info);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        List<DownloadInfo> list = new ArrayList<>(allInfoMap.values());
         // 按时间倒序排列
         list.sort((o1, o2) -> Long.compare(o2.timestamp, o1.timestamp));
         return list;

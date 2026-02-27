@@ -526,37 +526,61 @@ public class MainActivity extends AppCompatActivity {
                 }
                 final String finalMime = tempMime;
                 final String finalDisp = tempDisp;
+                // 把完整的 WebResponse 传给下载触发方法，让它能读取 GeckoView 的真实 Cookie
+                final org.mozilla.geckoview.WebResponse finalResponse = response;
 
                 runOnUiThread(() -> {
-                    triggerDownload(session, url, finalDisp, finalMime);
+                    triggerDownloadWithHeaders(session, url, finalDisp, finalMime, finalResponse);
                 });
             }
 
             private void triggerDownload(GeckoSession session, String url, String contentDisposition, String mimeType) {
-                String ua = session.getSettings().getUserAgentOverride();
-                if (ua == null || ua.isEmpty()) {
-                    ua = Config.DEFAULT_UA;
+                triggerDownloadWithHeaders(session, url, contentDisposition, mimeType, null);
+            }
+
+            private void triggerDownloadWithHeaders(GeckoSession session, String url, String contentDisposition, String mimeType, org.mozilla.geckoview.WebResponse geckoResponse) {
+                String filename = com.olsc.manorbrowser.utils.DownloadHelper.guessFileName(url, contentDisposition, mimeType);
+
+                // ======== 方案A：直接使用 GeckoView 的已认证响应体流（推荐，可处理 Cookie/Session 认证）========
+                // GeckoView 在调用 onExternalResponse 时已经完成了带 Cookie 的 HTTP 握手，
+                // body 里就是已经认证成功的数据流，直接写磁盘即可，无需 OkHttp 重新请求。
+                if (geckoResponse != null && geckoResponse.body != null) {
+                    long contentLength = -1;
+                    if (geckoResponse.headers != null) {
+                        String cl = geckoResponse.headers.get("Content-Length");
+                        if (cl == null) cl = geckoResponse.headers.get("content-length");
+                        if (cl != null) {
+                            try { contentLength = Long.parseLong(cl.trim()); } catch (NumberFormatException ignored) {}
+                        }
+                    }
+                    com.olsc.manorbrowser.utils.BrowserDownloader.downloadFromStream(
+                        MainActivity.this, url, mimeType, filename, contentLength, geckoResponse.body
+                    );
+                    return;
                 }
-                final String userAgentFinal = ua;
-                
-                String cookies = android.webkit.CookieManager.getInstance().getCookie(url);
-                
+
+                // ======== 方案B：OkHttp 重新请求（无 GeckoView body 时的兜底方案，如长按菜单触发） ========
+                String ua = session.getSettings().getUserAgentOverride();
+                if (ua == null || ua.isEmpty()) ua = Config.DEFAULT_UA;
+
+                // 尝试从 GeckoView 响应头中获取 Cookie（可能没有，因为是请求头不是响应头）
+                String cookies = null;
+                if (geckoResponse != null && geckoResponse.headers != null) {
+                    String setCookie = geckoResponse.headers.get("Set-Cookie");
+                    if (setCookie == null) setCookie = geckoResponse.headers.get("set-cookie");
+                    if (setCookie != null) cookies = setCookie.split(";")[0].trim();
+                }
+                if (cookies == null || cookies.isEmpty()) {
+                    cookies = android.webkit.CookieManager.getInstance().getCookie(url);
+                }
+
                 String referer = null;
                 for (TabInfo t : tabs) {
-                    if (t.session == session) {
-                        referer = t.url;
-                        break;
-                    }
+                    if (t.session == session) { referer = t.url; break; }
                 }
-                
+
                 com.olsc.manorbrowser.utils.DownloadHelper.startDownload(
-                    MainActivity.this, 
-                    url, 
-                    userAgentFinal, 
-                    contentDisposition, 
-                    mimeType,
-                    cookies, 
-                    referer
+                    MainActivity.this, url, ua, contentDisposition, mimeType, cookies, referer
                 );
             }
 
