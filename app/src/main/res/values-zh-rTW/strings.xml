@@ -249,4 +249,6 @@
     <string name="dialog_title_confirm">確認</string>
     <string name="dialog_title_prompt">請輸入</string>
     <string name="dialog_title_select">請選擇</string>
+    <string name="title_download_apk">下載 APK 檔案？</string>
+    <string name="msg_download_apk">檢測到此連結為安卓應用安裝包 (APK)，是否確認下載？\n\n檔案：%1$s</string>
 </resources>

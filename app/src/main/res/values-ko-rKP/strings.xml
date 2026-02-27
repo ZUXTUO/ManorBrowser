@@ -251,4 +251,6 @@
     <string name="dialog_title_confirm">확인</string>
     <string name="dialog_title_prompt">입력</string>
     <string name="dialog_title_select">선택</string>
+    <string name="title_download_apk">APK를 다운로드하시겠습니까?</string>
+    <string name="msg_download_apk">이 링크는 애플리케이션 설치 파일 (APK) 입니다. 다운로드하시겠습니까?\n\n파일: %1$s</string>
 </resources>

@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">Bevestigen</string>
     <string name="dialog_title_prompt">Invoer</string>
     <string name="dialog_title_select">Selecteren</string>
+    <string name="title_download_apk">APK downloaden?</string>
+    <string name="msg_download_apk">Deze link is voor een installatiebestand (APK). Wilt u dit downloaden?\n\nBestand: %1$s</string>
 </resources>

@@ -88,7 +88,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
         });
         holder.btnAction.setOnClickListener(v -> {
              if (info.status == 1 || info.status == 0) {
-                 cancelDownload(info.id);
+                 cancelDownload(info);
              } else if (info.status == 3) {
                  openFile(info);
              } else if (info.status == 4) {
@@ -110,23 +110,42 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             .show();
     }
     private void deleteDownload(DownloadInfo info, boolean deleteFile) {
+        // 0. 如果是正在运行的内置下载，必须中断网络连接
+        if (info.isInternal) {
+            com.olsc.manorbrowser.utils.BrowserDownloader.cancel(info.id);
+        }
+
+        // 1. 从内存活跃列表和持久化历史中移除
+        com.olsc.manorbrowser.utils.DownloadHelper.sInternalDownloads.removeIf(i -> i.id == info.id);
+        com.olsc.manorbrowser.data.DownloadStorage.removeDownload(context, info.id);
+        
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        if (!deleteFile && info.filePath != null) {
+        if (deleteFile && info.filePath != null) {
             try {
                 android.net.Uri uri = android.net.Uri.parse(info.filePath);
                 if ("file".equals(uri.getScheme())) {
                     java.io.File file = new java.io.File(uri.getPath());
-                    if (file.exists()) {
-                        java.io.File dest = new java.io.File(file.getParent(), "kept_" + file.getName());
-                        file.renameTo(dest);
-                    }
+                    if (file.exists()) file.delete();
+                } else if ("content".equals(uri.getScheme())) {
+                    context.getContentResolver().delete(uri, null, null);
+                } else if (info.filePath.startsWith("/")) {
+                    new java.io.File(info.filePath).delete();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        dm.remove(info.id);
-        Toast.makeText(context, R.string.msg_download_cancelled, Toast.LENGTH_SHORT).show();
+        try {
+            // 仅当非内置任务且 ID 为系统分配时调用系统移除
+            if (!info.isInternal && info.id < 1000000000L) {
+                dm.remove(info.id);
+            }
+        } catch (Exception ignored) {}
+        
+        list.remove(info);
+        notifyDataSetChanged();
+        // 提示已被删除（不再误显为“已取消”）
+        Toast.makeText(context, R.string.action_delete, Toast.LENGTH_SHORT).show();
     }
     @Override
     public int getItemCount() {
@@ -134,13 +153,27 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
     }
     private void openFile(DownloadInfo info) {
         try {
-            Uri uri = Uri.parse(info.filePath);
-            DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-            Uri fileUri = dm.getUriForDownloadedFile(info.id);
+            Uri fileUri = null;
+            if (info.filePath != null) {
+                if (info.filePath.startsWith("content://")) {
+                    fileUri = Uri.parse(info.filePath);
+                } else if (info.filePath.startsWith("/")) {
+                    java.io.File file = new java.io.File(info.filePath);
+                    fileUri = androidx.core.content.FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+                }
+            }
+            
+            // 如果仍然没有，且可能是系统下载，则查询系统
+            if (fileUri == null && info.id < 1000000000L) {
+                DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                fileUri = dm.getUriForDownloadedFile(info.id);
+            }
+
             if (fileUri != null) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(fileUri, info.mimeType);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } else {
                  Toast.makeText(context, R.string.msg_file_not_found, Toast.LENGTH_SHORT).show();
@@ -149,9 +182,24 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             Toast.makeText(context, context.getString(R.string.msg_file_open_error, e.getMessage()), Toast.LENGTH_SHORT).show();
         }
     }
-    private void cancelDownload(long id) {
+    private void cancelDownload(DownloadInfo info) {
+        // 1. 如果是内置任务，必须先通知下载器中断网络连接，否则后台仍会继续传输
+        if (info.isInternal) {
+            com.olsc.manorbrowser.utils.BrowserDownloader.cancel(info.id);
+        }
+        
+        com.olsc.manorbrowser.utils.DownloadHelper.sInternalDownloads.removeIf(i -> i.id == info.id);
+        com.olsc.manorbrowser.data.DownloadStorage.removeDownload(context, info.id);
+        
         DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        dm.remove(id);
+        try {
+            if (!info.isInternal && info.id < 1000000000L) {
+                dm.remove(info.id);
+            }
+        } catch (Exception ignored) {}
+        
+        list.remove(info);
+        notifyDataSetChanged();
         Toast.makeText(context, R.string.msg_download_cancelled, Toast.LENGTH_SHORT).show();
     }
     private String getPausedReason(int reason) {
@@ -159,10 +207,15 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.Downlo
             case DownloadManager.PAUSED_WAITING_TO_RETRY: return context.getString(R.string.paused_waiting_to_retry);
             case DownloadManager.PAUSED_WAITING_FOR_NETWORK: return context.getString(R.string.paused_waiting_for_network);
             case DownloadManager.PAUSED_QUEUED_FOR_WIFI: return context.getString(R.string.paused_queued_for_wifi);
-            default: return context.getString(R.string.download_status_unknown);
+            default: return context.getString(R.string.download_status_paused);
         }
     }
     private String getErrorReason(int reason) {
+        // 自定义错误码处理
+        if (reason == 1000) return "网络异常/连接超时 (LAN IP?)";
+        if (reason == 1001) return "存储空间不足或写入失败";
+        if (reason >= 300 && reason < 600) return "HTTP 服务器响应错误: " + reason;
+
         switch (reason) {
             case DownloadManager.ERROR_CANNOT_RESUME: return context.getString(R.string.error_cannot_resume);
             case DownloadManager.ERROR_DEVICE_NOT_FOUND: return context.getString(R.string.error_device_not_found);

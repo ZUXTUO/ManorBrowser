@@ -13,6 +13,7 @@ public class DownloadInfo {
     public long currentBytes;
     public long timestamp;
     public int reason;
+    public boolean isInternal;
     public DownloadInfo(long id, String title, String url, String filePath, String mimeType) {
         this.id = id;
         this.title = title;
@@ -21,5 +22,6 @@ public class DownloadInfo {
         this.mimeType = mimeType;
         this.status = 0;
         this.timestamp = System.currentTimeMillis();
+        this.isInternal = false;
     }
 }
