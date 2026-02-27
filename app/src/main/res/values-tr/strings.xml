@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">Onayla</string>
     <string name="dialog_title_prompt">Giriş</string>
     <string name="dialog_title_select">Seç</string>
+    <string name="title_download_apk">APK indirilsin mi?</string>
+    <string name="msg_download_apk">Bu bağlantı bir uygulama yükleme dosyası (APK) içindir. İndirmek istiyor musunuz?\n\nDosya: %1$s</string>
 </resources>

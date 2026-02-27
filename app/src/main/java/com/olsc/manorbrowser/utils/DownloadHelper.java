@@ -23,7 +23,7 @@ public class DownloadHelper {
         if (TextUtils.isEmpty(url)) return -1;
         // 检查是否使用系统下载器
         android.content.SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
-        boolean useSystemDownloader = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, false);
+        boolean useSystemDownloader = prefs.getBoolean(com.olsc.manorbrowser.Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, true);
         
         if (!useSystemDownloader) {
             // 使用浏览器内置下载器（默认）

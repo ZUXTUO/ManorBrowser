@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">確認</string>
     <string name="dialog_title_prompt">入力</string>
     <string name="dialog_title_select">選択</string>
+    <string name="title_download_apk">APKをダウンロードしますか？</string>
+    <string name="msg_download_apk">このリンクはアプリケーションのインストールファイル (APK) です。ダウンロードしますか？\n\nファイル: %1$s</string>
 </resources>

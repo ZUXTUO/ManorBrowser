@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">Konfirmasi</string>
     <string name="dialog_title_prompt">Masukan</string>
     <string name="dialog_title_select">Pilih</string>
+    <string name="title_download_apk">Unduh APK?</string>
+    <string name="msg_download_apk">Tautan ini adalah untuk file instalasi aplikasi (APK). Apakah Anda ingin mengunduhnya?\n\nFile: %1$s</string>
 </resources>

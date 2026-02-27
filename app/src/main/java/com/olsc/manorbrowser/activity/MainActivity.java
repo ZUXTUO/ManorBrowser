@@ -367,6 +367,33 @@ public class MainActivity extends AppCompatActivity {
                     contentType = response.headers.get("Content-Type");
                     if (contentType == null) contentType = response.headers.get("content-type");
                 }
+
+                // APK 检查，防止自动下载
+                if (lowerUrl.endsWith(".apk") || (contentType != null && contentType.contains("vnd.android.package-archive"))) {
+                    String tempMime = contentType;
+                    String tempDisp = null;
+                    if (response.headers != null) {
+                        tempDisp = response.headers.get("Content-Disposition");
+                        if (tempDisp == null) tempDisp = response.headers.get("content-disposition");
+                    }
+                    final String apkMime = tempMime;
+                    final String apkDisp = tempDisp;
+                    
+                    runOnUiThread(() -> {
+                        String filename = com.olsc.manorbrowser.utils.DownloadHelper.guessFileName(url, apkDisp, apkMime);
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(R.string.title_download_apk)
+                            .setMessage(getString(R.string.msg_download_apk, filename))
+                            .setPositiveButton(R.string.action_download, (dialog, which) -> {
+                                triggerDownload(session, url, apkDisp, apkMime);
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                    });
+                    return;
+                }
+
+                // 扩展程序检查
                 if (lowerUrl.endsWith(".xpi") || "application/x-xpinstall".equals(contentType)) {
                     final String extensionUrl = url;
                     runOnUiThread(() -> {
@@ -381,63 +408,56 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                String tempMime = null;
-                String tempDisp = null;
-                if (response.headers != null) {
-                    if (response.headers.containsKey("Content-Type")) {
-                        tempMime = response.headers.get("Content-Type");
-                    } else if (response.headers.containsKey("content-type")) {
-                        tempMime = response.headers.get("content-type");
-                    }
-                    
-                    if (response.headers.containsKey("Content-Disposition")) {
-                        tempDisp = response.headers.get("Content-Disposition");
-                    } else if (response.headers.containsKey("content-disposition")) {
-                        tempDisp = response.headers.get("content-disposition");
+                // 在尝试下载之前，先检查是否可以由外部应用处理（处理某些Gecko未拦截的Scheme）
+                if (com.olsc.manorbrowser.utils.IntentHelper.shouldInterceptUrl(url)) {
+                    boolean handled = com.olsc.manorbrowser.utils.IntentHelper.tryOpenExternalApp(MainActivity.this, url);
+                    if (handled) {
+                        return;
                     }
                 }
-                final String mimeTypeFinal = tempMime;
-                final String contentDispositionFinal = tempDisp;
-                
+
+                String tempMime = contentType;
+                String tempDisp = null;
+                if (response.headers != null) {
+                    tempDisp = response.headers.get("Content-Disposition");
+                    if (tempDisp == null) tempDisp = response.headers.get("content-disposition");
+                }
+                final String finalMime = tempMime;
+                final String finalDisp = tempDisp;
+
+                runOnUiThread(() -> {
+                    triggerDownload(session, url, finalDisp, finalMime);
+                });
+            }
+
+            private void triggerDownload(GeckoSession session, String url, String contentDisposition, String mimeType) {
                 String ua = session.getSettings().getUserAgentOverride();
                 if (ua == null || ua.isEmpty()) {
                     ua = Config.DEFAULT_UA;
                 }
                 final String userAgentFinal = ua;
-                String ref = null;
+                
+                String cookies = android.webkit.CookieManager.getInstance().getCookie(url);
+                
+                String referer = null;
                 for (TabInfo t : tabs) {
                     if (t.session == session) {
-                        ref = t.url;
+                        referer = t.url;
                         break;
                     }
                 }
-                final String refererFinal = ref;
-                runOnUiThread(() -> {
-                    String cookies = android.webkit.CookieManager.getInstance().getCookie(url);
-                    
-                    String referer = null;
-                    for (TabInfo t : tabs) {
-                        if (t.session == session) {
-                            referer = t.url;
-                            break;
-                        }
-                    }
-                    String finalUa = userAgentFinal;
-                    if (TextUtils.isEmpty(finalUa)) {
-                        finalUa = Config.CHROME_UA;
-                    }
-                    
-                    com.olsc.manorbrowser.utils.DownloadHelper.startDownload(
-                        MainActivity.this, 
-                        url, 
-                        finalUa, 
-                        contentDispositionFinal, 
-                        mimeTypeFinal,
-                        cookies, 
-                        referer
-                    );
-                });
+                
+                com.olsc.manorbrowser.utils.DownloadHelper.startDownload(
+                    MainActivity.this, 
+                    url, 
+                    userAgentFinal, 
+                    contentDisposition, 
+                    mimeType,
+                    cookies, 
+                    referer
+                );
             }
+
              @Override public void onFocusRequest(@NonNull GeckoSession session) {}
              @Override public void onFullScreen(@NonNull GeckoSession session, boolean fullScreen) {}
              @Override public void onCloseRequest(@NonNull GeckoSession session) {}
@@ -723,6 +743,16 @@ public class MainActivity extends AppCompatActivity {
                     boolean handled = com.olsc.manorbrowser.utils.IntentHelper.tryOpenExternalApp(MainActivity.this, uri);
                     if (handled) {
                         return GeckoResult.fromValue(AllowOrDeny.DENY);
+                    } else if (uri.startsWith("intent://")) {
+                        // 处理 intent fallback
+                        try {
+                            android.content.Intent intent = android.content.Intent.parseUri(uri, android.content.Intent.URI_INTENT_SCHEME);
+                            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                            if (fallbackUrl != null && !fallbackUrl.isEmpty()) {
+                                runOnUiThread(() -> session.loadUri(fallbackUrl));
+                                return GeckoResult.fromValue(AllowOrDeny.DENY);
+                            }
+                        } catch (Exception e) {}
                     }
                 }
                 
