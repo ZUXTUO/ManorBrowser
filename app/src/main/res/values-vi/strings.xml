@@ -63,6 +63,8 @@
     <string name="download_status_completed">Đã hoàn thành</string>
     <string name="download_status_failed">Thất bại</string>
     <string name="download_status_unknown">Không xác định</string>
+    <string name="title_download_apk">Tải về APK?</string>
+    <string name="msg_download_apk">Liên kết này dành cho tệp cài đặt ứng dụng (APK). Bạn có muốn tải về không?\n\nTệp: %1$s</string>
     <string name="msg_download_start">Bắt đầu tải: %1$s</string>
     <string name="msg_download_failed">Tải xuống thất bại: %1$s</string>
     <string name="msg_download_cancelled">Đã hủy</string>

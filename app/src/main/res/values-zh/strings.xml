@@ -252,4 +252,6 @@ URL: %1$s</string>
     <string name="dialog_title_confirm">确认</string>
     <string name="dialog_title_prompt">请输入</string>
     <string name="dialog_title_select">请选择</string>
+    <string name="title_download_apk">下载 APK 文件？</string>
+    <string name="msg_download_apk">检测到此链接为安卓应用安装包 (APK)，是否确认下载？\n\n文件：%1$s</string>
 </resources>

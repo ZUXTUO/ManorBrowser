@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">Подтверждение</string>
     <string name="dialog_title_prompt">Ввод</string>
     <string name="dialog_title_select">Выбор</string>
+    <string name="title_download_apk">Скачать APK?</string>
+    <string name="msg_download_apk">Эта ссылка ведет на файл установки приложения (APK). Вы хотите его скачать?\n\nФайл: %1$s</string>
 </resources>
