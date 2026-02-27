@@ -1,7 +1,13 @@
 /**
- * 浏览器主界面，处理网页加载、导航、菜单、多标签页等核心逻辑。
+ * 浏览器主界面类
+ * 核心功能：
+ * 1. 管理多标签页 (Tabs) 的生命周期与状态切换。
+ * 2. 调度 GeckoView 引擎进行网页渲染。
+ * 3. 处理导航逻辑、历史记录、书签以及自动填充系统的接入。
+ * 4. 提供动态背景切换、主题切换等 UI 特性。
  */
 package com.olsc.manorbrowser.activity;
+
 import com.olsc.manorbrowser.R;
 import com.olsc.manorbrowser.view.DynamicBackgroundView;
 import com.olsc.manorbrowser.adapter.TabSwitcherAdapter;
@@ -11,6 +17,7 @@ import com.olsc.manorbrowser.data.TabInfo;
 import com.olsc.manorbrowser.data.TabStorage;
 import com.olsc.manorbrowser.data.HistoryStorage;
 import com.olsc.manorbrowser.utils.SearchHelper;
+
 import android.text.TextUtils;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -20,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -32,7 +40,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsControllerCompat;
+
 import com.google.android.material.navigation.NavigationView;
+
 import org.mozilla.geckoview.GeckoResult;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
@@ -43,15 +53,20 @@ import org.mozilla.geckoview.WebResponse;
 import org.mozilla.geckoview.GeckoSession.ContentDelegate.ContextElement;
 import org.mozilla.geckoview.GeckoSession.NavigationDelegate.LoadRequest;
 import org.mozilla.geckoview.AllowOrDeny;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
 import androidx.preference.PreferenceManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+
 import android.net.Uri;
 import org.mozilla.geckoview.GeckoSession.PromptDelegate;
+
 public class MainActivity extends AppCompatActivity {
+    // --- UI 基础控件 ---
     private DrawerLayout drawerLayout;
     private GeckoView geckoView;
     private androidx.recyclerview.widget.RecyclerView tabSwitcher;
@@ -61,34 +76,54 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private android.widget.ProgressBar progressBar;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh;
+
+    // --- 引擎与数据管理器 ---
+    /** 全局共享的 GeckoRuntime，一个进程通常只需要一个 */
     public static GeckoRuntime sRuntime;
+    /** 当前会话中维护的所有标签页列表 */
     private List<TabInfo> tabs = new ArrayList<>();
     private TabSwitcherAdapter tabSwitcherAdapter;
+    /** 当前处于前台显示的标签索引 */
     private int currentTabIndex = -1;
+    
+    // --- 状态标志位 ---
+    /** 标签切换器界面是否可见 */
     private boolean isTabSwitcherVisible = false;
     private int lastX, lastY;
     private long lastBackTime = 0;
     private boolean urlInputFirstClick = true; // 跟踪URL输入框是否是第一次点击
     private boolean isSwitchingTab = false; // 防止switchToTab重入导致的崩溃和逻辑混乱
+    private boolean isProcessingAction = false; // 全局锁，防止多重点击导致的 PixelCopy 并发或状态异常
     private GeckoResult<PromptDelegate.PromptResponse> mFilePromptResult = null;
     private PromptDelegate.FilePrompt mCurrentFilePrompt = null;
     private ActivityResultLauncher<android.content.Intent> mFilePickerLauncher;
+    
+    /** 应用初始化权限申请处理器 (如存储权限) */
+    private ActivityResultLauncher<String> mPermissionLauncher;
+    private java.util.Queue<String> mPendingPermissions = new java.util.LinkedList<>();
+    
+    /** 网页请求权限处理器 (如摄像头、地理位置) */
+    private GeckoSession.PermissionDelegate.Callback mGeckoPermissionCallback;
+    private ActivityResultLauncher<String[]> mGeckoPermissionLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 加载主题色调（深色模式或亮色模式）
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
         AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         
+        // 沉浸式状态栏配置
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        
-        
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
             controller.setAppearanceLightStatusBars(!isDarkMode);
             controller.setAppearanceLightNavigationBars(!isDarkMode);
         }
+        
         super.onCreate(savedInstanceState);
         
+        // 1. 注册文件选择器的 Activity 回调，用于处理 <input type="file">
         mFilePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -121,28 +156,54 @@ public class MainActivity extends AppCompatActivity {
             }
         );
 
+        // 2. 注册通用权限申请回调
+        mPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                requestNextPendingPermission();
+            }
+        );
+
+        // 3. 注册网页特权申请回调 (如相机、位置)
+        mGeckoPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(),
+            result -> {
+                if (mGeckoPermissionCallback != null) {
+                    boolean anyGranted = false;
+                    for (Boolean granted : result.values()) {
+                        if (granted) anyGranted = true;
+                    }
+                    if (anyGranted) mGeckoPermissionCallback.grant();
+                    else mGeckoPermissionCallback.reject();
+                    mGeckoPermissionCallback = null;
+                }
+            }
+        );
+
         setContentView(R.layout.activity_main);
+        
+        // --- 初始化 UI 树 ---
         drawerLayout = findViewById(R.id.drawer_layout);
         geckoView = findViewById(R.id.geckoview);
         tabSwitcher = findViewById(R.id.tab_switcher);
         urlInput = findViewById(R.id.et_url);
         topBar = findViewById(R.id.top_bar);
         progressBar = findViewById(R.id.progress_bar);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
+        navigationView = findViewById(R.id.nav_view);
+        btnBack = findViewById(R.id.btn_back);
+        btnRefresh = findViewById(R.id.btn_refresh);
+        btnHome = findViewById(R.id.btn_home);
+        btnTabs = findViewById(R.id.btn_tabs);
+        btnMenu = findViewById(R.id.btn_menu);
         
+        // 4. 应用窗口 Insets 监听 (解决刘海屏、导航栏遮挡)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, windowInsets) -> {
             Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            
-            
             topBar.setPadding(topBar.getPaddingLeft(), systemBars.top, topBar.getPaddingRight(), 0);
-            
-            
             View bottomBar = findViewById(R.id.bottom_bar);
             bottomBar.setPadding(bottomBar.getPaddingLeft(), bottomBar.getPaddingTop(), bottomBar.getPaddingRight(), systemBars.bottom);
-            
-            
             navigationView.setPadding(0, 0, 0, systemBars.bottom);
-            
-            
             return windowInsets;
         });
         swipeRefresh = findViewById(R.id.swipe_refresh);
@@ -158,6 +219,10 @@ public class MainActivity extends AppCompatActivity {
             showPrivacyDialog();
         }
     }
+
+    /**
+     * 检测隐私协议同意状态
+     */
     private boolean isPrivacyAgreed() {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         return prefs.getBoolean(Config.PREF_KEY_PRIVACY_AGREED, false);
@@ -167,6 +232,10 @@ public class MainActivity extends AppCompatActivity {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         prefs.edit().putBoolean(Config.PREF_KEY_PRIVACY_AGREED, agreed).apply();
     }
+
+    /**
+     * 强制弹窗显示隐私政策，仅在首次运行或未同意时调用
+     */
     private void showPrivacyDialog() {
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(R.string.title_privacy_policy)
@@ -181,22 +250,36 @@ public class MainActivity extends AppCompatActivity {
             })
             .show();
     }
+
+    /**
+     * 核心初始化流程：包括引擎启动、标签页恢复、监听器挂载
+     */
     private void initializeApp() {
+        // 初始化添加标签按钮
         ImageButton btnAddTab = findViewById(R.id.btn_add_tab);
         if (btnAddTab != null) {
             btnAddTab.setOnClickListener(v -> {
+                if (isProcessingAction) return;
+                isProcessingAction = true;
                 captureScreenshot(() -> {
                     createNewTab(Config.URL_BLANK);
-                    toggleTabSwitcher();
+                    // 直接执行动画展示切换器，不走 toggleTabSwitcher 的逻辑锁
+                    performToggleAnimation(true);
+                    isProcessingAction = false;
                 });
             });
         }
         navigationView = findViewById(R.id.nav_view);
         if (sRuntime == null) {
             sRuntime = GeckoRuntime.create(getApplicationContext());
+            // 设置扩展安装的代理回调
             sRuntime.getWebExtensionController().setPromptDelegate(new com.olsc.manorbrowser.utils.ExtensionPromptDelegate(this));
         }
+
+        // 2. 初始化 RecyclerView 标签列表
         setupTabSwitcher();
+
+        // 3. 处理 Intent 跳转或会话恢复
         if (getIntent() != null) {
             if (getIntent().hasExtra("url")) {
                 restoreTabsOrInit();
@@ -213,29 +296,48 @@ public class MainActivity extends AppCompatActivity {
         } else {
             restoreTabsOrInit();
         }
+
+        // 4. 初始化各种子组件
         setupListeners();
         setupSwipeRefresh();
-        checkDownloadPermissions();
+        requestInitialPermissions();
     }
     
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
         super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
     }
-    private void checkDownloadPermissions() {
+    private void requestInitialPermissions() {
         if (!isPrivacyAgreed()) return;
+        
+        mPendingPermissions.clear();
+        
+        // 1. 通知权限 (Android 13+)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) 
-                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                androidx.core.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1001);
-            }
+            mPendingPermissions.add(android.Manifest.permission.POST_NOTIFICATIONS);
         }
         
+        // 2. 存储权限 (Android 12 及以下)
+        // 注意：录音与相机权限将在网页实际请求时，通过 PermissionDelegate 动态申请
         if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.S_V2) {
-             if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) 
-                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                androidx.core.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1002);
-            }
+            mPendingPermissions.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            mPendingPermissions.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        
+        requestNextPendingPermission();
+    }
+
+    private void requestNextPendingPermission() {
+        String permission = mPendingPermissions.poll();
+        // 跳过已授权的权限
+        while (permission != null && 
+               androidx.core.content.ContextCompat.checkSelfPermission(this, permission) 
+               == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            permission = mPendingPermissions.poll();
+        }
+        
+        if (permission != null) {
+            mPermissionLauncher.launch(permission);
         }
     }
     private void setupSwipeRefresh() {
@@ -480,7 +582,9 @@ public class MainActivity extends AppCompatActivity {
                     callback.reject();
                     return;
                 }
-                callback.reject();
+                // 这里处理使用时的动态申请（如相机）
+                mGeckoPermissionCallback = callback;
+                mGeckoPermissionLauncher.launch(permissions);
             }
         });
         session.setPromptDelegate(new GeckoSession.PromptDelegate() {
@@ -868,7 +972,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        TabStorage.saveTabs(this, tabs);
+        // 传递副本以确保后台线程保存时的线程安全
+        TabStorage.saveTabs(this, new ArrayList<>(tabs));
     }
     @Override
     protected void onDestroy() {
@@ -986,6 +1091,7 @@ public class MainActivity extends AppCompatActivity {
                 urlInput.clearFocus();
                 String input = urlInput.getText().toString();
                 String url = SearchHelper.getSearchUrl(this, input);
+                // 直接调用 loadUri 以绕过主界面的 UI 锁校验（或者是统一在 loadUrlInCurrentTab 中校验）
                 loadUrlInCurrentTab(url);
                 return true;
             }
@@ -1024,12 +1130,14 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
         btnBack.setOnClickListener(v -> {
+            if (isProcessingAction) return;
             GeckoSession session = getCurrentSession();
             if (session != null) {
                 session.goBack();
             }
         });
         btnRefresh.setOnClickListener(v -> {
+            if (isProcessingAction) return;
             if (getCurrentSession() != null) {
                 getCurrentSession().reload();
             }
@@ -1056,20 +1164,25 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 loadUrlInCurrentTab(Config.URL_BLANK);
             } else if (id == R.id.nav_history) {
+                if (isProcessingAction) return false;
                 android.content.Intent intent = new android.content.Intent(this, HistoryActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
-                 android.content.Intent intent = new android.content.Intent(this, SettingsActivity.class);
-                 startActivity(intent);
+                if (isProcessingAction) return false;
+                android.content.Intent intent = new android.content.Intent(this, SettingsActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_downloads) {
-                 android.content.Intent intent = new android.content.Intent(this, DownloadsActivity.class);
-                 startActivity(intent);
+                if (isProcessingAction) return false;
+                android.content.Intent intent = new android.content.Intent(this, DownloadsActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_add_bookmark) {
                 showAddBookmarkDialog();
             } else if (id == R.id.nav_bookmarks) {
+                if (isProcessingAction) return false;
                 android.content.Intent intent = new android.content.Intent(this, BookmarkActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_passwords) {
+                if (isProcessingAction) return false;
                 android.content.Intent intent = new android.content.Intent(this, PasswordManagerActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_theme) {
@@ -1077,18 +1190,21 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_desktop_mode) {
                 toggleDesktopMode();
             } else if (id == R.id.nav_cookies) {
-                 android.content.Intent intent = new android.content.Intent(this, CookieManagerActivity.class);
-                 startActivity(intent);
+                if (isProcessingAction) return false;
+                android.content.Intent intent = new android.content.Intent(this, CookieManagerActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_about) {
-                 android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
-                 startActivity(intent);
+                if (isProcessingAction) return false;
+                android.content.Intent intent = new android.content.Intent(this, AboutActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_extensions_action) {
-                 navigationView.postDelayed(this::showExtensionActionDialog, 250);
+                navigationView.postDelayed(this::showExtensionActionDialog, 250);
             } else if (id == R.id.nav_extensions_browse) {
-                 createNewTab("https://addons.mozilla.org/");
+                createNewTab("https://addons.mozilla.org/");
             } else if (id == R.id.nav_extensions_manager) {
-                 android.content.Intent intent = new android.content.Intent(this, ExtensionManagerActivity.class);
-                 startActivity(intent);
+                if (isProcessingAction) return false;
+                android.content.Intent intent = new android.content.Intent(this, ExtensionManagerActivity.class);
+                startActivity(intent);
             }
             if (isTabSwitcherVisible && id != R.id.nav_theme) toggleTabSwitcher();
             return true;
@@ -1096,6 +1212,9 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                // 1. 如果正在执行核心操作（如截图），忽略返回键以防止 Native 状态冲突导致崩溃
+                if (isProcessingAction) return;
+
                 if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return;
@@ -1108,9 +1227,17 @@ public class MainActivity extends AppCompatActivity {
                 if (currentTabIndex >= 0 && currentTabIndex < tabs.size()) {
                     currentTab = tabs.get(currentTabIndex);
                 }
+
+                // 2. 页面内后退逻辑
                 if (currentTab != null && currentTab.session != null && currentTab.canGoBack) {
                     currentTab.session.goBack();
-                } else {
+                } 
+                // 3. 页面无法后退时，如果不在主页，则先返回主页（响应用户要求返回主页的诉求）
+                else if (currentTab != null && !Config.URL_BLANK.equals(currentTab.url)) {
+                    loadUrlInCurrentTab(Config.URL_BLANK);
+                } 
+                // 4. 已在主页且无法后退，执行退出确认逻辑
+                else {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastBackTime < 2000) {
                         finish();
@@ -1228,6 +1355,10 @@ public class MainActivity extends AppCompatActivity {
         TabInfo tab = tabs.get(position);
         if (tab.session != null) {
             tab.session.close();
+        }
+        if (tab.thumbnail != null && !tab.thumbnail.isRecycled()) {
+            tab.thumbnail.recycle();
+            tab.thumbnail = null;
         }
         tabs.remove(position);
         
@@ -1360,8 +1491,8 @@ public class MainActivity extends AppCompatActivity {
         tabs.clear();
         currentTabIndex = -1;
         
-        // 保存空的标签页状态
-        TabStorage.saveTabs(this, tabs);
+        // 保存空的标签页状态（传递副本以确保线程安全）
+        TabStorage.saveTabs(this, new ArrayList<>(tabs));
         
         // 创建一个新的空白标签页
         createNewTab(Config.URL_BLANK);
@@ -1375,12 +1506,15 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.msg_all_tabs_closed, Toast.LENGTH_SHORT).show();
     }
     private void toggleTabSwitcher() {
+        if (isProcessingAction) return;
         if (isTabSwitcherVisible) {
             performToggleAnimation(false);
             return;
         }
+        isProcessingAction = true;
         captureScreenshot(() -> {
             performToggleAnimation(true);
+            isProcessingAction = false;
         });
     }
     private void performToggleAnimation(boolean showSwitcher) {
@@ -1458,57 +1592,76 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void captureScreenshot(Runnable onComplete) {
+        if (isFinishing() || isDestroyed()) return;
+        
         if (currentTabIndex < 0 || currentTabIndex >= tabs.size()) {
             if (onComplete != null) onComplete.run();
             return;
         }
+        
         TabInfo tab = tabs.get(currentTabIndex);
+        
+        // 逻辑A：非主页（GeckoView 渲染内容）的截图
         if (!Config.URL_BLANK.equals(tab.url) && geckoView.getVisibility() == View.VISIBLE && geckoView.getWidth() > 0 && geckoView.getHeight() > 0) {
             try {
-                int[] location = new int[2];
-                geckoView.getLocationInWindow(location);
+                int viewWidth = geckoView.getWidth();
+                int viewHeight = geckoView.getHeight();
+                
+                // 内存优化：1/3 比例
+                int targetWidth = Math.max(1, viewWidth / 3);
+                int targetHeight = Math.max(1, viewHeight / 3);
+                
                 android.graphics.Bitmap bitmap = android.graphics.Bitmap.createBitmap(
-                        geckoView.getWidth(),
-                        geckoView.getHeight(),
-                        android.graphics.Bitmap.Config.ARGB_8888);
+                        targetWidth, targetHeight, android.graphics.Bitmap.Config.ARGB_8888);
+                
                 android.view.SurfaceView surfaceView = findSurfaceView(geckoView);
                 if (surfaceView != null) {
                     android.view.PixelCopy.request(surfaceView, bitmap, copyResult -> {
                         if (copyResult == android.view.PixelCopy.SUCCESS) {
                             validateAndSetThumbnail(tab, bitmap);
+                        } else {
+                            bitmap.recycle();
                         }
-                         handleScreenshotResult(onComplete);
+                        handleScreenshotResult(onComplete);
                     }, new android.os.Handler(android.os.Looper.getMainLooper()));
+                    return; // 异步回调执行
                 } else {
+                    int[] location = new int[2];
+                    geckoView.getLocationInWindow(location);
                     android.view.PixelCopy.request(getWindow(),
                         new android.graphics.Rect(
                             location[0],
                             location[1],
-                            location[0] + geckoView.getWidth(),
-                            location[1] + geckoView.getHeight()),
+                            location[0] + viewWidth,
+                            location[1] + viewHeight),
                         bitmap,
                         copyResult -> {
                             if (copyResult == android.view.PixelCopy.SUCCESS) {
                                 validateAndSetThumbnail(tab, bitmap);
+                            } else {
+                                bitmap.recycle();
                             }
                             handleScreenshotResult(onComplete);
                         },
                         new android.os.Handler(android.os.Looper.getMainLooper())
                     );
+                    return; // 异步回调执行
                 }
-                return;
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (Config.URL_BLANK.equals(tab.url)) {
+        } 
+        // 逻辑B：主页（空白页）布局截图
+        else if (Config.URL_BLANK.equals(tab.url)) {
             View layoutHome = findViewById(R.id.layout_home);
             if (layoutHome != null && layoutHome.getVisibility() == View.VISIBLE && layoutHome.getWidth() > 0) {
                 try {
+                    int w = Math.max(1, layoutHome.getWidth() / 3);
+                    int h = Math.max(1, layoutHome.getHeight() / 3);
                     android.graphics.Bitmap bitmap = android.graphics.Bitmap.createBitmap(
-                            layoutHome.getWidth(),
-                            layoutHome.getHeight(),
-                            android.graphics.Bitmap.Config.ARGB_8888);
+                            w, h, android.graphics.Bitmap.Config.ARGB_8888);
                     android.graphics.Canvas canvas = new android.graphics.Canvas(bitmap);
+                    canvas.scale(1/3f, 1/3f);
                     layoutHome.draw(canvas);
                     validateAndSetThumbnail(tab, bitmap);
                 } catch (Exception e) {
@@ -1516,12 +1669,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        
+        // 如果是主页截图或之前逻辑走到了同步结束点
         if (onComplete != null) onComplete.run();
     }
     private void captureScreenshot() {
         captureScreenshot(null);
     }
     private void loadUrlInCurrentTab(String url) {
+        if (isProcessingAction) return; 
         if (getCurrentSession() != null) {
             getCurrentSession().loadUri(url);
         }
