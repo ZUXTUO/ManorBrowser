@@ -241,4 +241,6 @@
     <string name="dialog_title_confirm">تأكيد</string>
     <string name="dialog_title_prompt">إدخال</string>
     <string name="dialog_title_select">اختر</string>
+    <string name="title_download_apk">هل تريد تحميل ملف APK؟</string>
+    <string name="msg_download_apk">هذا الرابط خاص بملف تثبيت تطبيق (APK). هل تريد تحميله؟\n\nالملف: %1$s</string>
 </resources>

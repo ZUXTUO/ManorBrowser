@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">Potwierdź</string>
     <string name="dialog_title_prompt">Wejście</string>
     <string name="dialog_title_select">Wybierz</string>
+    <string name="title_download_apk">Pobrać APK?</string>
+    <string name="msg_download_apk">Ten link prowadzi do pliku instalacyjnego aplikacji (APK). Czy chcesz go pobrać?\n\nPlik: %1$s</string>
 </resources>

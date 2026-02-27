@@ -250,4 +250,6 @@
     <string name="dialog_title_confirm">पुष्टि करें</string>
     <string name="dialog_title_prompt">इनपुट</string>
     <string name="dialog_title_select">चुनें</string>
+    <string name="title_download_apk">APK डाउनलोड करें?</string>
+    <string name="msg_download_apk">यह लिंक किसी एप्लिकेशन इंस्टॉलेशन फ़ाइल (APK) के लिए है। क्या आप इसे डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
 </resources>

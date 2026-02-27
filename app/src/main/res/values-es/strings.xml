@@ -241,4 +241,6 @@
     <string name="dialog_title_confirm">Confirmar</string>
     <string name="dialog_title_prompt">Entrada</string>
     <string name="dialog_title_select">Seleccionar</string>
+    <string name="title_download_apk">¿Descargar APK?</string>
+    <string name="msg_download_apk">Este enlace es para un archivo de instalación de aplicación (APK). ¿Desea descargarlo?\n\nArchivo: %1$s</string>
 </resources>

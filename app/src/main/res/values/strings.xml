@@ -253,4 +253,6 @@ URL: %1$s</string>
     <string name="dialog_title_confirm">Confirm</string>
     <string name="dialog_title_prompt">Input</string>
     <string name="dialog_title_select">Select</string>
+    <string name="title_download_apk">Download APK?</string>
+    <string name="msg_download_apk">This link is for an application installation file (APK). Do you want to download it?\n\nFile: %1$s</string>
 </resources>
