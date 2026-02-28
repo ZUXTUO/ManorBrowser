@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">ليلة الشفق</string>
     <string name="bg_effect_sakura">سقوط أزهار الكرز</string>
     <string name="bg_effect_solid">لون سادة</string>
+    <string name="bg_effect_image">صورة مخصصة</string>
     <string name="bg_effect_desc">اختر تأثير الخلفية المتحرك</string>
     <string name="pref_bg_pick_color">اختر لوناً</string>
+    <string name="pref_bg_pick_image">اختر صورة من المعرض</string>
+    <string name="msg_pick_image_failed">فشل اختيار الصورة</string>
     <string name="dialog_pick_color">اختر لون الخلفية</string>
     <string name="action_select">اختر</string>
     <string name="msg_download_starting">بدء التنزيل...</string>
@@ -243,4 +246,15 @@
     <string name="dialog_title_select">اختر</string>
     <string name="title_download_apk">هل تريد تحميل ملف APK؟</string>
     <string name="msg_download_apk">هذا الرابط خاص بملف تثبيت تطبيق (APK). هل تريد تحميله؟\n\nالملف: %1$s</string>
+    <string name="title_custom_home_button">تخصيص زر الصفحة الرئيسية</string>
+    <string name="desc_custom_home_button">تخصيص وظيفة الزر الأول في الشريط السفلي</string>
+    <string name="label_current_function">الوظيفة الحالية</string>
+    <string name="func_home">الرئيسية</string>
+    <string name="func_extensions">الإضافات</string>
+    <string name="func_bookmarks">الإشارات المرجعية</string>
+    <string name="func_history">السجل</string>
+    <string name="func_downloads">التنزيلات</string>
+    <string name="func_desktop_mode">وضع سطح المكتب</string>
+    <string name="func_add_bookmark">إضافة للإشارات المرجعية</string>
+    <string name="func_theme">الوضع الليلي/النهاري</string>
 </resources>

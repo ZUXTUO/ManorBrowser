@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">अरोरा नाइट</string>
     <string name="bg_effect_sakura">सकुरा बारिश</string>
     <string name="bg_effect_solid">ठोस रंग</string>
+    <string name="bg_effect_image">कस्टम छवि</string>
     <string name="bg_effect_desc">गतिशील बैकग्राउंड प्रभाव चुनें</string>
     <string name="pref_bg_pick_color">रंग चुनें</string>
+    <string name="pref_bg_pick_image">गैलरी से छवि चुनें</string>
+    <string name="msg_pick_image_failed">छवि चुनने में विफल</string>
     <string name="dialog_pick_color">बैकग्राउंड रंग चुनें</string>
     <string name="action_select">चुनें</string>
     <string name="msg_download_starting">डाउनलोड शुरू हो रहा है...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">चुनें</string>
     <string name="title_download_apk">APK डाउनलोड करें?</string>
     <string name="msg_download_apk">यह लिंक किसी एप्लिकेशन इंस्टॉलेशन फ़ाइल (APK) के लिए है। क्या आप इसे डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
+    <string name="title_custom_home_button">होम बटन अनुकूलन</string>
+    <string name="desc_custom_home_button">निचली पट्टी में पहले बटन के कार्य को अनुकूलित करें</string>
+    <string name="label_current_function">वर्तमान कार्य</string>
+    <string name="func_home">होम</string>
+    <string name="func_extensions">एक्सटेंशन</string>
+    <string name="func_bookmarks">बुकमार्क</string>
+    <string name="func_history">इतिहास</string>
+    <string name="func_downloads">डाउनलोड</string>
+    <string name="func_desktop_mode">डेस्कटॉप मोड</string>
+    <string name="func_add_bookmark">बुकमार्क करें</string>
+    <string name="func_theme">दिन/रात मोड</string>
 </resources>

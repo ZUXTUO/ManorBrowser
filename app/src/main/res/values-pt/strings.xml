@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Noite de aurora</string>
     <string name="bg_effect_sakura">Chuva de sakura</string>
     <string name="bg_effect_solid">Cor sólida</string>
+    <string name="bg_effect_image">Imagem personalizada</string>
     <string name="bg_effect_desc">Selecionar efeito de fundo dinâmico</string>
     <string name="pref_bg_pick_color">Escolher cor</string>
+    <string name="pref_bg_pick_image">Escolher imagem da galeria</string>
+    <string name="msg_pick_image_failed">Falha ao escolher imagem</string>
     <string name="dialog_pick_color">Escolher cor de fundo</string>
     <string name="action_select">Selecionar</string>
     <string name="msg_download_starting">Iniciando download...</string>
@@ -243,4 +246,15 @@
     <string name="dialog_title_select">Selecionar</string>
     <string name="title_download_apk">Baixar APK?</string>
     <string name="msg_download_apk">Este link é para um arquivo de instalação de aplicativo (APK). Deseja baixá-lo?\n\nArquivo: %1$s</string>
+    <string name="title_custom_home_button">Personalização do botão de início</string>
+    <string name="desc_custom_home_button">Personalize a função do primeiro botão na barra inferior</string>
+    <string name="label_current_function">Função atual</string>
+    <string name="func_home">Início</string>
+    <string name="func_extensions">Extensões</string>
+    <string name="func_bookmarks">Favoritos</string>
+    <string name="func_history">Histórico</string>
+    <string name="func_downloads">Downloads</string>
+    <string name="func_desktop_mode">Modo desktop</string>
+    <string name="func_add_bookmark">Adicionar aos favoritos</string>
+    <string name="func_theme">Modo dia/noite</string>
 </resources>

@@ -33,6 +33,20 @@ public class Config {
     public static final String PREF_KEY_USE_SYSTEM_DOWNLOADER = "use_system_downloader";
     /** 强制桌面模式状态 (boolean) */
     public static final String PREF_KEY_DESKTOP_MODE = "desktop_mode";
+    /** 底部左侧第一个按钮功能 (String) */
+    public static final String PREF_KEY_LEFT_BUTTON_FUNCTION = "left_button_function_v2";
+    /** 自定义背景图片路径 (String) */
+    public static final String PREF_KEY_CUSTOM_BG_IMAGE = "custom_bg_image";
+
+    // --- 按钮功能值 ---
+    public static final String FUNC_HOME = "home";
+    public static final String FUNC_EXTENSIONS = "extensions";
+    public static final String FUNC_BOOKMARKS = "bookmarks";
+    public static final String FUNC_HISTORY = "history";
+    public static final String FUNC_DOWNLOADS = "downloads";
+    public static final String FUNC_DESKTOP_MODE = "desktop_mode";
+    public static final String FUNC_ADD_BOOKMARK = "add_bookmark";
+    public static final String FUNC_THEME = "theme";
 
     // --- 搜索引擎标识符 ---
     /** 百度搜索 */
@@ -57,6 +71,8 @@ public class Config {
     public static final String BG_EFFECT_SAKURA = "sakura";
     /** 静态纯色背景模式 */
     public static final String BG_EFFECT_SOLID = "solid";
+    /** 自定义图片背景 */
+    public static final String BG_EFFECT_IMAGE = "image";
     
     // --- 默认数值 ---
     /** 默认纯色背景颜色 (曼诺绿) */
