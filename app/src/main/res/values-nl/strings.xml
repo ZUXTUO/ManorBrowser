@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Aurora-nacht</string>
     <string name="bg_effect_sakura">Sakura-regen</string>
     <string name="bg_effect_solid">Effen kleur</string>
+    <string name="bg_effect_image">Aangepaste afbeelding</string>
     <string name="bg_effect_desc">Selecteer dynamisch achtergrondeffect</string>
     <string name="pref_bg_pick_color">Kies kleur</string>
+    <string name="pref_bg_pick_image">Kies afbeelding uit galerij</string>
+    <string name="msg_pick_image_failed">Afbeelding kiezen mislukt</string>
     <string name="dialog_pick_color">Kies achtergrondkleur</string>
     <string name="action_select">Selecteren</string>
     <string name="msg_download_starting">Downloaden starten...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">Selecteren</string>
     <string name="title_download_apk">APK downloaden?</string>
     <string name="msg_download_apk">Deze link is voor een installatiebestand (APK). Wilt u dit downloaden?\n\nBestand: %1$s</string>
+    <string name="title_custom_home_button">Aanpassing startknop</string>
+    <string name="desc_custom_home_button">Pas de functie aan van de eerste knop in de onderste balk</string>
+    <string name="label_current_function">Huidige functie</string>
+    <string name="func_home">Home</string>
+    <string name="func_extensions">Extensies</string>
+    <string name="func_bookmarks">Bladwijzers</string>
+    <string name="func_history">Geschiedenis</string>
+    <string name="func_downloads">Downloads</string>
+    <string name="func_desktop_mode">Desktopmodus</string>
+    <string name="func_add_bookmark">Toevoegen aan bladwijzers</string>
+    <string name="func_theme">Dag-/nachtmodus</string>
 </resources>

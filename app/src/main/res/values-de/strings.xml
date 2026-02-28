@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Aurora-Nacht</string>
     <string name="bg_effect_sakura">Sakura-Regen</string>
     <string name="bg_effect_solid">Einfarbig</string>
+    <string name="bg_effect_image">Benutzerdefiniertes Bild</string>
     <string name="bg_effect_desc">Dynamischen Hintergrundeffekt auswählen</string>
     <string name="pref_bg_pick_color">Farbe wählen</string>
+    <string name="pref_bg_pick_image">Bild aus Galerie auswählen</string>
+    <string name="msg_pick_image_failed">Bildauswahl fehlgeschlagen</string>
     <string name="dialog_pick_color">Hintergrundfarbe wählen</string>
     <string name="action_select">Auswählen</string>
     <string name="msg_download_starting">Download startet...</string>
@@ -243,4 +246,15 @@
     <string name="dialog_title_select">Auswahl</string>
     <string name="title_download_apk">APK herunterladen?</string>
     <string name="msg_download_apk">Dieser Link führt zu einer Anwendungsinstallationsdatei (APK). Möchten Sie diese herunterladen?\n\nDatei: %1$s</string>
+    <string name="title_custom_home_button">Startseiten-Button Anpassung</string>
+    <string name="desc_custom_home_button">Passen Sie die Funktion der ersten Schaltfläche in der unteren Leiste an</string>
+    <string name="label_current_function">Aktuelle Funktion</string>
+    <string name="func_home">Startseite</string>
+    <string name="func_extensions">Erweiterungen</string>
+    <string name="func_bookmarks">Lesezeichen</string>
+    <string name="func_history">Verlauf</string>
+    <string name="func_downloads">Downloads</string>
+    <string name="func_desktop_mode">Desktop-Modus</string>
+    <string name="func_add_bookmark">Lesezeichen hinzufügen</string>
+    <string name="func_theme">Tag/Nacht-Modus</string>
 </resources>

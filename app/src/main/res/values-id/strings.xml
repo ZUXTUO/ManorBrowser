@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Malam Aurora</string>
     <string name="bg_effect_sakura">Hujan Sakura</string>
     <string name="bg_effect_solid">Warna Solid</string>
+    <string name="bg_effect_image">Gambar Kustom</string>
     <string name="bg_effect_desc">Pilih efek latar belakang dinamis</string>
     <string name="pref_bg_pick_color">Pilih Warna</string>
+    <string name="pref_bg_pick_image">Pilih Gambar dari Galeri</string>
+    <string name="msg_pick_image_failed">Gagal memilih gambar</string>
     <string name="dialog_pick_color">Pilih Warna Latar Belakang</string>
     <string name="action_select">Pilih</string>
     <string name="msg_download_starting">Memulai unduhan...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">Pilih</string>
     <string name="title_download_apk">Unduh APK?</string>
     <string name="msg_download_apk">Tautan ini adalah untuk file instalasi aplikasi (APK). Apakah Anda ingin mengunduhnya?\n\nFile: %1$s</string>
+    <string name="title_custom_home_button">Kustomisasi Tombol Beranda</string>
+    <string name="desc_custom_home_button">Kustomisasi fungsi tombol pertama di bilah bawah</string>
+    <string name="label_current_function">Fungsi Saat Ini</string>
+    <string name="func_home">Beranda</string>
+    <string name="func_extensions">Ekstensi</string>
+    <string name="func_bookmarks">Bookmark</string>
+    <string name="func_history">Riwayat</string>
+    <string name="func_downloads">Unduhan</string>
+    <string name="func_desktop_mode">Mode desktop</string>
+    <string name="func_add_bookmark">Tambah ke bookmark</string>
+    <string name="func_theme">Mode siang/malam</string>
 </resources>
