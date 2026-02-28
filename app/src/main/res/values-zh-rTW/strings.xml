@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">極光夜</string>
     <string name="bg_effect_sakura">櫻花雨</string>
     <string name="bg_effect_solid">純色背景</string>
+    <string name="bg_effect_image">自定義圖片</string>
     <string name="bg_effect_desc">選擇動態背景特效</string>
     <string name="pref_bg_pick_color">選擇顏色</string>
+    <string name="pref_bg_pick_image">從相冊選擇圖片</string>
+    <string name="msg_pick_image_failed">選擇圖片失敗</string>
     <string name="dialog_pick_color">選擇背景顏色</string>
     <string name="action_select">確定</string>
     <string name="msg_download_starting">正在開始下載...</string>
@@ -251,4 +254,15 @@
     <string name="dialog_title_select">請選擇</string>
     <string name="title_download_apk">下載 APK 檔案？</string>
     <string name="msg_download_apk">檢測到此連結為安卓應用安裝包 (APK)，是否確認下載？\n\n檔案：%1$s</string>
+    <string name="title_custom_home_button">主頁按鈕自定義</string>
+    <string name="desc_custom_home_button">自定義底部欄第一個按鈕的功能</string>
+    <string name="label_current_function">當前功能</string>
+    <string name="func_home">主頁</string>
+    <string name="func_extensions">外掛管理</string>
+    <string name="func_bookmarks">書籤管理</string>
+    <string name="func_history">歷史記錄</string>
+    <string name="func_downloads">下載管理</string>
+    <string name="func_desktop_mode">桌面模式</string>
+    <string name="func_add_bookmark">收藏當前頁面</string>
+    <string name="func_theme">白天/夜間模式</string>
 </resources>

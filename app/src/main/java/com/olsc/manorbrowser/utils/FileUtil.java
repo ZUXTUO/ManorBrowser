@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class FileUtil {
+
     public static File copyContentUriToTempFile(Context context, Uri uri, String filename) {
         try {
             InputStream is = context.getContentResolver().openInputStream(uri);
@@ -30,6 +31,22 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static boolean copyUriToFile(Context context, Uri uri, File destFile) {
+        try (InputStream is = context.getContentResolver().openInputStream(uri);
+             FileOutputStream fos = new FileOutputStream(destFile)) {
+            if (is == null) return false;
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, read);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

@@ -50,8 +50,11 @@
     <string name="bg_effect_aurora">Aurora Night</string>
     <string name="bg_effect_sakura">Sakura Rain</string>
     <string name="bg_effect_solid">Solid Color</string>
+    <string name="bg_effect_image">Custom Image</string>
     <string name="bg_effect_desc">Select dynamic background effect</string>
     <string name="pref_bg_pick_color">Pick Color</string>
+    <string name="pref_bg_pick_image">Pick Image from Gallery</string>
+    <string name="msg_pick_image_failed">Failed to pick image</string>
     <string name="dialog_pick_color">Pick Background Color</string>
     <string name="action_select">Select</string>
     <string name="msg_download_starting">Starting download...</string>
@@ -255,4 +258,15 @@ URL: %1$s</string>
     <string name="dialog_title_select">Select</string>
     <string name="title_download_apk">Download APK?</string>
     <string name="msg_download_apk">This link is for an application installation file (APK). Do you want to download it?\n\nFile: %1$s</string>
+    <string name="title_custom_home_button">Home Button Customization</string>
+    <string name="desc_custom_home_button">Customize the function of the first button in the bottom bar</string>
+    <string name="label_current_function">Current Function</string>
+    <string name="func_home">Home</string>
+    <string name="func_extensions">Extensions</string>
+    <string name="func_bookmarks">Bookmarks</string>
+    <string name="func_history">History</string>
+    <string name="func_downloads">Downloads</string>
+    <string name="func_desktop_mode">Desktop Mode</string>
+    <string name="func_add_bookmark">Add to Bookmarks</string>
+    <string name="func_theme">Day/Night Mode</string>
 </resources>

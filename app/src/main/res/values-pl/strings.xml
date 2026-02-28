@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Noc polarna</string>
     <string name="bg_effect_sakura">Deszcz sakury</string>
     <string name="bg_effect_solid">Jednolity kolor</string>
+    <string name="bg_effect_image">Własny obraz</string>
     <string name="bg_effect_desc">Wybierz dynamiczny efekt tła</string>
     <string name="pref_bg_pick_color">Wybierz kolor</string>
+    <string name="pref_bg_pick_image">Wybierz obraz z galerii</string>
+    <string name="msg_pick_image_failed">Nie udało się wybrać obrazu</string>
     <string name="dialog_pick_color">Wybierz kolor tła</string>
     <string name="action_select">Wybierz</string>
     <string name="msg_download_starting">Rozpoczynanie pobierania...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">Wybierz</string>
     <string name="title_download_apk">Pobrać APK?</string>
     <string name="msg_download_apk">Ten link prowadzi do pliku instalacyjnego aplikacji (APK). Czy chcesz go pobrać?\n\nPlik: %1$s</string>
+    <string name="title_custom_home_button">Dostosowanie przycisku głównego</string>
+    <string name="desc_custom_home_button">Dostosuj funkcję pierwszego przycisku na dolnym pasku</string>
+    <string name="label_current_function">Bieżąca funkcja</string>
+    <string name="func_home">Strona główna</string>
+    <string name="func_extensions">Rozszerzenia</string>
+    <string name="func_bookmarks">Zakładki</string>
+    <string name="func_history">Historia</string>
+    <string name="func_downloads">Pobrane</string>
+    <string name="func_desktop_mode">Tryb komputerowy</string>
+    <string name="func_add_bookmark">Dodaj do zakładek</string>
+    <string name="func_theme">Tryb dzień/noc</string>
 </resources>

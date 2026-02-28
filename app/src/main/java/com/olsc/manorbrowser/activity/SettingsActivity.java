@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.core.graphics.Insets;
 public class SettingsActivity extends AppCompatActivity {
     private android.widget.TextView tvCurrentEngine;
+    private androidx.activity.result.ActivityResultLauncher<String> pickImageLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
@@ -34,6 +35,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        
+        pickImageLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        saveCustomImage(uri);
+                    }
+                });
+        
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -97,6 +106,13 @@ public class SettingsActivity extends AppCompatActivity {
             switchSystemDownloader.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 defaultPrefs.edit().putBoolean(Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, isChecked).apply();
             });
+        }
+
+        // 主页按钮自定义
+        View containerCustomHomeButton = findViewById(R.id.container_custom_home_button);
+        if (containerCustomHomeButton != null) {
+            containerCustomHomeButton.setOnClickListener(v -> showCustomHomeButtonDialog());
+            updateCurrentHomeButtonText();
         }
     }
     
@@ -184,6 +200,7 @@ public class SettingsActivity extends AppCompatActivity {
             case Config.BG_EFFECT_AURORA: checkedItem = 3; break;
             case Config.BG_EFFECT_SAKURA: checkedItem = 4; break;
             case Config.BG_EFFECT_SOLID: checkedItem = 5; break;
+            case Config.BG_EFFECT_IMAGE: checkedItem = 6; break;
             default: checkedItem = 0; break;
         }
         String[] effects = {
@@ -192,9 +209,18 @@ public class SettingsActivity extends AppCompatActivity {
             getString(R.string.bg_effect_snow),
             getString(R.string.bg_effect_aurora),
             getString(R.string.bg_effect_sakura),
-            getString(R.string.bg_effect_solid)
+            getString(R.string.bg_effect_solid),
+            getString(R.string.bg_effect_image)
         };
-        String[] values = {Config.BG_EFFECT_METEOR, Config.BG_EFFECT_RAIN, Config.BG_EFFECT_SNOW, Config.BG_EFFECT_AURORA, Config.BG_EFFECT_SAKURA, Config.BG_EFFECT_SOLID};
+        String[] values = {
+            Config.BG_EFFECT_METEOR, 
+            Config.BG_EFFECT_RAIN, 
+            Config.BG_EFFECT_SNOW, 
+            Config.BG_EFFECT_AURORA, 
+            Config.BG_EFFECT_SAKURA, 
+            Config.BG_EFFECT_SOLID,
+            Config.BG_EFFECT_IMAGE
+        };
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.title_background_effect)
                 .setSingleChoiceItems(effects, checkedItem, (dialog, which) -> {
@@ -219,6 +245,7 @@ public class SettingsActivity extends AppCompatActivity {
             case Config.BG_EFFECT_AURORA: effectName = getString(R.string.bg_effect_aurora); break;
             case Config.BG_EFFECT_SAKURA: effectName = getString(R.string.bg_effect_sakura); break;
             case Config.BG_EFFECT_SOLID: effectName = getString(R.string.bg_effect_solid); break;
+            case Config.BG_EFFECT_IMAGE: effectName = getString(R.string.bg_effect_image); break;
             default: effectName = getString(R.string.bg_effect_meteor); break;
         }
         tvCurrentEffect.setText(effectName);
@@ -227,13 +254,19 @@ public class SettingsActivity extends AppCompatActivity {
         View btnPickColor = findViewById(R.id.btn_bg_pick_color);
         if (containerSolid != null) {
             boolean isSolidEffect = Config.BG_EFFECT_SOLID.equals(currentEffect);
-            if (isSolidEffect) {
-                containerSolid.setVisibility(View.VISIBLE);
-                if (btnPickColor != null) {
-                    btnPickColor.setOnClickListener(v -> showColorPickerDialog());
-                }
-            } else {
-                containerSolid.setVisibility(View.GONE);
+            containerSolid.setVisibility(isSolidEffect ? View.VISIBLE : View.GONE);
+            if (isSolidEffect && btnPickColor != null) {
+                btnPickColor.setOnClickListener(v -> showColorPickerDialog());
+            }
+        }
+
+        View containerImage = findViewById(R.id.container_image_settings);
+        View btnPickImage = findViewById(R.id.btn_bg_pick_image);
+        if (containerImage != null) {
+            boolean isImageEffect = Config.BG_EFFECT_IMAGE.equals(currentEffect);
+            containerImage.setVisibility(isImageEffect ? View.VISIBLE : View.GONE);
+            if (isImageEffect && btnPickImage != null) {
+                btnPickImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
             }
         }
     }
@@ -336,6 +369,85 @@ public class SettingsActivity extends AppCompatActivity {
         
         tvLanguage.setText(display);
     }
+
+    private void showCustomHomeButtonDialog() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentFunc = prefs.getString(Config.PREF_KEY_LEFT_BUTTON_FUNCTION, Config.FUNC_BOOKMARKS);
+        
+        String[] functions = {
+            getString(R.string.func_home),
+            getString(R.string.func_extensions),
+            getString(R.string.func_bookmarks),
+            getString(R.string.func_history),
+            getString(R.string.func_downloads),
+            getString(R.string.func_desktop_mode),
+            getString(R.string.func_add_bookmark),
+            getString(R.string.func_theme)
+        };
+        String[] values = {
+            Config.FUNC_HOME,
+            Config.FUNC_EXTENSIONS,
+            Config.FUNC_BOOKMARKS,
+            Config.FUNC_HISTORY,
+            Config.FUNC_DOWNLOADS,
+            Config.FUNC_DESKTOP_MODE,
+            Config.FUNC_ADD_BOOKMARK,
+            Config.FUNC_THEME
+        };
+        
+        int checkedItem = 2;
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(currentFunc)) {
+                checkedItem = i;
+                break;
+            }
+        }
+        
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.title_custom_home_button)
+                .setSingleChoiceItems(functions, checkedItem, (dialog, which) -> {
+                    prefs.edit().putString(Config.PREF_KEY_LEFT_BUTTON_FUNCTION, values[which]).apply();
+                    updateCurrentHomeButtonText();
+                    dialog.dismiss();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void updateCurrentHomeButtonText() {
+        android.widget.TextView tvFunc = findViewById(R.id.tv_current_home_function);
+        if (tvFunc == null) return;
+        
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentFunc = prefs.getString(Config.PREF_KEY_LEFT_BUTTON_FUNCTION, Config.FUNC_BOOKMARKS);
+        
+        String display;
+        switch (currentFunc) {
+            case Config.FUNC_HOME: display = getString(R.string.func_home); break;
+            case Config.FUNC_EXTENSIONS: display = getString(R.string.func_extensions); break;
+            case Config.FUNC_BOOKMARKS: display = getString(R.string.func_bookmarks); break;
+            case Config.FUNC_HISTORY: display = getString(R.string.func_history); break;
+            case Config.FUNC_DOWNLOADS: display = getString(R.string.func_downloads); break;
+            case Config.FUNC_DESKTOP_MODE: display = getString(R.string.func_desktop_mode); break;
+            case Config.FUNC_ADD_BOOKMARK: display = getString(R.string.func_add_bookmark); break;
+            case Config.FUNC_THEME: display = getString(R.string.func_theme); break;
+            default: display = getString(R.string.func_bookmarks); break;
+        }
+        tvFunc.setText(display);
+    }
+    
+    private void saveCustomImage(android.net.Uri uri) {
+        java.io.File destFile = new java.io.File(getFilesDir(), "custom_bg.jpg");
+        boolean success = com.olsc.manorbrowser.utils.FileUtil.copyUriToFile(this, uri, destFile);
+        if (success) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit().putString(Config.PREF_KEY_CUSTOM_BG_IMAGE, destFile.getAbsolutePath()).apply();
+            updateCurrentBackgroundEffectText();
+        } else {
+            android.widget.Toast.makeText(this, R.string.msg_pick_image_failed, android.widget.Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
         super.attachBaseContext(com.olsc.manorbrowser.utils.LocaleHelper.onAttach(newBase));
