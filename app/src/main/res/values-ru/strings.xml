@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Полярное сияние</string>
     <string name="bg_effect_sakura">Листопад сакуры</string>
     <string name="bg_effect_solid">Сплошной цвет</string>
+    <string name="bg_effect_image">Своё изображение</string>
     <string name="bg_effect_desc">Выберите динамический эффект фона</string>
     <string name="pref_bg_pick_color">Выбрать цвет</string>
+    <string name="pref_bg_pick_image">Выбрать изображение из галереи</string>
+    <string name="msg_pick_image_failed">Ошибка при выборе изображения</string>
     <string name="dialog_pick_color">Выбрать цвет фона</string>
     <string name="action_select">Выбрать</string>
     <string name="msg_download_starting">Начало загрузки...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">Выбор</string>
     <string name="title_download_apk">Скачать APK?</string>
     <string name="msg_download_apk">Эта ссылка ведет на файл установки приложения (APK). Вы хотите его скачать?\n\nФайл: %1$s</string>
+    <string name="title_custom_home_button">Настройка кнопки «Домой»</string>
+    <string name="desc_custom_home_button">Настройте функцию первой кнопки на нижней панели</string>
+    <string name="label_current_function">Текущая функция</string>
+    <string name="func_home">Домой</string>
+    <string name="func_extensions">Расширения</string>
+    <string name="func_bookmarks">Закладки</string>
+    <string name="func_history">История</string>
+    <string name="func_downloads">Загрузки</string>
+    <string name="func_desktop_mode">ПК-режим</string>
+    <string name="func_add_bookmark">Добавить в закладки</string>
+    <string name="func_theme">Дневной/ночной режим</string>
 </resources>

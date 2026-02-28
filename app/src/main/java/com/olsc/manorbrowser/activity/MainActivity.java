@@ -914,6 +914,7 @@ public class MainActivity extends AppCompatActivity {
                 applyThemeToSession(tab.session);
             }
         }
+        updateHomeButton();
     }
     
     @Override
@@ -1166,10 +1167,7 @@ public class MainActivity extends AppCompatActivity {
                 getCurrentSession().reload();
             }
         });
-        btnHome.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(MainActivity.this, BookmarkActivity.class);
-            startActivity(intent);
-        });
+        updateHomeButton();
         btnTabs.setOnClickListener(v -> toggleTabSwitcher());
         btnTabs.setOnLongClickListener(v -> {
             showTabManagerOptionsDialog();
@@ -1997,26 +1995,30 @@ public class MainActivity extends AppCompatActivity {
         DynamicBackgroundView dynamicBgView = findViewById(R.id.dynamic_background_view);
         if (dynamicBgView != null) {
             switch (effect) {
-                case "rain":
+                case Config.BG_EFFECT_RAIN:
                     dynamicBgView.setMode(DynamicBackgroundView.EffectMode.RAIN);
                     break;
-                case "snow":
+                case Config.BG_EFFECT_SNOW:
                     dynamicBgView.setMode(DynamicBackgroundView.EffectMode.SNOW);
                     break;
-                case "aurora":
+                case Config.BG_EFFECT_AURORA:
                     dynamicBgView.setMode(DynamicBackgroundView.EffectMode.AURORA);
                     break;
-                case "sakura":
+                case Config.BG_EFFECT_SAKURA:
                     dynamicBgView.setMode(DynamicBackgroundView.EffectMode.SAKURA);
                     break;
-                case "solid":
+                case Config.BG_EFFECT_IMAGE:
+                    String imagePath = prefs.getString(Config.PREF_KEY_CUSTOM_BG_IMAGE, null);
+                    dynamicBgView.setCustomImagePath(imagePath);
+                    dynamicBgView.setMode(DynamicBackgroundView.EffectMode.IMAGE);
+                    break;
+                case Config.BG_EFFECT_SOLID:
                     dynamicBgView.setMode(DynamicBackgroundView.EffectMode.SOLID);
                     int solidColor = prefs.getInt(Config.PREF_KEY_SOLID_BG_COLOR, Config.DEFAULT_SOLID_BG_COLOR);
                     if (dynamicBgView.getChildCount() > 0) {
                         dynamicBgView.getChildAt(0).setBackgroundColor(solidColor);
                     }
                     break;
-                case "meteor":
                 default:
                     dynamicBgView.setMode(DynamicBackgroundView.EffectMode.METEOR);
                     break;
@@ -2526,5 +2528,80 @@ public class MainActivity extends AppCompatActivity {
          } else {
               Toast.makeText(this, getString(R.string.action_extension_options) + "\n" + extension.metaData.name, Toast.LENGTH_SHORT).show();
          }
+    }
+
+    private void updateHomeButton() {
+        if (btnHome == null) return;
+        
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String function = prefs.getString(Config.PREF_KEY_LEFT_BUTTON_FUNCTION, Config.FUNC_BOOKMARKS);
+        
+        int iconRes;
+        String description;
+        View.OnClickListener listener;
+        
+        switch (function) {
+            case Config.FUNC_HOME:
+                iconRes = R.drawable.ic_home;
+                description = getString(R.string.action_home);
+                listener = v -> loadUrlInCurrentTab(Config.URL_BLANK);
+                break;
+            case Config.FUNC_EXTENSIONS:
+                iconRes = R.drawable.ic_extension;
+                description = getString(R.string.action_extensions);
+                listener = v -> showExtensionActionDialog();
+                break;
+            case Config.FUNC_BOOKMARKS:
+                iconRes = R.drawable.ic_bookmark;
+                description = getString(R.string.action_bookmarks);
+                listener = v -> {
+                    android.content.Intent intent = new android.content.Intent(this, BookmarkActivity.class);
+                    startActivity(intent);
+                };
+                break;
+            case Config.FUNC_HISTORY:
+                iconRes = R.drawable.ic_history;
+                description = getString(R.string.action_history);
+                listener = v -> {
+                    android.content.Intent intent = new android.content.Intent(this, HistoryActivity.class);
+                    startActivity(intent);
+                };
+                break;
+            case Config.FUNC_DOWNLOADS:
+                iconRes = R.drawable.ic_download;
+                description = getString(R.string.action_downloads);
+                listener = v -> {
+                    android.content.Intent intent = new android.content.Intent(this, DownloadsActivity.class);
+                    startActivity(intent);
+                };
+                break;
+            case Config.FUNC_DESKTOP_MODE:
+                iconRes = R.drawable.ic_desktop;
+                description = getString(R.string.title_desktop_mode);
+                listener = v -> toggleDesktopMode();
+                break;
+            case Config.FUNC_ADD_BOOKMARK:
+                iconRes = R.drawable.ic_bookmark_add;
+                description = getString(R.string.action_add_bookmark);
+                listener = v -> showAddBookmarkDialog();
+                break;
+            case Config.FUNC_THEME:
+                iconRes = R.drawable.ic_theme;
+                description = getString(R.string.action_theme);
+                listener = v -> toggleTheme();
+                break;
+            default:
+                iconRes = R.drawable.ic_bookmark;
+                description = getString(R.string.action_bookmarks);
+                listener = v -> {
+                    android.content.Intent intent = new android.content.Intent(this, BookmarkActivity.class);
+                    startActivity(intent);
+                };
+                break;
+        }
+        
+        btnHome.setImageResource(iconRes);
+        btnHome.setContentDescription(description);
+        btnHome.setOnClickListener(listener);
     }
 }

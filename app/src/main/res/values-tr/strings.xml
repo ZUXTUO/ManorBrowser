@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Aurora Gecesi</string>
     <string name="bg_effect_sakura">Sakura Yağmuru</string>
     <string name="bg_effect_solid">Düz Renk</string>
+    <string name="bg_effect_image">Özel Resim</string>
     <string name="bg_effect_desc">Dinamik arka plan efekti seçin</string>
     <string name="pref_bg_pick_color">Renk Seç</string>
+    <string name="pref_bg_pick_image">Galeriden Resim Seç</string>
+    <string name="msg_pick_image_failed">Resim seçimi başarısız</string>
     <string name="dialog_pick_color">Arka Plan Rengi Seç</string>
     <string name="action_select">Seç</string>
     <string name="msg_download_starting">İndirme başlatılıyor...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">Seç</string>
     <string name="title_download_apk">APK indirilsin mi?</string>
     <string name="msg_download_apk">Bu bağlantı bir uygulama yükleme dosyası (APK) içindir. İndirmek istiyor musunuz?\n\nDosya: %1$s</string>
+    <string name="title_custom_home_button">Giriş Düğmesi Özelleştirme</string>
+    <string name="desc_custom_home_button">Alt çubuktaki ilk düğmenin işlevini özelleştirin</string>
+    <string name="label_current_function">Mevcut İşlev</string>
+    <string name="func_home">Giriş</string>
+    <string name="func_extensions">Eklentiler</string>
+    <string name="func_bookmarks">Yer İşaretleri</string>
+    <string name="func_history">Geçmiş</string>
+    <string name="func_downloads">İndirmeler</string>
+    <string name="func_desktop_mode">Masaüstü modu</string>
+    <string name="func_add_bookmark">Yer işaretlerine ekle</string>
+    <string name="func_theme">Gündüz/Gece modu</string>
 </resources>

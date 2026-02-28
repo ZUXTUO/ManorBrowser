@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">オーロラの夜</string>
     <string name="bg_effect_sakura">桜の雨</string>
     <string name="bg_effect_solid">単色</string>
+    <string name="bg_effect_image">カスタム画像</string>
     <string name="bg_effect_desc">動的な背景効果を選択</string>
     <string name="pref_bg_pick_color">色の選択</string>
+    <string name="pref_bg_pick_image">ギャラリーから画像を選択</string>
+    <string name="msg_pick_image_failed">画像の選択に失敗しました</string>
     <string name="dialog_pick_color">背景色の選択</string>
     <string name="action_select">選択</string>
     <string name="msg_download_starting">ダウンロードを開始しています...</string>
@@ -252,4 +255,15 @@
     <string name="dialog_title_select">選択</string>
     <string name="title_download_apk">APKをダウンロードしますか？</string>
     <string name="msg_download_apk">このリンクはアプリケーションのインストールファイル (APK) です。ダウンロードしますか？\n\nファイル: %1$s</string>
+    <string name="title_custom_home_button">ホームボタンのカスタマイズ</string>
+    <string name="desc_custom_home_button">ボトムバーの最初のボタンの機能をカスタマイズします</string>
+    <string name="label_current_function">現在の機能</string>
+    <string name="func_home">ホーム</string>
+    <string name="func_extensions">拡張機能マネージャー</string>
+    <string name="func_bookmarks">ブックマーク管理</string>
+    <string name="func_history">履歴</string>
+    <string name="func_downloads">ダウンロード管理</string>
+    <string name="func_desktop_mode">PCモード</string>
+    <string name="func_add_bookmark">現在のページをブックマーク</string>
+    <string name="func_theme">ライト/ダークモード</string>
 </resources>

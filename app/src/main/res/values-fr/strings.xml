@@ -51,8 +51,11 @@
     <string name="bg_effect_aurora">Nuit polaire</string>
     <string name="bg_effect_sakura">Pluie de sakura</string>
     <string name="bg_effect_solid">Couleur unie</string>
+    <string name="bg_effect_image">Image personnalisée</string>
     <string name="bg_effect_desc">Sélectionner un effet d\'arrière-plan dynamique</string>
     <string name="pref_bg_pick_color">Choisir une couleur</string>
+    <string name="pref_bg_pick_image">Choisir une image dans la galerie</string>
+    <string name="msg_pick_image_failed">Échec du choix de l\'image</string>
     <string name="dialog_pick_color">Choisir la couleur d\'arrière-plan</string>
     <string name="action_select">Sélectionner</string>
     <string name="msg_download_starting">Démarrage du téléchargement...</string>
@@ -243,4 +246,15 @@
     <string name="dialog_title_select">Sélection</string>
     <string name="title_download_apk">Télécharger l\'APK ?</string>
     <string name="msg_download_apk">Ce lien est destiné à un fichier d\'installation d\'application (APK). Voulez-vous le télécharger ?\n\nFichier : %1$s</string>
+    <string name="title_custom_home_button">Personnalisation du bouton d\'accueil</string>
+    <string name="desc_custom_home_button">Personnalisez la fonction du premier bouton dans la barre inférieure</string>
+    <string name="label_current_function">Fonction actuelle</string>
+    <string name="func_home">Accueil</string>
+    <string name="func_extensions">Extensions</string>
+    <string name="func_bookmarks">Signets</string>
+    <string name="func_history">Historique</string>
+    <string name="func_downloads">Téléchargements</string>
+    <string name="func_desktop_mode">Mode bureau</string>
+    <string name="func_add_bookmark">Ajouter aux signets</string>
+    <string name="func_theme">Mode jour/nuit</string>
 </resources>
