@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">PCモード</string>
     <string name="func_add_bookmark">現在のページをブックマーク</string>
     <string name="func_theme">ライト/ダークモード</string>
+    <string name="action_update">更新</string>
+    <string name="msg_update_password">%1$s のパスワードを更新しますか？</string>
+    <string name="title_update_password">パスワードを更新しますか？</string>
 </resources>

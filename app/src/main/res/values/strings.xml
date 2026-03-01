@@ -269,4 +269,8 @@ URL: %1$s</string>
     <string name="func_desktop_mode">Desktop Mode</string>
     <string name="func_add_bookmark">Add to Bookmarks</string>
     <string name="func_theme">Day/Night Mode</string>
+
+    <string name="title_update_password">Update Password?</string>
+    <string name="msg_update_password">Do you want to update the password for %1$s?</string>
+    <string name="action_update">Update</string>
 </resources>

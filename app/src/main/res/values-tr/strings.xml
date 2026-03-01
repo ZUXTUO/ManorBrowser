@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">Masaüstü modu</string>
     <string name="func_add_bookmark">Yer işaretlerine ekle</string>
     <string name="func_theme">Gündüz/Gece modu</string>
+    <string name="action_update">Güncelle</string>
+    <string name="msg_update_password">%1$s için şifreyi güncellemek istiyor musunuz?</string>
+    <string name="title_update_password">Şifreyi Güncelle?</string>
 </resources>

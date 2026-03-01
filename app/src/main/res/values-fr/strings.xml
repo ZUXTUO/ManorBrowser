@@ -257,4 +257,7 @@
     <string name="func_desktop_mode">Mode bureau</string>
     <string name="func_add_bookmark">Ajouter aux signets</string>
     <string name="func_theme">Mode jour/nuit</string>
+    <string name="action_update">Mettre à jour</string>
+    <string name="msg_update_password">Voulez-vous mettre à jour le mot de passe pour %1$s ?</string>
+    <string name="title_update_password">Mettre à jour le mot de passe ?</string>
 </resources>

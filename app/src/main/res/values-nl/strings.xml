@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">Desktopmodus</string>
     <string name="func_add_bookmark">Toevoegen aan bladwijzers</string>
     <string name="func_theme">Dag-/nachtmodus</string>
+    <string name="action_update">Bijwerken</string>
+    <string name="msg_update_password">Wilt u het wachtwoord voor %1$s bijwerken?</string>
+    <string name="title_update_password">Wachtwoord bijwerken?</string>
 </resources>

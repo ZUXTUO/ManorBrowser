@@ -257,4 +257,7 @@
     <string name="func_desktop_mode">وضع سطح المكتب</string>
     <string name="func_add_bookmark">إضافة للإشارات المرجعية</string>
     <string name="func_theme">الوضع الليلي/النهاري</string>
+    <string name="action_update">تحديث</string>
+    <string name="msg_update_password">هل تريد تحديث كلمة المرور لـ %1$s؟</string>
+    <string name="title_update_password">تحديث كلمة المرور؟</string>
 </resources>
