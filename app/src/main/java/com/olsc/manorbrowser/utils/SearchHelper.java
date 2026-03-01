@@ -23,19 +23,23 @@ public class SearchHelper {
     public static String getSearchUrl(Context context, String query) {
         query = query.trim();
 
-        // 1. 如果已经是完整的 URL（如 http://, https://, file:// ），直接返回
-        if (URLUtil.isValidUrl(query)) {
+        // 1. 如果已经包含协议，直接返回
+        String lowerQuery = query.toLowerCase();
+        if (lowerQuery.startsWith("http://") || lowerQuery.startsWith("https://") ||
+            lowerQuery.startsWith("file://") || lowerQuery.startsWith("about:") ||
+            lowerQuery.startsWith("javascript:") || lowerQuery.startsWith("data:")) {
             return query;
         }
 
-        // 2. 检查是否是 IP 地址格式（支持带端口和路径，如 192.168.1.1:8080/admin）
-        // 关键：必须在常规 WEB_URL 前拦截，防止 IP 被误认为域名
-        if (isIpAddressFormat(query)) {
+        // 2. 检查是否是 IP 地址或局域网特有域名，默认使用 http://
+        // 这是为了解决局域网内大量 HTTP 服务被误强制跳转到 HTTPS 的问题
+        if (isLocalOrIpFormat(query)) {
             return "http://" + query;
         }
 
         // 3. 检查是否是常规域名格式 (如 google.com)
         if (Patterns.WEB_URL.matcher(query).matches()) {
+             // 对于外网常规域名，优先使用 HTTPS 确保安全
              return "https://" + query;
         }
 
@@ -51,28 +55,52 @@ public class SearchHelper {
     }
 
     /**
-     * 更严谨地识别 IPv4 地址（含可选端口与路径）
+     * 判断输入内容是否为局域网地址、IP 地址或直连主机名
      */
-    private static boolean isIpAddressFormat(String input) {
+    private static boolean isLocalOrIpFormat(String input) {
         if (input == null || input.isEmpty()) return false;
         
-        // 分离 Host 和 路径
+        // 分离 Host 和 路径/端口
         String hostPart = input.split("/")[0].trim();
         
-        // 移除可选的端口号
-        String ipOnly = hostPart;
+        // 移除可选的端口号进行主机名校验
+        String ipOrHost = hostPart;
         if (hostPart.contains(":")) {
-            String[] parts = hostPart.split(":");
-            ipOnly = parts[0];
+            try {
+                ipOrHost = hostPart.split(":")[0];
+            } catch (Exception ignored) {}
         }
 
-        // 匹配 IPv4 正则
-        // 为确保兼容性，使用标准正则取代 Patterns.IP_ADDRESS（某些 OEM 系统中此常量定义可能不同）
-        String ipv4Pattern = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\." +
-                             "(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\." +
-                             "(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\." +
-                             "(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$";
+        // 1. 匹配 IPv4 地址 (使用 Android 标准库正则)
+        if (Patterns.IP_ADDRESS.matcher(ipOrHost).matches()) {
+            return true;
+        }
         
-        return ipOnly.matches(ipv4Pattern);
+        // 2. 匹配 localhost
+        if ("localhost".equalsIgnoreCase(ipOrHost) || "127.0.0.1".equals(ipOrHost)) {
+            return true;
+        }
+        
+        // 3. 检查局域网特有的常见域名后缀 (如 .local, .lan, .home 等)
+        String lowHost = ipOrHost.toLowerCase();
+        if (lowHost.endsWith(".local") || lowHost.endsWith(".lan") || 
+            lowHost.endsWith(".home") || lowHost.endsWith(".internal")) {
+            return true;
+        }
+
+        // 4. (可选) 检查是否为纯主机名（不含点，且带有端口号，如 nas:5000）
+        // 如果包含端口号且不含点，通常是内网服务
+        if (hostPart.contains(":") && !ipOrHost.contains(".")) {
+            return true;
+        }
+
+        // 5. 检查是否为 IPv6 地址格式 (如 [::1] 或 [fe80::...])
+        if (ipOrHost.startsWith("[") && ipOrHost.endsWith("]")) {
+            return true;
+        }
+
+        return false;
     }
 }
+
+

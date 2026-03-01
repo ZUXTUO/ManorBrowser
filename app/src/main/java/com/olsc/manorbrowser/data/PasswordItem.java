@@ -14,13 +14,23 @@ public class PasswordItem {
     public String username;
     /** 密码 */
     public String password;
+    /** 用户名输入框的 ID 或 Name */
+    public String usernameField;
+    /** 密码输入框的 ID 或 Name */
+    public String passwordField;
     /** 时间戳 */
     public long timestamp;
 
     public PasswordItem(String url, String username, String password) {
+        this(url, username, password, null, null);
+    }
+
+    public PasswordItem(String url, String username, String password, String usernameField, String passwordField) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.usernameField = usernameField;
+        this.passwordField = passwordField;
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -33,6 +43,8 @@ public class PasswordItem {
             json.put("url", url);
             json.put("username", username);
             json.put("password", password);
+            json.put("usernameField", usernameField);
+            json.put("passwordField", passwordField);
             json.put("timestamp", timestamp);
             return json;
         } catch (JSONException e) {
@@ -48,7 +60,9 @@ public class PasswordItem {
         PasswordItem item = new PasswordItem(
             json.optString("url"),
             json.optString("username"),
-            json.optString("password")
+            json.optString("password"),
+            json.optString("usernameField", null),
+            json.optString("passwordField", null)
         );
         // 恢复原始时间戳
         item.timestamp = json.optLong("timestamp", item.timestamp);
