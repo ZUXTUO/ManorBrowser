@@ -267,4 +267,7 @@
     <string name="func_desktop_mode">데스크톱 모드</string>
     <string name="func_add_bookmark">현재 페지 즐겨찾기 추가</string>
     <string name="func_theme">낮/밤 모드</string>
+    <string name="action_update">갱신</string>
+    <string name="msg_update_password">%1$s의 암호를 갱신하시겠습니까?</string>
+    <string name="title_update_password">암호갱신?</string>
 </resources>

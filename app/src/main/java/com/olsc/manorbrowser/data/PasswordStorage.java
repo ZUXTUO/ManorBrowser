@@ -55,8 +55,12 @@ public class PasswordStorage {
      * 保存单条新的账号密码，若存在相同 URL+用户名 则覆盖。
      */
     public static void savePassword(Context context, PasswordItem newItem) {
+        if (newItem == null || newItem.url == null) return;
         List<PasswordItem> items = loadPasswords(context);
-        items.removeIf(item -> item.url.equals(newItem.url) && item.username.equals(newItem.username));
+        items.removeIf(item -> 
+            item.url != null && item.url.equals(newItem.url) && 
+            ((item.username == null && newItem.username == null) || (item.username != null && item.username.equals(newItem.username)))
+        );
         items.add(0, newItem);
         saveAll(context, items);
     }
@@ -113,7 +117,7 @@ public class PasswordStorage {
     /**
      * 工具方法：从 URL 中提取域名
      */
-    private static String getDomain(String url) {
+    public static String getDomain(String url) {
         try {
             java.net.URI uri = new java.net.URI(url);
             String host = uri.getHost();

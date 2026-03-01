@@ -54,9 +54,18 @@ import org.mozilla.geckoview.GeckoSession.ContentDelegate.ContextElement;
 import org.mozilla.geckoview.GeckoSession.NavigationDelegate.LoadRequest;
 import org.mozilla.geckoview.AllowOrDeny;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import org.mozilla.geckoview.Autocomplete;
+import org.mozilla.geckoview.Autocomplete.LoginEntry;
+import org.mozilla.geckoview.Autocomplete.LoginSaveOption;
+import org.mozilla.geckoview.Autocomplete.LoginSelectOption;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import com.olsc.manorbrowser.data.PasswordItem;
+import com.olsc.manorbrowser.data.PasswordStorage;
 
 import androidx.preference.PreferenceManager;
 import androidx.activity.result.ActivityResultLauncher;
@@ -64,6 +73,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import android.net.Uri;
 import org.mozilla.geckoview.GeckoSession.PromptDelegate;
+import org.mozilla.geckoview.GeckoSession.PromptDelegate.AutocompleteRequest;
+import org.mozilla.geckoview.GeckoSession.PromptDelegate.PromptResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     // --- UI 基础控件 ---
@@ -105,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
     /** 网页请求权限处理器 (如摄像头、地理位置) */
     private GeckoSession.PermissionDelegate.Callback mGeckoPermissionCallback;
     private ActivityResultLauncher<String[]> mGeckoPermissionLauncher;
+    private final java.util.Set<String> mPromptedAutofillUrls = new java.util.HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,6 +287,8 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         if (sRuntime == null) {
             sRuntime = GeckoRuntime.create(getApplicationContext());
+            sRuntime.getSettings().setLoginAutofillEnabled(true);
+            sRuntime.setAutocompleteStorageDelegate(mAutocompleteStorageDelegate);
             // 设置扩展安装的代理回调
             sRuntime.getWebExtensionController().setPromptDelegate(new com.olsc.manorbrowser.utils.ExtensionPromptDelegate(this));
         }
@@ -372,6 +389,8 @@ public class MainActivity extends AppCompatActivity {
         if (tab.session != null) return;
         GeckoSession session = new GeckoSession();
         session.open(sRuntime);
+        // LoginDelegate 已弃用，逻辑已移至 Autocomplete.StorageDelegate (Runtime) 
+        // 交互逻辑在 PromptDelegate (Session)
         tab.session = session; 
         applyThemeToSession(session);
         
@@ -382,6 +401,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageStart(@NonNull GeckoSession session, @NonNull String url) {
                updateTabInfo(session, url, null);
+               // 页面重新加载时，清除该 session 的自动填充弹出记录，使刷新后可再次弹出
+               mPromptedAutofillUrls.removeIf(key -> key.startsWith(session.hashCode() + "_"));
                for (TabInfo t : tabs) {
                    if (t.session == session) {
                        t.scrollY = 0;
@@ -431,10 +452,9 @@ public class MainActivity extends AppCompatActivity {
                    if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                });
                
-               if (success) {
-                    session.loadUri("javascript:" + com.olsc.manorbrowser.utils.JSInjector.INJECT_LOGIN_DETECT);
-                    checkAndAutofill(session);
-               }
+                if (success) {
+                     // 移除不可靠的 JS 注入和手动触发
+                }
             }
             
             @Override public void onSessionStateChange(@NonNull GeckoSession session, @NonNull GeckoSession.SessionState sessionState) {}
@@ -715,6 +735,34 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .show();
                 });
+                return result;
+            }
+
+            @Override
+            public GeckoResult<PromptResponse> onLoginSelect(@NonNull GeckoSession session, @NonNull AutocompleteRequest<Autocomplete.LoginSelectOption> request) {
+                GeckoResult<PromptResponse> result = new GeckoResult<>();
+                String currentUrl = null;
+                for (TabInfo t : tabs) {
+                    if (t.session == session) {
+                        currentUrl = t.url;
+                        break;
+                    }
+                }
+                final String urlKey = session.hashCode() + "_" + (currentUrl != null ? currentUrl : "");
+                if (mPromptedAutofillUrls.contains(urlKey)) {
+                    result.complete(request.dismiss());
+                    return result;
+                }
+                mPromptedAutofillUrls.add(urlKey);
+                
+                runOnUiThread(() -> showPasswordSelectionDialogForNative(request, result));
+                return result;
+            }
+
+            @Override
+            public GeckoResult<PromptResponse> onLoginSave(@NonNull GeckoSession session, @NonNull AutocompleteRequest<Autocomplete.LoginSaveOption> request) {
+                GeckoResult<PromptResponse> result = new GeckoResult<>();
+                runOnUiThread(() -> handleNativeSavePassword(request, result));
                 return result;
             }
 
@@ -2165,10 +2213,11 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(R.string.title_save_password)
                 .setMessage(getString(R.string.msg_save_password, username))
                 .setPositiveButton(R.string.action_save, (dialog, which) -> {
-                    com.olsc.manorbrowser.data.PasswordStorage.savePassword(this, 
+                    com.olsc.manorbrowser.data.PasswordStorage.savePassword(getApplicationContext(), 
                         new com.olsc.manorbrowser.data.PasswordItem(url, username, password));
-                    Toast.makeText(this, R.string.msg_password_saved, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_password_saved, Toast.LENGTH_SHORT).show();
                 })
+
                 .setNegativeButton(R.string.action_never, null)
                 .show();
         });
@@ -2603,5 +2652,199 @@ public class MainActivity extends AppCompatActivity {
         btnHome.setImageResource(iconRes);
         btnHome.setContentDescription(description);
         btnHome.setOnClickListener(listener);
+    }
+
+    private final Autocomplete.StorageDelegate mAutocompleteStorageDelegate = new Autocomplete.StorageDelegate() {
+        @Override
+        public GeckoResult<LoginEntry[]> onLoginFetch(@NonNull String domain) {
+            List<PasswordItem> matches = PasswordStorage.getPasswordsForUrl(MainActivity.this, domain);
+            if (matches.isEmpty()) {
+                return GeckoResult.fromValue(null);
+            }
+            LoginEntry[] entries = new LoginEntry[matches.size()];
+            for (int i = 0; i < matches.size(); i++) {
+                PasswordItem item = matches.get(i);
+                entries[i] = new LoginEntry.Builder()
+                    .origin(item.url)
+                    .username(item.username)
+                    .password(item.password)
+                    .build();
+            }
+            return GeckoResult.fromValue(entries);
+        }
+
+        @Override
+        public void onLoginSave(@NonNull LoginEntry login) {
+
+        }
+    };
+
+    /**
+     * 弹出原生账号选择底部对话框
+     */
+    private void showPasswordSelectionDialogForNative(PromptDelegate.AutocompleteRequest<Autocomplete.LoginSelectOption> request, GeckoResult<PromptDelegate.PromptResponse> result) {
+        Autocomplete.LoginSelectOption[] logins = request.options;
+        final java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean(false);
+
+        // 使用专属样式创建，让系统框架背景透明，消除进场闪白
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheetDialogStyle);
+        View view = getLayoutInflater().inflate(R.layout.dialog_password_selection, null);
+
+        // 设置 alpha 0，随后淡入，避免布局测量/绘制阶段的视觉跳变
+        view.setAlpha(0f);
+        dialog.setContentView(view);
+
+        // 跳过折叠态，直接完全展开，防止半展开→展开再展开的抖动
+        dialog.setOnShowListener(d -> {
+            com.google.android.material.bottomsheet.BottomSheetBehavior<?> behavior =
+                    ((BottomSheetDialog) d).getBehavior();
+            behavior.setSkipCollapsed(true);
+            behavior.setState(com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED);
+
+            // 内容完全就位后再淡入
+            view.animate().alpha(1f).setDuration(180).setInterpolator(
+                    new android.view.animation.DecelerateInterpolator()).start();
+        });
+
+        RecyclerView rv = view.findViewById(R.id.rv_passwords);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(new RecyclerView.Adapter<PasswordSelectionViewHolder>() {
+            @NonNull
+            @Override
+            public PasswordSelectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v = getLayoutInflater().inflate(R.layout.item_password_selection, parent, false);
+                return new PasswordSelectionViewHolder(v);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull PasswordSelectionViewHolder holder, int position) {
+                Autocomplete.LoginSelectOption option = logins[position];
+                LoginEntry item = option.value;
+                holder.tvUsername.setText(item != null ? (item.username != null ? item.username : item.origin) : "Unknown Account");
+                holder.itemView.setOnClickListener(v -> {
+                    if (completed.compareAndSet(false, true)) {
+                        dialog.dismiss();
+                        result.complete(request.confirm(option));
+                    }
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return logins.length;
+            }
+        });
+
+        dialog.setOnCancelListener(d -> {
+            if (completed.compareAndSet(false, true)) {
+                result.complete(request.dismiss());
+            }
+        });
+        dialog.show();
+    }
+
+
+    private static class PasswordSelectionViewHolder extends RecyclerView.ViewHolder {
+        TextView tvUsername;
+        PasswordSelectionViewHolder(View v) {
+            super(v);
+            tvUsername = v.findViewById(R.id.tv_username);
+        }
+    }
+
+    /**
+     * 处理原生回调的账号保存/更新逻辑。
+     */
+    private void handleNativeSavePassword(PromptDelegate.AutocompleteRequest<Autocomplete.LoginSaveOption> request, GeckoResult<PromptDelegate.PromptResponse> result) {
+        if (request.options == null || request.options.length == 0) {
+             try { result.complete(request.dismiss()); } catch (Exception ignored) {}
+             return;
+        }
+
+        final java.util.concurrent.atomic.AtomicBoolean completed = new java.util.concurrent.atomic.AtomicBoolean(false);
+
+        // 查找保存选项和从不保存选项
+        Autocomplete.LoginSaveOption saveOption = null;
+        Autocomplete.LoginSaveOption neverOption = null;
+        
+        for (Autocomplete.LoginSaveOption opt : request.options) {
+            if (saveOption == null) saveOption = opt;
+            else neverOption = opt;
+        }
+
+        if (saveOption == null || saveOption.value == null) {
+            if (completed.compareAndSet(false, true)) {
+                try { result.complete(request.dismiss()); } catch (Exception ignored) {}
+            }
+            return;
+        }
+
+        LoginEntry login = saveOption.value;
+        final Autocomplete.LoginSaveOption finalSaveOption = saveOption;
+        final Autocomplete.LoginSaveOption finalNeverOption = neverOption;
+
+        // 检查是更新还是保存，以及密码是否真正变化
+        boolean isUpdate = false;
+        boolean isPasswordChanged = true;
+        List<PasswordItem> matches = PasswordStorage.getPasswordsForUrl(getApplicationContext(), login.origin);
+        for (PasswordItem item : matches) {
+            // 健壮的用户名匹配逻辑
+            boolean nameMatches = (item.username == null || item.username.isEmpty()) ? 
+                                (login.username == null || login.username.isEmpty()) : 
+                                item.username.equals(login.username);
+            
+            if (nameMatches) {
+                isUpdate = true;
+                if (item.password != null && item.password.equals(login.password)) {
+                    isPasswordChanged = false;
+                }
+                break;
+            }
+        }
+
+        // 如果是更新且密码未变化，直接静默确认，避免多余弹窗
+        if (isUpdate && !isPasswordChanged) {
+            if (completed.compareAndSet(false, true)) {
+                try { result.complete(request.confirm(finalSaveOption)); } catch (Exception ignored) {}
+            }
+            return;
+        }
+
+        String msg = getString(isUpdate ? R.string.msg_update_password : R.string.msg_save_password, login.username != null ? login.username : "");
+        int titleRes = isUpdate ? R.string.title_update_password : R.string.title_save_password;
+        int actionRes = isUpdate ? R.string.action_update : R.string.action_save;
+        final boolean finalIsUpdate = isUpdate;
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+            .setTitle(titleRes)
+            .setMessage(msg)
+            .setCancelable(false)
+            .setPositiveButton(actionRes, (dialog, which) -> {
+                if (completed.compareAndSet(false, true)) {
+                    try {
+                        PasswordStorage.savePassword(getApplicationContext(), 
+                            new PasswordItem(login.origin, login.username, login.password));
+                        Toast.makeText(getApplicationContext(), finalIsUpdate ? R.string.msg_password_updated : R.string.msg_password_saved, Toast.LENGTH_SHORT).show();
+                        result.complete(request.confirm(finalSaveOption));
+                    } catch (Exception e) {
+                        try { result.complete(request.dismiss()); } catch (Exception ignored) {}
+                    }
+                }
+            })
+            .setNegativeButton(isUpdate ? android.R.string.cancel : R.string.action_never, (dialog, which) -> {
+                if (completed.compareAndSet(false, true)) {
+                    try {
+                        result.complete(finalIsUpdate ? request.dismiss() : (finalNeverOption != null ? request.confirm(finalNeverOption) : request.dismiss()));
+                    } catch (Exception ignored) {}
+                }
+            })
+            .setOnDismissListener(d -> {
+                if (completed.compareAndSet(false, true)) {
+                    try {
+                        result.complete(request.dismiss());
+                    } catch (Exception ignored) {}
+                }
+            })
+            .show();
     }
 }

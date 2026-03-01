@@ -257,4 +257,7 @@
     <string name="func_desktop_mode">Modalità desktop</string>
     <string name="func_add_bookmark">Aggiungi ai segnalibri</string>
     <string name="func_theme">Modalità giorno/notte</string>
+    <string name="action_update">Aggiorna</string>
+    <string name="msg_update_password">Vuoi aggiornare la password per %1$s?</string>
+    <string name="title_update_password">Aggiornare la password?</string>
 </resources>

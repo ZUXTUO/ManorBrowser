@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">Chế độ máy tính</string>
     <string name="func_add_bookmark">Thêm vào dấu trang</string>
     <string name="func_theme">Chế độ ngày/đêm</string>
+    <string name="action_update">Cập nhật</string>
+    <string name="msg_update_password">Bạn có muốn cập nhật mật khẩu cho %1$s không?</string>
+    <string name="title_update_password">Cập nhật mật khẩu?</string>
 </resources>

@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">Tryb komputerowy</string>
     <string name="func_add_bookmark">Dodaj do zakładek</string>
     <string name="func_theme">Tryb dzień/noc</string>
+    <string name="action_update">Aktualizuj</string>
+    <string name="msg_update_password">Czy chcesz zaktualizować hasło dla %1$s?</string>
+    <string name="title_update_password">Aktualizować hasło?</string>
 </resources>
