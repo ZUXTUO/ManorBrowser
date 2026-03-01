@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">Mode desktop</string>
     <string name="func_add_bookmark">Tambah ke bookmark</string>
     <string name="func_theme">Mode siang/malam</string>
+    <string name="action_update">Perbarui</string>
+    <string name="msg_update_password">Apakah Anda ingin memperbarui kata sandi untuk %1$s?</string>
+    <string name="title_update_password">Perbarui Kata Sandi?</string>
 </resources>

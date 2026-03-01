@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">ПК-режим</string>
     <string name="func_add_bookmark">Добавить в закладки</string>
     <string name="func_theme">Дневной/ночной режим</string>
+    <string name="action_update">Обновить</string>
+    <string name="msg_update_password">Обновить пароль для %1$s?</string>
+    <string name="title_update_password">Обновить пароль?</string>
 </resources>
