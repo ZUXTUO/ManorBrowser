@@ -257,4 +257,7 @@
     <string name="func_desktop_mode">Modo escritorio</string>
     <string name="func_add_bookmark">Añadir a marcadores</string>
     <string name="func_theme">Modo día/noche</string>
+    <string name="action_update">Actualizar</string>
+    <string name="msg_update_password">¿Desea actualizar la contraseña para %1$s?</string>
+    <string name="title_update_password">¿Actualizar contraseña?</string>
 </resources>

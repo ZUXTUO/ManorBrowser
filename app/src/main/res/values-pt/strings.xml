@@ -257,4 +257,7 @@
     <string name="func_desktop_mode">Modo desktop</string>
     <string name="func_add_bookmark">Adicionar aos favoritos</string>
     <string name="func_theme">Modo dia/noite</string>
+    <string name="action_update">Atualizar</string>
+    <string name="msg_update_password">Deseja atualizar a senha de %1$s?</string>
+    <string name="title_update_password">Atualizar senha?</string>
 </resources>

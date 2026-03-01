@@ -266,4 +266,7 @@
     <string name="func_desktop_mode">डेस्कटॉप मोड</string>
     <string name="func_add_bookmark">बुकमार्क करें</string>
     <string name="func_theme">दिन/रात मोड</string>
+    <string name="action_update">अपडेट करें</string>
+    <string name="msg_update_password">क्या आप %1$s के लिए पासवर्ड अपडेट करना चाहते हैं?</string>
+    <string name="title_update_password">पासवर्ड अपडेट करें?</string>
 </resources>
