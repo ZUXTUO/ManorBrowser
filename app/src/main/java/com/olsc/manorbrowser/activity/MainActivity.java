@@ -9,13 +9,13 @@
 package com.olsc.manorbrowser.activity;
 
 import com.olsc.manorbrowser.R;
+import com.olsc.manorbrowser.data.HistoryStorage;
 import com.olsc.manorbrowser.view.DynamicBackgroundView;
 import com.olsc.manorbrowser.adapter.TabSwitcherAdapter;
 import com.olsc.manorbrowser.adapter.TabSwipeCallback;
 import com.olsc.manorbrowser.Config;
 import com.olsc.manorbrowser.data.TabInfo;
 import com.olsc.manorbrowser.data.TabStorage;
-import com.olsc.manorbrowser.data.HistoryStorage;
 import com.olsc.manorbrowser.utils.SearchHelper;
 
 import android.annotation.SuppressLint;
@@ -46,6 +46,7 @@ import android.os.Looper;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONObject;
 import org.mozilla.geckoview.GeckoResult;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
@@ -75,6 +76,8 @@ import org.mozilla.geckoview.GeckoSession.PromptDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.olsc.manorbrowser.utils.BrowserCommandServer;
 
 public class MainActivity extends AppCompatActivity {
     // --- UI 基础控件 ---
@@ -118,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
     private GeckoSession.PermissionDelegate.Callback mGeckoPermissionCallback;
     private ActivityResultLauncher<String[]> mGeckoPermissionLauncher;
     private final java.util.Set<String> mPromptedAutofillUrls = new java.util.HashSet<>();
+    
+    // --- 远程控制 ---
+    private BrowserCommandServer commandServer;
+    /** JS 标题桥调用: 待处理的回调和原始标题 */
+    private volatile BrowserCommandServer.EvalCallback pendingJsCallback = null;
+    private volatile String pendingJsOriginalTitle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,11 +315,15 @@ public class MainActivity extends AppCompatActivity {
         }
         navigationView = findViewById(R.id.nav_view);
         if (sRuntime == null) {
-            sRuntime = GeckoRuntime.create(getApplicationContext());
-            sRuntime.getSettings().setLoginAutofillEnabled(true);
+            // 首次创建 Runtime
+            GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()
+                .loginAutofillEnabled(true);
+            
+            sRuntime = GeckoRuntime.create(getApplicationContext(), builder.build());
             sRuntime.setAutocompleteStorageDelegate(mAutocompleteStorageDelegate);
-            // 设置扩展安装的代理回调
             sRuntime.getWebExtensionController().setPromptDelegate(new com.olsc.manorbrowser.utils.ExtensionPromptDelegate(this));
+        } else {
+            // Runtime 已存在
         }
 
         // 2. 初始化 RecyclerView 标签列表
@@ -338,6 +351,9 @@ public class MainActivity extends AppCompatActivity {
         setupListeners();
         setupSwipeRefresh();
         requestInitialPermissions();
+        
+        // 初始化内置 HTTP 命令服务器
+        initAiRemoteAssistant();
     }
     
     @Override
@@ -484,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
         session.setContentDelegate(new GeckoSession.ContentDelegate() {
             @Override
             public void onTitleChange(@NonNull GeckoSession session, String title) {
+                // 原有的标题变更逻辑，不再用于 JS 桥接
                 updateTabInfo(session, null, title);
                 if (title != null && !title.isEmpty() && !title.equals(Config.URL_BLANK)) {
                    TabInfo tabInfo = null;
@@ -676,6 +693,15 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_reader_mode_failed, Toast.LENGTH_SHORT).show());
                     } else {
                         runOnUiThread(() -> openReaderActivity(title, content));
+                    }
+                    return GeckoResult.fromValue(prompt.dismiss());
+                } else if (message != null && message.startsWith("__JSRESULT__:")) {
+                    // JS 桥接调用拦截
+                    String resultData = message.substring("__JSRESULT__:".length());
+                    BrowserCommandServer.EvalCallback cb = pendingJsCallback;
+                    pendingJsCallback = null;
+                    if (cb != null) {
+                        cb.onResult(resultData);
                     }
                     return GeckoResult.fromValue(prompt.dismiss());
                 }
@@ -1066,6 +1092,9 @@ public class MainActivity extends AppCompatActivity {
                 tab.session = null;
             }
         }
+        if (commandServer != null) {
+            commandServer = null;
+        }
         super.onDestroy();
     }
     private void setupTabSwitcher() {
@@ -1301,10 +1330,8 @@ public class MainActivity extends AppCompatActivity {
         // 下拉恢复顶栏和底栏
         if (swipeRefresh != null) {
             swipeRefresh.setOnChildScrollUpCallback((parent, child) -> {
-                // 如果在全屏模式且顶栏影藏，检测下拉
-                // 注意：这里返回 false 表示可以触发下拉刷新，我们借此逻辑恢复顶栏
-                if (isFullScreenMode && topBar.getVisibility() == View.GONE) {
-                    // 我们可以在这里恢复顶栏
+                if (isFullScreenMode) {
+                    topBar.getVisibility();
                 }
                 return child != null && child.canScrollVertically(-1);
             });
@@ -2111,9 +2138,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setBarsVisible(boolean visible) {
+    public void setBarsVisible(boolean visible) {
         if (topBar == null || bottomBar == null) return;
         
+        // 如果 AI 遮罩正在显示，强制隐藏导航栏和搜索栏，防止在 AI 执行操作（如导航）时被强行显示出来
+        View aiOverlay = findViewById(R.id.ai_overlay_include);
+        if (aiOverlay != null && aiOverlay.getVisibility() == View.VISIBLE && visible) {
+            visible = false;
+        }
+
         // 如果状态没变，且不是正在强制刷新，则跳过以减少不必要的动画同步
         if (topBar.getVisibility() == (visible ? View.VISIBLE : View.GONE) &&
             bottomBar.getVisibility() == (visible ? View.VISIBLE : View.GONE) &&
@@ -2128,6 +2161,10 @@ public class MainActivity extends AppCompatActivity {
         topBar.setVisibility(visible ? View.VISIBLE : View.GONE);
         bottomBar.setVisibility(visible ? View.VISIBLE : View.GONE);
         
+        // 手动请求应用 Insets，确保内容容器的 Padding 能够根据顶栏可见性及时更新，
+        // 从而消除“网页与顶栏之间莫名多出一块空间”的问题。
+        androidx.core.view.ViewCompat.requestApplyInsets(root);
+
         if (fullscreenMenuContainer != null) {
             fullscreenMenuContainer.setVisibility(!visible && isFullScreenMode ? View.VISIBLE : View.GONE);
         }
@@ -2368,184 +2405,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     
-    private boolean isExternalAppLink(String uri) {
-        String[] externalSchemes = {
-            "mailto:",
-            "tel:",
-            "sms:",
-            "market:",
-            "play.google.com",
-            "maps:",
-            "geo:",
-            "youtube:",
-            "twitter:",
-            "facebook:",
-            "instagram:",
-            "whatsapp:",
-            "tg:",
-            "snapchat:",
-            "pinterest:",
-            "linkedin:",
-            "skype:",
-            "slack:",
-            "discord:",
-            "spotify:",
-            "paypal:",
-            "fb-messenger:",
-            "viber:",
-            "telegram:",
-            "signal:",
-            "teams:",
-            "zoomus:",
-            "tiktok:",
-            "twitch:",
-            "etsy:",
-            "ebay:",
-            "amazon:",
-            "netflix:",
-            "primevideo:",
-            "hulu:",
-            "disneyplus:",
-            "apple-music:",
-            "itunes:",
-            "calshow:",
-            "caladd:",
-            "itms-apps:",
-            "itms-books:",
-            "itms-itunes:",
-            "itms-podcasts:",
-            "itms-music:",
-            "google.streetview:",
-            "comgooglemaps:",
-            "comgooglecalendar:",
-            "gmm:",
-            "fb:",
-            "line:",
-            "kakaotalk:",
-            "kakaoplus:",
-            "navermap:",
-            "nmap:",
-            "daummap:",
-            "viki:",
-            "watcha:",
-            "wavve:",
-            "tving:",
-            "genie:",
-            "bugs:",
-            "melon:",
-            "flo:",
-            "yes24:",
-            "aladdin:",
-            "kyobo:",
-            "ridibooks:",
-            "bookcube:",
-            "mangabox:",
-            "cartoon365:",
-            "watchmart:",
-            "auction:",
-            "gmarket:",
-            "11st:",
-            "wemakeprice:",
-            "coupang:",
-            "tmon:",
-            "hottracksonline:",
-            "yes24movie:",
-            "lottecinema:",
-            "megabox:",
-            "cgv:",
-            "watcha-party:",
-            "netmarble:",
-            "com.nhnent.wannaplay:",
-            "com.gamevil.nary:",
-            // 中国区应用
-            "bilibili:",
-            "zhihu:",
-            "csdn:",
-            "weixin:",
-            "wechat:",
-            "alipays:",
-            "alipay:",
-            "taobao:",
-            "tbopen:",
-            "openapp.jdmobile:",
-            "jd:",
-            "snssdk1128:",
-            "douyin:",
-            "mqq:",
-            "mqqapi:",
-            "tim:",
-            "sinaweibo:",
-            "weibo:",
-            "imeituan:",
-            "meituan:",
-            "dianping:",
-            "orpheus:",
-            "neteasemusic:",
-            "fleamarket:",
-            "xianyu:",
-            "youku:",
-            "iqiyi:",
-            "tudou:",
-            "sohuvideo:",
-            "baiduyun:",
-            "baidunetdisk:",
-            "wangpan:",
-            "kwai:",
-            "gifshow:",
-            "pinduoduo:",
-            "pddopen:",
-            "xiaohongshu:",
-            "xhsdiscover:",
-            "qqmusic:",
-            "kugou:",
-            "kuwo:",
-            "baidumap:",
-            "bdapp:",
-            "iosamap:",
-            "androidamap:",
-            "autonavi:"
-        };
-        
-        for (String scheme : externalSchemes) {
-            if (uri.toLowerCase().startsWith(scheme)) {
-                return true;
-            }
-        }
 
-        if (uri.contains("//play.google.com/store/apps/details?id=") ||
-            uri.contains("//play.google.com/store/search?q=") ||
-            uri.contains("//apps.apple.com/") ||
-            uri.contains("//itunes.apple.com/")) {
-            return true;
-        }
-
-        return false;
-    }
-    
-    private void handleExternalAppRedirect(String uri) {
-        runOnUiThread(() -> {
-            new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.title_external_app_redirect)
-                .setMessage(getString(R.string.msg_external_app_redirect, uri))
-                .setPositiveButton(R.string.action_allow, (dialog, which) -> {
-                    try {
-                        android.content.Intent intent = android.content.Intent.parseUri(uri, android.content.Intent.URI_INTENT_SCHEME);
-                        
-                        android.content.pm.PackageManager pm = getPackageManager();
-                        if (intent.resolveActivity(pm) != null) {
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(this, R.string.error_no_app_found, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (java.net.URISyntaxException e) {
-                        Toast.makeText(this, R.string.error_invalid_uri, Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                })
-                .setNegativeButton(R.string.action_deny, null)
-                .show();
-        });
-    }
     private void showTabEditDialog(int position) {
         if (position < 0 || position >= tabs.size()) return;
         
@@ -2992,4 +2852,154 @@ public class MainActivity extends AppCompatActivity {
             })
             .show();
     }
+
+    /**
+     * 初始化 AI 远程助手
+     * 采用反向连接模式：手机主动连接 PC 服务端，无需手机 IP。
+     */
+    private void initAiRemoteAssistant() {
+        // 初始化命令处理器（不启动内部 HTTP Server，只作为逻辑封装）
+        commandServer = new BrowserCommandServer(new BrowserCommandServer.CommandHandler() {
+            @Override
+            public void navigate(String url) {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) session.loadUri(url);
+                });
+            }
+
+            @Override
+            public void goBack() {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) session.goBack();
+                });
+            }
+
+            @Override
+            public void goForward() {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) session.goForward();
+                });
+            }
+
+            @Override
+            public void reload() {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) session.reload();
+                });
+            }
+
+            @Override
+            public void evalJs(String js, BrowserCommandServer.EvalCallback callback) {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session == null) { callback.onResult("null"); return; }
+
+                    pendingJsCallback = callback;
+
+                    // 通过 alert() 传回 JS 结果（解决 document.title 的长度限制问题）
+                    String encodedJs = js.replace("\\", "\\\\").replace("'", "\\'").replace("\n", " ");
+                    String bridge = "(function(){try{var __r=" + encodedJs + ";alert('__JSRESULT__:' + JSON.stringify(__r));}catch(__e){alert('__JSRESULT__:' + JSON.stringify('error:'+__e.message));}})()";
+                    session.loadUri("javascript:" + bridge);
+                });
+            }
+
+            @Override
+            public java.util.List<com.olsc.manorbrowser.data.HistoryStorage.HistoryItem> getHistory(String timeFilter) {
+                java.util.List<com.olsc.manorbrowser.data.HistoryStorage.HistoryItem> all = com.olsc.manorbrowser.data.HistoryStorage.loadHistory(MainActivity.this);
+                if (timeFilter == null || timeFilter.isEmpty()) return all;
+                java.util.List<com.olsc.manorbrowser.data.HistoryStorage.HistoryItem> filtered = new java.util.ArrayList<>();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                for (com.olsc.manorbrowser.data.HistoryStorage.HistoryItem item : all) {
+                    if (sdf.format(new java.util.Date(item.timestamp)).contains(timeFilter)) filtered.add(item);
+                }
+                return filtered;
+            }
+
+            @Override
+            public String getCurrentUrl() {
+                if (currentTabIndex >= 0 && currentTabIndex < tabs.size()) return tabs.get(currentTabIndex).url;
+                return "";
+            }
+
+            @Override
+            public String getCurrentTitle() {
+                if (currentTabIndex >= 0 && currentTabIndex < tabs.size()) return tabs.get(currentTabIndex).title;
+                return "";
+            }
+
+            @Override
+            public java.util.List<com.olsc.manorbrowser.data.DownloadInfo> getDownloads() {
+                return com.olsc.manorbrowser.data.DownloadStorage.getAllDownloads(MainActivity.this);
+            }
+
+            @Override
+            public String getStatus() {
+                try {
+                    JSONObject s = new JSONObject();
+                    s.put("url", getCurrentUrl());
+                    s.put("title", getCurrentTitle());
+                    s.put("tabCount", tabs.size());
+                    s.put("currentTabIndex", currentTabIndex);
+                    return s.toString();
+                } catch (Exception e) { return "{}"; }
+            }
+
+            @Override
+            public java.util.List<com.olsc.manorbrowser.data.TabInfo> getTabs() {
+                return new java.util.ArrayList<>(tabs);
+            }
+
+            @Override
+            public void switchTab(int index) {
+                runOnUiThread(() -> switchToTab(index));
+            }
+
+            @Override
+            public void closeTab(int index) {
+                runOnUiThread(() -> MainActivity.this.closeTab(index));
+            }
+
+            @Override
+            public void createTab(String url) {
+                runOnUiThread(() -> createNewTab(url));
+            }
+        });
+
+        // 注册到 Application 并启动轮询
+        if (getApplication() instanceof com.olsc.manorbrowser.ManorBrowserApp) {
+            com.olsc.manorbrowser.ManorBrowserApp app = (com.olsc.manorbrowser.ManorBrowserApp) getApplication();
+            app.initAiCommandClient(commandServer.getHandler());
+            
+            // 启动定时器更新覆盖层可见性
+            final View overlay = findViewById(R.id.ai_overlay_include);
+            if (overlay != null) {
+                final com.olsc.manorbrowser.utils.AiCommandClient client = app.getAiCommandClient();
+                final com.olsc.manorbrowser.utils.AiOverlayManager overlayManager = new com.olsc.manorbrowser.utils.AiOverlayManager(this, overlay, client, commandServer.getHandler());
+                
+                final android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean isRunning = client != null && client.isRunning();
+                        if (overlay.getVisibility() == View.VISIBLE != isRunning) {
+                            if (isRunning) {
+                                overlayManager.show();
+                            } else {
+                                overlayManager.hide();
+                            }
+                        }
+                        if (isRunning) {
+                            overlayManager.updateStatus();
+                        }
+                        h.postDelayed(this, 1000);
+                    }
+                });
+            }
+        }
+    }
+
 }

@@ -1,5 +1,8 @@
 /**
- * 设置界面，允许用户配置浏览器环境和个人偏好。
+ * 设置页面
+ *
+ * 提供各类浏览器偏好设置，包括：搜索引擎、语言、主题、背景特效、
+ * 隐私管理（密码/Cookie）、智能托管（AI 远程控制）等。
  */
 package com.olsc.manorbrowser.activity;
 import com.olsc.manorbrowser.R;
@@ -22,12 +25,12 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         android.content.SharedPreferences prefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
-            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
-        
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(isDarkMode ?
+                androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        
-        
+
+
         WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
             controller.setAppearanceLightStatusBars(!isDarkMode);
@@ -35,20 +38,20 @@ public class SettingsActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        
+
         pickImageLauncher = registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
                         saveCustomImage(uri);
                     }
                 });
-        
+
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        
+
         View mainView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -77,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
-        
+
         View containerDefaultBrowser = findViewById(R.id.container_default_browser);
         if (containerDefaultBrowser != null) {
             containerDefaultBrowser.setOnClickListener(v -> requestDefaultBrowserRole());
@@ -91,7 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (switchDesktopMode != null) {
             boolean isDesktopMode = defaultPrefs.getBoolean(Config.PREF_KEY_DESKTOP_MODE, false);
             switchDesktopMode.setChecked(isDesktopMode);
-            
+
             switchDesktopMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 defaultPrefs.edit().putBoolean(Config.PREF_KEY_DESKTOP_MODE, isChecked).apply();
             });
@@ -102,11 +105,12 @@ public class SettingsActivity extends AppCompatActivity {
         if (switchSystemDownloader != null) {
             boolean useSystemDownloader = defaultPrefs.getBoolean(Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, false);
             switchSystemDownloader.setChecked(useSystemDownloader);
-            
+
             switchSystemDownloader.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 defaultPrefs.edit().putBoolean(Config.PREF_KEY_USE_SYSTEM_DOWNLOADER, isChecked).apply();
             });
         }
+
 
         // 主页按钮自定义
         View containerCustomHomeButton = findViewById(R.id.container_custom_home_button);
@@ -122,7 +126,7 @@ public class SettingsActivity extends AppCompatActivity {
             SharedPreferences themePrefs = getSharedPreferences(Config.PREF_NAME_THEME, MODE_PRIVATE);
             boolean isDark = themePrefs.getBoolean(Config.PREF_KEY_DARK_MODE, false);
             switchDarkMode.setChecked(isDark);
-            
+
             containerTheme.setOnClickListener(v -> {
                 boolean nextMode = !switchDarkMode.isChecked();
                 switchDarkMode.setChecked(nextMode);
@@ -145,6 +149,112 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new android.content.Intent(this, CookieManagerActivity.class));
             });
         }
+
+        // 智能托管 (AI 远程控制)
+        androidx.appcompat.widget.SwitchCompat swAiRemote = findViewById(R.id.sw_ai_remote);
+        View containerAiServer = findViewById(R.id.container_ai_server_url);
+        android.widget.TextView tvAiStatus = findViewById(R.id.tv_ai_agent_status);
+        android.widget.TextView tvAiServerUrl = findViewById(R.id.tv_current_ai_server_url);
+
+        com.olsc.manorbrowser.utils.AiCommandClient aiClient = getAiCommandClient();
+        if (aiClient != null) {
+            String savedUrl = aiClient.getServerUrl();
+            if (savedUrl != null && !savedUrl.isEmpty()) {
+                tvAiServerUrl.setText(savedUrl);
+            }
+
+            // 启动定时器更新状态文字
+            android.os.Handler statusHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+            Runnable statusRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (tvAiStatus != null && aiClient != null) {
+                        if (!aiClient.isRunning()) {
+                            tvAiStatus.setText(R.string.msg_ai_not_started);
+                            tvAiStatus.setTextColor(android.graphics.Color.GRAY);
+                        } else if (aiClient.isLastPollSuccessful()) {
+                            tvAiStatus.setText(R.string.msg_ai_connected);
+                            tvAiStatus.setTextColor(android.graphics.Color.parseColor("#4CAF50"));
+                        } else {
+                            tvAiStatus.setText(R.string.msg_ai_connecting);
+                            tvAiStatus.setTextColor(android.graphics.Color.parseColor("#FF5252"));
+                        }
+                    }
+                    statusHandler.postDelayed(this, 1000);
+                }
+            };
+            statusHandler.post(statusRunnable);
+
+            if (containerAiServer != null) {
+                containerAiServer.setOnClickListener(v -> showAiServerDialog(aiClient, tvAiServerUrl));
+            }
+
+            if (swAiRemote != null) {
+                swAiRemote.setChecked(aiClient.isRunning());
+                swAiRemote.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        String url = aiClient.getServerUrl();
+                        if (url == null || url.isEmpty()) {
+                            // 尚未配置服务端地址，拒绝开启并引导配置
+                            buttonView.setChecked(false);
+                            android.widget.Toast.makeText(this, R.string.msg_ai_config_server_first, android.widget.Toast.LENGTH_SHORT).show();
+                            showAiServerDialog(aiClient, tvAiServerUrl);
+                            return;
+                        }
+                        // 异步检测服务器连通性，避免在主线程阻塞
+                        buttonView.setEnabled(false);
+                        new Thread(() -> {
+                            boolean reachable = false;
+                            try {
+                                java.net.HttpURLConnection conn = (java.net.HttpURLConnection)
+                                    new java.net.URL(url + "/api/status").openConnection();
+                                conn.setRequestMethod("HEAD");
+                                conn.setConnectTimeout(4000);
+                                conn.setReadTimeout(4000);
+                                reachable = (conn.getResponseCode() == 200);
+                                conn.disconnect();
+                            } catch (Exception ignored) {}
+                            final boolean canConnect = reachable;
+                            runOnUiThread(() -> {
+                                buttonView.setEnabled(true);
+                                if (canConnect) {
+                                    // 服务器可达，启动智能托管
+                                    aiClient.start();
+                                    getSharedPreferences(Config.PREFERENCE_NAME, android.content.Context.MODE_PRIVATE)
+                                        .edit().putBoolean(Config.PREF_KEY_AI_REMOTE_ENABLED, true).apply();
+                                    android.widget.Toast.makeText(this, R.string.msg_ai_started, android.widget.Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    // 服务器不可达，回拨开关并警告
+                                    buttonView.setChecked(false);
+                                    android.widget.Toast.makeText(this, R.string.msg_ai_server_unreachable, android.widget.Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }).start();
+                    } else {
+                        // 用户主动关闭
+                        aiClient.stop();
+                        getSharedPreferences(Config.PREFERENCE_NAME, android.content.Context.MODE_PRIVATE)
+                            .edit().putBoolean(Config.PREF_KEY_AI_REMOTE_ENABLED, false).apply();
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 从 Application 获取全局 AiCommandClient 实例
+     * （由 MainActivity 在启动时注入到 ManorBrowserApp 中）
+     */
+    private com.olsc.manorbrowser.utils.AiCommandClient getAiCommandClient() {
+        try {
+            if (getApplication() instanceof com.olsc.manorbrowser.ManorBrowserApp) {
+                return ((com.olsc.manorbrowser.ManorBrowserApp) getApplication()).getAiCommandClient();
+            }
+        } catch (Exception e) {
+            android.util.Log.w("SettingsActivity", "获取 AiCommandClient 失败: " + e.getMessage());
+        }
+        return null;
     }
 
     private void toggleTheme(SharedPreferences themePrefs, boolean isDarkMode) {
@@ -475,6 +585,35 @@ public class SettingsActivity extends AppCompatActivity {
         tvFunc.setText(display);
     }
     
+    private void showAiServerDialog(com.olsc.manorbrowser.utils.AiCommandClient aiClient, android.widget.TextView tvDisplay) {
+        android.widget.EditText etInput = new android.widget.EditText(this);
+        etInput.setHint(R.string.hint_ai_server_address);
+        String current = aiClient.getServerUrl();
+        if (current != null) etInput.setText(current);
+        etInput.setSingleLine(true);
+        
+        int padding = (int) (24 * getResources().getDisplayMetrics().density);
+        android.widget.FrameLayout container = new android.widget.FrameLayout(this);
+        container.setPadding(padding, padding / 2, padding, 0);
+        container.addView(etInput);
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.label_ai_server_address)
+                .setView(container)
+                .setPositiveButton(R.string.action_save, (dialog, which) -> {
+                    String url = etInput.getText().toString().trim();
+                    if (!url.isEmpty()) {
+                        if (!url.startsWith("http") && !url.contains("://")) {
+                            url = "http://" + url;
+                        }
+                        aiClient.setServerUrl(url);
+                        tvDisplay.setText(url);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
     private void saveCustomImage(android.net.Uri uri) {
         java.io.File destFile = new java.io.File(getFilesDir(), "custom_bg.jpg");
         boolean success = com.olsc.manorbrowser.utils.FileUtil.copyUriToFile(this, uri, destFile);
