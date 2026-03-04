@@ -187,7 +187,7 @@
     <string name="label_author">Penulis</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Lisensi</string>
-    <string name="license_name">GPL 3.0</string>
+    <string name="license_name">Apache-2.0</string>
     <string name="app_introduction">Browser modern berbasis mesin Firefox.</string>
     <string name="label_source_code">Kode Sumber</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>

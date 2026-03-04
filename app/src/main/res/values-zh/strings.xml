@@ -182,7 +182,7 @@
     <string name="label_author">作者</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">许可证</string>
-    <string name="license_name">GPL 3.0</string>
+    <string name="license_name">Apache-2.0</string>
     <string name="app_introduction">一款基于火狐内核的开源现代化浏览器。</string>
     <string name="label_source_code">开源链接</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>

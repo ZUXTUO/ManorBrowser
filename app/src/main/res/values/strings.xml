@@ -189,7 +189,7 @@ URL: %1$s</string>
     <string name="label_author">Author</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">License</string>
-    <string name="license_name">GPL 3.0</string>
+    <string name="license_name">Apache-2.0</string>
     <string name="app_introduction">A modern browser based on the Firefox engine.</string>
     <string name="label_source_code">Source Code</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>

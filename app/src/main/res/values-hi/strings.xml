@@ -187,7 +187,7 @@
     <string name="label_author">लेखक</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">लाइसेंस</string>
-    <string name="license_name">GPL 3.0</string>
+    <string name="license_name">Apache-2.0</string>
     <string name="app_introduction">फ़ायरफ़ॉक्स इंजन पर आधारित एक आधुनिक ब्राउज़र।</string>
     <string name="label_source_code">सोर्स कोड</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>

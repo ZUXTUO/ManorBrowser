@@ -184,7 +184,7 @@
     <string name="label_author">Autor</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Lizenz</string>
-    <string name="license_name">GPL 3.0</string>
+    <string name="license_name">Apache-2.0</string>
     <string name="app_introduction">Ein moderner Browser basierend auf der Firefox-Engine.</string>
     <string name="label_source_code">Quellcode</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
