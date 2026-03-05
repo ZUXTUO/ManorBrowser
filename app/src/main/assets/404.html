@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出错了，但这不是你的错</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        /* 舒缓的流动背景效果 */
+        body {
+            background: linear-gradient(135deg, #e0f2f7 0%, #f0f9ff 50%, #e0f2f7 100%);
+            background-size: 400% 400%;
+            animation: flowAnimation 15s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a7d8c;
+        }
+
+        @keyframes flowAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 容器布局 */
+        .content {
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+            animation: fadeIn 2s ease-out;
+        }
+
+        /* 动态浮动圆圈 - 增加清新感 */
+        .orb {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 1;
+            animation: float 20s infinite alternate;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(50px, 100px) scale(1.1);
+            }
+        }
+
+        /* 文字样式 */
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.7;
+        }
+
+        /* 按钮样式 */
+        .back-home {
+            text-decoration: none;
+            color: #78a1b5;
+            border: 1px solid rgba(120, 161, 181, 0.3);
+            padding: 12px 30px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: #78a1b5;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 适配手机端 */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            .orb-1 {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="content">
+        <div
+            style="font-size: 8rem; font-weight: bold; margin-bottom: -10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); color: #78a1b5;">
+            404</div>
+        <h1>遇到了些问题，但这不是你的错</h1>
+        <p>或许这个页面正在云端漫步，先请稍微休息一下。</p>
+        <div>
+            <a href="javascript:history.back()" class="back-home">返回上一页</a>
+            <a href="404_game.html" class="back-home" style="margin-left: 15px; background: #78a1b5; color: white;"
+                target="_blank">打发时间玩个小游戏</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,2426 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>抢滩登陆</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Share+Tech+Mono&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #07111f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Share Tech Mono', monospace;
+      color: #c8d8e8;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    :root {
+      --ui-bg: rgba(13, 24, 38, 0.9);
+      --ui-accent: #e8c84a;
+      --ui-border: #1a3040;
+    }
+
+    #hdr {
+      position: absolute;
+      top: env(safe-area-inset-top, 10px);
+      left: 10px;
+      z-index: 10;
+      background: var(--ui-bg);
+      backdrop-filter: blur(8px);
+      padding: 6px 10px;
+      border: 1px solid var(--ui-border);
+      border-radius: 6px;
+      pointer-events: none;
+      margin: 0;
+    }
+
+    #wrap {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* 顶部统一 HUD 面板 */
+    #top-hud {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 54px;
+      background: linear-gradient(to bottom, var(--ui-bg), rgba(10, 20, 30, 0.7));
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--ui-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 env(safe-area-inset-right, 15px) 0 env(safe-area-inset-left, 15px);
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .hud-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .hud-title h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1em;
+      margin: 0;
+      color: var(--ui-accent);
+      text-shadow: 0 0 10px var(--ui-glow);
+    }
+
+    .hud-timer {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: bold;
+      color: #ff5050;
+    }
+
+    .hud-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 0.85em;
+    }
+
+    .hud-stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .hud-stat-item label {
+      font-size: 0.7em;
+      color: #708090;
+      text-transform: uppercase;
+    }
+
+    .hud-stat-item span {
+      color: var(--ui-accent);
+      font-weight: bold;
+    }
+
+    /* 底部统一控制面板 */
+    #bottom-hud {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding-bottom: env(safe-area-inset-bottom, 10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-left: 15px;
+      padding-right: 15px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    #control-cluster {
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+      background: var(--ui-bg);
+      backdrop-filter: blur(12px);
+      padding: 10px;
+      border-radius: 12px 12px 0 0;
+      border: 1px solid var(--ui-border);
+      border-bottom: none;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .action-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mbtn {
+      width: 60px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(232, 200, 74, 0.4);
+      color: var(--ui-accent);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mbtn:active {
+      background: var(--ui-accent);
+      color: #000;
+      transform: scale(0.95);
+    }
+
+    .mbtn i {
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    #mode-toggle {
+      width: 50px;
+      height: 50px;
+      background: rgba(40, 60, 80, 0.4);
+      border: 2px solid var(--ui-accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ui-accent);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    #mode-toggle.active {
+      background: var(--ui-accent);
+      color: #000;
+      box-shadow: 0 0 15px var(--ui-glow);
+    }
+
+    #info-panel {
+      pointer-events: none;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      padding: 8px 12px;
+      border-radius: 8px 8px 0 0;
+      font-size: 0.7em;
+      color: #90a0b0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: none;
+    }
+
+    #info-panel b {
+      color: #fff;
+      margin-right: 4px;
+    }
+
+    /* 模态窗口/结束画面 */
+    .endscr {
+      display: none;
+      position: absolute;
+      inset: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      text-align: center;
+      padding: 20px;
+      background: rgba(5, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--ui-border);
+    }
+
+    .endscr.on {
+      display: flex;
+    }
+
+    #ov {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+      text-align: center;
+      padding: 30px;
+    }
+
+    #ov.on {
+      display: flex;
+    }
+
+    #ovtext {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1em;
+      color: #c8d8b8;
+      line-height: 2.3;
+      max-width: 500px;
+      animation: fi 1s ease;
+    }
+
+    #ovbig {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.2em;
+      color: #ff3333;
+      font-weight: 900;
+      letter-spacing: .2em;
+      text-shadow: 0 0 30px #ff3333;
+      margin-top: 20px;
+      display: none;
+      animation: pu 0.8s infinite alternate;
+    }
+
+    #ovbtn {
+      margin-top: 30px;
+      padding: 12px 35px;
+      background: var(--ui-accent);
+      color: #000;
+      border: none;
+      font-family: var(--font-main);
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 4px;
+      display: none;
+      font-weight: bold;
+      box-shadow: 0 0 20px var(--ui-glow);
+    }
+
+    @keyframes fi {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes pu {
+      from {
+        text-shadow: 0 0 15px #ff3333
+      }
+
+      to {
+        text-shadow: 0 0 40px #ff8888, 0 0 60px #ff3333
+      }
+    }
+
+    #winscr h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.8em;
+      color: #40ff70;
+      text-shadow: 0 0 30px #40ff70;
+    }
+
+    #winscr p {
+      color: #80c090;
+      margin-top: 10px;
+      font-size: .85em;
+    }
+
+    #defscr h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.8em;
+      color: #ff4040;
+    }
+
+    #defscr p {
+      color: #c07070;
+      margin-top: 10px;
+      font-size: .85em;
+    }
+
+    .rbtn {
+      margin-top: 18px;
+      padding: 9px 26px;
+      border: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .95em;
+      cursor: pointer;
+      border-radius: 2px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .hud-title h1 {
+        font-size: 0.9em;
+      }
+
+      .hud-stats {
+        gap: 8px;
+      }
+
+      #info-panel {
+        display: none;
+      }
+    }
+
+    /* VR 按钮样式 */
+    #vr-btn {
+      position: absolute;
+      top: 10px;
+      right: 170px;
+      z-index: 1000;
+      padding: 10px 20px;
+      background: #e8c84a;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
+    }
+
+    #vr-mode-select {
+      position: absolute;
+      top: 55px;
+      right: 170px;
+      z-index: 1000;
+      display: none;
+      color: #fff;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #e8c84a;
+    }
+
+    #vr-mode-select input {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    #vr-btn:hover {
+      background: #f0d87a;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="wrap">
+    <button id="vr-btn">启动战术沙盘 (XR)</button>
+    <div id="vr-mode-select">
+      <label><input type="checkbox" id="vr-passthrough-chk" checked> 启用 AR 透视模式 [更佳体验]</label>
+      <div style="font-size: 10px; opacity: 0.7; margin-top: 2px;">关闭以进入 VR 性能模式 [省电/高帧率]</div>
+    </div>
+    <canvas id="c"></canvas>
+
+    <!-- 顶部统一 HUD -->
+    <header id="top-hud">
+      <div class="hud-section">
+        <div class="hud-title">
+          <h1>⚔ 抢滩登陆</h1>
+        </div>
+        <div id="phase-tag" style="font-size: 0.7em; color: #50c090;">战斗准备</div>
+      </div>
+
+      <div class="hud-timer" id="timer">1:30</div>
+
+      <div class="hud-section hud-stats">
+        <div class="hud-stat-item"><label>我军</label><span id="ac">0</span></div>
+        <div class="hud-stat-item"><label>敌军</label><span id="ec">0</span></div>
+        <div class="hud-stat-item"><label>长官</label><span id="bhp">300/300</span></div>
+      </div>
+    </header>
+
+    <div id="ov">
+      <div id="ovtext"></div>
+      <div id="ovbig">【最后攻势】</div>
+      <button id="ovbtn" onclick="startLastStand()">✈ 发动空袭！</button>
+    </div>
+    <div id="winscr" class="endscr">
+      <h2>🎉 胜利！</h2>
+      <p>敌军长官被击毙，岛屿防线瓦解！</p>
+      <button class="rbtn" style="background:#40ff70;color:#001" onclick="initGame()">再战一局</button>
+    </div>
+    <div id="defscr" class="endscr">
+      <h2>💀 失败</h2>
+      <p id="defmsg">最后攻势失败，士兵全部阵亡...</p>
+      <button class="rbtn" style="background:#ff4040;color:#fff" onclick="initGame()">重整旗鼓</button>
+    </div>
+
+    <!-- 底部统一面板 -->
+    <footer id="bottom-hud">
+      <div id="info-panel">
+        <b>图例</b> 我方🪖 敌方💂 长官🎖 船🚢 壕⬛ 火🔥
+      </div>
+
+      <div id="control-cluster">
+        <div id="mode-toggle" onclick="toggleMode()" title="切换操作模式">✥</div>
+        <div class="action-group">
+          <div class="mbtn" onclick="handleBtn('q')"><i>⛏</i>挖壕</div>
+          <div class="mbtn" onclick="handleBtn('w')"><i>⚔</i>进攻</div>
+          <div class="mbtn" onclick="handleBtn('e')"><i>⌧</i>取消</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    'use strict';
+
+    const cv = document.getElementById('c');
+    const cx = cv.getContext('2d');
+    const COLS = 44, ROWS = 32, TS = 20;
+
+    function resize() {
+      cv.width = window.innerWidth;
+      cv.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const OCEAN = 0, SAND = 1, GRASS = 2, ROCK = 3;
+
+    const rI = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+    const rF = (a, b) => Math.random() * (b - a) + a;
+    const dst = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+    const getLevel = (x, y) => {
+      if (x > INNER.L && x < INNER.R && y > INNER.T && y < INNER.B) return 2;
+      if (x > OUTER.L && x < OUTER.R && y > OUTER.T && y < OUTER.B) return 1;
+      return 0;
+    };
+
+    let MAP = [], TRENCH = new Set(), ALLY_TRENCHES = new Set();
+    let OUTER = {}, INNER = {};
+    let OUTER_ENTRIES = [], INNER_ENTRIES = [];
+    let CMD_POS = { x: 0, y: 0 }; // 指挥官位置
+    let FIRES = [];
+
+    let units = [], bullets = [], ships = [], particles = [];
+    let commander = null, selectedUnits = [];
+    let gameTime = 0, gameState = 'PLAYING'; // 游戏状态：PLAYING, CINEMATIC, LAST_STAND, WIN, DEFEAT
+    let shipTimer = 2;
+    let enemyShipTimer = 5; // 敌船稍晚开始刷新
+    let airplanes = [];
+    let cinematicText = "";
+    let cinematicActive = false;
+    let vrPassthroughEnabled = true;
+    let vrTargetMode = 'immersive-ar';
+    let prevT = 0;
+    let isDragging = false, dragStart = { x: 0, y: 0 }, dragEnd = { x: 0, y: 0 };
+    let enemyAlert = 0; // 敌人警报计时器（用于蜂拥行为）
+    let hardModeApplied = false;
+    let lastStandTimer = 60; // 最后攻势期间击杀指挥官的 60 秒限时
+
+    // 移动端控制状态
+    let controlMode = 'PAN'; // 'PAN' or 'SELECT'
+
+    // 摄像机/视口
+    let cam = { x: 0, y: 0, z: 1 };
+    let isPanning = false, lastPan = { x: 0, y: 0 };
+    let touches = [];
+
+    // ── 地图构建 ──────────────────────────────────────────────
+    function buildMap() {
+      MAP = Array.from({ length: ROWS }, () => new Array(COLS).fill(OCEAN));
+      TRENCH = new Set();
+      ALLY_TRENCHES = new Set();
+      FIRES = [];
+      OUTER_ENTRIES = []; INNER_ENTRIES = [];
+
+      // 岛屿矩形（顶部边缘随机锯齿化）
+      const IW = rI(26, 30), IH = rI(16, 20);
+      const IL = Math.floor((COLS - IW) / 2) + rI(-1, 1), IR = IL + IW;
+
+      // 垂直居中设置：
+      const totalVerPadding = ROWS - IH;
+      const ITop = Math.floor(totalVerPadding / 2);
+      const IBot = ITop + IH;
+      const BEACH_TOP = IBot - 3; // 底部 4 行为沙滩
+
+      // 填充岛屿地块
+      for (let y = ITop; y <= IBot; y++) {
+        let lEdge = IL + (y <= ITop + 2 ? rI(0, 2) : 0);
+        let rEdge = IR - (y <= ITop + 2 ? rI(0, 2) : 0);
+        for (let x = lEdge; x <= rEdge; x++) {
+          if (y >= BEACH_TOP) MAP[y][x] = SAND;
+          else {
+            let edgeDist = Math.min(x - IL, IR - x, y - ITop);
+            if (edgeDist <= 1 && Math.random() < .55) MAP[y][x] = ROCK;
+            else if (Math.random() < .09) MAP[y][x] = ROCK;
+            else MAP[y][x] = GRASS;
+          }
+        }
+      }
+      // 岩石群
+      for (let i = 0; i < 8; i++) {
+        let rx = rI(IL + 2, IR - 2), ry = rI(ITop + 2, BEACH_TOP - 2);
+        if (MAP[ry]?.[rx] === GRASS) {
+          for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++)
+            if (Math.random() < .35 && MAP[ry + dy]?.[rx + dx] === GRASS) MAP[ry + dy][rx + dx] = ROCK;
+        }
+      }
+
+      // ── 外层战壕环 ─────────────────────────────
+      const oL = IL + 3, oR = IR - 3;
+      const oT = ITop + 3, oB = BEACH_TOP - 1;
+      for (let x = oL; x <= oR; x++) {
+        markTrench(x, oT); markTrench(x, oB);
+      }
+      for (let y = oT; y <= oB; y++) {
+        markTrench(oL, y); markTrench(oR, y);
+      }
+      // 两个入口（顶部和底部）
+      const oe1 = { x: rI(oL + 3, oR - 3), y: oT, side: 'top' };
+      const oe2 = { x: rI(oL + 3, oR - 3), y: oB, side: 'bottom' };
+      OUTER_ENTRIES = [oe1, oe2];
+      for (let e of OUTER_ENTRIES) {
+        TRENCH.delete(e.x + ',' + e.y);
+      }
+      OUTER = { L: oL, R: oR, T: oT, B: oB };
+
+      // ── 内层战壕环 ─────────────────────────────
+      const iL = oL + 4, iR = oR - 4;
+      const iT = oT + 3, iB = oB - 3;
+      if (iR > iL + 2 && iB > iT + 2) {
+        for (let x = iL; x <= iR; x++) {
+          markTrench(x, iT); markTrench(x, iB);
+        }
+        for (let y = iT; y <= iB; y++) {
+          markTrench(iL, y); markTrench(iR, y);
+        }
+        const ie1 = { x: rI(iL + 2, iR - 2), y: iT, side: 'top' };
+        const ie2 = { x: rI(iL + 2, iR - 2), y: iB, side: 'bottom' };
+        INNER_ENTRIES = [ie1, ie2];
+        for (let e of INNER_ENTRIES) {
+          TRENCH.delete(e.x + ',' + e.y);
+        }
+        INNER = { L: iL, R: iR, T: iT, B: iB };
+      } else {
+        INNER = { L: oL + 2, R: oR - 2, T: oT + 2, B: oB - 2 };
+      }
+
+      CMD_POS = { x: Math.floor((INNER.L + INNER.R) / 2), y: Math.floor((INNER.T + INNER.B) / 2) };
+
+      // 存储岛屿边界用于船只生成
+      MAP._IL = IL; MAP._IR = IR; MAP._BEACH_TOP = BEACH_TOP; MAP._ITOP = ITop;
+    }
+
+    function markTrench(x, y, isAlly = false) {
+      if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return;
+      if (MAP[y][x] !== OCEAN) {
+        MAP[y][x] = GRASS;
+        TRENCH.add(x + ',' + y);
+        if (isAlly) ALLY_TRENCHES.add(x + ',' + y);
+      }
+    }
+
+    function isTrench(x, y) { return TRENCH.has(x + ',' + y); }
+
+    function tileAt(x, y) {
+      if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return OCEAN;
+      return MAP[y][x];
+    }
+
+    // 单位是否可以行走？
+    function passable(x, y, team) {
+      if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
+      let t = MAP[y][x];
+      if (t === OCEAN) return false; // 海水不可通行
+
+      let tKey = x + ',' + y;
+      if (TRENCH.has(tKey)) {
+        // 盟军只能穿过自己的战壕
+        if (team === 'ally' && ALLY_TRENCHES.has(tKey)) return true;
+        return false; // 否则战壕就是实心墙
+      }
+      return true; // 草地、沙滩和岩石可以通行
+    }
+
+    // ── 单位类 ────────────────────────────────────────────────
+    let _uid = 0;
+    class Unit {
+      constructor(tx, ty, team, role) {
+        this.id = _uid++;
+        this.tx = tx; this.ty = ty;
+        this.team = team; this.role = role; // 'ally'/'enemy', 'soldier'/'guard'/'commander' (盟军/敌军, 士兵/守卫/指挥官)
+
+        // 根据角色和队伍定义的属性
+        if (team === 'ally') {
+          this.hp = 100;
+          this.atk = 10;
+          this.fireCooldown = rF(.6, .9);
+        } else {
+          // 按要求增强敌人属性
+          if (role === 'commander') {
+            this.hp = 450; this.atk = 22; this.fireCooldown = rF(.3, .45);
+          } else if (role === 'guard') {
+            this.hp = 220; this.atk = 17; this.fireCooldown = rF(.35, .55) * 1.15; // 提高速度
+          } else {
+            this.hp = 140; this.atk = 15; this.fireCooldown = rF(.35, .55) * 1.15; // 提高速度
+          }
+        }
+
+        this.maxHp = this.hp;
+        this.range = (role === 'commander' ? 5 : 3.5) * TS;
+        this.fireTimer = rF(0, .8);
+        this.dead = false;
+        this.flash = 0;
+        // 移动设置
+        this.moveCooldown = team === 'ally' ? 0.38 : 0.45; // 敌人移动稍慢但更强韧
+        this.moveTimer = 0;
+        // 挖壕设置
+        this.digging = false; this.digTimer = 0; this.covered = false;
+        // 压制设置
+        this.suppressed = 0;
+        // 人工智能 (AI)
+        this.patrolPts = []; this.patrolIdx = 0; this.patrolWait = 0;
+        this.bounds = null;
+        this.mobile = team === 'enemy' ? Math.random() < 0.7 : true; // 约 70% 的敌人会扑向盟军
+        this.post = { x: tx, y: ty }; // 守卫固定点
+        this.forceGoal = null;
+        this.manualTarget = null;
+        this.stance = 'default'; // 'default', 'trench', 'attack'
+        // 表情符号
+        this.emoji = role === 'commander' ? '🎖' : team === 'ally' ? '🪖' : '💂';
+      }
+      alive() { return this.hp > 0 && !this.dead; }
+      px() { return this.tx * TS + TS / 2; }
+      py() { return this.ty * TS + TS / 2; }
+    }
+
+    // ── 单位生成 ─────────────────────────────────────────────
+    function spawnEnemies() {
+      units = []; commander = null;
+
+      function addSoldier(x, y, ring) {
+        if (!passable(x, y, 'enemy') || unitAt(x, y)) return;
+        let u = new Unit(x, y, 'enemy', 'soldier');
+        assignPatrol(u, ring); units.push(u);
+      }
+      function addGuard(x, y) {
+        if (!passable(x, y, 'enemy') || unitAt(x, y)) return;
+        let u = new Unit(x, y, 'enemy', 'guard');
+        u.patrolPts = [{ x, y }, { x: x + rI(-1, 1), y: y + rI(-1, 1) }].filter(p => passable(p.x, p.y, 'enemy'));
+        if (!u.patrolPts.length) u.patrolPts = [{ x, y }];
+        units.push(u);
+      }
+
+      // ── 1. 填充外部回型区域 (外层和内层战壕之间) ──
+      // 当前任务：在外部区域聚集更多敌人！
+      // 外部环位于 OUTER 和 INNER 边界之间
+      for (let y = OUTER.T + 1; y < OUTER.B; y++) {
+        for (let x = OUTER.L + 1; x < OUTER.R; x++) {
+          // 如果在地块位于外层和内层战壕的间隙
+          let isInsideInner = x > INNER.L - 1 && x < INNER.R + 1 && y > INNER.T - 1 && y < INNER.B + 1;
+          if (!isInsideInner && passable(x, y)) {
+            if (Math.random() < 0.12) addSoldier(x, y, OUTER); // 外部密度较高
+          }
+        }
+      }
+
+      // ── 2. 出入口守卫 ──
+      for (let e of OUTER_ENTRIES) {
+        let gy = e.side === 'top' ? e.y + 2 : e.y - 2;
+        for (let dx = -1; dx <= 1; dx++) {
+          if (Math.random() < 0.6) addGuard(e.x + dx, gy);
+        }
+      }
+      for (let e of INNER_ENTRIES) {
+        let gy = e.side === 'top' ? e.y + 1 : e.y - 1;
+        for (let dx = -1; dx <= 1; dx++) if (dx !== 0) addGuard(e.x + dx, gy);
+      }
+
+      // ── 3. 内部区域 (按要求密度最低) ──
+      for (let y = INNER.T + 1; y < INNER.B; y++) {
+        for (let x = INNER.L + 1; x < INNER.R; x++) {
+          if (passable(x, y) && dst(x, y, CMD_POS.x, CMD_POS.y) > 2) {
+            if (Math.random() < 0.06) addSoldier(x, y, INNER); // 内部区域密度较低
+          }
+        }
+      }
+
+      // 指挥官
+      let cmd = new Unit(CMD_POS.x, CMD_POS.y, 'enemy', 'commander');
+      units.push(cmd); commander = cmd;
+    }
+
+    function assignPatrol(u, ring) {
+      u.bounds = ring;
+      let pts = [];
+      for (let i = 0; i < 5; i++) {
+        let px = rI(ring.L + 1, ring.R - 1), py = rI(ring.T + 1, ring.B - 1);
+        if (passable(px, py, u.team)) pts.push({ x: px, y: py });
+      }
+      if (!pts.length) pts = [{ x: u.tx, y: u.ty }];
+      u.patrolPts = pts; u.patrolIdx = 0; u.patrolWait = rF(1, 3);
+    }
+
+    // 识别盟军最密集的热点区域
+    function getAlliedHotspot() {
+      let allies = units.filter(u => u.team === 'ally' && u.alive());
+      if (allies.length === 0) return null;
+
+      let bestA = allies[0], maxNear = -1;
+      for (let a of allies) {
+        let count = allies.filter(o => dst(a.px(), a.py(), o.px(), o.py()) < 6 * TS).length;
+        if (count > maxNear) { maxNear = count; bestA = a; }
+      }
+
+      let cluster = allies.filter(o => dst(bestA.px(), bestA.py(), o.px(), o.py()) < 6 * TS);
+      let sx = cluster.reduce((sum, u) => sum + u.tx, 0);
+      let sy = cluster.reduce((sum, u) => sum + u.ty, 0);
+      return { x: Math.round(sx / cluster.length), y: Math.round(sy / cluster.length) };
+    }
+
+    function unitAt(tx, ty) { return units.some(u => u.tx === tx && u.ty === ty && u.alive()); }
+
+    // ── 移动逻辑 ──────────────────────────────────────────────────
+    // 向 (gx,gy) 贪婪移动一步
+    function stepToward(u, gx, gy) {
+      if (u.tx === gx && u.ty === gy) return false;
+      let dx = gx - u.tx, dy = gy - u.ty;
+      let dirs;
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        dirs = [{ x: u.tx + (dx > 0 ? 1 : -1), y: u.ty },
+        { x: u.tx, y: u.ty + (dy > 0 ? 1 : (dy < 0 ? -1 : 0)) },
+        { x: u.tx, y: u.ty + (dy >= 0 ? -1 : 1) }];
+      } else {
+        dirs = [{ x: u.tx, y: u.ty + (dy > 0 ? 1 : -1) },
+        { x: u.tx + (dx > 0 ? 1 : (dx < 0 ? -1 : 0)), y: u.ty },
+        { x: u.tx + (dx >= 0 ? -1 : 1), y: u.ty }];
+      }
+      for (let d of dirs) {
+        if (!passable(d.x, d.y, u.team)) continue;
+        let unitsOnTile = units.filter(o => o.tx === d.x && o.ty === d.y && o.alive()).length;
+        let isBombed = [...OUTER_ENTRIES, ...INNER_ENTRIES].some(e => e.x === d.x && e.y === d.y && e.bombed);
+        let maxCap = isBombed ? 3 : 1;
+        if (unitsOnTile < maxCap) {
+          u.tx = d.x; u.ty = d.y;
+          if (u.covered) u.covered = false;
+          u._stuck = 0;
+          return true;
+        }
+      }
+      // 脱卡机制
+      u._stuck = (u._stuck || 0) + 1;
+      if (u._stuck > 5) {
+        let rDir = [{ x: u.tx + 1, y: u.ty }, { x: u.tx - 1, y: u.ty }, { x: u.tx, y: u.ty + 1 }, { x: u.tx, y: u.ty - 1 }];
+        for (let d of rDir.sort(() => Math.random() - .5)) {
+          if (passable(d.x, d.y, u.team)) {
+            let uc = units.filter(o => o.tx === d.x && o.ty === d.y && o.alive()).length;
+            let cap = [...OUTER_ENTRIES, ...INNER_ENTRIES].some(e => e.x === d.x && e.y === d.y && e.bombed) ? 3 : 1;
+            if (uc < cap) {
+              u.tx = d.x; u.ty = d.y; u._stuck = 0; return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    // ── AI 更新 ─────────────────────────────────────────────────
+    function updateUnit(u, dt) {
+      if (!u.alive()) return;
+      u.flash = Math.max(0, u.flash - dt);
+      u.fireTimer = Math.max(0, u.fireTimer - dt);
+      u.suppressed = Math.max(0, u.suppressed - dt);
+      u.moveTimer = Math.max(0, u.moveTimer - dt);
+
+      // 挖壕中：无法执行其他操作
+      if (u.digging) {
+        u.digTimer += dt;
+        if (u.digTimer >= 3) {
+          u.digging = false; u.covered = true;
+          markTrench(u.tx, u.ty, true); // 盟军挖出了真实的战壕！
+        }
+        return;
+      }
+
+      if (u.team === 'ally') aiAlly(u, dt);
+      else aiEnemy(u, dt);
+    }
+
+    function aiAlly(u, dt) {
+      // 寻找敌人
+      let enemies = units.filter(e => e.team === 'enemy' && e.alive());
+
+      // 选择目标：手动 > 距离最近
+      let target = null;
+      if (u.manualTarget?.alive()) target = u.manualTarget;
+      else {
+        let best = null, bd = Infinity;
+        for (let e of enemies) { let d = dst(u.px(), u.py(), e.px(), e.py()); if (d < bd) { bd = d; best = e; } }
+        target = best;
+      }
+
+      // 如果目标在射程内，则开火
+      if (target && u.fireTimer <= 0) {
+        let d = dst(u.px(), u.py(), target.px(), target.py());
+        if (d <= u.range) {
+          u.fireTimer = (gameState === 'LAST_STAND') ? u.fireCooldown / 3 : u.fireCooldown;
+          bullets.push({
+            sx: u.px(), sy: u.py(), // 发射起点
+            x: u.px(), y: u.py(), tx: target.px(), ty: target.py(),
+            vx: 0, vy: 0, team: 'ally', dmg: u.atk, done: false
+          });
+          target.suppressed = Math.max(target.suppressed, 1.0);
+        }
+      }
+
+      // 检查单位是否进入战壕入口或进入外层防线内部
+      const insideOuter = u.tx > OUTER.L && u.tx < OUTER.R && u.ty > OUTER.T && u.ty < OUTER.B;
+      let onEntry = [...OUTER_ENTRIES, ...INNER_ENTRIES].some(e => e.x === u.tx && e.y === u.ty);
+      if (onEntry || insideOuter) enemyAlert = Math.max(enemyAlert, insideOuter ? 8 : 5);
+
+      // 受到压制 -> 挖壕 (智能：仅当身边有盟军掩护或靠近现有战壕时才挖壕)
+      // 同时检查玩家是否切换到 Q 模式（挖壕模式）
+      let digChance = u.suppressed > 0 ? 0.018 : 0;
+      if (u.stance === 'trench') digChance = 0.03;
+      if (u.stance === 'attack') digChance = 0; // 在进攻模式下从不挖壕
+
+      if (digChance > 0 && !u.covered && !u.digging && !isTrench(u.tx, u.ty) && Math.random() < digChance) {
+        // 防止在敌人入口附近挖壕
+        let nearEntry = [...OUTER_ENTRIES, ...INNER_ENTRIES].some(e => dst(u.px(), u.py(), e.x * TS + TS / 2, e.y * TS + TS / 2) < 2 * TS);
+
+        if (!nearEntry) {
+          let nearestEnemy = enemies.reduce((best, e) => {
+            let d = dst(u.px(), u.py(), e.px(), e.py());
+            return d < best.d ? { e, d } : best;
+          }, { e: null, d: Infinity });
+
+          if (nearestEnemy.e) {
+            let nearbyTrenches = units.filter(f => f.alive() && (f.covered || isTrench(f.tx, f.ty)) && dst(u.px(), u.py(), f.px(), f.py()) < 3 * TS);
+            let friends = units.filter(f => f.team === 'ally' && f.alive() && f !== u &&
+              dst(u.px(), u.py(), f.px(), f.py()) < 6 * TS && !f.digging);
+
+            let shielded = friends.some(f => dst(f.px(), f.py(), nearestEnemy.e.px(), nearestEnemy.e.py()) < nearestEnemy.d - 10);
+
+            if (shielded || nearbyTrenches.length > 0 || u.stance === 'trench') {
+              u.digging = true; u.digTimer = 0; return;
+            }
+          }
+        }
+      }
+
+      // 移动：如果不是强制移动，寻找掩体
+      if (u.moveTimer <= 0) {
+        let gx = u.tx, gy = u.ty;
+        if (u.forceGoal) {
+          let goal = smartPath(u, u.forceGoal.x, u.forceGoal.y);
+          gx = goal.x; gy = goal.y;
+          if (u.tx === gx && u.ty === gy) u.forceGoal = null;
+        } else {
+          // 优先级 1：如果被压制且没有掩护，寻找最近的战壕地块
+          if (u.suppressed > 0 && !u.covered) {
+            let bestT = null, btd = 5 * TS;
+            for (let tKey of TRENCH) {
+              let [tx, ty] = tKey.split(',').map(Number);
+              for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+                let nx = tx + dx, ny = ty + dy;
+                if (passable(nx, ny, u.team) && !unitAt(nx, ny)) {
+                  let d = dst(u.px(), u.py(), nx * TS + TS / 2, ny * TS + TS / 2);
+                  if (d < btd) { btd = d; bestT = { x: nx, y: ny }; }
+                }
+              }
+            }
+            if (bestT) { gx = bestT.x; gy = bestT.y; }
+          }
+
+          if (gx === u.tx && gy === u.ty) {
+            if (target) {
+              let d = dst(u.px(), u.py(), target.px(), target.py());
+              if (d > u.range * 0.75) { gx = target.tx; gy = target.ty; }
+            } else {
+              let goal = nearestGoal(u);
+              gx = goal.x; gy = goal.y;
+            }
+          }
+        }
+        if (!(gx === u.tx && gy === u.ty)) {
+          if (stepToward(u, gx, gy)) u.moveTimer = u.moveCooldown;
+        }
+      }
+    }
+
+    function nearestGoal(u) {
+      let { tx, ty } = u;
+
+      // 单位是否在最外层战壕之外？
+      const isOutsideOuter = tx < OUTER.L || tx > OUTER.R || ty < OUTER.T || ty > OUTER.B;
+      if (isOutsideOuter) {
+        // 以前往外部入口为目标
+        let cands = OUTER_ENTRIES.filter(e => passable(e.x, e.y, u.team));
+        if (cands.length) return getNearestTo(CMD_POS.x, CMD_POS.y, cands);
+      }
+
+      // 单位是否在内层和外层战壕之间？
+      const isOutsideInner = tx < INNER.L || tx > INNER.R || ty < INNER.T || ty > INNER.B;
+      if (isOutsideInner) {
+        // 以前往内部入口为目标
+        let cands = INNER_ENTRIES.filter(e => passable(e.x, e.y, u.team));
+        if (cands.length) return getNearestTo(CMD_POS.x, CMD_POS.y, cands);
+      }
+
+      // 否则，以前往指挥官处为目标
+      return CMD_POS;
+    }
+
+    function getNearestTo(tx, ty, cands) {
+      if (!cands || cands.length === 0) return { x: tx, y: ty };
+      return cands.reduce((best, c) => {
+        return dst(tx * TS, ty * TS, c.x * TS, c.y * TS) <
+          dst(tx * TS, ty * TS, best.x * TS, best.y * TS) ? c : best;
+      }, cands[0]);
+    }
+
+    function smartPath(u, gx, gy) {
+      let { tx, ty } = u;
+      let curL = getLevel(tx, ty);
+      let tarL = getLevel(gx, gy);
+
+      // 处理同等级的环形阻挡 (Level 0)
+      if (curL === 0 && tarL === 0) {
+        let midY = (OUTER.T + OUTER.B) / 2;
+        if ((ty < midY - 2 && gy > midY + 2) || (ty > midY + 2 && gy < midY - 2)) {
+          tarL = 1; // 经过 Level 1 区域以绕过或穿过
+        }
+      }
+
+      if (curL === tarL) return { x: gx, y: gy };
+
+      // 向内移动
+      if (curL < tarL) {
+        let entries = curL === 0 ? OUTER_ENTRIES : INNER_ENTRIES;
+        let entry = getNearestTo(gx, gy, entries);
+        if (tx === entry.x && ty === entry.y) return { x: gx, y: gy };
+        return entry;
+      }
+
+      // 向外移动
+      if (curL > tarL) {
+        let entries = curL === 2 ? INNER_ENTRIES : OUTER_ENTRIES;
+        let entry = getNearestTo(gx, gy, entries);
+        if (tx === entry.x && ty === entry.y) return { x: gx, y: gy };
+        return entry;
+      }
+
+      return { x: gx, y: gy };
+    }
+
+    function aiEnemy(u, dt) {
+      if (u.suppressed > 0) return; // 已被压制（如炸弹袭击后）
+
+      // 寻找最近的盟军
+      let allies = units.filter(a => a.team === 'ally' && a.alive());
+      if (allies.length === 0) { enemyPatrol(u, dt); return; }
+
+      let nearest = null, nd = Infinity;
+      for (let a of allies) { let d = dst(u.px(), u.py(), a.px(), a.py()); if (d < nd) { nd = d; nearest = a; } }
+
+      // 开火
+      if (nd <= u.range && u.fireTimer <= 0) {
+        u.fireTimer = (gameState === 'LAST_STAND') ? 1.0 : (gameTime > 60 ? u.fireCooldown / 2 : u.fireCooldown);
+        bullets.push({
+          sx: u.px(), sy: u.py(),
+          x: u.px(), y: u.py(), tx: nearest.px(), ty: nearest.py(),
+          vx: 0, vy: 0, team: 'enemy', dmg: gameTime > 60 ? u.atk * 2 : u.atk, done: false
+        });
+        nearest.suppressed = Math.max(nearest.suppressed, 1.2);
+        enemyAlert = Math.max(enemyAlert, 3); // 战斗中维持警报状态
+      }
+
+      if (u.role === 'commander') {
+        // 如果受伤则采取闪避行动
+        if (u.flash > 0 && u.moveTimer <= 0) {
+          let allies = units.filter(a => a.team === 'ally' && a.alive());
+          if (allies.length > 0) {
+            let threat = allies.reduce((best, a) => {
+              let d = dst(u.px(), u.py(), a.px(), a.py());
+              return d < best.d ? { a, d } : best;
+            }, { a: null, d: Infinity }).a;
+
+            // 逃离威胁
+            let dx = u.tx - threat.tx, dy = u.ty - threat.ty;
+            let gx = u.tx + (dx !== 0 ? Math.sign(dx) : (Math.random() < 0.5 ? 1 : -1));
+            let gy = u.ty + (dy !== 0 ? Math.sign(dy) : (Math.random() < 0.5 ? 1 : -1));
+            if (stepToward(u, gx, gy)) u.moveTimer = u.moveCooldown;
+          }
+        }
+        return;
+      }
+
+      // 移动：如果是近战则逼近，否则巡逻或狩猎
+      if (u.moveTimer <= 0) {
+        if (u.forceReturn) {
+          let g = getNearestTo(u.tx, u.ty, OUTER_ENTRIES);
+          let target = smartPath(u, g.x, g.y);
+          if (stepToward(u, target.x, target.y)) u.moveTimer = u.moveCooldown;
+          return;
+        }
+
+        // 如果警报激活，采取蜂拥行为
+        if (enemyAlert > 0 && u.role !== 'commander') {
+          let hotspot = getAlliedHotspot();
+          if (hotspot) {
+            // 添加一些抖动以避免单位重叠
+            let tx = hotspot.x + rI(-2, 2), ty = hotspot.y + rI(-2, 2);
+            let target = smartPath(u, tx, ty);
+            if (stepToward(u, target.x, target.y)) {
+              u.moveTimer = u.moveCooldown;
+              return;
+            }
+          }
+        }
+
+        // 智能守卫行为：保护哨所/入口
+        if (u.role === 'guard') {
+          let distToPost = dst(u.px(), u.py(), u.post.x * TS + TS / 2, u.post.y * TS + TS / 2);
+          if (nd <= u.range * 1.2) {
+            // 仅当离哨所不太远时才追击
+            if (u.mobile || distToPost < 4 * TS) {
+              if (nd > u.range * 0.6) {
+                let target = smartPath(u, nearest.tx, nearest.ty);
+                stepToward(u, target.x, target.y); u.moveTimer = u.moveCooldown;
+              }
+            } else {
+              // 返回哨所！
+              let target = smartPath(u, u.post.x, u.post.y);
+              stepToward(u, target.x, target.y); u.moveTimer = u.moveCooldown;
+            }
+          } else if (distToPost > 0.5 * TS) {
+            let target = smartPath(u, u.post.x, u.post.y);
+          }
+        } else {
+          // 士兵行为
+          if (nd <= u.range * 1.5) {
+            if (nd > u.range * 0.7) {
+              let target = smartPath(u, nearest.tx, nearest.ty);
+              stepToward(u, target.x, target.ty); u.moveTimer = u.moveCooldown;
+            }
+          } else {
+            // 不在交战范围内？检查应该狩猎还是巡逻
+            if (u.mobile) {
+              let hotspot = getAlliedHotspot();
+              if (hotspot) {
+                let tx = hotspot.x + rI(-3, 3), ty = hotspot.y + rI(-3, 3);
+                let target = smartPath(u, tx, ty);
+                if (stepToward(u, target.x, target.y)) u.moveTimer = u.moveCooldown;
+              } else {
+                enemyPatrol(u, dt);
+              }
+            } else {
+              enemyPatrol(u, dt);
+            }
+          }
+        }
+      }
+    }
+
+    function enemyPatrol(u, dt) {
+      if (!u.patrolPts.length) return;
+      if (u.moveTimer > 0) return;
+      let g = u.patrolPts[u.patrolIdx];
+      if (u.tx === g.x && u.ty === g.y) {
+        u.patrolWait -= dt;
+        if (u.patrolWait <= 0) {
+          u.patrolIdx = (u.patrolIdx + 1) % u.patrolPts.length;
+          u.patrolWait = rF(1, 3);
+        }
+      } else {
+        let target = smartPath(u, g.x, g.y);
+        if (stepToward(u, target.x, target.y)) u.moveTimer = u.moveCooldown;
+      }
+    }
+
+    // ── 子弹逻辑 ───────────────────────────────────────────────────
+    function initBullet(b) {
+      let d = dst(b.x, b.y, b.tx, b.ty) || 1;
+      let spd = 7;
+      b.vx = (b.tx - b.x) / d * spd; b.vy = (b.ty - b.y) / d * spd;
+    }
+    function stepBullet(b) {
+      b.x += b.vx; b.y += b.vy;
+      if (dst(b.x, b.y, b.tx, b.ty) < 5) b.done = true;
+    }
+    function applyBulletDmg(b) {
+      let opp = b.team === 'ally' ? 'enemy' : 'ally';
+      for (let u of units) {
+        if (u.team === opp && u.alive() && dst(b.x, b.y, u.px(), u.py()) < TS * 0.85) {
+          let damageFac = 1.0;
+          // 检查子弹轨迹是否与任何战壕或岩石相交
+          // 在起点到目标点的路径上采样 5 个点进行检测
+          for (let i = 1; i <= 4; i++) {
+            let px = b.sx + (b.tx - b.sx) * (i / 5);
+            let py = b.sy + (b.ty - b.sy) * (i / 5);
+            let tx = Math.floor(px / TS), ty = Math.floor(py / TS);
+
+            if (isTrench(tx, ty)) {
+              damageFac *= 0.5; // 战壕减少 50% 伤害
+            }
+            if (tileAt(tx, ty) === ROCK) {
+              damageFac *= 0.7; // 岩石额外减少 30% 伤害
+            }
+          }
+          // 如果单位本身就在掩体中，伤害也会降低
+          if (u.covered) damageFac *= 0.7;
+
+          u.hp -= b.dmg * damageFac;
+          u.flash = 0.18;
+          puff(u.px(), u.py(), '#cc2020', 5, 2.5);
+          if (u.hp <= 0) { u.hp = 0; u.dead = true; puff(u.px(), u.py(), '#ff8020', 12, 4); }
+        }
+      }
+    }
+
+    // ── 粒子效果 ─────────────────────────────────────────────────
+    function puff(x, y, col, n = 8, spd = 3) {
+      for (let i = 0; i < n; i++) {
+        let a = rF(0, Math.PI * 2);
+        particles.push({
+          x, y, vx: Math.cos(a) * rF(.5, spd), vy: Math.sin(a) * rF(.5, spd),
+          color: col, life: rF(.3, .8)
+        });
+      }
+    }
+
+    // ── 船只逻辑 ─────────────────────────────────────────────────────
+    function spawnShip(team = 'ally') {
+      let IL = MAP._IL, IR = MAP._IR;
+      let tx = rI(IL + 1, IR - 1);
+      let py = (team === 'ally') ? (ROWS + 1) * TS : (-2) * TS;
+      ships.push({ tx, py, team, unloaded: false, done: false, retreating: false });
+    }
+
+    function updateShip(s, dt) {
+      if (s.done) return;
+      let speed = 4 * TS; // 船只移动速度
+      if (!s.retreating) {
+        if (s.team === 'ally') {
+          s.py -= speed * dt;
+          if (s.py <= (ROWS - 1) * TS) {
+            s.py = (ROWS - 1) * TS;
+            if (!s.unloaded) { s.unloaded = true; doUnload(s); }
+            s.retreating = true;
+          }
+        } else {
+          s.py += speed * dt;
+          if (s.py >= (MAP._ITOP - 1) * TS) {
+            s.py = (MAP._ITOP - 1) * TS;
+            if (!s.unloaded) { s.unloaded = true; doUnload(s); }
+            s.retreating = true;
+          }
+        }
+      } else {
+        if (s.team === 'ally') {
+          s.py += speed * 0.8 * dt;
+          if (s.py > (ROWS + 2) * TS) s.done = true;
+        } else {
+          s.py -= speed * 0.8 * dt;
+          if (s.py < (-3) * TS) s.done = true;
+        }
+      }
+    }
+
+    function doUnload(s) {
+      let BEACH_TOP = MAP._BEACH_TOP, IL = MAP._IL, IR = MAP._IR, ITOP = MAP._ITOP;
+      let placed = 0, maxToPlace = (s.team === 'ally' ? 2 : 1); // 敌人的援军规模较小
+      for (let tries = 0; tries < 60 && placed < maxToPlace; tries++) {
+        let tx = s.tx + rI(-2, 2);
+        let ty = (s.team === 'ally') ? rI(BEACH_TOP, ROWS - 2) : rI(ITOP, ITOP + 2);
+        if (tx < IL || tx > IR) continue;
+        if (!passable(tx, ty, s.team) || unitAt(tx, ty)) continue;
+
+        let role = (s.team === 'enemy' && Math.random() < 0.2) ? 'guard' : 'soldier';
+        let u = new Unit(tx, ty, s.team, role);
+        if (s.team === 'enemy' && role === 'soldier') assignPatrol(u, OUTER);
+        units.push(u);
+        placed++;
+      }
+    }
+
+
+    // ── 最后攻势 (剧情/玩法) ────────────────────────────────────────────────
+    function triggerCinematic() {
+      gameState = 'CINEMATIC';
+      cinematicText = "我们无法拿下此区域。\n但你的心中仍有钢铁般的意志，\n绝望中仍存有一丝意志，\n用血液铸就新的长城！";
+      let ov = document.getElementById('ov');
+      ov.classList.add('on');
+      document.getElementById('ovtext').innerHTML =
+        `我们无法拿下此区域。<br><br>` +
+        `但你的心中仍有<span style="color:#e8c84a">钢铁一般的意志</span>，<br>` +
+        `我们绝不允许任何敌人侵犯领土和家园，<br>` +
+        `绝望中仍存有一丝意志，<br><br>` +
+        `<span style="color:#ffcc00">用血液铸就新的长城！</span>`;
+      setTimeout(() => {
+        document.getElementById('ovbig').style.display = 'block';
+        setTimeout(() => { document.getElementById('ovbtn').style.display = 'inline-block'; }, 900);
+      }, 2300);
+    }
+
+    function startLastStand() {
+      document.getElementById('ov').classList.remove('on');
+      document.getElementById('ovbig').style.display = 'none';
+      document.getElementById('ovbtn').style.display = 'none';
+      gameState = 'LAST_STAND';
+      document.getElementById('phase-tag').textContent = '最后攻势！';
+      launchAirplanes();
+    }
+
+    function launchAirplanes() {
+      airplanes = [];
+      let side = 'bottom';
+      let beachEntries = OUTER_ENTRIES.filter(e => e.side === 'bottom');
+      let targetEntry = beachEntries.length > 0 ? beachEntries[rI(0, beachEntries.length - 1)] : { x: Math.floor(COLS / 2), y: OUTER.B };
+
+      airplanes.push({
+        px: -5 * TS,
+        py: targetEntry.y * TS,
+        spd: 165,
+        targetPx: targetEntry.x * TS,
+        bombTx: targetEntry.x,
+        bombTy: targetEntry.y,
+        side,
+        dropped: false, bombTimer: -1, done: false,
+        smoke: []
+      });
+    }
+
+    function updateAirplane(dt) {
+      airplanes.forEach(a => {
+        if (a.done && a.smoke.length === 0) return;
+        a.px += a.spd * dt;
+
+        // 生成烟雾尾迹
+        if (Math.random() < 0.4 && !a.done) {
+          a.smoke.push({ x: a.px - 10, y: a.py, life: 1.2 });
+        }
+        a.smoke.forEach(s => s.life -= dt * 1.3);
+        a.smoke = a.smoke.filter(s => s.life > 0);
+
+        if (!a.dropped && a.px >= a.targetPx - 3 * TS) {
+          a.dropped = true; a.bombTimer = 0.55;
+        }
+        if (a.dropped && a.bombTimer > 0) {
+          a.bombTimer -= dt;
+          if (a.bombTimer <= 0) doBomb(a);
+        }
+        if (a.px > (COLS + 8) * TS) a.done = true;
+      });
+      airplanes = airplanes.filter(a => !a.done || a.smoke.length > 0);
+    }
+
+    function doBomb(a) {
+      let { bombTx: bx, bombTy: by, side } = a;
+      // 炸开 3 个地块，并标记为“损坏的可多人数通过”的出口
+      for (let dx = -1; dx <= 1; dx++) {
+        let nx = bx + dx, ny = by;
+        if (nx < 0 || nx >= COLS) continue;
+        TRENCH.delete(nx + ',' + ny);
+        let ent = [...OUTER_ENTRIES, ...INNER_ENTRIES].find(e => e.x === nx && e.y === ny);
+        if (ent) ent.bombed = true;
+        else OUTER_ENTRIES.push({ x: nx, y: ny, side, bombed: true });
+
+        if (Math.random() < 0.5) FIRES.push({ tx: nx, ty: ny, timer: 10, maxTimer: 10 });
+      }
+      puff(bx * TS + TS / 2, by * TS + TS / 2, '#ff8020', 30, 7);
+      puff(bx * TS + TS / 2, by * TS + TS / 2, '#ffcc00', 20, 4);
+
+      for (let u of units) {
+        let d = dst(u.px(), u.py(), bx * TS, by * TS);
+        if (d < 5 * TS) {
+          u.hp -= 40; u.flash = 0.5;
+          u.suppressed = Math.max(u.suppressed, 6);
+          if (u.hp <= 0) { u.hp = 0; u.dead = true; puff(u.px(), u.py(), '#ff4000', 12, 4); }
+        }
+      }
+    }
+
+    // ── 渲染逻辑 ────────────────────────────────────────────────────
+    function drawMap(t) {
+      // 1. 计算当前屏幕可见的世界边界
+      let vw = cv.width / cam.z, vh = cv.height / cam.z;
+      let minX = Math.floor((cam.x - vw / 2) / TS), maxX = Math.ceil((cam.x + vw / 2) / TS);
+      let minY = Math.floor((cam.y - vh / 2) / TS), maxY = Math.ceil((cam.y + vh / 2) / TS);
+
+      // 深海背景（大范围填充以确保无缝隙）
+      cx.fillStyle = '#0a1828';
+      cx.fillRect(minX * TS, minY * TS, (maxX - minX + 1) * TS, (maxY - minY + 1) * TS);
+
+      for (let y = minY; y <= maxY; y++) {
+        for (let x = minX; x <= maxX; x++) {
+          let onIsland = x >= 0 && y >= 0 && x < COLS && y < ROWS; // 是否在岛屿上
+          let tile = onIsland ? MAP[y][x] : OCEAN;
+          let px = x * TS, py = y * TS;
+          if (tile === OCEAN) {
+            let w = Math.sin(x * .65 + t * 1.4) * .5 + Math.sin(y * .8 + t * .9) * .5;
+            cx.fillStyle = `hsl(212,${52 + w * 9}%,${10 + w * 5}%)`;
+            cx.fillRect(px, py, TS, TS);
+            if ((x + y) % 4 === 0) {
+              cx.fillStyle = `rgba(130,190,255,${.04 + w * .05})`;
+              cx.fillRect(px + 2, py + 2, TS - 4, 3);
+            }
+          } else if (tile === SAND) { // 沙滩
+            cx.fillStyle = '#c0a050'; cx.fillRect(px, py, TS, TS);
+            cx.fillStyle = '#a08030';
+            if ((x * 5 + y * 7) % 6 === 0) cx.fillRect(px + 5, py + 5, 4, 4);
+            if ((x * 3 + y * 13) % 9 === 0) cx.fillRect(px + 13, py + 3, 3, 3);
+          } else if (tile === GRASS) { // 草地
+            cx.fillStyle = '#2c5e1e'; cx.fillRect(px, py, TS, TS);
+            cx.fillStyle = '#1c4010';
+            if ((x * 7 + y * 3) % 5 === 0) cx.fillRect(px + 2, py + 13, 3, 6);
+            if ((x * 11 + y * 5) % 7 === 0) cx.fillRect(px + 13, py + 8, 3, 8);
+            if ((x * 2 + y * 9) % 11 === 0) cx.fillRect(px + 8, py + 3, 2, 7);
+          } else { // 岩石
+            cx.fillStyle = '#585868'; cx.fillRect(px, py, TS, TS);
+            cx.fillStyle = '#383844'; cx.fillRect(px + 2, py + 2, TS - 4, TS - 4);
+            cx.fillStyle = 'rgba(255,255,255,.07)'; cx.fillRect(px + 3, py + 3, TS - 8, 3);
+          }
+
+          // 战壕叠加层
+          if (TRENCH.has(x + ',' + y)) {
+            const isAlly = ALLY_TRENCHES.has(x + ',' + y);
+            // 盟军战壕：钢蓝灰色 | 敌军：大地棕色
+            cx.fillStyle = isAlly ? '#1a2a3a' : '#3c1f08'; cx.fillRect(px, py, TS, TS);
+            cx.fillStyle = isAlly ? '#304a60' : '#562e10'; cx.fillRect(px + 2, py + 2, TS - 4, TS - 4);
+            cx.fillStyle = isAlly ? '#4a6d8a' : '#6a3c18';
+            cx.fillRect(px + 3, py + 4, TS - 6, 3);
+            cx.fillRect(px + 3, py + TS - 7, TS - 6, 3);
+          }
+
+          // 网格线（仅在岛屿上显示）
+          if (onIsland) {
+            cx.strokeStyle = 'rgba(0,0,0,.07)'; cx.lineWidth = .5;
+            cx.strokeRect(px, py, TS, TS);
+          }
+        }
+      }
+
+      // 岸边泡沫效果（仅在岛屿边缘生成）
+      for (let y = -1; y <= ROWS; y++) {
+        for (let x = -1; x <= COLS; x++) {
+          let onIsland = x >= 0 && y >= 0 && x < COLS && y < ROWS;
+          if (onIsland && MAP[y][x] !== OCEAN) continue;
+
+          let near = [[-1, 0], [1, 0], [0, -1], [0, 1]].some(([dx, dy]) => {
+            let nx = x + dx, ny = y + dy;
+            return nx >= 0 && ny >= 0 && nx < COLS && ny < ROWS && MAP[ny][nx] !== OCEAN;
+          });
+          if (near) {
+            let w = Math.sin(x * 1.1 + t * 2.3 + y * .6) * .5 + .5;
+            cx.fillStyle = `rgba(190,230,255,${.07 + w * .1})`; cx.fillRect(x * TS, y * TS, TS, TS);
+          }
+        }
+      }
+
+      // 入口缺口标记
+      for (let e of [...OUTER_ENTRIES, ...INNER_ENTRIES]) {
+        let px2 = e.x * TS, py2 = e.y * TS;
+        cx.fillStyle = e.bombed ? 'rgba(90,35,0,.45)' : 'rgba(50,90,25,.4)';
+        cx.fillRect(px2 + 1, py2 + 1, TS - 2, TS - 2);
+        cx.strokeStyle = e.bombed ? '#ff8040' : '#72b834';
+        cx.lineWidth = 1.5; cx.strokeRect(px2 + 2, py2 + 2, TS - 4, TS - 4);
+      }
+
+      // 火焰
+      for (let f of FIRES) {
+        if (f.timer <= 0) continue;
+        let fl = Math.sin(t * 15 + f.tx * .8) * .35 + .65;
+        cx.fillStyle = `rgba(255,${75 + fl * 55},15,${fl * .78})`; cx.fillRect(f.tx * TS, f.ty * TS, TS, TS);
+        cx.fillStyle = `rgba(255,200,50,${fl * .5})`; cx.fillRect(f.tx * TS + 4, f.ty * TS + 2, TS - 8, TS - 6);
+      }
+    }
+
+    function drawUnit(u) {
+      if (!u.alive()) return;
+
+      // 处理多人同格的视觉偏移
+      let othersOnTile = units.filter(o => o.tx === u.tx && o.ty === u.ty && o.alive());
+      let offX = 0;
+      if (othersOnTile.length > 1) {
+        let idx = othersOnTile.indexOf(u);
+        if (idx === 1) offX = 5;
+        else if (idx === 2) offX = -5;
+      }
+      let px = u.tx * TS + offX, py = u.ty * TS;
+
+      // 掩体指示器
+      if (u.covered) {
+        cx.fillStyle = 'rgba(55,30,8,.55)'; cx.fillRect(px + 1, py + 1, TS - 2, TS - 2);
+      }
+
+      // 选择环
+      if (selectedUnits.includes(u)) {
+        cx.strokeStyle = '#fff'; cx.lineWidth = 2.5; cx.strokeRect(px - .5, py - .5, TS + 1, TS + 1);
+      }
+
+      // 背景
+      let bg;
+      if (u.flash > 0) bg = 'rgba(255,240,80,.75)';
+      else if (u.team === 'ally') bg = '#0c2858';
+      else if (u.role === 'commander') bg = '#38190a';
+      else bg = '#580c0c';
+      cx.fillStyle = bg; cx.fillRect(px + 1, py + 1, TS - 2, TS - 2);
+
+      // 边框
+      cx.strokeStyle = u.team === 'ally' ? '#4488ff' : u.role === 'commander' ? '#ffaa00' : '#dd2020';
+      cx.lineWidth = 1.5; cx.strokeRect(px + 1, py + 1, TS - 2, TS - 2);
+
+      // 表情符号
+      cx.font = `${TS - 3}px serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText(u.emoji, px + TS / 2, py + TS / 2);
+
+      // 血条
+      let r = Math.max(0, u.hp / u.maxHp);
+      cx.fillStyle = '#180000'; cx.fillRect(px + 1, py + TS - 3, TS - 2, 3);
+      cx.fillStyle = r > .5 ? '#28dd58' : r > .25 ? '#e0a020' : '#dd2020';
+      cx.fillRect(px + 1, py + TS - 3, (TS - 2) * r, 3);
+
+      // 进度条
+      if (u.digging) {
+        let p = u.digTimer / 3;
+        cx.fillStyle = 'rgba(0,0,0,.5)'; cx.fillRect(px + 1, py + 1, TS - 2, TS - 2);
+        cx.fillStyle = '#ddc030'; cx.fillRect(px + 2, py + TS - 7, (TS - 4) * p, 3);
+        cx.font = '10px serif'; cx.fillText('⛏', px + TS / 2, py + TS / 2 - 1);
+      }
+    }
+
+    function drawBullets() {
+      for (let b of bullets) {
+        cx.strokeStyle = b.team === 'ally' ? '#88d8ff' : '#ff9060'; cx.lineWidth = 1.8; cx.globalAlpha = .9;
+        cx.beginPath(); cx.moveTo(b.x - b.vx * 3, b.y - b.vy * 3); cx.lineTo(b.x, b.y); cx.stroke();
+        cx.globalAlpha = 1;
+        cx.fillStyle = b.team === 'ally' ? '#c8f0ff' : '#ffcc80';
+        cx.beginPath(); cx.arc(b.x, b.y, 2, 0, Math.PI * 2); cx.fill();
+      }
+    }
+
+    function drawParticles() {
+      for (let p of particles) {
+        cx.globalAlpha = Math.max(0, p.life);
+        cx.fillStyle = p.color;
+        cx.beginPath(); cx.arc(p.x, p.y, 2, 0, Math.PI * 2); cx.fill();
+      }
+      cx.globalAlpha = 1;
+    }
+
+    function drawShips() {
+      cx.font = `${TS + 4}px serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      for (let s of ships) {
+        if (s.done) continue;
+        if (s.team === 'enemy') {
+          cx.fillStyle = 'rgba(255,50,50,0.4)';
+          cx.fillRect(s.tx * TS, s.py, TS, TS);
+        }
+        cx.fillText('🚢', s.tx * TS + TS / 2, s.py + TS / 2);
+      }
+    }
+
+    function drawAirplane() {
+      const time = performance.now() / 1000;
+      airplanes.forEach(a => {
+        if (a.done && a.smoke.length === 0) return;
+
+        // 浓郁的浓烟尾迹
+        a.smoke.forEach(s => {
+          cx.fillStyle = `rgba(180, 180, 180, ${s.life * 0.35})`;
+          cx.beginPath();
+          cx.arc(s.x, s.y, 5 + (1 - s.life) * 12, 0, Math.PI * 2);
+          cx.fill();
+        });
+
+        if (a.done) return;
+
+        // 绘制重型轰炸机 - 侧视精修版
+        cx.save();
+        cx.translate(a.px, a.py);
+
+        // 1. 机身 (金属拉丝质感)
+        cx.fillStyle = '#2c3e50';
+        cx.beginPath(); cx.ellipse(0, 0, 24, 7, 0, 0, Math.PI * 2); cx.fill();
+        cx.strokeStyle = '#1a252f'; cx.lineWidth = 1; cx.stroke();
+
+        // 2. 双侧主机翼
+        cx.fillStyle = '#34495e';
+        cx.beginPath();
+        cx.moveTo(-4, -2); cx.lineTo(-20, -25); cx.lineTo(5, -25); cx.lineTo(12, -2);
+        cx.fill();
+        cx.beginPath();
+        cx.moveTo(-4, 2); cx.lineTo(-20, 25); cx.lineTo(5, 25); cx.lineTo(12, 2);
+        cx.fill();
+
+        // 3. 动态旋转螺旋桨 (增加飞行沉浸感)
+        cx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
+        cx.lineWidth = 2;
+        let rot = time * 45;
+        // 左桨
+        cx.beginPath();
+        cx.moveTo(-3, -15);
+        cx.lineTo(-3 + Math.cos(rot) * 12, -15 + Math.sin(rot) * 12);
+        cx.stroke();
+        // 右桨
+        cx.beginPath();
+        cx.moveTo(-3, 15);
+        cx.lineTo(-3 + Math.cos(rot + Math.PI) * 12, 15 + Math.sin(rot + Math.PI) * 12);
+        cx.stroke();
+
+        // 4. 垂直尾翼
+        cx.fillStyle = '#1a252f';
+        cx.beginPath();
+        cx.moveTo(-18, 0); cx.lineTo(-28, -10); cx.lineTo(-28, 10); cx.closePath();
+        cx.fill();
+
+        // 5. 亮蓝色高光座舱
+        cx.fillStyle = '#00d2ff';
+        cx.beginPath(); cx.ellipse(12, 0, 8, 4, 0, 0, Math.PI * 2); cx.fill();
+        // 座舱偏光
+        cx.fillStyle = 'rgba(255,255,255,0.45)';
+        cx.beginPath(); cx.ellipse(14, -1, 4, 2, 0, 0, Math.PI * 2); cx.fill();
+
+        // 6. 鲜红识别纹
+        cx.fillStyle = '#e74c3c';
+        cx.fillRect(-12, -23, 14, 4);
+        cx.fillRect(-12, 19, 14, 4);
+
+        // 投弹下落预览
+        if (a.dropped && a.bombTimer > 0) {
+          let prog = 1 - a.bombTimer / .55;
+          let bpy = (a.bombTy * TS - a.py) * prog;
+          cx.font = '20px serif'; cx.textAlign = 'center';
+          cx.fillText('💣', a.targetPx - a.px, bpy);
+        }
+
+        cx.restore();
+      });
+    }
+
+    // ── 游戏主循环 ─────────────────────────────────────────────────
+    function updateGame(dt) {
+      if (gameState === 'PLAYING' || gameState === 'LAST_STAND') {
+        if (gameState === 'PLAYING') {
+          gameTime += dt;
+          if (enemyAlert > 0) enemyAlert -= dt;
+        } else if (gameState === 'LAST_STAND') {
+          lastStandTimer -= dt;
+          if (lastStandTimer <= 0) {
+            lastStandTimer = 0;
+            gameState = 'DEFEAT';
+            document.getElementById('defmsg').textContent = "最后攻势超时，未能击毙敌军长官...";
+            document.getElementById('defscr').classList.add('on');
+          }
+        }
+
+        // 敌军数量限制检查
+        let enemiesOutside = units.filter(u => u.team === 'enemy' && u.alive() && u.role !== 'commander' && getLevel(u.tx, u.ty) === 0);
+        if (enemiesOutside.length > 5) {
+          let allies = units.filter(u => u.team === 'ally' && u.alive());
+          enemiesOutside.forEach(u => {
+            let minDist = Infinity;
+            if (allies.length === 0) minDist = 9999;
+            else allies.forEach(a => { let d = dst(u.px(), u.py(), a.px(), a.py()); if (d < minDist) minDist = d; });
+            u._distToAlly = minDist;
+          });
+          enemiesOutside.sort((a, b) => b._distToAlly - a._distToAlly);
+          for (let i = 0; i < enemiesOutside.length; i++) enemiesOutside[i].forceReturn = (i < enemiesOutside.length - 5);
+        } else enemiesOutside.forEach(u => u.forceReturn = false);
+
+        units.forEach(u => { if (u.team === 'enemy' && u.forceReturn && getLevel(u.tx, u.ty) >= 1) u.forceReturn = false; });
+
+        for (let u of units) updateUnit(u, dt);
+        units = units.filter(u => u.alive());
+
+        for (let b of bullets) {
+          if (b.vx === 0 && b.vy === 0) initBullet(b);
+          stepBullet(b);
+          if (b.done) applyBulletDmg(b);
+        }
+        bullets = bullets.filter(b => !b.done);
+
+        for (let p of particles) { p.x += p.vx; p.y += p.vy; p.vy += .08; p.life -= dt; }
+        particles = particles.filter(p => p.life > 0);
+
+        for (let s of ships) updateShip(s, dt);
+        ships = ships.filter(s => !s.done);
+        shipTimer -= dt;
+        if (shipTimer <= 0) { spawnShip('ally'); shipTimer = gameTime < 60 ? 3 : 1.8; }
+
+        enemyShipTimer -= dt;
+        if (enemyShipTimer <= 0) { spawnShip('enemy'); enemyShipTimer = gameTime < 60 ? 6 : 4.5; }
+      }
+
+      for (let f of FIRES) f.timer -= dt;
+      FIRES = FIRES.filter(f => f.timer > 0);
+      updateAirplane(dt);
+
+      if (commander && !commander.alive()) { gameState = 'WIN'; document.getElementById('winscr').classList.add('on'); }
+      if (gameState === 'LAST_STAND') {
+        let aliveAllies = units.filter(u => u.team === 'ally' && u.alive()).length;
+        if (aliveAllies === 0 && ships.length === 0) { gameState = 'DEFEAT'; document.getElementById('defscr').classList.add('on'); }
+      }
+      if (gameState === 'PLAYING' && gameTime >= 90) {
+        let { L, R, T, B } = OUTER;
+        let anyInside = units.some(u => u.team === 'ally' && u.alive() && u.tx > L && u.tx < R && u.ty > T && u.ty < B);
+        if (!anyInside) triggerCinematic();
+        else {
+          gameState = 'LAST_STAND';
+          document.getElementById('phase-tag').textContent = '最后决战！';
+          launchAirplanes(); // 直接进入也触发空袭
+        }
+      }
+      updateHUD();
+    }
+
+    function loop(t) {
+      if (vrActive) return; // VR 接管逻辑
+      let dt = Math.min((t - prevT) / 1000, .05);
+      prevT = t;
+      updateGame(dt);
+      renderInternal(t);
+
+      if (isDragging) {
+        cx.strokeStyle = '#00ff00'; cx.lineWidth = 1;
+        cx.strokeRect(dragStart.x, dragStart.y, dragEnd.x - dragStart.x, dragEnd.y - dragStart.y);
+        cx.fillStyle = 'rgba(0,255,0,0.15)';
+        cx.fillRect(dragStart.x, dragStart.y, dragEnd.x - dragStart.x, dragEnd.y - dragStart.y);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    function renderInternal(t) {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      cx.save();
+      cx.translate(cv.width / 2, cv.height / 2);
+      cx.scale(cam.z, cam.z);
+      cx.translate(-cam.x, -cam.y);
+
+      drawMap(t / 1000);
+      drawShips();
+      for (let u of units) if (u.team === 'enemy') drawUnit(u);
+      for (let u of units) if (u.team === 'ally') drawUnit(u);
+      drawBullets();
+      drawParticles();
+      drawAirplane();
+      cx.restore();
+
+      // 绘制框选框
+      if (isDragging) {
+        cx.strokeStyle = '#00ff00'; cx.lineWidth = 2;
+        cx.strokeRect(dragStart.x, dragStart.y, dragEnd.x - dragStart.x, dragEnd.y - dragStart.y);
+        cx.fillStyle = 'rgba(0,255,0,0.15)';
+        cx.fillRect(dragStart.x, dragStart.y, dragEnd.x - dragStart.x, dragEnd.y - dragStart.y);
+      }
+    }
+
+    function updateHUD() {
+      let rem = Math.max(0, 90 - gameTime);
+      let m = Math.floor(rem / 60), s = Math.floor(rem % 60);
+      let lsRem = Math.ceil(lastStandTimer);
+      document.getElementById('timer').textContent =
+        gameState === 'LAST_STAND' ? lsRem + 's' : m + ':' + (s < 10 ? '0' : '') + s;
+      document.getElementById('timer').style.color = gameState === 'LAST_STAND' ? '#ff3333' : '#ff5050';
+
+      document.getElementById('ac').textContent = units.filter(u => u.team === 'ally' && u.alive()).length;
+      document.getElementById('ec').textContent = units.filter(u => u.team === 'enemy' && u.alive()).length;
+      let bh = commander?.alive() ? Math.ceil(commander.hp) : 0;
+      document.getElementById('bhp').textContent = bh + '/' + 450;
+
+      let phaseTag = document.getElementById('phase-tag');
+      if (gameState === 'PLAYING') {
+        phaseTag.textContent = gameTime < 60 ? '试探阶段' : '敌军狂暴';
+        phaseTag.style.color = gameTime < 60 ? '#50c090' : '#ff8800';
+      } else if (gameState === 'LAST_STAND') {
+        phaseTag.textContent = '决战时刻';
+        phaseTag.style.color = '#ff3333';
+      }
+    }
+
+    // ── 输入交互 ─────────────────────────────────────────────────────
+    function getMouse(e) {
+      let r = cv.getBoundingClientRect();
+      let mx = (e.clientX - r.left) / r.width * cv.width;
+      let my = (e.clientY - r.top) / r.height * cv.height;
+      if (e.type.startsWith('touch')) {
+        mx = (e.touches[0].clientX - r.left) / r.width * cv.width;
+        my = (e.touches[0].clientY - r.top) / r.height * cv.height;
+      }
+      return { x: mx, y: my };
+    }
+
+    function screenToWorld(sx, sy) {
+      return {
+        x: (sx - cv.width / 2) / cam.z + cam.x,
+        y: (sy - cv.height / 2) / cam.z + cam.y
+      };
+    }
+
+    cv.addEventListener('mousedown', e => {
+      if (gameState !== 'PLAYING' && gameState !== 'LAST_STAND') return;
+      let m = getMouse(e);
+      // 在桌面端，左键点击为拖拽选择，Alt/中键点击为平移
+      if (e.button === 0 && !e.altKey && !e.ctrlKey) {
+        isDragging = true;
+        dragStart = m; dragEnd = m;
+      } else {
+        isPanning = true;
+        lastPan = m;
+      }
+    });
+
+    window.addEventListener('mousemove', e => {
+      let m = getMouse(e);
+      if (isDragging) dragEnd = m;
+      if (isPanning) {
+        cam.x -= (m.x - lastPan.x) / cam.z;
+        cam.y -= (m.y - lastPan.y) / cam.z;
+        lastPan = m;
+      }
+    });
+
+    window.addEventListener('mouseup', e => {
+      if (isDragging) {
+        isDragging = false;
+        let m = getMouse(e);
+        let wStart = screenToWorld(dragStart.x, dragStart.y);
+        let wEnd = screenToWorld(m.x, m.y);
+
+        let dx = Math.abs(m.x - dragStart.x), dy = Math.abs(m.y - dragStart.y);
+        if (dx < 5 && dy < 5) { // 点击
+          let tx = Math.floor(wEnd.x / TS), ty = Math.floor(wEnd.y / TS);
+          let ally = units.find(u => u.team === 'ally' && u.alive() && u.tx === tx && u.ty === ty);
+          if (ally) {
+            if (!e.shiftKey) selectedUnits = [ally];
+            else if (!selectedUnits.includes(ally)) selectedUnits.push(ally);
+          } else {
+            let enemy = units.find(u => u.team === 'enemy' && u.alive() && u.tx === tx && u.ty === ty);
+            if (enemy && selectedUnits.length > 0) {
+              selectedUnits.forEach(u => u.manualTarget = enemy);
+            } else if (selectedUnits.length > 0 && passable(tx, ty)) {
+              selectedUnits.forEach(u => { u.forceGoal = { x: tx, y: ty }; u.manualTarget = null; });
+            }
+          }
+        } else { // 框选
+          let x1 = Math.min(wStart.x, wEnd.x), x2 = Math.max(wStart.x, wEnd.x);
+          let y1 = Math.min(wStart.y, wEnd.y), y2 = Math.max(wStart.y, wEnd.y);
+          let found = units.filter(u => u.team === 'ally' && u.alive() && u.px() >= x1 && u.px() <= x2 && u.py() >= y1 && u.py() <= y2);
+          if (!e.shiftKey) selectedUnits = found;
+          else found.forEach(u => { if (!selectedUnits.includes(u)) selectedUnits.push(u); });
+        }
+      }
+      isPanning = false;
+    });
+
+    cv.addEventListener('wheel', e => {
+      e.preventDefault();
+      let delta = e.deltaY > 0 ? 0.9 : 1.1;
+      cam.z = Math.max(0.5, Math.min(2.5, cam.z * delta));
+    }, { passive: false });
+
+    // 触摸支持（针对移动端重新设计）
+    cv.addEventListener('touchstart', e => {
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        let m = getMouse(e);
+        if (controlMode === 'SELECT') {
+          isDragging = true; dragStart = m; dragEnd = m;
+        } else {
+          isPanning = true; lastPan = m;
+        }
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        isPanning = true;
+        let t1 = e.touches[0], t2 = e.touches[1];
+        lastPan = { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
+        lastDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      }
+    }, { passive: false });
+
+    let lastDist = 0;
+    cv.addEventListener('touchmove', e => {
+      e.preventDefault();
+      let m = getMouse(e);
+      if (e.touches.length === 1) {
+        if (isDragging) {
+          dragEnd = m;
+        } else if (isPanning) {
+          cam.x -= (m.x - lastPan.x) / cam.z;
+          cam.y -= (m.y - lastPan.y) / cam.z;
+          lastPan = m;
+        }
+      } else if (e.touches.length === 2) {
+        let t1 = e.touches[0], t2 = e.touches[1];
+        let center = { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
+        let dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+
+        // 缩放
+        if (lastDist > 0) {
+          let ratio = dist / lastDist;
+          cam.z = Math.max(0.5, Math.min(2.5, cam.z * ratio));
+        }
+        lastDist = dist;
+
+        // 双指平移
+        if (lastPan) {
+          let r = cv.getBoundingClientRect();
+          let moveX = (center.x - lastPan.x) / r.width * cv.width;
+          let moveY = (center.y - lastPan.y) / r.height * cv.height;
+          cam.x -= moveX / cam.z;
+          cam.y -= moveY / cam.z;
+        }
+        lastPan = center;
+      }
+    }, { passive: false });
+
+    cv.addEventListener('touchend', e => {
+      if (isDragging) {
+        isDragging = false;
+        let wEnd = screenToWorld(dragEnd.x, dragEnd.y);
+        let wStart = screenToWorld(dragStart.x, dragStart.y);
+        let dx = Math.abs(dragEnd.x - dragStart.x), dy = Math.abs(dragEnd.y - dragStart.y);
+
+        if (dx < 15 && dy < 15) { // 轻触
+          let tx = Math.floor(wEnd.x / TS), ty = Math.floor(wEnd.y / TS);
+          let ally = units.find(u => u.team === 'ally' && u.alive() && u.tx === tx && u.ty === ty);
+          if (ally) {
+            selectedUnits = [ally];
+          } else {
+            let enemy = units.find(u => u.team === 'enemy' && u.alive() && u.tx === tx && u.ty === ty);
+            if (enemy && selectedUnits.length > 0) {
+              selectedUnits.forEach(u => u.manualTarget = enemy);
+            } else if (selectedUnits.length > 0 && passable(tx, ty)) {
+              selectedUnits.forEach(u => { u.forceGoal = { x: tx, y: ty }; u.manualTarget = null; });
+            }
+          }
+        } else { // 框选
+          let x1 = Math.min(wStart.x, wEnd.x), x2 = Math.max(wStart.x, wEnd.x);
+          let y1 = Math.min(wStart.y, wEnd.y), y2 = Math.max(wStart.y, wEnd.y);
+          selectedUnits = units.filter(u => u.team === 'ally' && u.alive() && u.px() >= x1 && u.px() <= x2 && u.py() >= y1 && u.py() <= y2);
+        }
+      }
+      isPanning = false;
+      lastDist = 0;
+      lastPan = null;
+    });
+
+    function toggleMode() {
+      const btn = document.getElementById('mode-toggle');
+
+      if (controlMode === 'PAN') {
+        controlMode = 'SELECT';
+        btn.classList.add('active');
+        btn.textContent = '◩';
+      } else {
+        controlMode = 'PAN';
+        btn.classList.remove('active');
+        btn.textContent = '✥';
+      }
+    }
+
+    function handleBtn(k) {
+      if (k === 'e') selectedUnits = [];
+      if (k === 'q') selectedUnits.forEach(u => u.stance = 'trench');
+      if (k === 'w') selectedUnits.forEach(u => u.stance = 'attack');
+    }
+
+    window.addEventListener('keydown', e => {
+      let k = e.key.toLowerCase();
+      handleBtn(k);
+    });
+
+    cv.addEventListener('contextmenu', e => { e.preventDefault(); selectedUnits = []; });
+
+    // ── HUD 鼠标交互 ─────────────────────────────────────
+    // 防止在点击 UI 时启动拖拽
+    document.getElementById('top-hud').addEventListener('mousedown', e => e.stopPropagation());
+    document.getElementById('bottom-hud').addEventListener('mousedown', e => e.stopPropagation());
+
+    // ── VR / WebXR 模块 ──────────────────────────────────────────────────
+    let vrActive = false;
+    let vrScene, vrCamera, vrRenderer, vrGroup, THREE;
+    let controllers = [];
+    let controllerGrips = [];
+    let hands = [];
+    let vrUnitsMap = new Map();
+    let vrBulletsActive = [];
+    let vrMapPlane; // 改为单一平面
+    let vrHudPlane;
+    let vrHudCanvas, vrHudCtx;
+    let vrSkyBox; // VR 遮罩球 (用于强制关闭透视)
+
+    // 沙盘变换状态
+    let initialDistance = null;
+    let initialScale = null;
+    let initialGroupPos = null;
+    let initialControllerPos = null;
+    let vrPinching = [];
+    let vrRaycaster;
+    let vrIntersections = [];
+
+    async function initVR() {
+      THREE = await import('three');
+      vrRaycaster = new THREE.Raycaster();
+      initialGroupPos = new THREE.Vector3();
+      initialControllerPos = new THREE.Vector3();
+      const { XRControllerModelFactory } = await import('three/addons/webxr/XRControllerModelFactory.js');
+      const { XRHandModelFactory } = await import('three/addons/webxr/XRHandModelFactory.js');
+
+      vrScene = new THREE.Scene();
+      // 不设置背景，以支持透视
+
+      vrCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
+
+      vrRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      vrRenderer.setPixelRatio(window.devicePixelRatio);
+      vrRenderer.setSize(window.innerWidth, window.innerHeight);
+      vrRenderer.xr.enabled = true;
+
+      // 容器组
+      vrGroup = new THREE.Group();
+      // 初始位置设在地面
+      vrGroup.position.set(0, 0.01, -1.0);
+      vrGroup.rotation.x = -Math.PI / 2; // 水平放置在地面
+      vrGroup.scale.set(0.003, 0.003, 0.003); // 初始缩放更适合室内
+      vrScene.add(vrGroup);
+
+      // 地图平面（匹配画布尺寸，防止拉伸和计算便宜）
+      const mapGeo = new THREE.PlaneGeometry(cv.width, cv.height);
+      const mapTex = new THREE.CanvasTexture(cv);
+      const mapMat = new THREE.MeshBasicMaterial({ map: mapTex, transparent: true, side: THREE.DoubleSide });
+      vrMapPlane = new THREE.Mesh(mapGeo, mapMat);
+      vrGroup.add(vrMapPlane);
+      vrMapPlane.position.set(0, 0, 0);
+
+      // 控制器与手
+      const controllerModelFactory = new XRControllerModelFactory();
+      const handModelFactory = new XRHandModelFactory();
+
+      for (let i = 0; i < 2; i++) {
+        const controller = vrRenderer.xr.getController(i);
+        controller.addEventListener('selectstart', () => onTriggerStart(i));
+        controller.addEventListener('selectend', () => onTriggerEnd(i));
+        controller.addEventListener('squeezestart', () => onGripStart(i));
+        controller.addEventListener('squeezeend', () => onGripEnd(i));
+        vrScene.add(controller);
+        controllers.push(controller);
+
+        const grip = vrRenderer.xr.getControllerGrip(i);
+        grip.add(controllerModelFactory.createControllerModel(grip));
+        vrScene.add(grip);
+        controllerGrips.push(grip);
+
+        const hand = vrRenderer.xr.getHand(i);
+        hand.add(handModelFactory.createHandModel(hand, 'mesh'));
+        vrScene.add(hand);
+        hands.push(hand);
+
+        // 射线指示器
+        const lineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -5)]);
+        const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff });
+        const line = new THREE.Line(lineGeo, lineMat);
+        line.name = 'rayline';
+        controller.add(line);
+      }
+
+      // VR HUD
+      vrHudCanvas = document.createElement('canvas');
+      vrHudCanvas.width = 512; vrHudCanvas.height = 256;
+      vrHudCtx = vrHudCanvas.getContext('2d');
+      const hudTex = new THREE.CanvasTexture(vrHudCanvas);
+      const hudMat = new THREE.MeshBasicMaterial({ map: hudTex, transparent: true, side: THREE.DoubleSide });
+      vrHudPlane = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.4), hudMat);
+      vrHudPlane.position.set(0, 1.4, -1.5);
+      vrScene.add(vrHudPlane);
+
+      // 创建遮罩球 (用于强制关闭透视)
+      const skyGeo = new THREE.SphereGeometry(60, 32, 32);
+      const skyMat = new THREE.MeshBasicMaterial({ color: 0x050a10, side: THREE.BackSide, transparent: true, opacity: 1 });
+      vrSkyBox = new THREE.Mesh(skyGeo, skyMat);
+      vrSkyBox.visible = !vrPassthroughEnabled; // 初始状态同步开关
+      vrScene.add(vrSkyBox);
+
+      const vrBtn = document.getElementById('vr-btn');
+      const vrModePanel = document.getElementById('vr-mode-select');
+      const vrPassthroughChk = document.getElementById('vr-passthrough-chk');
+
+      if (navigator.xr) {
+        const [ar, vr] = await Promise.all([
+          navigator.xr.isSessionSupported('immersive-ar'),
+          navigator.xr.isSessionSupported('immersive-vr')
+        ]);
+
+        if (ar || vr) {
+          vrBtn.style.display = 'block';
+          vrModePanel.style.display = 'block';
+
+          vrBtn.onclick = () => {
+            const session = vrRenderer.xr.getSession();
+            if (session) {
+              session.end();
+            } else {
+              vrTargetMode = (ar && vrPassthroughChk.checked) ? 'immersive-ar' : 'immersive-vr';
+              navigator.xr.requestSession(vrTargetMode, {
+                optionalFeatures: ['local-floor', 'hand-tracking']
+              }).then(onSessionStarted);
+            }
+          };
+        }
+      }
+    }
+
+    function onSessionStarted(session) {
+      vrRenderer.xr.setSession(session);
+      vrActive = true;
+      session.addEventListener('end', () => {
+        vrActive = false;
+        vrRenderer.setAnimationLoop(null);
+        // 如果是从 VR/AR 切换回来的，在网页端给个明显的引导
+        const vrBtn = document.getElementById('vr-btn');
+        vrBtn.textContent = (document.getElementById('vr-passthrough-chk').checked) ? '点击重新进入 (AR 透视)' : '点击重新进入 (VR 性能)';
+        vrBtn.style.background = '#ffcc00';
+
+        requestAnimationFrame(ts => { prevT = ts; requestAnimationFrame(loop); });
+      });
+      vrRenderer.setAnimationLoop(vrLoop);
+    }
+
+    let vrDragStart = null, vrDragging = false, vrActiveTriggerIndex = -1;
+    let vrGripPinching = [];
+
+    function updateRay(index) {
+      const controller = controllers[index];
+      const tempMatrix = new THREE.Matrix4();
+      tempMatrix.identity().extractRotation(controller.matrixWorld);
+      vrRaycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
+      vrRaycaster.ray.direction.set(0, 0, -1).applyMatrix4(tempMatrix);
+    }
+
+    function onTriggerStart(index) {
+      if (vrDragging) return;
+      updateRay(index);
+
+      // 1. HUD 交互
+      const hudIntersects = vrRaycaster.intersectObject(vrHudPlane);
+      if (hudIntersects.length > 0) {
+        const uv = hudIntersects[0].uv;
+        const hx = uv.x * 512, hy = (1 - uv.y) * 256;
+
+        if (gameState === 'WIN' || gameState === 'DEFEAT') {
+          if (hy > 160 && hy < 230 && hx > 180 && hx < 330) initGame();
+          return;
+        }
+        if (gameState === 'CINEMATIC') {
+          if (hy > 160 && hy < 230 && hx > 180 && hx < 330) startLastStand();
+          return;
+        }
+
+        if (hy > 160 && hy < 230) {
+          if (hx > 30 && hx < 150) handleBtn('q');
+          else if (hx > 170 && hx < 290) handleBtn('w');
+          else if (hx > 310 && hx < 430) handleBtn('e');
+        }
+        return;
+      }
+
+      // 2. 地图交互 (开始选择)
+      const intersects = vrRaycaster.intersectObject(vrMapPlane);
+      if (intersects.length > 0) {
+        const lp = vrMapPlane.worldToLocal(intersects[0].point.clone());
+        // 映射到画布像素坐标 0..Width / 0..Height
+        const wx = lp.x + cv.width / 2;
+        const wy = cv.height / 2 - lp.y; // 修复上下翻转
+        vrDragStart = { x: wx, y: wy };
+        vrDragging = true;
+        vrActiveTriggerIndex = index;
+      }
+    }
+
+    function onTriggerEnd(index) {
+      if (vrDragging && vrActiveTriggerIndex === index) {
+        updateRay(index);
+        const intersects = vrRaycaster.intersectObject(vrMapPlane);
+        if (intersects.length > 0) {
+          const lp = vrMapPlane.worldToLocal(intersects[0].point.clone());
+          const wx = lp.x + cv.width / 2;
+          const wy = cv.height / 2 - lp.y;
+
+          const dx = Math.abs(wx - vrDragStart.x);
+          const dy = Math.abs(wy - vrDragStart.y);
+          const vrCamZ = Math.min(cv.width / (COLS * TS), cv.height / (ROWS * TS));
+
+          if (dx < 15 && dy < 15) {
+            const gx = (wx - cv.width / 2) / vrCamZ + (COLS * TS) / 2;
+            const gy = (wy - cv.height / 2) / vrCamZ + (ROWS * TS) / 2;
+            handleWorldClick(Math.floor(gx / TS), Math.floor(gy / TS));
+          } else {
+            const x1 = (Math.min(wx, vrDragStart.x) - cv.width / 2) / vrCamZ + (COLS * TS) / 2;
+            const x2 = (Math.max(wx, vrDragStart.x) - cv.width / 2) / vrCamZ + (COLS * TS) / 2;
+            const y1 = (Math.min(wy, vrDragStart.y) - cv.height / 2) / vrCamZ + (ROWS * TS) / 2;
+            const y2 = (Math.max(wy, vrDragStart.y) - cv.height / 2) / vrCamZ + (ROWS * TS) / 2;
+            selectedUnits = units.filter(u => u.team === 'ally' && u.alive() && u.px() >= x1 && u.px() <= x2 && u.py() >= y1 && u.py() <= y2);
+          }
+        }
+        vrDragging = false; vrDragStart = null; vrActiveTriggerIndex = -1;
+      }
+    }
+
+    function onGripStart(index) {
+      vrGripPinching.push(index);
+      if (vrGripPinching.length === 1) {
+        initialControllerPos.copy(controllers[index].position);
+        initialGroupPos.copy(vrGroup.position);
+      } else if (vrGripPinching.length === 2) {
+        initialDistance = controllers[vrGripPinching[0]].position.distanceTo(controllers[vrGripPinching[1]].position);
+        initialScale = vrGroup.scale.x;
+      }
+    }
+
+    function onGripEnd(index) {
+      vrGripPinching = vrGripPinching.filter(i => i !== index);
+      if (vrGripPinching.length === 1) {
+        initialControllerPos.copy(controllers[vrGripPinching[0]].position);
+        initialGroupPos.copy(vrGroup.position);
+      }
+    }
+
+    // 抽象点击逻辑 (与核心交互逻辑保持一致)
+    function handleWorldClick(tx, ty) {
+      let ally = units.find(u => u.team === 'ally' && u.alive() && u.tx === tx && u.ty === ty);
+      if (ally) {
+        selectedUnits = [ally];
+      } else {
+        let enemy = units.find(u => u.team === 'enemy' && u.alive() && u.tx === tx && u.ty === ty);
+        if (enemy && selectedUnits.length > 0) {
+          selectedUnits.forEach(u => u.manualTarget = enemy);
+        } else if (selectedUnits.length > 0 && passable(tx, ty)) {
+          selectedUnits.forEach(u => { u.forceGoal = { x: tx, y: ty }; u.manualTarget = null; });
+        }
+      }
+    }
+
+    function onSelectEnd(index) {
+      vrPinching = vrPinching.filter(i => i !== index);
+    }
+
+    function handleVRInteraction() {
+      // 1. 处理沙盘移动与缩放 (仅使用 Grip 键)
+      if (vrGripPinching.length === 1) {
+        const idx = vrGripPinching[0];
+        const currentPos = controllers[idx].position;
+        const delta = new THREE.Vector3().subVectors(currentPos, initialControllerPos);
+        vrGroup.position.addVectors(initialGroupPos, delta);
+      } else if (vrGripPinching.length === 2) {
+        const p1 = controllers[vrGripPinching[0]].position;
+        const p2 = controllers[vrGripPinching[1]].position;
+        const d = p1.distanceTo(p2);
+        if (initialDistance > 0) {
+          const s = Math.max(0.0001, Math.min(0.2, initialScale * (d / initialDistance)));
+          vrGroup.scale.set(s, s, s);
+        }
+      }
+
+      // 2. 处理触发器 (Trigger) 框选提示
+      if (vrDragging && vrActiveTriggerIndex !== -1) {
+        updateRay(vrActiveTriggerIndex);
+        const intersects = vrRaycaster.intersectObject(vrMapPlane);
+        if (intersects.length > 0) {
+          const lp = vrMapPlane.worldToLocal(intersects[0].point.clone());
+          const wx = lp.x + cv.width / 2;
+          const wy = cv.height / 2 - lp.y;
+
+          dragStart = { x: vrDragStart.x, y: vrDragStart.y };
+          dragEnd = { x: wx, y: wy };
+          isDragging = true;
+        }
+      } else {
+        isDragging = false;
+      }
+    }
+
+    function updateVrHud() {
+      try {
+        const ctx = vrHudCtx;
+        ctx.clearRect(0, 0, 512, 256);
+        ctx.fillStyle = 'rgba(13, 24, 38, 0.95)';
+        ctx.fillRect(0, 0, 512, 256);
+        ctx.strokeStyle = '#e8c84a';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(5, 5, 502, 246);
+
+        ctx.textAlign = 'center';
+        if (gameState === 'WIN' || gameState === 'DEFEAT') {
+          ctx.fillStyle = gameState === 'WIN' ? '#f0ff44' : '#ff4444';
+          ctx.font = 'bold 44px sans-serif';
+          ctx.fillText(gameState === 'WIN' ? '🏆 战役胜利！' : '💀 战役失败', 256, 100);
+          ctx.font = '20px sans-serif';
+          const endMsg = document.getElementById('defmsg')?.textContent || '阵地已失守...';
+          ctx.fillText(gameState === 'WIN' ? '敌军指挥官将被击毙！' : endMsg, 256, 140);
+
+          // 重启按钮视觉
+          ctx.fillStyle = 'rgba(232, 200, 74, 0.2)';
+          ctx.fillRect(180, 160, 150, 60);
+          ctx.strokeStyle = '#e8c84a';
+          ctx.strokeRect(180, 160, 150, 60);
+          ctx.fillStyle = '#e8c84a';
+          ctx.font = 'bold 24px sans-serif';
+          ctx.fillText('再来一局', 256, 198);
+        } else if (gameState === 'CINEMATIC' || (gameTime >= 85 && gameTime < 90)) {
+          ctx.fillStyle = '#ffcc00';
+          ctx.font = 'bold 18px sans-serif';
+          const msg = (gameState === 'CINEMATIC') ? cinematicText : "指挥部：战机掩护即刻就位，准备进行最后打击！";
+          const lines = msg.split('\n');
+          lines.forEach((line, i) => ctx.fillText(line, 256, 80 + i * 25));
+
+          // 发动空袭按钮
+          ctx.fillStyle = 'rgba(232, 200, 74, 0.2)';
+          ctx.fillRect(180, 160, 150, 60);
+          ctx.strokeStyle = '#e8c84a';
+          ctx.strokeRect(180, 160, 150, 60);
+          ctx.fillStyle = '#e8c84a';
+          ctx.font = 'bold 24px sans-serif';
+          ctx.fillText('发动空袭！', 256, 198);
+        } else {
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#e8c84a';
+          ctx.font = 'bold 32px sans-serif';
+          ctx.fillText('⚔ 抢滩登陆 WebXR', 30, 60);
+
+          ctx.font = '24px monospace';
+          ctx.fillStyle = '#ff5050';
+          const timeStr = document.getElementById('timer')?.textContent || '0:00';
+          ctx.fillText('时间: ' + timeStr, 30, 105);
+
+          ctx.fillStyle = '#4488ff';
+          ctx.fillText('我军: ' + (document.getElementById('ac')?.textContent || '0'), 200, 105);
+          ctx.fillStyle = '#ff4444';
+          ctx.fillText('敌军: ' + (document.getElementById('ec')?.textContent || '0'), 350, 105);
+
+          // 绘制战术按钮
+          const actions = [{ k: 'q', t: '挖壕' }, { k: 'w', t: '进攻' }, { k: 'e', t: '取消' }];
+          ctx.font = 'bold 24px sans-serif';
+          actions.forEach((a, i) => {
+            const bx = 30 + i * 140, by = 160, bw = 120, bh = 70;
+            ctx.fillStyle = 'rgba(232, 200, 74, 0.15)';
+            ctx.fillRect(bx, by, bw, bh);
+            ctx.strokeStyle = '#e8c84a';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(bx, by, bw, bh);
+            ctx.fillStyle = '#e8c84a';
+            ctx.textAlign = 'center';
+            ctx.fillText(a.t, bx + bw / 2, by + bh / 2 + 10);
+          });
+        }
+
+        ctx.textAlign = 'left';
+        ctx.font = '14px sans-serif';
+        ctx.fillStyle = '#99ffaa';
+        ctx.fillText('操作: 扳机-指令 | 侧键-移动沙盘', 30, 240);
+
+        if (vrHudPlane && vrHudPlane.material.map) {
+          vrHudPlane.material.map.needsUpdate = true;
+          vrHudPlane.lookAt(vrCamera.position);
+        }
+      } catch (err) { console.error("VR HUD Update Error:", err); }
+    }
+
+    function vrLoop(time, frame) {
+      try {
+        // 1. 同步逻辑
+        let dt = Math.min((time - prevT) / 1000, .05);
+        prevT = time;
+        updateGame(dt);
+
+        // 2. 检测手势
+        if (frame) processHandGestures(frame);
+
+        // 3. 更新 2D Canvas 纹理 (包含轰炸飞机和剧情文字)
+        const oldCam = { ...cam };
+        const vrCamZ = Math.min(cv.width / (COLS * TS), cv.height / (ROWS * TS));
+        cam.x = (COLS * TS) / 2;
+        cam.y = (ROWS * TS) / 2;
+        cam.z = vrCamZ;
+        renderInternal(time);
+        Object.assign(cam, oldCam);
+
+        if (vrMapPlane) vrMapPlane.material.map.needsUpdate = true;
+
+        // 4. 射线视觉反馈
+        controllers.forEach((c, i) => {
+          const line = c.getObjectByName('rayline');
+          if (line) {
+            updateRay(i);
+            const hitsHUD = vrRaycaster.intersectObject(vrHudPlane);
+            const hitsMap = vrRaycaster.intersectObject(vrMapPlane);
+            line.material.color.set((hitsHUD.length > 0 || hitsMap.length > 0) ? 0x40ff70 : 0xffffff);
+          }
+        });
+
+        // 5. VR 渲染
+        handleVRInteraction();
+        updateVrHud();
+        vrRenderer.render(vrScene, vrCamera);
+      } catch (err) {
+        console.error("VR Loop Error:", err);
+      }
+    }
+
+    let handStates = [{ pinching: false, grasping: false }, { pinching: false, grasping: false }];
+    function processHandGestures(frame) {
+      const inputSources = vrRenderer.xr.getSession().inputSources;
+      inputSources.forEach((source, i) => {
+        if (!source.hand) return;
+
+        const hand = hands[i];
+        const thumb = hand.joints['thumb-tip'];
+        const index = hand.joints['index-finger-tip'];
+        const middle = hand.joints['middle-finger-tip'];
+
+        if (thumb && index && middle) {
+          const dPinch = thumb.position.distanceTo(index.position);
+          const isPinching = dPinch < 0.02;
+
+          if (isPinching && !handStates[i].pinching) onTriggerStart(i);
+          else if (!isPinching && handStates[i].pinching) onTriggerEnd(i);
+          handStates[i].pinching = isPinching;
+
+          const dGrasp = thumb.position.distanceTo(middle.position);
+          const isGrasping = dGrasp < 0.02;
+          if (isGrasping && !handStates[i].grasping) onGripStart(i);
+          else if (!isGrasping && handStates[i].grasping) onGripEnd(i);
+          handStates[i].grasping = isGrasping;
+        }
+      });
+    }
+
+    initVR();
+
+    function initGame() {
+      document.getElementById('winscr').classList.remove('on');
+      document.getElementById('defscr').classList.remove('on');
+      document.getElementById('ov').classList.remove('on');
+      document.getElementById('ovbig').style.display = 'none';
+      document.getElementById('ovbtn').style.display = 'none';
+      document.getElementById('phase-tag').textContent = '战斗准备';
+
+      gameState = 'PLAYING'; gameTime = 0;
+      lastStandTimer = 60;
+      units = []; bullets = []; ships = []; particles = []; FIRES = [];
+      selectedUnits = []; commander = null; airplanes = [];
+      shipTimer = 2; enemyShipTimer = 6;
+
+      buildMap();
+      spawnEnemies();
+      cam = { x: (COLS * TS) / 2, y: (ROWS * TS) / 2, z: 1.2 };
+    }
+
+    initGame();
+    requestAnimationFrame(ts => { prevT = ts; requestAnimationFrame(loop); });
+  </script>
+</body>
+
+</html>

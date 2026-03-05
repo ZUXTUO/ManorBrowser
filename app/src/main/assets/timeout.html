@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>连接超时</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff3e0 0%, #fffde7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e65100;
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.7;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: inline-block;
+            border: 1px solid rgba(230, 81, 0, 0.2);
+            color: #e65100;
+        }
+
+        .btn-primary {
+            background: #e65100;
+            color: white;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="icon">⌛</div>
+        <h1>连接已超时</h1>
+        <p>服务器响应太慢了，可能是访问的人太多，或者网址有误。</p>
+        <div class="btn-group">
+            <a href="javascript:location.reload()" class="btn btn-primary">再试一次</a>
+            <a href="404_game.html" class="btn" target="_blank">玩个游戏等一下</a>
+        </div>
+    </div>
+</body>
+
+</html>
