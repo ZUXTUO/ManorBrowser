@@ -96,13 +96,38 @@
 <body>
     <div class="content">
         <div class="icon">⌛</div>
-        <h1>连接已超时</h1>
-        <p>服务器响应太慢了，可能是访问的人太多，或者网址有误。</p>
+        <h1 id="title">连接已超时</h1>
+        <p id="msg">服务器响应太慢了，可能是访问的人太多，或者网址有误。</p>
         <div class="btn-group">
-            <a href="javascript:location.reload()" class="btn btn-primary">再试一次</a>
-            <a href="404_game.html" class="btn" target="_blank">玩个游戏等一下</a>
+            <a href="javascript:location.reload()" class="btn btn-primary" id="btn-retry">再试一次</a>
+            <a href="404_game.html" class="btn" id="btn-game" target="_blank">玩个游戏等一下</a>
         </div>
     </div>
+    <script>
+        const i18n = {
+            zh: {
+                title: "连接已超时",
+                msg: "服务器响应太慢了，可能是访问的人太多，或者网址有误。",
+                btnRetry: "再试一次",
+                btnGame: "玩个游戏等一下",
+                pageTitle: "加载超时"
+            },
+            en: {
+                title: "Connection Timed Out",
+                msg: "The server is taking too long to respond. It might be busy or the address could be wrong.",
+                btnRetry: "Try Again",
+                btnGame: "Play a Game",
+                pageTitle: "Timed Out"
+            }
+        };
+
+        const lang = (navigator.language || navigator.userLanguage).startsWith('zh') ? 'zh' : 'en';
+        document.title = i18n[lang].pageTitle;
+        document.getElementById('title').innerText = i18n[lang].title;
+        document.getElementById('msg').innerText = i18n[lang].msg;
+        document.getElementById('btn-retry').innerText = i18n[lang].btnRetry;
+        document.getElementById('btn-game').innerText = i18n[lang].btnGame;
+    </script>
 </body>
 
 </html>

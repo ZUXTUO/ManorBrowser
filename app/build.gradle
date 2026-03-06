@@ -36,6 +36,7 @@ android {
             useLegacyPackaging false
         }
     }
+    compileSdkMinor 1
 }
 
 dependencies {

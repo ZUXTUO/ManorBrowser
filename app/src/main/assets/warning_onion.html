@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗网访问警告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ecf0f1;
+            animation: flow 10s ease infinite;
+        }
+
+        @keyframes flow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .content {
+            text-align: center;
+            padding: 30px;
+            z-index: 10;
+            animation: fadeIn 1s;
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1.2rem;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: #e74c3c;
+            line-height: 1.3;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: block;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        @media (min-width: 400px) {
+            .btn-group {
+                flex-direction: row;
+                gap: 15px;
+            }
+
+            .btn {
+                flex: 1;
+                display: inline-block;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #bdc3c7;
+            border: 1px solid rgba(189, 195, 199, 0.5);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #f05a4b;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .warning-text {
+            border-left: 4px solid #e74c3c;
+            padding-left: 15px;
+            text-align: left;
+            margin-bottom: 30px;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="icon">💀</div>
+        <h1 id="title">建议不要访问暗网</h1>
+        <div class="warning-text">
+            <p id="msg-1">您正尝试访问一个 .onion 域名的暗网网站。暗网环境复杂，包含大量虚假信息、恶意软件和非法内容。</p>
+        </div>
+        <p id="msg-2">为了您的隐私和安全，建议返回安全页面。</p>
+        <div class="btn-group">
+            <a href="about:blank" class="btn btn-primary" id="btn-back">返回安全页</a>
+            <a href="javascript:window.location.replace('')" id="continue-btn" class="btn btn-secondary">坚持进入</a>
+        </div>
+    </div>
+    <script>
+        const i18n = {
+            zh: {
+                title: "建议不要访问暗网",
+                msg1: "您正尝试访问一个 .onion 域名的暗网网站。暗网环境复杂，包含大量虚假信息、恶意软件和非法内容。",
+                msg2: "为了您的隐私和安全，建议返回安全页面。",
+                btnBack: "返回安全页",
+                btnContinue: "坚持进入"
+            },
+            en: {
+                title: "Warning: Dark Web Access",
+                msg1: "You are attempting to access a .onion domain. The dark web is complex and contains a large amount of misinformation, malware, and illegal content.",
+                msg2: "For your privacy and safety, we recommend returning to a secure page.",
+                btnBack: "Go Back",
+                btnContinue: "Continue Anyway"
+            }
+        };
+
+        const lang = (navigator.language || navigator.userLanguage).startsWith('zh') ? 'zh' : 'en';
+        document.title = i18n[lang].title;
+        document.getElementById('title').innerText = i18n[lang].title;
+        document.getElementById('msg-1').innerText = i18n[lang].msg1;
+        document.getElementById('msg-2').innerText = i18n[lang].msg2;
+        document.getElementById('btn-back').innerText = i18n[lang].btnBack;
+        document.getElementById('continue-btn').innerText = i18n[lang].btnContinue;
+
+        // 从 URL 参数中获取原始 URL，如果用户要坚持进入，则重定向
+        const urlParams = new URLSearchParams(window.location.search);
+        const originalUrl = urlParams.get('url');
+        if (originalUrl) {
+            document.getElementById('continue-btn').onclick = function () {
+                // 加一个特殊标记，防止无限循环重定向
+                const separator = originalUrl.includes('?') ? '&' : '?';
+                window.location.href = originalUrl + (originalUrl.includes('allow_onion=1') ? '' : (separator + 'allow_onion=1'));
+                return false;
+            };
+        } else {
+            document.getElementById('continue-btn').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

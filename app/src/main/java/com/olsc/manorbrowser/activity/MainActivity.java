@@ -1010,6 +1010,23 @@ public class MainActivity extends AppCompatActivity {
                     @NonNull GeckoSession session,
                     @NonNull LoadRequest request) {
                 String uri = request.uri;
+
+                // 检查是否是 .onion 域名
+                try {
+                    android.net.Uri parsedUri = android.net.Uri.parse(uri);
+                    String host = parsedUri.getHost();
+                    if (host != null && host.toLowerCase().endsWith(".onion")) {
+                        // 如果没有特殊的允许标记，则重定向到警告页面
+                        if (!uri.contains("allow_onion=1")) {
+                            String encodedUrl = android.net.Uri.encode(uri);
+                            String warningUrl = "resource://android/assets/warning_onion.html?url=" + encodedUrl;
+                            runOnUiThread(() -> session.loadUri(warningUrl));
+                            return GeckoResult.fromValue(AllowOrDeny.DENY);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 
                 // 使用改进的IntentHelper处理外部应用跳转
                 if (com.olsc.manorbrowser.utils.IntentHelper.shouldInterceptUrl(uri)) {

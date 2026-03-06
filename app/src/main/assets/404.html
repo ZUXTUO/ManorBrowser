@@ -160,14 +160,39 @@
         <div
             style="font-size: 8rem; font-weight: bold; margin-bottom: -10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); color: #78a1b5;">
             404</div>
-        <h1>遇到了些问题，但这不是你的错</h1>
-        <p>或许这个页面正在云端漫步，先请稍微休息一下。</p>
+        <h1 id="error-title">遇到了些问题，但这不是你的错</h1>
+        <p id="error-msg">或许这个页面正在云端漫步，先请稍微休息一下。</p>
         <div>
-            <a href="javascript:history.back()" class="back-home">返回上一页</a>
-            <a href="404_game.html" class="back-home" style="margin-left: 15px; background: #78a1b5; color: white;"
-                target="_blank">打发时间玩个小游戏</a>
+            <a href="javascript:history.back()" class="back-home" id="btn-back">返回上一页</a>
+            <a href="404_game.html" class="back-home" id="btn-game"
+                style="margin-left: 15px; background: #78a1b5; color: white;" target="_blank">打发时间玩个小游戏</a>
         </div>
     </div>
+    <script>
+        const i18n = {
+            zh: {
+                title: "出错了，但这不是你的错",
+                errorTitle: "遇到了些问题，但这不是你的错",
+                errorMsg: "或许这个页面正在云端漫步，先请稍微休息一下。",
+                btnBack: "返回上一页",
+                btnGame: "打发时间玩个小游戏"
+            },
+            en: {
+                title: "Error, But Not Your Fault",
+                errorTitle: "Something went wrong, but it's not you",
+                errorMsg: "Maybe this page is taking a walk in the clouds, take a little break.",
+                btnBack: "Go Back",
+                btnGame: "Play a Game"
+            }
+        };
+
+        const lang = (navigator.language || navigator.userLanguage).startsWith('zh') ? 'zh' : 'en';
+        document.title = i18n[lang].title;
+        document.getElementById('error-title').innerText = i18n[lang].errorTitle;
+        document.getElementById('error-msg').innerText = i18n[lang].errorMsg;
+        document.getElementById('btn-back').innerText = i18n[lang].btnBack;
+        document.getElementById('btn-game').innerText = i18n[lang].btnGame;
+    </script>
 </body>
 
 </html>

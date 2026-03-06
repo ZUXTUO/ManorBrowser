@@ -416,8 +416,9 @@
   <div id="wrap">
     <button id="vr-btn">启动战术沙盘 (XR)</button>
     <div id="vr-mode-select">
-      <label><input type="checkbox" id="vr-passthrough-chk" checked> 启用 AR 透视模式 [更佳体验]</label>
-      <div style="font-size: 10px; opacity: 0.7; margin-top: 2px;">关闭以进入 VR 性能模式 [省电/高帧率]</div>
+      <label><input type="checkbox" id="vr-passthrough-chk" checked> <span id="label-ar-mode">启用 AR 透视模式
+          [更佳体验]</span></label>
+      <div id="label-vr-desc" style="font-size: 10px; opacity: 0.7; margin-top: 2px;">关闭以进入 VR 性能模式 [省电/高帧率]</div>
     </div>
     <canvas id="c"></canvas>
 
@@ -425,7 +426,7 @@
     <header id="top-hud">
       <div class="hud-section">
         <div class="hud-title">
-          <h1>⚔ 抢滩登陆</h1>
+          <h1 id="hud-game-title">⚔ 抢滩登陆</h1>
         </div>
         <div id="phase-tag" style="font-size: 0.7em; color: #50c090;">战斗准备</div>
       </div>
@@ -433,9 +434,9 @@
       <div class="hud-timer" id="timer">1:30</div>
 
       <div class="hud-section hud-stats">
-        <div class="hud-stat-item"><label>我军</label><span id="ac">0</span></div>
-        <div class="hud-stat-item"><label>敌军</label><span id="ec">0</span></div>
-        <div class="hud-stat-item"><label>长官</label><span id="bhp">300/300</span></div>
+        <div class="hud-stat-item"><label id="label-ally">我军</label><span id="ac">0</span></div>
+        <div class="hud-stat-item"><label id="label-enemy">敌军</label><span id="ec">0</span></div>
+        <div class="hud-stat-item"><label id="label-commander">长官</label><span id="bhp">300/300</span></div>
       </div>
     </header>
 
@@ -445,14 +446,15 @@
       <button id="ovbtn" onclick="startLastStand()">✈ 发动空袭！</button>
     </div>
     <div id="winscr" class="endscr">
-      <h2>🎉 胜利！</h2>
-      <p>敌军长官被击毙，岛屿防线瓦解！</p>
-      <button class="rbtn" style="background:#40ff70;color:#001" onclick="initGame()">再战一局</button>
+      <h2 id="win-title">🎉 胜利！</h2>
+      <p id="win-msg">敌军长官被击毙，岛屿防线瓦解！</p>
+      <button class="rbtn" id="btn-win-restart" style="background:#40ff70;color:#001" onclick="initGame()">再战一局</button>
     </div>
     <div id="defscr" class="endscr">
-      <h2>💀 失败</h2>
+      <h2 id="fail-title">💀 失败</h2>
       <p id="defmsg">最后攻势失败，士兵全部阵亡...</p>
-      <button class="rbtn" style="background:#ff4040;color:#fff" onclick="initGame()">重整旗鼓</button>
+      <button class="rbtn" id="btn-fail-restart" style="background:#ff4040;color:#fff"
+        onclick="initGame()">重整旗鼓</button>
     </div>
 
     <!-- 底部统一面板 -->
@@ -464,13 +466,121 @@
       <div id="control-cluster">
         <div id="mode-toggle" onclick="toggleMode()" title="切换操作模式">✥</div>
         <div class="action-group">
-          <div class="mbtn" onclick="handleBtn('q')"><i>⛏</i>挖壕</div>
-          <div class="mbtn" onclick="handleBtn('w')"><i>⚔</i>进攻</div>
-          <div class="mbtn" onclick="handleBtn('e')"><i>⌧</i>取消</div>
+          <div class="mbtn" onclick="handleBtn('q')"><i id="btn-dig-icon">⛏</i><span id="btn-dig-text">挖壕</span></div>
+          <div class="mbtn" onclick="handleBtn('w')"><i id="btn-atk-icon">⚔</i><span id="btn-atk-text">进攻</span></div>
+          <div class="mbtn" onclick="handleBtn('e')"><i id="btn-cancel-icon">⌧</i><span id="btn-cancel-text">取消</span>
+          </div>
         </div>
       </div>
     </footer>
   </div>
+
+  <script>
+    const i18n = {
+      zh: {
+        vrBtn: "启动战术沙盘 (XR)",
+        arMode: "启用 AR 透视模式 [更佳体验]",
+        vrDesc: "关闭以进入 VR 性能模式 [省电/高帧率]",
+        gameTitle: "⚔ 抢滩登陆",
+        preparing: "战斗准备",
+        ally: "我军",
+        enemy: "敌军",
+        commander: "长官",
+        lastStand: "【最后攻势】",
+        airstrike: "✈ 发动空袭！",
+        victory: "🎉 胜利！",
+        winMsg: "敌军长官被击毙，岛屿防线瓦解！",
+        playAgain: "再战一局",
+        defeat: "💀 失败",
+        failMsg: "最后攻势失败，士兵全部阵亡...",
+        restart: "重整旗鼓",
+        legend: "<b>图例</b> 我方🪖 敌方💂 长官🎖 船🚢 壕⬛ 火🔥",
+        dig: "挖壕",
+        attack: "进攻",
+        cancel: "取消",
+        time: "时间",
+        vrHint: "操作: 扳机-指令 | 侧键-移动沙盘",
+        cinematic: "指挥部：战机掩护即刻就位，准备进行最后打击！",
+        probing: "试探阶段",
+        berserk: "敌军狂暴",
+        finalMoment: "决战时刻",
+        finalBattle: "最后决战！",
+        lastStandTag: "最后攻势！",
+        timeoutFail: "最后攻势超时，未能击毙敌军长官...",
+        defenseLost: "阵地已失守...",
+        victoryVR: "🏆 战役胜利！",
+        defeatVR: "💀 战役失败",
+        winMsgVR: "敌军指挥官将被击毙！",
+        cinematicTitle: "我们无法拿下此区域。<br><br>但你的心中仍有<span style='color:#e8c84a'>钢铁一般的意志</span>，<br>我们绝不允许任何敌人侵犯领土和家园，<br>绝望中仍存有一丝意志，<br><br><span style='color:#ffcc00'>用血液铸就新的长城！</span>",
+        cinematicText: "我们无法拿下此区域。\n但你的心中仍有钢铁般的意志，\n绝望中仍存有一丝意志，\n用血液铸就新的长城！"
+      },
+      en: {
+        vrBtn: "Tactical Sandbox (XR)",
+        arMode: "Enable AR Passthrough [Better]",
+        vrDesc: "Disable for VR Performance [High FPS]",
+        gameTitle: "⚔ Beach Landing",
+        preparing: "Preparing...",
+        ally: "Allies",
+        enemy: "Enemies",
+        commander: "Cmdr",
+        lastStand: "[Last Stand]",
+        airstrike: "✈ Launch Airstrike!",
+        victory: "🎉 Victory!",
+        winMsg: "Commander eliminated, defense collapsed!",
+        playAgain: "Play Again",
+        defeat: "💀 Defeated",
+        failMsg: "Last stand failed, all units lost...",
+        restart: "Restart",
+        legend: "<b>Legend</b> Ally🪖 Enemy💂 Cmdr🎖 Ship🚢 Trench⬛ Fire🔥",
+        dig: "Dig",
+        attack: "Attack",
+        cancel: "Cancel",
+        time: "Time",
+        vrHint: "Trigger: CMD | Side: Move",
+        cinematic: "HQ: Air cover arriving, prepare for final strike!",
+        probing: "Probing Phase",
+        berserk: "Enemy Berserk",
+        finalMoment: "Final Moment",
+        finalBattle: "Final Battle!",
+        lastStandTag: "Last Stand!",
+        timeoutFail: "Last stand timed out. Failed to eliminate commander...",
+        defenseLost: "Defense collapsed...",
+        victoryVR: "🏆 Victory!",
+        defeatVR: "💀 Defeat",
+        winMsgVR: "Enemy commander eliminated!",
+        cinematicTitle: "We cannot hold this area.<br><br>But your heart holds <span style='color:#e8c84a'>the will of steel</span>,<br>We will never allow any enemy to invade our home,<br>High purpose remains in despair,<br><br><span style='color:#ffcc00'>Build a new wall with blood!</span>",
+        cinematicText: "We cannot hold this area.\nBut your heart holds the will of steel,\nHigh purpose remains in despair,\nBuild a new wall with blood!"
+      }
+    };
+
+    const lang = (navigator.language || navigator.userLanguage).startsWith('zh') ? 'zh' : 'en';
+
+    // 初始化 UI 文本
+    function initI18n() {
+      document.title = i18n[lang].gameTitle;
+      document.getElementById('vr-btn').innerText = i18n[lang].vrBtn;
+      document.getElementById('label-ar-mode').innerText = i18n[lang].arMode;
+      document.getElementById('label-vr-desc').innerText = i18n[lang].vrDesc;
+      document.getElementById('hud-game-title').innerText = i18n[lang].gameTitle;
+      document.getElementById('phase-tag').innerText = i18n[lang].preparing;
+      document.getElementById('label-ally').innerText = i18n[lang].ally;
+      document.getElementById('label-enemy').innerText = i18n[lang].enemy;
+      document.getElementById('label-commander').innerText = i18n[lang].commander;
+      document.getElementById('ovbig').innerText = i18n[lang].lastStand;
+      document.getElementById('ovbtn').innerText = i18n[lang].airstrike;
+      document.getElementById('win-title').innerText = i18n[lang].victory;
+      document.getElementById('win-msg').innerText = i18n[lang].winMsg;
+      document.getElementById('btn-win-restart').innerText = i18n[lang].playAgain;
+      document.getElementById('fail-title').innerText = i18n[lang].defeat;
+      document.getElementById('defmsg').innerText = i18n[lang].failMsg;
+      document.getElementById('btn-fail-restart').innerText = i18n[lang].restart;
+      document.getElementById('info-panel').innerHTML = i18n[lang].legend;
+      document.getElementById('btn-dig-text').innerText = i18n[lang].dig;
+      document.getElementById('btn-atk-text').innerText = i18n[lang].attack;
+      document.getElementById('btn-cancel-text').innerText = i18n[lang].cancel;
+    }
+    initI18n();
+  </script>
 
   <script>
     'use strict';
@@ -1250,15 +1360,10 @@
     // ── 最后攻势 (剧情/玩法) ────────────────────────────────────────────────
     function triggerCinematic() {
       gameState = 'CINEMATIC';
-      cinematicText = "我们无法拿下此区域。\n但你的心中仍有钢铁般的意志，\n绝望中仍存有一丝意志，\n用血液铸就新的长城！";
+      cinematicText = i18n[lang].cinematicText;
       let ov = document.getElementById('ov');
       ov.classList.add('on');
-      document.getElementById('ovtext').innerHTML =
-        `我们无法拿下此区域。<br><br>` +
-        `但你的心中仍有<span style="color:#e8c84a">钢铁一般的意志</span>，<br>` +
-        `我们绝不允许任何敌人侵犯领土和家园，<br>` +
-        `绝望中仍存有一丝意志，<br><br>` +
-        `<span style="color:#ffcc00">用血液铸就新的长城！</span>`;
+      document.getElementById('ovtext').innerHTML = i18n[lang].cinematicTitle;
       setTimeout(() => {
         document.getElementById('ovbig').style.display = 'block';
         setTimeout(() => { document.getElementById('ovbtn').style.display = 'inline-block'; }, 900);
@@ -1270,7 +1375,7 @@
       document.getElementById('ovbig').style.display = 'none';
       document.getElementById('ovbtn').style.display = 'none';
       gameState = 'LAST_STAND';
-      document.getElementById('phase-tag').textContent = '最后攻势！';
+      document.getElementById('phase-tag').textContent = i18n[lang].lastStandTag;
       launchAirplanes();
     }
 
@@ -1612,7 +1717,7 @@
           if (lastStandTimer <= 0) {
             lastStandTimer = 0;
             gameState = 'DEFEAT';
-            document.getElementById('defmsg').textContent = "最后攻势超时，未能击毙敌军长官...";
+            document.getElementById('defmsg').textContent = i18n[lang].timeoutFail;
             document.getElementById('defscr').classList.add('on');
           }
         }
@@ -1670,7 +1775,7 @@
         if (!anyInside) triggerCinematic();
         else {
           gameState = 'LAST_STAND';
-          document.getElementById('phase-tag').textContent = '最后决战！';
+          document.getElementById('phase-tag').textContent = i18n[lang].finalBattle;
           launchAirplanes(); // 直接进入也触发空袭
         }
       }
@@ -1733,10 +1838,10 @@
 
       let phaseTag = document.getElementById('phase-tag');
       if (gameState === 'PLAYING') {
-        phaseTag.textContent = gameTime < 60 ? '试探阶段' : '敌军狂暴';
+        phaseTag.textContent = gameTime < 60 ? i18n[lang].probing : i18n[lang].berserk;
         phaseTag.style.color = gameTime < 60 ? '#50c090' : '#ff8800';
       } else if (gameState === 'LAST_STAND') {
-        phaseTag.textContent = '决战时刻';
+        phaseTag.textContent = i18n[lang].finalMoment;
         phaseTag.style.color = '#ff3333';
       }
     }
@@ -2256,10 +2361,10 @@
         if (gameState === 'WIN' || gameState === 'DEFEAT') {
           ctx.fillStyle = gameState === 'WIN' ? '#f0ff44' : '#ff4444';
           ctx.font = 'bold 44px sans-serif';
-          ctx.fillText(gameState === 'WIN' ? '🏆 战役胜利！' : '💀 战役失败', 256, 100);
+          ctx.fillText(gameState === 'WIN' ? i18n[lang].victoryVR : i18n[lang].defeatVR, 256, 100);
           ctx.font = '20px sans-serif';
-          const endMsg = document.getElementById('defmsg')?.textContent || '阵地已失守...';
-          ctx.fillText(gameState === 'WIN' ? '敌军指挥官将被击毙！' : endMsg, 256, 140);
+          const endMsg = document.getElementById('defmsg')?.textContent || i18n[lang].defenseLost;
+          ctx.fillText(gameState === 'WIN' ? i18n[lang].winMsgVR : endMsg, 256, 140);
 
           // 重启按钮视觉
           ctx.fillStyle = 'rgba(232, 200, 74, 0.2)';
@@ -2268,11 +2373,11 @@
           ctx.strokeRect(180, 160, 150, 60);
           ctx.fillStyle = '#e8c84a';
           ctx.font = 'bold 24px sans-serif';
-          ctx.fillText('再来一局', 256, 198);
+          ctx.fillText(i18n[lang].playAgain, 256, 198);
         } else if (gameState === 'CINEMATIC' || (gameTime >= 85 && gameTime < 90)) {
           ctx.fillStyle = '#ffcc00';
           ctx.font = 'bold 18px sans-serif';
-          const msg = (gameState === 'CINEMATIC') ? cinematicText : "指挥部：战机掩护即刻就位，准备进行最后打击！";
+          const msg = (gameState === 'CINEMATIC') ? cinematicText : i18n[lang].cinematic;
           const lines = msg.split('\n');
           lines.forEach((line, i) => ctx.fillText(line, 256, 80 + i * 25));
 
@@ -2283,25 +2388,25 @@
           ctx.strokeRect(180, 160, 150, 60);
           ctx.fillStyle = '#e8c84a';
           ctx.font = 'bold 24px sans-serif';
-          ctx.fillText('发动空袭！', 256, 198);
+          ctx.fillText(i18n[lang].airstrike, 256, 198);
         } else {
           ctx.textAlign = 'left';
           ctx.fillStyle = '#e8c84a';
           ctx.font = 'bold 32px sans-serif';
-          ctx.fillText('⚔ 抢滩登陆 WebXR', 30, 60);
+          ctx.fillText(i18n[lang].gameTitle + ' WebXR', 30, 60);
 
           ctx.font = '24px monospace';
           ctx.fillStyle = '#ff5050';
           const timeStr = document.getElementById('timer')?.textContent || '0:00';
-          ctx.fillText('时间: ' + timeStr, 30, 105);
+          ctx.fillText(i18n[lang].time + ': ' + timeStr, 30, 105);
 
           ctx.fillStyle = '#4488ff';
-          ctx.fillText('我军: ' + (document.getElementById('ac')?.textContent || '0'), 200, 105);
+          ctx.fillText(i18n[lang].ally + ': ' + (document.getElementById('ac')?.textContent || '0'), 200, 105);
           ctx.fillStyle = '#ff4444';
-          ctx.fillText('敌军: ' + (document.getElementById('ec')?.textContent || '0'), 350, 105);
+          ctx.fillText(i18n[lang].enemy + ': ' + (document.getElementById('ec')?.textContent || '0'), 350, 105);
 
           // 绘制战术按钮
-          const actions = [{ k: 'q', t: '挖壕' }, { k: 'w', t: '进攻' }, { k: 'e', t: '取消' }];
+          const actions = [{ k: 'q', t: i18n[lang].dig }, { k: 'w', t: i18n[lang].attack }, { k: 'e', t: i18n[lang].cancel }];
           ctx.font = 'bold 24px sans-serif';
           actions.forEach((a, i) => {
             const bx = 30 + i * 140, by = 160, bw = 120, bh = 70;
@@ -2319,7 +2424,7 @@
         ctx.textAlign = 'left';
         ctx.font = '14px sans-serif';
         ctx.fillStyle = '#99ffaa';
-        ctx.fillText('操作: 扳机-指令 | 侧键-移动沙盘', 30, 240);
+        ctx.fillText(i18n[lang].vrHint, 30, 240);
 
         if (vrHudPlane && vrHudPlane.material.map) {
           vrHudPlane.material.map.needsUpdate = true;
@@ -2405,7 +2510,7 @@
       document.getElementById('ov').classList.remove('on');
       document.getElementById('ovbig').style.display = 'none';
       document.getElementById('ovbtn').style.display = 'none';
-      document.getElementById('phase-tag').textContent = '战斗准备';
+      document.getElementById('phase-tag').textContent = i18n[lang].preparing;
 
       gameState = 'PLAYING'; gameTime = 0;
       lastStandTimer = 60;

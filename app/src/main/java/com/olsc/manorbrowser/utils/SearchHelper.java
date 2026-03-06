@@ -38,7 +38,12 @@ public class SearchHelper {
             return "http://" + query;
         }
 
-        // 3. 常规公网域名（如 google.com），优先使用 HTTPS
+        // 3. .onion 域名，通常需要使用 http (因为是通过 Tor)
+        if (lowerQuery.endsWith(".onion") || lowerQuery.contains(".onion/")) {
+            return "http://" + query;
+        }
+
+        // 4. 常规公网域名（如 google.com），优先使用 HTTPS
         if (Patterns.WEB_URL.matcher(query).matches()) {
             return "https://" + query;
         }

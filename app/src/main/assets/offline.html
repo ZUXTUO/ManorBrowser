@@ -113,13 +113,38 @@
 <body>
     <div class="content">
         <div class="icon">📡</div>
-        <h1>哎呀，网络开小差了</h1>
-        <p>检查一下你的 Wi-Fi 或数据连接，稍后再试吧。</p>
+        <h1 id="title">哎呀，网络开小差了</h1>
+        <p id="msg">检查一下你的 Wi-Fi 或数据连接，稍后再试吧。</p>
         <div class="btn-group">
-            <a href="javascript:location.reload()" class="btn btn-primary">刷新重试</a>
-            <a href="404_game.html" class="btn" target="_blank">玩个游戏消遣下</a>
+            <a href="javascript:location.reload()" class="btn btn-primary" id="btn-retry">刷新重试</a>
+            <a href="404_game.html" class="btn" id="btn-game" target="_blank">玩个游戏消遣下</a>
         </div>
     </div>
+    <script>
+        const i18n = {
+            zh: {
+                title: "哎呀，网络开小差了",
+                msg: "检查一下你的 Wi-Fi 或数据连接，稍后再试吧。",
+                btnRetry: "刷新重试",
+                btnGame: "玩个游戏消遣下",
+                pageTitle: "网络连接已断开"
+            },
+            en: {
+                title: "Oh no, you're offline",
+                msg: "Check your Wi-Fi or data connection and try again.",
+                btnRetry: "Retry",
+                btnGame: "Play a game",
+                pageTitle: "No Internet Connection"
+            }
+        };
+
+        const lang = (navigator.language || navigator.userLanguage).startsWith('zh') ? 'zh' : 'en';
+        document.title = i18n[lang].pageTitle;
+        document.getElementById('title').innerText = i18n[lang].title;
+        document.getElementById('msg').innerText = i18n[lang].msg;
+        document.getElementById('btn-retry').innerText = i18n[lang].btnRetry;
+        document.getElementById('btn-game').innerText = i18n[lang].btnGame;
+    </script>
 </body>
 
 </html>
