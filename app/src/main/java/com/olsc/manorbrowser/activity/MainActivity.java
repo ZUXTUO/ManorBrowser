@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AlertDialog;
@@ -461,6 +462,32 @@ public class MainActivity extends AppCompatActivity {
                        swipeRefresh.setRefreshing(true);
                    }
                });
+
+                // --- 超时保护逻辑 ---
+                // 获取当前 Tab
+                TabInfo currentTab = null;
+                for (TabInfo t : tabs) {
+                    if (t.session == session) {
+                        currentTab = t;
+                        break;
+                    }
+                }
+                
+                if (currentTab != null) {
+                    final TabInfo finalTab = currentTab;
+                    // 如果已经有超时任务在跑，理论上不需要重复创建，但这里简单处理：每次 PageStart 重置超时
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        // 如果 20 秒后还在加载 (progress < 100) 且页面没有停止，主动干预
+                        if (finalTab.session == session && progressBar != null && progressBar.getVisibility() == View.VISIBLE) {
+                            // 排除已经在本地资源页的情况
+                            if (url != null && !url.startsWith("resource://android/assets/")) {
+                                session.stop();
+                                session.loadUri("resource://android/assets/timeout.html");
+                                Toast.makeText(MainActivity.this, "网页加载超时，已停止加载", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, 20000); // 20秒超时限制
+                }
             }
             @Override
             public void onProgressChange(@NonNull GeckoSession session, int progress) {
@@ -931,6 +958,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         session.setNavigationDelegate(new GeckoSession.NavigationDelegate() {
+            @Override
+            public GeckoResult<String> onLoadError(@NonNull GeckoSession session, @Nullable String uri, @NonNull org.mozilla.geckoview.WebRequestError error) {
+                if (uri != null && uri.startsWith("resource://android/assets/")) {
+                    return GeckoResult.fromValue(null);
+                }
+                
+                // 根据错误类别分发不同的错误页面
+                switch (error.category) {
+                    case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_NETWORK:
+                        return GeckoResult.fromValue("resource://android/assets/offline.html");
+                    case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_URI:
+                        return GeckoResult.fromValue("resource://android/assets/404.html");
+                    default:
+                        // 其他错误检查是否是因为超时导致的
+                        if (error.code == org.mozilla.geckoview.WebRequestError.ERROR_CONNECTION_REFUSED || 
+                            error.code == org.mozilla.geckoview.WebRequestError.ERROR_NET_TIMEOUT) {
+                            return GeckoResult.fromValue("resource://android/assets/timeout.html");
+                        }
+                        return GeckoResult.fromValue("resource://android/assets/404.html");
+                }
+            }
+
+            @Override
+            public GeckoResult<GeckoSession> onNewSession(@NonNull GeckoSession session, @NonNull String uri) {
+                // 手动创建一个新标签页并加载 URL
+                runOnUiThread(() -> {
+                    try {
+                        createNewTab(uri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                // 返回 null 告诉 GeckoView 不要尝试自动管理这个新窗口，避免双重绑定引发底层崩溃
+                return GeckoResult.fromValue(null);
+            }
+
             @Override
             public void onCanGoBack(@NonNull GeckoSession session, boolean canGoBack) {
                 tab.canGoBack = canGoBack;
@@ -1431,7 +1494,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    private void createNewTab(String url) {
+    private GeckoSession createNewTab(String url) {
         TabInfo info = new TabInfo(null);
         info.url = url;
         if (Config.URL_BLANK.equals(url)) {
@@ -1444,6 +1507,7 @@ public class MainActivity extends AppCompatActivity {
         }
         switchToTab(tabs.size() - 1);
         updateBottomTabCounter();
+        return info.session;
     }
     private void updateTabInfo(GeckoSession session, String url, String title) {
         for (int i = 0; i < tabs.size(); i++) {
@@ -2966,6 +3030,44 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void createTab(String url) {
                 runOnUiThread(() -> createNewTab(url));
+            }
+
+            @Override
+            public void scrollBy(int x, int y) {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) {
+                        session.loadUri("javascript:window.scrollBy({top: " + y + ", left: " + x + ", behavior: 'smooth'})");
+                    }
+                });
+            }
+
+            @Override
+            public void scrollTo(int x, int y) {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) {
+                        session.loadUri("javascript:window.scrollTo({top: " + y + ", left: " + x + ", behavior: 'smooth'})");
+                    }
+                });
+            }
+
+            @Override
+            public void clearHistory() {
+                com.olsc.manorbrowser.data.HistoryStorage.clearHistory(MainActivity.this);
+            }
+            
+            @Override
+            public void clearDownloads() {
+                com.olsc.manorbrowser.data.DownloadStorage.clearAllDownloads(MainActivity.this);
+            }
+
+            @Override
+            public void exitAi() {
+                if (getApplication() instanceof com.olsc.manorbrowser.ManorBrowserApp) {
+                    com.olsc.manorbrowser.utils.AiCommandClient client = ((com.olsc.manorbrowser.ManorBrowserApp) getApplication()).getAiCommandClient();
+                    if (client != null) client.stop();
+                }
             }
         });
 

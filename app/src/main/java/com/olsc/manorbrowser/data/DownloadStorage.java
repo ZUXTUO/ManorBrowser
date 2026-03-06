@@ -41,6 +41,11 @@ public class DownloadStorage {
         saveAll(context, list);
     }
 
+    public static synchronized void clearAllDownloads(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().remove(KEY_DOWNLOADS).apply();
+    }
+
     public static List<DownloadInfo> getAllDownloads(Context context) {
         List<DownloadInfo> list = new ArrayList<>();
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

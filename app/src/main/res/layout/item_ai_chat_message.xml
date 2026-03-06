@@ -89,6 +89,14 @@
                     android:textSize="11sp" />
             </LinearLayout>
 
+            <!-- 思考块容器 -->
+            <LinearLayout
+                android:id="@+id/think_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
             <!-- AI 气泡 -->
             <TextView
                 android:id="@+id/tv_ai_bubble"

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络连接已断开</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #fff1f2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #880e4f;
+            animation: flow 10s ease infinite;
+        }
+
+        @keyframes flow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+            animation: fadeIn 1s;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.7;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: inline-block;
+            border: 1px solid rgba(136, 14, 79, 0.2);
+            color: #880e4f;
+        }
+
+        .btn-primary {
+            background: #880e4f;
+            color: white;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="icon">📡</div>
+        <h1>哎呀，网络开小差了</h1>
+        <p>检查一下你的 Wi-Fi 或数据连接，稍后再试吧。</p>
+        <div class="btn-group">
+            <a href="javascript:location.reload()" class="btn btn-primary">刷新重试</a>
+            <a href="404_game.html" class="btn" target="_blank">玩个游戏消遣下</a>
+        </div>
+    </div>
+</body>
+
+</html>

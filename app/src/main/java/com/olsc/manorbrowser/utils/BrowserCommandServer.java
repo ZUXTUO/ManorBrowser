@@ -67,6 +67,21 @@ public class BrowserCommandServer {
 
         /** 创建新标签页 */
         void createTab(String url);
+
+        /** 滚动页面 */
+        void scrollBy(int x, int y);
+
+        /** 滚动到具体位置 */
+        void scrollTo(int x, int y);
+
+        /** 清理历史记录 */
+        void clearHistory();
+
+        /** 清理下载记录 */
+        void clearDownloads();
+
+        /** 退出 AI 模式 */
+        void exitAi();
     }
 
     /** JS 执行结果回调 */

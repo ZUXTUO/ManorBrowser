@@ -1,5 +1,7 @@
 # Manor Browser (领域浏览器)
 
+[**简体中文**] | [**English**](README.md)
+
 ![Project Version](https://img.shields.io/badge/version-beta--0.0.1-blue)
 ![Engine](https://img.shields.io/badge/Engine-GeckoView--148-orange)
 ![License](https://img.shields.io/badge/License-Apache--2.0-green)
