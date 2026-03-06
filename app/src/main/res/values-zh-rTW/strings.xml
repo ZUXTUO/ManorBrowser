@@ -343,4 +343,27 @@
     <string name="ai_tool_exit_ai">正在關閉助手並退出托管模式...</string>
     <string name="ai_tool_eval_js">執行腳本自動化...</string>
     <string name="ai_thinking_dots">思考中...</string>
+    <string name="engine_bing">必应</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">雅虎</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">搜狗</string>
+    <string name="engine_360">360搜索</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    <string name="action_close_all_tabs_in_group">關閉目前群組的所有分頁</string>
+    <string name="action_save_to_new_group">放入新群組</string>
+    <string name="action_switch_to_group">切換到群組: %1$s</string>
+    <string name="action_return_to_default_group">返回預設群組</string>
+    <string name="title_new_tab_group">新群組名稱</string>
+    <string name="hint_tab_group_name">請輸入群組名稱</string>
+    <string name="msg_tab_group_saved">已儲存到新群組</string>
+    <string name="default_group_name">預設群組</string>
+    <string name="msg_group_closed">群組 %1$s 已關閉</string>
 </resources>

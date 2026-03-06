@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSwitchingTab = false; // 防止switchToTab重入导致的崩溃和逻辑混乱
     private boolean isProcessingAction = false; // 全局锁，防止多重点击导致的 PixelCopy 并发或状态异常
     private boolean isFullScreenMode = false;
+    private String currentTabGroup = null;
     private GeckoResult<PromptDelegate.PromptResponse> mFilePromptResult = null;
     private PromptDelegate.FilePrompt mCurrentFilePrompt = null;
     private ActivityResultLauncher<android.content.Intent> mFilePickerLauncher;
@@ -413,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @SuppressLint("NotifyDataSetChanged")
     private void restoreTabsOrInit() {
-        List<TabInfo> savedTabs = TabStorage.loadTabs(this);
+        List<TabInfo> savedTabs = TabStorage.loadTabs(this, currentTabGroup);
         if (savedTabs != null && !savedTabs.isEmpty()) {
             tabs.clear();
             tabs.addAll(savedTabs);
@@ -1160,7 +1161,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         // 传递副本以确保后台线程保存时的线程安全
-        TabStorage.saveTabs(this, new ArrayList<>(tabs));
+        TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
     }
     @Override
     protected void onDestroy() {
@@ -1623,7 +1624,27 @@ public class MainActivity extends AppCompatActivity {
         tabs.remove(position);
         
         if (tabs.isEmpty()) {
-            createNewTab("about:blank");
+            if (currentTabGroup != null) {
+                TabStorage.deleteGroup(this, currentTabGroup);
+                Toast.makeText(this, getString(R.string.msg_group_closed, currentTabGroup), Toast.LENGTH_SHORT).show();
+                currentTabGroup = null;
+                
+                List<TabInfo> savedTabs = TabStorage.loadTabs(this, null);
+                if (savedTabs != null && !savedTabs.isEmpty()) {
+                    tabs.addAll(savedTabs);
+                    for (TabInfo t : tabs) {
+                        initializeSessionForTab(t);
+                    }
+                    if (tabSwitcherAdapter != null) {
+                        tabSwitcherAdapter.notifyDataSetChanged();
+                    }
+                    switchToTab(tabs.size() - 1);
+                } else {
+                    createNewTab(Config.URL_BLANK);
+                }
+            } else {
+                createNewTab(Config.URL_BLANK);
+            }
             if (tabSwitcherAdapter != null) {
                 tabSwitcherAdapter.notifyDataSetChanged();
             }
@@ -1711,16 +1732,102 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showTabManagerOptionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String[] options = {getString(R.string.action_close_all_tabs)};
+        String title = currentTabGroup != null ? currentTabGroup : getString(R.string.default_group_name);
+        builder.setTitle(title);
         
-        builder.setItems(options, (dialog, which) -> {
+        List<CharSequence> options = new ArrayList<>();
+        options.add(getString(R.string.action_close_all_tabs_in_group));
+        options.add(getString(R.string.action_save_to_new_group));
+        
+        List<String> groups = TabStorage.getGroups(this);
+        int[] groupColors = {0xFFE53935, 0xFF1E88E5, 0xFF43A047, 0xFFFDD835, 0xFF8E24AA, 0xFFF4511E, 0xFF00ACC1};
+        int colorIdx = 0;
+        
+        for (String g : groups) {
+            String mark = (currentTabGroup != null && currentTabGroup.equals(g)) ? " *" : "";
+            String fullStr = getString(R.string.action_switch_to_group, g) + mark;
+            android.text.SpannableString sp = new android.text.SpannableString(fullStr);
+            sp.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, fullStr.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sp.setSpan(new android.text.style.ForegroundColorSpan(groupColors[colorIdx % groupColors.length]), 0, fullStr.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            options.add(sp);
+            colorIdx++;
+        }
+        if (currentTabGroup != null) {
+            options.add(getString(R.string.action_return_to_default_group));
+        }
+        
+        builder.setItems(options.toArray(new CharSequence[0]), (dialog, which) -> {
             if (which == 0) {
-                // 关闭所有标签页
                 showCloseAllTabsConfirmDialog();
+            } else if (which == 1) {
+                showSaveToNewGroupDialog();
+            } else {
+                int groupIndex = which - 2;
+                if (groupIndex < groups.size()) {
+                    switchToGroup(groups.get(groupIndex));
+                } else {
+                    switchToGroup(null);
+                }
             }
         });
         
         builder.show();
+    }
+    
+    private void showSaveToNewGroupDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.title_new_tab_group);
+        
+        final EditText input = new EditText(this);
+        input.setHint(R.string.hint_tab_group_name);
+        builder.setView(input);
+        
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            String newGroup = input.getText().toString().trim();
+            if (!newGroup.isEmpty()) {
+
+                TabStorage.saveTabs(this, newGroup, new ArrayList<>(tabs));
+
+                TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>());
+
+                currentTabGroup = newGroup;
+                
+                Toast.makeText(this, R.string.msg_tab_group_saved, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
+    }
+
+    private void switchToGroup(String newGroup) {
+        TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
+        
+        for (TabInfo tab : tabs) {
+            if (tab.session != null) {
+                tab.session.close();
+            }
+        }
+        tabs.clear();
+        currentTabIndex = -1;
+        
+        currentTabGroup = newGroup;
+        
+        List<TabInfo> savedTabs = TabStorage.loadTabs(this, currentTabGroup);
+        if (savedTabs != null && !savedTabs.isEmpty()) {
+            tabs.addAll(savedTabs);
+            for (TabInfo tab : tabs) {
+                initializeSessionForTab(tab);
+            }
+            if (tabSwitcherAdapter != null) {
+                tabSwitcherAdapter.notifyDataSetChanged();
+            }
+            switchToTab(tabs.size() - 1);
+            updateBottomTabCounter();
+        } else {
+            createNewTab(Config.URL_BLANK);
+        }
+        
+        if (isTabSwitcherVisible) toggleTabSwitcher();
     }
     
     private void showCloseAllTabsConfirmDialog() {
@@ -1749,19 +1856,38 @@ public class MainActivity extends AppCompatActivity {
         tabs.clear();
         currentTabIndex = -1;
         
-        // 保存空的标签页状态（传递副本以确保线程安全）
-        TabStorage.saveTabs(this, new ArrayList<>(tabs));
+        if (currentTabGroup != null) {
+            TabStorage.deleteGroup(this, currentTabGroup);
+            Toast.makeText(this, getString(R.string.msg_group_closed, currentTabGroup), Toast.LENGTH_SHORT).show();
+            currentTabGroup = null;
+            
+            List<TabInfo> savedTabs = TabStorage.loadTabs(this, null);
+            if (savedTabs != null && !savedTabs.isEmpty()) {
+                tabs.addAll(savedTabs);
+                for (TabInfo t : tabs) {
+                    initializeSessionForTab(t);
+                }
+                if (tabSwitcherAdapter != null) {
+                    tabSwitcherAdapter.notifyDataSetChanged();
+                }
+                switchToTab(tabs.size() - 1);
+            } else {
+                createNewTab(Config.URL_BLANK);
+            }
+        } else {
+            // 保存空的标签页状态（传递副本以确保线程安全）
+            TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
+            // 创建一个新的空白标签页
+            createNewTab(Config.URL_BLANK);
+            Toast.makeText(this, R.string.msg_all_tabs_closed, Toast.LENGTH_SHORT).show();
+        }
         
-        // 创建一个新的空白标签页
-        createNewTab(Config.URL_BLANK);
+        updateBottomTabCounter();
         
         // 如果当前在标签页切换器界面，关闭它
         if (isTabSwitcherVisible) {
             toggleTabSwitcher();
         }
-        
-        // 显示提示消息
-        Toast.makeText(this, R.string.msg_all_tabs_closed, Toast.LENGTH_SHORT).show();
     }
     private void toggleTabSwitcher() {
         if (isProcessingAction) return;
@@ -2506,7 +2632,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!newTitle.isEmpty()) {
                     tab.title = newTitle;
                     tabSwitcherAdapter.notifyItemChanged(position);
-                    TabStorage.saveTabs(this, tabs);
+                    TabStorage.saveTabs(this, currentTabGroup, tabs);
                     Toast.makeText(this, R.string.msg_tab_updated, Toast.LENGTH_SHORT).show();
                 }
             })

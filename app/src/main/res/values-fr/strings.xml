@@ -336,4 +336,27 @@
     <string name="ai_tool_exit_ai">Fermeture de l\'assistant et sortie...</string>
     <string name="ai_tool_eval_js">Exécution du script...</string>
     <string name="ai_thinking_dots">Réflexion...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

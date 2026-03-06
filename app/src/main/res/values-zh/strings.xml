@@ -8,6 +8,15 @@
     <string name="action_back">后退</string>
     <string name="title_new_tab">新标签页</string>
     <string name="title_settings">设置</string>
+    <string name="action_close_all_tabs_in_group">关闭当前组的所有标签</string>
+    <string name="action_save_to_new_group">放入新分组</string>
+    <string name="action_switch_to_group">切换到分组: %1$s</string>
+    <string name="action_return_to_default_group">返回默认分组</string>
+    <string name="title_new_tab_group">新分组名称</string>
+    <string name="hint_tab_group_name">请输入分组名称</string>
+    <string name="msg_tab_group_saved">已保存到新分组</string>
+    <string name="default_group_name">默认分组</string>
+    <string name="msg_group_closed">分组 %1$s 已关闭</string>
     <string name="label_default_search_engine">默认搜索引擎</string>
     <string name="engine_baidu">百度</string>
     <string name="engine_google">谷歌</string>
@@ -347,4 +356,18 @@ URL: %1$s</string>
     <string name="ai_tool_exit_ai">正在关闭助手并退出托管模式...</string>
     <string name="ai_tool_eval_js">执行脚本自动化...</string>
     <string name="ai_thinking_dots">思考中...</string>
+    <string name="engine_bing">必应</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">雅虎</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">搜狗</string>
+    <string name="engine_360">360搜索</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
 </resources>

@@ -54,6 +54,34 @@ public class SearchHelper {
 
         if (Config.ENGINE_GOOGLE.equals(engine)) {
             return "https://www.google.com/search?q=" + query;
+        } else if (Config.ENGINE_BING.equals(engine)) {
+            return "https://www.bing.com/search?q=" + query;
+        } else if (Config.ENGINE_DUCKDUCKGO.equals(engine)) {
+            return "https://duckduckgo.com/?q=" + query;
+        } else if (Config.ENGINE_YAHOO.equals(engine)) {
+            return "https://search.yahoo.com/search?p=" + query;
+        } else if (Config.ENGINE_YANDEX.equals(engine)) {
+            return "https://yandex.com/search/?text=" + query;
+        } else if (Config.ENGINE_ECOSIA.equals(engine)) {
+            return "https://www.ecosia.org/search?q=" + query;
+        } else if (Config.ENGINE_BRAVE.equals(engine)) {
+            return "https://search.brave.com/search?q=" + query;
+        } else if (Config.ENGINE_STARTPAGE.equals(engine)) {
+            return "https://www.startpage.com/sp/search?query=" + query;
+        } else if (Config.ENGINE_SOGOU.equals(engine)) {
+            return "https://www.sogou.com/web?query=" + query;
+        } else if (Config.ENGINE_360.equals(engine)) {
+            return "https://www.so.com/s?q=" + query;
+        } else if (Config.ENGINE_QWANT.equals(engine)) {
+            return "https://www.qwant.com/?q=" + query;
+        } else if (Config.ENGINE_NAVER.equals(engine)) {
+            return "https://search.naver.com/search.naver?query=" + query;
+        } else if (Config.ENGINE_SEZNAM.equals(engine)) {
+            return "https://search.seznam.cz/?q=" + query;
+        } else if (Config.ENGINE_MOJEEK.equals(engine)) {
+            return "https://www.mojeek.com/search?q=" + query;
+        } else if (Config.ENGINE_METAGER.equals(engine)) {
+            return "https://metager.org/meta/meta.ger3?eingabe=" + query;
         } else {
             return "https://www.baidu.com/s?wd=" + query;
         }

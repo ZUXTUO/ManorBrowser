@@ -57,6 +57,34 @@ public class Config {
     public static final String ENGINE_BAIDU = "baidu";
     /** 谷歌搜索 */
     public static final String ENGINE_GOOGLE = "google";
+    /** 必应搜索 */
+    public static final String ENGINE_BING = "bing";
+    /** 鸭鸭搜索 */
+    public static final String ENGINE_DUCKDUCKGO = "duckduckgo";
+    /** 雅虎搜索 */
+    public static final String ENGINE_YAHOO = "yahoo";
+    /** Yandex搜索 */
+    public static final String ENGINE_YANDEX = "yandex";
+    /** Ecosia 搜索 */
+    public static final String ENGINE_ECOSIA = "ecosia";
+    /** Brave 搜索 */
+    public static final String ENGINE_BRAVE = "brave";
+    /** Startpage */
+    public static final String ENGINE_STARTPAGE = "startpage";
+    /** 搜狗搜索 */
+    public static final String ENGINE_SOGOU = "sogou";
+    /** 360搜索 */
+    public static final String ENGINE_360 = "360";
+    /** Qwant */
+    public static final String ENGINE_QWANT = "qwant";
+    /** Naver */
+    public static final String ENGINE_NAVER = "naver";
+    /** Seznam */
+    public static final String ENGINE_SEZNAM = "seznam";
+    /** Mojeek */
+    public static final String ENGINE_MOJEEK = "mojeek";
+    /** MetaGer */
+    public static final String ENGINE_METAGER = "metager";
 
     // --- URL 常量 ---
     /** 空白页 */

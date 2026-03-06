@@ -25,7 +25,14 @@ import android.os.Looper;
 
 public class TabStorage {
     /** 标签列表配置文件名 */
-    private static final String FILE_NAME = "tabs.json";
+    private static final String DEFAULT_FILE_NAME = "tabs.json";
+    
+    private static String getFileName(String groupId) {
+        if (groupId == null || groupId.isEmpty()) {
+            return DEFAULT_FILE_NAME;
+        }
+        return "tabs_group_" + groupId + ".json";
+    }
     /** 缩略图存放子目录 */
     private static final String THUMB_DIR = "thumbnails";
     
@@ -40,7 +47,7 @@ public class TabStorage {
     /**
      * 保存所有标签页数据到磁盘（异步执行）
      */
-    public static void saveTabs(Context context, List<TabInfo> tabs) {
+    public static void saveTabs(Context context, String groupId, List<TabInfo> tabs) {
         executor.execute(() -> {
             try {
                 JSONArray jsonArray = new JSONArray();
@@ -55,7 +62,8 @@ public class TabStorage {
                     saveThumbnail(context, tab);
                 }
                 
-                File file = new File(context.getFilesDir(), FILE_NAME);
+                
+                File file = new File(context.getFilesDir(), getFileName(groupId));
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     fos.write(jsonArray.toString().getBytes());
                 }
@@ -68,10 +76,10 @@ public class TabStorage {
     /**
      * 同步加载保存好的标签页信息（不含大图缩略图）
      */
-    public static List<TabInfo> loadTabs(Context context) {
+    public static List<TabInfo> loadTabs(Context context, String groupId) {
         List<TabInfo> tabs = new ArrayList<>();
         try {
-            File file = new File(context.getFilesDir(), FILE_NAME);
+            File file = new File(context.getFilesDir(), getFileName(groupId));
             if (!file.exists()) return tabs;
             
             FileInputStream fis = new FileInputStream(file);
@@ -96,6 +104,33 @@ public class TabStorage {
             e.printStackTrace();
         }
         return tabs;
+    }
+
+    /**
+     * 获取所有已保存的分组名称
+     */
+    public static List<String> getGroups(Context context) {
+        List<String> groups = new ArrayList<>();
+        File[] files = context.getFilesDir().listFiles();
+        if (files != null) {
+            for (File f : files) {
+                String name = f.getName();
+                if (name.startsWith("tabs_group_") && name.endsWith(".json")) {
+                    groups.add(name.substring(11, name.length() - 5));
+                }
+            }
+        }
+        return groups;
+    }
+
+    /**
+     * 删除分组
+     */
+    public static void deleteGroup(Context context, String groupId) {
+        File file = new File(context.getFilesDir(), getFileName(groupId));
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     /**
