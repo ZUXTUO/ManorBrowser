@@ -3031,6 +3031,44 @@ public class MainActivity extends AppCompatActivity {
             public void createTab(String url) {
                 runOnUiThread(() -> createNewTab(url));
             }
+
+            @Override
+            public void scrollBy(int x, int y) {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) {
+                        session.loadUri("javascript:window.scrollBy({top: " + y + ", left: " + x + ", behavior: 'smooth'})");
+                    }
+                });
+            }
+
+            @Override
+            public void scrollTo(int x, int y) {
+                runOnUiThread(() -> {
+                    GeckoSession session = getCurrentSession();
+                    if (session != null) {
+                        session.loadUri("javascript:window.scrollTo({top: " + y + ", left: " + x + ", behavior: 'smooth'})");
+                    }
+                });
+            }
+
+            @Override
+            public void clearHistory() {
+                com.olsc.manorbrowser.data.HistoryStorage.clearHistory(MainActivity.this);
+            }
+            
+            @Override
+            public void clearDownloads() {
+                com.olsc.manorbrowser.data.DownloadStorage.clearAllDownloads(MainActivity.this);
+            }
+
+            @Override
+            public void exitAi() {
+                if (getApplication() instanceof com.olsc.manorbrowser.ManorBrowserApp) {
+                    com.olsc.manorbrowser.utils.AiCommandClient client = ((com.olsc.manorbrowser.ManorBrowserApp) getApplication()).getAiCommandClient();
+                    if (client != null) client.stop();
+                }
+            }
         });
 
         // 注册到 Application 并启动轮询

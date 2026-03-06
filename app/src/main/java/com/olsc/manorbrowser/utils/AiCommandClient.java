@@ -313,13 +313,25 @@ public class AiCommandClient {
                 case "scroll_to": {
                     int x = params.optInt("x", 0);
                     int y = params.optInt("y", 0);
-                    String js = "window.scrollTo(" + x + "," + y + "); 'ok'";
-                    return jsonOk(evalSync(js, 5));
+                    handler.scrollTo(x, y);
+                    return jsonOk("ok");
                 }
                 case "scroll_by": {
                     int dy = params.optInt("dy", 400);
-                    String js = "window.scrollBy(0, " + dy + "); 'ok'";
-                    return jsonOk(evalSync(js, 5));
+                    handler.scrollBy(0, dy);
+                    return jsonOk("ok");
+                }
+                case "clear_history": {
+                    handler.clearHistory();
+                    return jsonOk("ok");
+                }
+                case "clear_downloads": {
+                    handler.clearDownloads();
+                    return jsonOk("ok");
+                }
+                case "exit_ai": {
+                    handler.exitAi();
+                    return jsonOk("ok");
                 }
                 case "ping":
                     return jsonOk("pong");

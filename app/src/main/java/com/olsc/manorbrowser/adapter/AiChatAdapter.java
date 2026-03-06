@@ -28,7 +28,8 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
         public String text;       // 消息文本
         public String toolCall;   // tool调用描述（可选）
         public boolean thinking;  // 是否正在思考
-        public String statusText; // 思考状态文字（如"执行工具中..."）
+        public final List<Boolean> thinkExpandedStates = new ArrayList<>(); // 记录每一段思考的展开状态
+        public String statusText; // 状态文字
         public final List<String> logSteps = new ArrayList<>(); // 操作日志记录
 
         public ChatMessage(int type, String text) {
@@ -47,7 +48,7 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
         public static ChatMessage aiThinking(String statusText) {
             ChatMessage m = new ChatMessage(TYPE_AI, "");
             m.thinking = true;
-            m.statusText = statusText != null ? statusText : "思考中...";
+            m.statusText = statusText;
             return m;
         }
     }
@@ -151,55 +152,84 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
         onBindViewHolder(h, pos, new ArrayList<>());
     }
 
-    private CharSequence formatMessage(String text) {
-        if (text == null) return "";
-        android.text.SpannableStringBuilder ssb = new android.text.SpannableStringBuilder();
-        String lowerText = text.toLowerCase();
-        String thinkStart = "<think>";
-        String thinkEnd = "</think>";
-        
-        int currentIndex = 0;
-        while (currentIndex < text.length()) {
-            int startIdx = lowerText.indexOf(thinkStart, currentIndex);
+    private void bindAiText(VH h, ChatMessage msg, int pos) {
+        String plainText = msg.text;
+        if (plainText != null) {
+            plainText = plainText.replaceAll("(?s)<tool_call>.*?(</tool_call>|$)", "");
+        } else {
+            plainText = "";
+        }
+
+        h.thinkContainer.removeAllViews();
+        h.thinkContainer.setVisibility(View.GONE);
+
+        String lowerText = plainText.toLowerCase();
+        int lastPos = 0;
+        int thinkIndex = 0;
+        StringBuilder normalTextBuilder = new StringBuilder();
+
+        while (true) {
+            int startIdx = lowerText.indexOf("<think>", lastPos);
             if (startIdx == -1) {
-                ssb.append(text.substring(currentIndex));
+                normalTextBuilder.append(plainText.substring(lastPos));
                 break;
             }
-            
-            ssb.append(text.substring(currentIndex, startIdx));
-            
-            int thinkContentStart = startIdx + thinkStart.length();
-            if (thinkContentStart < text.length() && text.charAt(thinkContentStart) == '\n') {
-                thinkContentStart++;
-            }
-            
-            int endIdx = lowerText.indexOf(thinkEnd, thinkContentStart);
-            int spanStart = ssb.length();
-            
-            if (endIdx == -1) {
-                ssb.append(text.substring(thinkContentStart));
-                int spanEnd = ssb.length();
-                setThinkSpan(ssb, spanStart, spanEnd);
-                break;
+
+            normalTextBuilder.append(plainText.substring(lastPos, startIdx));
+            int contentStart = startIdx + 7;
+            int endIdx = lowerText.indexOf("</think>", contentStart);
+
+            String thinkContent;
+            if (endIdx != -1) {
+                thinkContent = plainText.substring(contentStart, endIdx).trim();
+                lastPos = endIdx + 8;
             } else {
-                ssb.append(text.substring(thinkContentStart, endIdx));
-                int spanEnd = ssb.length();
-                setThinkSpan(ssb, spanStart, spanEnd);
-                
-                currentIndex = endIdx + thinkEnd.length();
-                if (currentIndex < text.length() && text.charAt(currentIndex) == '\n') {
-                    currentIndex++;
-                }
+                thinkContent = plainText.substring(contentStart).trim();
+                lastPos = plainText.length();
+            }
+
+            if (!thinkContent.isEmpty()) {
+                addThinkView(h.thinkContainer, msg, pos, thinkIndex++, thinkContent);
+                h.thinkContainer.setVisibility(View.VISIBLE);
             }
         }
-        return ssb;
+
+        String finalNormal = normalTextBuilder.toString().trim();
+        if (!finalNormal.isEmpty()) {
+            h.tvAiBubble.setVisibility(View.VISIBLE);
+            h.tvAiBubble.setText(finalNormal);
+        } else {
+            h.tvAiBubble.setVisibility(View.GONE);
+        }
     }
 
-    private void setThinkSpan(android.text.SpannableStringBuilder ssb, int start, int end) {
-        if (start >= end) return;
-        ssb.setSpan(new android.text.style.RelativeSizeSpan(0.85f), start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.setSpan(new android.text.style.ForegroundColorSpan(0xFF999999), start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.ITALIC), start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    private void addThinkView(LinearLayout container, ChatMessage msg, int messagePos, int thinkIndex, String content) {
+        View v = LayoutInflater.from(container.getContext()).inflate(R.layout.view_think_bubble, container, false);
+        TextView tv = v.findViewById(R.id.tv_think_content);
+        
+        while (msg.thinkExpandedStates.size() <= thinkIndex) {
+            msg.thinkExpandedStates.add(false);
+        }
+        boolean isExpanded = msg.thinkExpandedStates.get(thinkIndex);
+
+        tv.setText(content);
+        if (!isExpanded) {
+            tv.setMaxLines(2000);
+            int lineHeight = tv.getLineHeight();
+            if (lineHeight <= 0) lineHeight = (int) (tv.getTextSize() * 1.4f + 0.5f);
+            tv.setMaxHeight(lineHeight * 3 + tv.getPaddingTop() + tv.getPaddingBottom());
+            tv.setGravity(android.view.Gravity.BOTTOM);
+        } else {
+            tv.setMaxLines(Integer.MAX_VALUE);
+            tv.setMaxHeight(Integer.MAX_VALUE);
+            tv.setGravity(android.view.Gravity.TOP);
+        }
+
+        v.setOnClickListener(view -> {
+            msg.thinkExpandedStates.set(thinkIndex, !isExpanded);
+            notifyItemChanged(messagePos, "think_expand");
+        });
+        container.addView(v);
     }
 
     @Override
@@ -210,17 +240,14 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
             // 局部更新逻辑，避免闪烁
             for (Object payload : payloads) {
                 if ("text".equals(payload)) {
-                    if (msg.text != null && !msg.text.isEmpty()) {
-                        h.tvAiBubble.setVisibility(View.VISIBLE);
-                        h.tvAiBubble.setText(formatMessage(msg.text));
-                    } else {
-                        h.tvAiBubble.setVisibility(View.GONE);
-                    }
+                    bindAiText(h, msg, pos);
                     // 状态通常在更新 text 时也会改变
                     h.aiStatusRow.setVisibility(msg.thinking ? View.VISIBLE : View.GONE);
+                } else if ("think_expand".equals(payload)) {
+                    bindAiText(h, msg, pos);
                 } else if ("status".equals(payload)) {
                     h.aiStatusRow.setVisibility(msg.thinking ? View.VISIBLE : View.GONE);
-                    h.tvAiStatusText.setText(msg.statusText != null ? msg.statusText : "思考中...");
+                    h.tvAiStatusText.setText(msg.statusText != null ? msg.statusText : h.itemView.getContext().getString(R.string.ai_thinking_dots));
                 } else if ("tool".equals(payload)) {
                     StringBuilder sb = new StringBuilder();
                     if (msg.toolCall != null && !msg.toolCall.isEmpty()) {
@@ -253,7 +280,7 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
             // 思考状态
             if (msg.thinking) {
                 h.aiStatusRow.setVisibility(View.VISIBLE);
-                h.tvAiStatusText.setText(msg.statusText != null ? msg.statusText : "思考中...");
+                h.tvAiStatusText.setText(msg.statusText != null ? msg.statusText : h.itemView.getContext().getString(R.string.ai_thinking_dots));
             } else {
                 h.aiStatusRow.setVisibility(View.GONE);
             }
@@ -274,19 +301,14 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
                 h.toolCallContainer.setVisibility(View.GONE);
             }
 
-            // 内容气泡
-            if (msg.text != null && !msg.text.isEmpty()) {
-                h.tvAiBubble.setVisibility(View.VISIBLE);
-                h.tvAiBubble.setText(formatMessage(msg.text));
-            } else {
-                h.tvAiBubble.setVisibility(View.GONE);
-            }
+            // 内容气泡 (普通文本与思考文本)
+            bindAiText(h, msg, pos);
         }
     }
 
     static class VH extends RecyclerView.ViewHolder {
         LinearLayout rowAi, rowUser;
-        LinearLayout aiStatusRow, toolCallContainer;
+        LinearLayout aiStatusRow, toolCallContainer, thinkContainer;
         TextView tvAiStatusText, tvToolCallText, tvAiBubble, tvUserBubble;
 
         VH(View v) {
@@ -295,6 +317,7 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
             rowUser = v.findViewById(R.id.row_user);
             aiStatusRow = v.findViewById(R.id.ai_status_row);
             toolCallContainer = v.findViewById(R.id.tool_call_container);
+            thinkContainer = v.findViewById(R.id.think_container);
             tvAiStatusText = v.findViewById(R.id.tv_ai_status_text);
             tvToolCallText = v.findViewById(R.id.tv_tool_call_text);
             tvAiBubble = v.findViewById(R.id.tv_ai_bubble);

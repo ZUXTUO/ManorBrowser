@@ -145,6 +145,18 @@ public class AiOverlayManager {
             if (activity instanceof MainActivity) {
                 ((MainActivity) activity).setBarsVisible(false);
             }
+            // 每次进入应用清空服务器上下文
+            networkExecutor.execute(() -> {
+                String baseUrl = aiClient.getServerUrl();
+                if (baseUrl != null && !baseUrl.isEmpty()) {
+                    try {
+                        URL url = new URL(baseUrl + "/api/chat/clear");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("POST");
+                        conn.getResponseCode(); // 发起请求
+                    } catch (Exception e) {}
+                }
+            });
             if (chatAdapter.getItemCount() == 0) {
                 chatAdapter.addMessage(AiChatAdapter.ChatMessage.aiMsg(activity.getString(R.string.ai_msg_hello)));
             }
@@ -249,6 +261,8 @@ public class AiOverlayManager {
                 String line;
 
                 StringBuilder currentAiText = new StringBuilder();
+                final boolean[] isThinkingMode = {false};
+                final boolean[] hasStartedThinkTag = {false};
 
                 while ((line = reader.readLine()) != null) {
                     if (line.trim().isEmpty()) continue;
@@ -261,14 +275,24 @@ public class AiOverlayManager {
 
                             mainHandler.post(() -> {
                                 if ("thinking".equals(type)) {
-                                    chatAdapter.updateLastAiStatus(data.optString("content", activity.getString(R.string.ai_msg_thinking)));
+                                    String c = data.optString("content");
+                                    if (c != null && !c.isEmpty()) {
+                                        if (!hasStartedThinkTag[0]) {
+                                            chatAdapter.appendToLastAiMessage("<think>");
+                                            hasStartedThinkTag[0] = true;
+                                            isThinkingMode[0] = true;
+                                        }
+                                        chatAdapter.appendToLastAiMessage(c);
+                                    }
                                 } 
                                 else if ("content".equals(type)) {
-                                    chatAdapter.updateLastAiStatus(null);
                                     String c = data.optString("content");
-                                    if (c != null) {
-                                        currentAiText.append(c);
-                                        chatAdapter.updateLastAiMessage(currentAiText.toString());
+                                    if (c != null && !c.isEmpty()) {
+                                        if (isThinkingMode[0]) {
+                                            chatAdapter.appendToLastAiMessage("</think>\n");
+                                            isThinkingMode[0] = false;
+                                        }
+                                        chatAdapter.appendToLastAiMessage(c);
                                     }
                                 } 
                                 else if ("tool_start".equals(type)) {
@@ -324,7 +348,7 @@ public class AiOverlayManager {
     }
 
     /**
-     * 将技术化的工具名和参数转换为友好的中文描述
+     * 将技术化的工具名和参数转换为友好的多国语言描述
      */
     private String getFriendlyToolName(String toolName, JSONObject args) {
         if (toolName == null) return "Unknown";
@@ -332,36 +356,42 @@ public class AiOverlayManager {
         
         switch (toolName) {
             case "browser_navigate": 
-                return "正在前往: " + args.optString("url", "...");
+                return activity.getString(R.string.ai_tool_navigate, args.optString("url", "..."));
             case "browser_search": 
-                return "搜索关键词: " + args.optString("keyword", "...");
-            case "browser_get_page_content": return "分析页面文本内容...";
-            case "browser_get_elements_tree": return "解析网页 UI 结构...";
+                return activity.getString(R.string.ai_tool_search, args.optString("keyword", "..."));
+            case "browser_get_page_content": return activity.getString(R.string.ai_tool_get_content);
+            case "browser_get_elements_tree": return activity.getString(R.string.ai_tool_get_tree);
             case "browser_click": 
                 String sel = args.optString("selector");
                 String txt = args.optString("text");
-                return "点击元素: " + (txt != null && !txt.isEmpty() ? txt : (sel != null && !sel.isEmpty() ? sel : "按钮"));
+                String displayName = (txt != null && !txt.isEmpty() ? txt : (sel != null && !sel.isEmpty() ? sel : activity.getString(R.string.ai_tool_click_default)));
+                return activity.getString(R.string.ai_tool_click, displayName);
             case "browser_set_input": 
-                return "填写文本: " + args.optString("value", "***");
+                return activity.getString(R.string.ai_tool_set_input, args.optString("value", "***"));
             case "browser_scroll": 
                 String dir = args.optString("direction", "down");
-                return "滚动页面 (" + ("down".equals(dir) ? "向下" : "向上") + ")...";
+                String dirName = "down".equals(dir) ? activity.getString(R.string.ai_tool_scroll_down) : activity.getString(R.string.ai_tool_scroll_up);
+                return activity.getString(R.string.ai_tool_scroll, dirName);
             case "browser_tab_management": {
                 String act = args.optString("action");
-                if ("new".equals(act)) return "新建标签页: " + args.optString("url", "...");
-                if ("switch".equals(act)) return "切换至标签 #" + args.optInt("index");
-                if ("close".equals(act)) return "关闭标签 #" + args.optInt("index");
-                return "管理浏览器标签...";
+                if ("new".equals(act)) return activity.getString(R.string.ai_tool_tab_new, args.optString("url", "..."));
+                if ("switch".equals(act)) return activity.getString(R.string.ai_tool_tab_switch, args.optInt("index"));
+                if ("close".equals(act)) return activity.getString(R.string.ai_tool_tab_close, args.optInt("index"));
+                return activity.getString(R.string.ai_tool_tab_manage);
             }
             case "browser_navigate_control": {
                 String act = args.optString("action");
-                if ("back".equals(act)) return "网页后退";
-                if ("forward".equals(act)) return "网页前进";
-                return "刷新当前页面";
+                if ("back".equals(act)) return activity.getString(R.string.ai_tool_nav_back);
+                if ("forward".equals(act)) return activity.getString(R.string.ai_tool_nav_forward);
+                return activity.getString(R.string.ai_tool_nav_reload);
             }
-            case "browser_get_status": return "同步浏览器运行状态...";
-            case "browser_get_history": return "查询历史记录...";
-            case "browser_get_downloads": return "检查下载状态...";
+            case "browser_get_status": return activity.getString(R.string.ai_tool_get_status);
+            case "browser_get_history": return activity.getString(R.string.ai_tool_get_history);
+            case "browser_get_downloads": return activity.getString(R.string.ai_tool_get_downloads);
+            case "browser_clear_history": return activity.getString(R.string.ai_tool_clear_history);
+            case "browser_clear_downloads": return activity.getString(R.string.ai_tool_clear_downloads);
+            case "browser_exit_ai": return activity.getString(R.string.ai_tool_exit_ai);
+            case "browser_eval_js": return activity.getString(R.string.ai_tool_eval_js);
             default: return toolName;
         }
     }
