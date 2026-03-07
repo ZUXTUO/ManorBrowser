@@ -231,7 +231,7 @@
     <string name="label_path">Ścieżka: %s</string>
     <string name="label_value">Wartość: %s</string>
     <string name="msg_no_cookies">Nie znaleziono plików cookie</string>
-    <string name="msg_confirm_delete_domain">Wycisnąć wszystkie pliki cookie i dane witryn dla %s?</string>
+    <string name="msg_confirm_delete_domain">Usunąć wszystkie pliki cookie i dane witryn dla %s?</string>
     <string name="title_extensions">Rozszerzenia</string>
     <string name="action_browse_extensions">Przeglądaj rozszerzenia</string>
     <string name="action_manage_extensions">Zarządzaj rozszerzeniami</string>
@@ -373,13 +373,14 @@
     <string name="title_restricted_sites">Uprawnienia Lokalizacji</string>
     <string name="msg_restricted_sites_desc">Zarządzaj witrynami, dla których dostęp do lokalizacji jest ustawiony na „Zawsze odmawiaj”.</string>
     <string name="action_remove">Usuń ograniczenie</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Zamknij wszystkie karty w grupie</string>
+    <string name="action_save_to_new_group">Zapisz w nowej grupie</string>
+    <string name="action_switch_to_group">Przełącz na grupę: %1$s</string>
+    <string name="action_return_to_default_group">Wróć do grupy domyślnej</string>
+    <string name="title_new_tab_group">Nazwa nowej grupy</string>
+    <string name="hint_tab_group_name">Wprowadź nazwę grupy</string>
+    <string name="msg_tab_group_saved">Zapisano w nowej grupie</string>
+    <string name="default_group_name">Grupa domyślna</string>
+    <string name="msg_group_closed">Grupa %1$s została zamknięta</string>
+    <string name="msg_load_timeout">Przekroczono czas ładowania strony, zatrzymano ładowanie</string>
 </resources>

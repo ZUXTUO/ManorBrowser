@@ -240,7 +240,7 @@
     <string name="msg_extension_installed">Tiện ích %1$s đã được cài đặt</string>
     <string name="msg_extension_install_failed">Cài đặt tiện ích thất bại</string>
     <string name="msg_installing_extension">Đang cài đặt tiện ích...</string>
-    <string name="msg_confirm_uninstall_extension">Gỡ lỗi %1$s?</string>
+    <string name="msg_confirm_uninstall_extension">Gỡ cài đặt %1$s?</string>
     <string name="msg_no_extensions">Không có tiện ích nào được cài đặt</string>
     <string name="label_version_value">Phiên bản: %1$s</string>
     <string name="action_extensions">Tiện ích đã cài đặt</string>
@@ -373,13 +373,14 @@
     <string name="title_restricted_sites">Quyền Vị trí</string>
     <string name="msg_restricted_sites_desc">Quản lý các trang web được đặt thành \"Luôn từ chối\" khi truy cập vị trí.</string>
     <string name="action_remove">Gỡ bỏ hạn chế</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Đóng tất cả các tab trong nhóm</string>
+    <string name="action_save_to_new_group">Lưu vào nhóm mới</string>
+    <string name="action_switch_to_group">Chuyển sang nhóm: %1$s</string>
+    <string name="action_return_to_default_group">Quay lại nhóm mặc định</string>
+    <string name="title_new_tab_group">Tên nhóm mới</string>
+    <string name="hint_tab_group_name">Nhập tên nhóm</string>
+    <string name="msg_tab_group_saved">Đã lưu vào nhóm mới</string>
+    <string name="default_group_name">Nhóm mặc định</string>
+    <string name="msg_group_closed">Nhóm %1$s đã đóng</string>
+    <string name="msg_load_timeout">Hết thời gian tải trang, đã dừng tải</string>
 </resources>

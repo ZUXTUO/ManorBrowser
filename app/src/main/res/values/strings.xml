@@ -386,4 +386,5 @@ URL: %1$s</string>
     <string name="title_restricted_sites">Location Permissions</string>
     <string name="msg_restricted_sites_desc">Manage sites that are set to \"Always Deny\" for location access.</string>
     <string name="action_remove">Remove Restriction</string>
+    <string name="msg_load_timeout">Page load timeout, stopped loading</string>
 </resources>

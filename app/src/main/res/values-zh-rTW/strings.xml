@@ -206,9 +206,9 @@
     
     <string name="title_download_settings">下載設定</string>
     <string name="pref_use_system_downloader">使用系統下載器</string>
-    <string name="pref_use_system_downloader_desc">使用安卓系統下載管理器下載文件</string>
+    <string name="pref_use_system_downloader_desc">使用安卓系統下載管理器下載檔案</string>
     <string name="pref_use_builtin_downloader">使用瀏覽器下載器</string>
-    <string name="pref_use_builtin_downloader_desc">使用瀏覽器內置下載管理器</string>
+    <string name="pref_use_builtin_downloader_desc">使用瀏覽器內建下載管理器</string>
     
     <string name="title_desktop_mode">桌面模式</string>
     <string name="title_mobile_mode">移動模式</string>
@@ -218,8 +218,8 @@
     <string name="msg_desktop_mode_on">已切換到桌面模式</string>
     <string name="msg_desktop_mode_off">已切換到移動模式</string>
     
-    <string name="title_file_exists">文件已存在</string>
-    <string name="msg_file_exists">文件 "%1$s" 已存在，是否下載新副本？</string>
+    <string name="title_file_exists">檔案已存在</string>
+    <string name="msg_file_exists">檔案 "%1$s" 已存在，是否下載新副本？</string>
     <string name="action_download_new">下載新副本</string>
     <string name="title_cookies">Cookies 與 網站數據</string>
     <string name="msg_clear_all_cookies">清除所有 Cookies 和網站數據嗎？</string>
@@ -231,17 +231,17 @@
     <string name="label_value">值: %s</string>
     <string name="msg_no_cookies">未找到 Cookies</string>
     <string name="msg_confirm_delete_domain">確定刪除 %s 的所有 Cookies 和網站數據嗎？</string>
-    <string name="title_extensions">瀏覽器插件</string>
-    <string name="action_browse_extensions">獲取插件</string>
-    <string name="action_manage_extensions">已安裝插件</string>
-    <string name="msg_extension_installed">已安裝插件：%1$s</string>
-    <string name="msg_extension_install_failed">插件安裝失敗</string>
-    <string name="msg_confirm_uninstall_extension">確定卸載插件 %1$s？</string>
-    <string name="msg_installing_extension">正在安裝插件...</string>
-    <string name="msg_no_extensions">暫無已安裝的插件</string>
+    <string name="title_extensions">擴充功能</string>
+    <string name="action_browse_extensions">獲取擴充功能</string>
+    <string name="action_manage_extensions">擴充功能管理</string>
+    <string name="msg_extension_installed">已安裝擴充功能：%1$s</string>
+    <string name="msg_extension_install_failed">擴充功能安裝失敗</string>
+    <string name="msg_confirm_uninstall_extension">確定解除安裝擴充功能 %1$s？</string>
+    <string name="msg_installing_extension">正在安裝擴充功能...</string>
+    <string name="msg_no_extensions">暫無已安裝的擴充功能</string>
     <string name="label_version_value">版本號：%1$s</string>
-    <string name="action_extensions">已安裝的插件</string>
-    <string name="action_extension_options">打開插件選單/設定</string>
+    <string name="action_extensions">已安裝擴充功能</string>
+    <string name="action_extension_options">打開擴充功能選單/設定</string>
     <string name="action_close_all_tabs">關閉所有分頁</string>
     <string name="msg_confirm_close_all_tabs">確定要關閉所有分頁嗎？</string>
     <string name="msg_all_tabs_closed">已關閉所有分頁</string>
@@ -381,4 +381,5 @@
     <string name="msg_tab_group_saved">已儲存到新群組</string>
     <string name="default_group_name">預設群組</string>
     <string name="msg_group_closed">群組 %1$s 已關閉</string>
+    <string name="msg_load_timeout">網頁載入超時，已停止載入</string>
 </resources>

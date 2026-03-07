@@ -364,13 +364,14 @@
     <string name="title_restricted_sites">"Standortberechtigungen"</string>
     <string name="msg_restricted_sites_desc">"Verwalten Sie Websites, für die der Standortzugriff auf \"Immer ablehnen\" gesetzt wurde."</string>
     <string name="action_remove">Einschränkung entfernen</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Alle Tabs in aktueller Gruppe schließen</string>
+    <string name="action_save_to_new_group">In neuer Gruppe speichern</string>
+    <string name="action_switch_to_group">Zu Gruppe wechseln: %1$s</string>
+    <string name="action_return_to_default_group">Zur Standardgruppe zurückkehren</string>
+    <string name="title_new_tab_group">Neuer Gruppenname</string>
+    <string name="hint_tab_group_name">Gruppenname eingeben</string>
+    <string name="msg_tab_group_saved">In neuer Gruppe gespeichert</string>
+    <string name="default_group_name">Standardgruppe</string>
+    <string name="msg_group_closed">Gruppe %1$s wurde geschlossen</string>
+    <string name="msg_load_timeout">Zeitüberschreitung beim Laden der Seite, Ladevorgang gestoppt</string>
 </resources>

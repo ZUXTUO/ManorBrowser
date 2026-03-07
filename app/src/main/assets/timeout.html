@@ -127,6 +127,17 @@
         document.getElementById('msg').innerText = i18n[lang].msg;
         document.getElementById('btn-retry').innerText = i18n[lang].btnRetry;
         document.getElementById('btn-game').innerText = i18n[lang].btnGame;
+
+        document.getElementById('btn-retry').onclick = function (e) {
+            e.preventDefault();
+            const params = new URLSearchParams(window.location.search);
+            const originalUrl = params.get('url');
+            if (originalUrl) {
+                window.location.href = originalUrl;
+            } else {
+                window.location.reload();
+            }
+        };
     </script>
 </body>
 

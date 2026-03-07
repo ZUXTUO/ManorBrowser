@@ -238,7 +238,7 @@
     <string name="msg_extension_installed">Ekstensi %1$s terinstal</string>
     <string name="msg_extension_install_failed">Instalasi ekstensi gagal</string>
     <string name="msg_installing_extension">Menginstal ekstensi...</string>
-    <string name="msg_confirm_uninstall_extension">Aninstal %1$s?</string>
+    <string name="msg_confirm_uninstall_extension">Hapus instalasi %1$s?</string>
     <string name="msg_no_extensions">Tidak ada ekstensi terinstal</string>
     <string name="label_version_value">Versi: %1$s</string>
     <string name="action_extensions">Ekstensi Terinstal</string>
@@ -373,13 +373,14 @@
     <string name="title_restricted_sites">Izin Lokasi</string>
     <string name="msg_restricted_sites_desc">Kelola situs yang disetel ke \"Selalu Tolak\" untuk akses lokasi.</string>
     <string name="action_remove">Hapus Batasan</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Tutup semua tab dalam grup</string>
+    <string name="action_save_to_new_group">Simpan ke grup baru</string>
+    <string name="action_switch_to_group">Beralih ke grup: %1$s</string>
+    <string name="action_return_to_default_group">Kembali ke grup default</string>
+    <string name="title_new_tab_group">Nama Grup Baru</string>
+    <string name="hint_tab_group_name">Masukkan nama grup</string>
+    <string name="msg_tab_group_saved">Disimpan ke grup baru</string>
+    <string name="default_group_name">Grup Default</string>
+    <string name="msg_group_closed">Grup %1$s telah ditutup</string>
+    <string name="msg_load_timeout">Waktu pemuatan halaman habis, pemuatan dihentikan</string>
 </resources>

@@ -374,13 +374,14 @@
     <string name="title_restricted_sites">위치 정보 권한 관리</string>
     <string name="msg_restricted_sites_desc">위치 정보 접근이 "항상 거부"로 설정된 사이트를 관리합니다.</string>
     <string name="action_remove">제한 해제</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">현재 그룹의 모든 탭 닫기</string>
+    <string name="action_save_to_new_group">새 그룹으로 이동</string>
+    <string name="action_switch_to_group">그룹으로 전환: %1$s</string>
+    <string name="action_return_to_default_group">기본 그룹으로 돌아가기</string>
+    <string name="title_new_tab_group">새 그룹 이름</string>
+    <string name="hint_tab_group_name">그룹 이름 입력</string>
+    <string name="msg_tab_group_saved">새 그룹에 저장됨</string>
+    <string name="default_group_name">기본 그룹</string>
+    <string name="msg_group_closed">%1$s 그룹이 닫혔습니다</string>
+    <string name="msg_load_timeout">페이지 로드 시간 초과, 로드가 중지되었습니다</string>
 </resources>

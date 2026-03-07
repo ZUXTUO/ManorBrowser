@@ -11,8 +11,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class BookmarkStorage {
     /** 书签存储的文件名 */
@@ -25,7 +28,13 @@ public class BookmarkStorage {
         List<BookmarkItem> bookmarks = new ArrayList<>();
         try {
             File file = new File(context.getFilesDir(), FILE_NAME);
-            if (!file.exists()) return bookmarks;
+            if (!file.exists()) {
+                bookmarks = initDefaultBookmarksIfNeeded(context);
+                if (!bookmarks.isEmpty()) {
+                    saveBookmarks(context, bookmarks);
+                }
+                return bookmarks;
+            }
             
             FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
@@ -35,6 +44,25 @@ public class BookmarkStorage {
             JSONArray arr = new JSONArray(new String(data));
             for (int i = 0; i < arr.length(); i++) {
                 bookmarks.add(BookmarkItem.fromJson(arr.getJSONObject(i)));
+            }
+
+            // 如果是朝鲜语/朝鲜地区环境且缺失光明星书签，自动补全
+            Locale locale = context.getResources().getConfiguration().getLocales().get(0);
+            if ("KP".equalsIgnoreCase(locale.getCountry()) && "ko".equalsIgnoreCase(locale.getLanguage())) {
+                boolean hasKwangmyong = false;
+                for (BookmarkItem item : bookmarks) {
+                    if ("광명 (국가망)".equals(item.title)) {
+                        hasKwangmyong = true;
+                        break;
+                    }
+                }
+                if (!hasKwangmyong) {
+                    List<BookmarkItem> defaults = initDefaultBookmarksIfNeeded(context);
+                    if (!defaults.isEmpty()) {
+                        bookmarks.addAll(defaults);
+                        saveBookmarks(context, bookmarks);
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,5 +209,34 @@ public class BookmarkStorage {
             }
         }
         return null;
+    }
+
+    /**
+     * 根据语言环境（朝鲜语）初始化默认书签
+     */
+    private static List<BookmarkItem> initDefaultBookmarksIfNeeded(Context context) {
+        List<BookmarkItem> bookmarks = new ArrayList<>();
+        Locale locale = context.getResources().getConfiguration().getLocales().get(0);
+        String country = locale.getCountry();
+        String language = locale.getLanguage();
+
+        // 只有当语言为 ko 且地区为 KP 时才载入（区分于通用韩文 ko-rKR）
+        if ("KP".equalsIgnoreCase(country) && "ko".equalsIgnoreCase(language)) {
+            try {
+                InputStream is = context.getAssets().open("default_bookmarks_ko_rkp.json");
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+                String jsonStr = new String(buffer, StandardCharsets.UTF_8);
+                JSONArray arr = new JSONArray(jsonStr);
+                for (int i = 0; i < arr.length(); i++) {
+                    bookmarks.add(BookmarkItem.fromJson(arr.getJSONObject(i)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return bookmarks;
     }
 }

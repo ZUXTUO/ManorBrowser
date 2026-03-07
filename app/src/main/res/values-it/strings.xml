@@ -364,13 +364,14 @@
     <string name="title_restricted_sites">"Permessi Posizione"</string>
     <string name="msg_restricted_sites_desc">"Gestisci i siti impostati su \"Nega sempre\" per l'accesso alla posizione."</string>
     <string name="action_remove">Rimuovi restrizione</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Chiudi tutte le schede nel gruppo</string>
+    <string name="action_save_to_new_group">Salva in un nuovo gruppo</string>
+    <string name="action_switch_to_group">Passa al gruppo: %1$s</string>
+    <string name="action_return_to_default_group">Torna al gruppo predefinito</string>
+    <string name="title_new_tab_group">Nome nuovo gruppo</string>
+    <string name="hint_tab_group_name">Inserisci nome gruppo</string>
+    <string name="msg_tab_group_saved">Salvato nel nuovo gruppo</string>
+    <string name="default_group_name">Gruppo predefinito</string>
+    <string name="msg_group_closed">Il gruppo %1$s è stato chiuso</string>
+    <string name="msg_load_timeout">Tempo di caricamento della pagina scaduto, caricamento interrotto</string>
 </resources>

@@ -8,7 +8,7 @@
     <string name="action_back">后退</string>
     <string name="title_new_tab">新标签页</string>
     <string name="title_settings">设置</string>
-    <string name="action_close_all_tabs_in_group">关闭当前组的所有标签</string>
+    <string name="action_close_all_tabs_in_group">关闭当前分组的所有标签</string>
     <string name="action_save_to_new_group">放入新分组</string>
     <string name="action_switch_to_group">切换到分组: %1$s</string>
     <string name="action_return_to_default_group">返回默认分组</string>
@@ -247,14 +247,14 @@ URL: %1$s</string>
     <string name="msg_confirm_delete_domain">确定删除 %s 的所有 Cookies 和网站数据吗？</string>
     <string name="title_extensions">浏览器插件</string>
     <string name="action_browse_extensions">获取插件</string>
-    <string name="action_manage_extensions">已安装插件</string>
+    <string name="action_manage_extensions">插件管理</string>
     <string name="msg_extension_installed">已安装插件：%1$s</string>
     <string name="msg_extension_install_failed">插件安装失败</string>
     <string name="msg_confirm_uninstall_extension">确定卸载插件 %1$s？</string>
     <string name="msg_installing_extension">正在安装插件...</string>
     <string name="msg_no_extensions">暂无已安装的插件</string>
     <string name="label_version_value">版本号：%1$s</string>
-    <string name="action_extensions">已安装的插件</string>
+    <string name="action_extensions">已安装插件</string>
     <string name="action_extension_options">打开插件菜单/设置</string>
     <string name="action_close_all_tabs">关闭所有标签页</string>
     <string name="msg_confirm_close_all_tabs">确定要关闭所有标签页吗？</string>
@@ -384,4 +384,5 @@ URL: %1$s</string>
     <string name="title_restricted_sites">位置权限管理</string>
     <string name="msg_restricted_sites_desc">在此管理已设置为“始终拒绝”访问位置信息的网站。</string>
     <string name="action_remove">移除限制</string>
+    <string name="msg_load_timeout">网页加载超时，已停止加载</string>
 </resources>

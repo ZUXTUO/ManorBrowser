@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private androidx.recyclerview.widget.RecyclerView tabSwitcher;
     private EditText urlInput;
     private View topBar, bottomBar, contentContainer, fullscreenMenuContainer;
-    private ImageButton btnBack, btnRefresh, btnHome, btnTabs, btnMenu, btnFullscreenMenu;
+    private ImageButton btnBack, btnRefresh, btnStop, btnHome, btnTabs, btnMenu, btnFullscreenMenu;
     private NavigationView navigationView;
     private android.widget.ProgressBar progressBar;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh;
@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     private volatile BrowserCommandServer.EvalCallback pendingJsCallback = null;
     private volatile String pendingJsOriginalTitle = null;
     private boolean isLordMode = false;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         btnBack = findViewById(R.id.btn_back);
         btnRefresh = findViewById(R.id.btn_refresh);
+        btnStop = findViewById(R.id.btn_stop);
         btnHome = findViewById(R.id.btn_home);
         btnTabs = findViewById(R.id.btn_tabs);
         btnMenu = findViewById(R.id.btn_menu);
@@ -403,10 +405,7 @@ public class MainActivity extends AppCompatActivity {
             if (isFullScreenMode && topBar.getVisibility() == View.GONE) {
                 setBarsVisible(true);
             } else {
-                GeckoSession session = getCurrentSession();
-                if (session != null) {
-                    session.reload();
-                }
+                performSmartRefresh();
             }
             swipeRefresh.setRefreshing(false);
         });
@@ -447,13 +446,23 @@ public class MainActivity extends AppCompatActivity {
                updateTabInfo(session, url, null);
                // 页面重新加载时，清除该 session 的自动填充弹出记录，使刷新后可再次弹出
                mPromptedAutofillUrls.removeIf(key -> key.startsWith(session.hashCode() + "_"));
+               
+               TabInfo currentTab = null;
                for (TabInfo t : tabs) {
                    if (t.session == session) {
                        t.scrollY = 0;
+                       currentTab = t;
                        break;
                    }
                }
+               
+               if (currentTab != null) {
+                   currentTab.lastProgress = 0;
+                   resetPageLoadTimeout(currentTab, url);
+               }
+
                runOnUiThread(() -> {
+                   updateStopButtonVisibility(true);
                    if (progressBar != null) {
                        progressBar.setProgress(0);
                        progressBar.setAlpha(1f);
@@ -464,9 +473,9 @@ public class MainActivity extends AppCompatActivity {
                        swipeRefresh.setRefreshing(true);
                    }
                });
-
-                // --- 超时保护逻辑 ---
-                // 获取当前 Tab
+            }
+            @Override
+            public void onProgressChange(@NonNull GeckoSession session, int progress) {
                 TabInfo currentTab = null;
                 for (TabInfo t : tabs) {
                     if (t.session == session) {
@@ -474,25 +483,16 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                
-                if (currentTab != null) {
-                    final TabInfo finalTab = currentTab;
-                    // 如果已经有超时任务在跑，理论上不需要重复创建，但这里简单处理：每次 PageStart 重置超时
-                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        // 如果 20 秒后还在加载 (progress < 100) 且页面没有停止，主动干预
-                        if (finalTab.session == session && progressBar != null && progressBar.getVisibility() == View.VISIBLE) {
-                            // 排除已经在本地资源页的情况
-                            if (url != null && !url.startsWith("resource://android/assets/")) {
-                                session.stop();
-                                session.loadUri("resource://android/assets/timeout.html");
-                                Toast.makeText(MainActivity.this, "网页加载超时，已停止加载", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }, 20000); // 20秒超时限制
+                if (currentTab != null && progress > currentTab.lastProgress) {
+                    currentTab.lastProgress = progress;
+                    // 70% 以上不再计算超时
+                    if (progress < 70) {
+                        resetPageLoadTimeout(currentTab, currentTab.url);
+                    } else {
+                        cancelPageLoadTimeout(currentTab);
+                    }
                 }
-            }
-            @Override
-            public void onProgressChange(@NonNull GeckoSession session, int progress) {
+
                 runOnUiThread(() -> {
                     if (progressBar == null) return;
                     progressBar.setProgress(progress);
@@ -508,16 +508,25 @@ public class MainActivity extends AppCompatActivity {
                     if (progress >= 100) {
                         progressBar.setVisibility(View.INVISIBLE);
                         progressBar.setAlpha(1f);
+                        updateStopButtonVisibility(false);
                     } else {
                         progressBar.setVisibility(View.VISIBLE);
                         progressBar.setAlpha(1f);
+                        updateStopButtonVisibility(true);
                     }
                 });
             }
             @Override
             public void onPageStop(@NonNull GeckoSession session, boolean success) {
                updateTabInfo(session, null, null);
+               for (TabInfo t : tabs) {
+                   if (t.session == session) {
+                       cancelPageLoadTimeout(t);
+                       break;
+                   }
+               }
                runOnUiThread(() -> {
+                   updateStopButtonVisibility(false);
                    if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
                    if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                });
@@ -1227,6 +1236,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         for (TabInfo tab : tabs) {
             if (tab.session != null) {
+                cancelPageLoadTimeout(tab);
                 tab.session.setProgressDelegate(null);
                 tab.session.setContentDelegate(null);
                 tab.session.close();
@@ -1389,8 +1399,13 @@ public class MainActivity extends AppCompatActivity {
         });
         btnRefresh.setOnClickListener(v -> {
             if (isProcessingAction) return;
-            if (getCurrentSession() != null) {
-                getCurrentSession().reload();
+            performSmartRefresh();
+        });
+        btnStop.setOnClickListener(v -> {
+            if (isProcessingAction) return;
+            GeckoSession session = getCurrentSession();
+            if (session != null) {
+                session.stop();
             }
         });
         updateHomeButton();
@@ -1609,6 +1624,120 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * 重置标签页加载超时计时器
+     *
+     * @param tab 目标标签页
+     * @param url 当前加载的 URL，用于排除本地资源
+     */
+    private void resetPageLoadTimeout(TabInfo tab, String url) {
+        if (tab == null || tab.session == null) return;
+        
+        // 如果是本地资源页，不设置超时
+        if (url != null && url.startsWith("resource://android/assets/")) {
+            cancelPageLoadTimeout(tab);
+            return;
+        }
+
+        synchronized (tab) {
+            cancelPageLoadTimeout(tab);
+
+            tab.timeoutRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (tab) {
+                        // 确保此任务仍然是该标签页的最新的任务
+                        if (this != tab.timeoutRunnable) return;
+                        
+                        // 检查标签页是否还在列表中（防止已关闭的标签页弹出提示）
+                        if (!tabs.contains(tab)) return;
+
+                        // 如果超时后还在加载 (进度未达 100) 且 UI 指示正在加载
+                        if (progressBar != null && progressBar.getVisibility() == View.VISIBLE && tab.lastProgress < 100) {
+                            tab.session.stop();
+                            String timeoutUrl = "resource://android/assets/timeout.html";
+                            if (url != null && !url.isEmpty()) {
+                                timeoutUrl += "?url=" + android.net.Uri.encode(url);
+                            }
+                            tab.session.loadUri(timeoutUrl);
+                            Toast.makeText(MainActivity.this, R.string.msg_load_timeout, Toast.LENGTH_SHORT).show();
+                        }
+                        tab.timeoutRunnable = null;
+                    }
+                }
+            };
+            
+            mainHandler.postDelayed(tab.timeoutRunnable, 20000); // 20秒后检查
+        }
+    }
+
+    /**
+     * 取消标签页的加载超时计时器
+     * @param tab 目标标签页
+     */
+    private void cancelPageLoadTimeout(TabInfo tab) {
+        if (tab != null) {
+            synchronized (tab) {
+                if (tab.timeoutRunnable != null) {
+                    mainHandler.removeCallbacks(tab.timeoutRunnable);
+                    tab.timeoutRunnable = null;
+                }
+            }
+        }
+    }
+
+    /**
+     * 执行智能刷新：如果当前是超时页面，尝试刷新原始 URL
+     */
+    private void performSmartRefresh() {
+        if (currentTabIndex < 0 || currentTabIndex >= tabs.size()) return;
+        TabInfo currentTab = tabs.get(currentTabIndex);
+        if (currentTab == null || currentTab.session == null) return;
+
+        String currentUrl = currentTab.url;
+        if (currentUrl != null && currentUrl.startsWith("resource://android/assets/timeout.html")) {
+            android.net.Uri uri = android.net.Uri.parse(currentUrl);
+            String originalUrl = uri.getQueryParameter("url");
+            if (originalUrl != null && !originalUrl.isEmpty()) {
+                currentTab.session.loadUri(originalUrl);
+                return;
+            }
+        }
+        currentTab.session.reload();
+    }
+
+    /**
+     * 更新停止按钮的可见性及动画效果
+     */
+    private void updateStopButtonVisibility(boolean show) {
+        if (btnStop == null) return;
+        
+        runOnUiThread(() -> {
+            if (show) {
+                if (btnStop.getVisibility() != View.VISIBLE) {
+                    btnStop.setVisibility(View.VISIBLE);
+                    btnStop.setAlpha(0f);
+                    btnStop.setTranslationX(-20f);
+                    btnStop.animate()
+                           .alpha(1f)
+                           .translationX(0f)
+                           .setDuration(300)
+                           .setInterpolator(new android.view.animation.OvershootInterpolator())
+                           .start();
+                }
+            } else {
+                if (btnStop.getVisibility() == View.VISIBLE) {
+                    btnStop.animate()
+                           .alpha(0f)
+                           .translationX(50f)
+                           .setDuration(300)
+                           .withEndAction(() -> btnStop.setVisibility(View.GONE))
+                           .start();
+                }
+            }
+        });
+    }
     private void switchToTab(int index) {
         if (index < 0 || index >= tabs.size()) return;
         if (isSwitchingTab) return;
@@ -1678,6 +1807,7 @@ public class MainActivity extends AppCompatActivity {
         if (position < 0 || position >= tabs.size()) return;
         TabInfo tab = tabs.get(position);
         if (tab.session != null) {
+            cancelPageLoadTimeout(tab);
             tab.session.close();
         }
         if (tab.thumbnail != null && !tab.thumbnail.isRecycled()) {

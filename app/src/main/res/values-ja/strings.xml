@@ -373,13 +373,14 @@
     <string name="title_restricted_sites">位置情報の権限</string>
     <string name="msg_restricted_sites_desc">位置情報アクセスを「常に拒否」に設定したサイトを管理します。</string>
     <string name="action_remove">制限を解除</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">現在のグループのすべてのタブを閉じる</string>
+    <string name="action_save_to_new_group">新しいグループに保存</string>
+    <string name="action_switch_to_group">グループに切り替え: %1$s</string>
+    <string name="action_return_to_default_group">デフォルトグループに戻る</string>
+    <string name="title_new_tab_group">新しいグループ名</string>
+    <string name="hint_tab_group_name">グループ名を入力</string>
+    <string name="msg_tab_group_saved">新しいグループに保存しました</string>
+    <string name="default_group_name">デフォルトグループ</string>
+    <string name="msg_group_closed">グループ %1$s を閉じました</string>
+    <string name="msg_load_timeout">ページの読み込みがタイムアウトしました。読み込みを停止しました。</string>
 </resources>
