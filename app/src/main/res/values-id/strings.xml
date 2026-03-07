@@ -345,4 +345,41 @@
     <string name="ai_tool_exit_ai">Menutup asisten dan keluar...</string>
     <string name="ai_tool_eval_js">Menjalankan skrip...</string>
     <string name="ai_thinking_dots">Sedang berpikir...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Mode Lord</string>
+    <string name="title_normal_mode">Mode Normal</string>
+    <string name="msg_lord_mode_intro">\"Mode Lord\" sekarang aktif. Dalam mode ini:\n\n1. Riwayat penelusuran Anda tidak akan disimpan.\n2. Saat situs web meminta Cookie atau penyimpanan lokal, peringatan akan muncul, memungkinkan Anda untuk mengizinkan or menolaknya.\n3. Anda memiliki kontrol mutlak atas data Anda.</string>
+    <string name="title_cookie_warning">Permintaan Cookie/Penyimpanan</string>
+    <string name="msg_cookie_warning">Situs web \"%1$s\" meminta untuk menggunakan Cookie or penyimpanan lokal.\n\nDalam Mode Lord, Anda dapat membatasi perilaku ini. Apakah Anda ingin mengizinkan situs web ini menyimpan data?</string>
+    <string name="title_location_warning">Permintaan Lokasi</string>
+    <string name="msg_location_warning">Situs web \"%1$s\" meminta lokasi Anda saat ini. Apakah Anda ingin mengizinkannya?</string>
+    <string name="msg_no_location_permission">Aplikasi belum diberikan izin lokasi. Harap aktifkan di \"Setelan -&gt; Info aplikasi\" dan coba lagi.</string>
+    <string name="action_always_deny">Selalu Tolak</string>
+    <string name="title_restricted_sites">Izin Lokasi</string>
+    <string name="msg_restricted_sites_desc">Kelola situs yang disetel ke \"Selalu Tolak\" untuk akses lokasi.</string>
+    <string name="action_remove">Hapus Batasan</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

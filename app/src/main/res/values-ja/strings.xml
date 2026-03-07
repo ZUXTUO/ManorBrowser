@@ -345,4 +345,41 @@
     <string name="ai_tool_exit_ai">アシスタントを終了して退席中...</string>
     <string name="ai_tool_eval_js">スクリプトを実行中...</string>
     <string name="ai_thinking_dots">考え中...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">領主モード</string>
+    <string name="title_normal_mode">通常モード</string>
+    <string name="msg_lord_mode_intro">「領主モード」が有効になりました。このモードでは：\n\n1. 閲覧履歴は保存されません。\n2. ウェブサイトがCookieやローカルストレージを要求した際に警告が表示され、許可または拒否を選択できます。\n3. データに対して絶対的なコントロールを持つことができます。</string>
+    <string name="title_cookie_warning">Cookie/ストレージ要求</string>
+    <string name="msg_cookie_warning">ウェブサイト「%1$s」がCookieまたはローカルストレージの使用を要求しています。\n\n領主モードでは、この動作を制限できます。このウェブサイトによるデータの保存を許可しますか？</string>
+    <string name="title_location_warning">位置情報の要求</string>
+    <string name="msg_location_warning">ウェブサイト「%1$s」が現在の位置情報へのアクセスを要求しています。許可しますか？</string>
+    <string name="msg_no_location_permission">アプリに位置情報の権限が許可されていません。「設定 -> アプリ情報」から権限を有効にして再度お試しください。</string>
+    <string name="action_always_deny">常に拒否</string>
+    <string name="title_restricted_sites">位置情報の権限</string>
+    <string name="msg_restricted_sites_desc">位置情報アクセスを「常に拒否」に設定したサイトを管理します。</string>
+    <string name="action_remove">制限を解除</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

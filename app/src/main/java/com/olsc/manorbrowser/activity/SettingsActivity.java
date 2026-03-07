@@ -150,6 +150,14 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
+        // 位置权限管理
+        View containerRestrictedSites = findViewById(R.id.container_restricted_sites);
+        if (containerRestrictedSites != null) {
+            containerRestrictedSites.setOnClickListener(v -> {
+                startActivity(new android.content.Intent(this, RestrictedSitesActivity.class));
+            });
+        }
+
         // 智能托管 (AI 远程控制)
         androidx.appcompat.widget.SwitchCompat swAiRemote = findViewById(R.id.sw_ai_remote);
         View containerAiServer = findViewById(R.id.container_ai_server_url);
@@ -317,9 +325,35 @@ public class SettingsActivity extends AppCompatActivity {
     private void showSearchEngineDialog() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
-        int checkedItem = Config.ENGINE_GOOGLE.equals(currentEngine) ? 1 : 0;
-        String[] engines = {getString(R.string.engine_baidu), getString(R.string.engine_google)};
-        String[] values = {Config.ENGINE_BAIDU, Config.ENGINE_GOOGLE};
+        
+        String[] engines = {
+            getString(R.string.engine_baidu), getString(R.string.engine_google),
+            getString(R.string.engine_bing), getString(R.string.engine_duckduckgo),
+            getString(R.string.engine_yahoo), getString(R.string.engine_yandex),
+            getString(R.string.engine_ecosia), getString(R.string.engine_brave),
+            getString(R.string.engine_startpage), getString(R.string.engine_sogou),
+            getString(R.string.engine_360), getString(R.string.engine_qwant),
+            getString(R.string.engine_naver), getString(R.string.engine_seznam),
+            getString(R.string.engine_mojeek), getString(R.string.engine_metager)
+        };
+        String[] values = {
+            Config.ENGINE_BAIDU, Config.ENGINE_GOOGLE,
+            Config.ENGINE_BING, Config.ENGINE_DUCKDUCKGO,
+            Config.ENGINE_YAHOO, Config.ENGINE_YANDEX,
+            Config.ENGINE_ECOSIA, Config.ENGINE_BRAVE,
+            Config.ENGINE_STARTPAGE, Config.ENGINE_SOGOU,
+            Config.ENGINE_360, Config.ENGINE_QWANT,
+            Config.ENGINE_NAVER, Config.ENGINE_SEZNAM,
+            Config.ENGINE_MOJEEK, Config.ENGINE_METAGER
+        };
+        int checkedItem = 0;
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(currentEngine)) {
+                checkedItem = i;
+                break;
+            }
+        }
+        
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.label_default_search_engine)
                 .setSingleChoiceItems(engines, checkedItem, (dialog, which) -> {
@@ -335,7 +369,26 @@ public class SettingsActivity extends AppCompatActivity {
     private void updateCurrentEngineText() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
-        String engineName = Config.ENGINE_GOOGLE.equals(currentEngine) ? getString(R.string.engine_google) : getString(R.string.engine_baidu);
+        
+        String engineName = getString(R.string.engine_baidu);
+        switch (currentEngine) {
+            case Config.ENGINE_GOOGLE: engineName = getString(R.string.engine_google); break;
+            case Config.ENGINE_BING: engineName = getString(R.string.engine_bing); break;
+            case Config.ENGINE_DUCKDUCKGO: engineName = getString(R.string.engine_duckduckgo); break;
+            case Config.ENGINE_YAHOO: engineName = getString(R.string.engine_yahoo); break;
+            case Config.ENGINE_YANDEX: engineName = getString(R.string.engine_yandex); break;
+            case Config.ENGINE_ECOSIA: engineName = getString(R.string.engine_ecosia); break;
+            case Config.ENGINE_BRAVE: engineName = getString(R.string.engine_brave); break;
+            case Config.ENGINE_STARTPAGE: engineName = getString(R.string.engine_startpage); break;
+            case Config.ENGINE_SOGOU: engineName = getString(R.string.engine_sogou); break;
+            case Config.ENGINE_360: engineName = getString(R.string.engine_360); break;
+            case Config.ENGINE_QWANT: engineName = getString(R.string.engine_qwant); break;
+            case Config.ENGINE_NAVER: engineName = getString(R.string.engine_naver); break;
+            case Config.ENGINE_SEZNAM: engineName = getString(R.string.engine_seznam); break;
+            case Config.ENGINE_MOJEEK: engineName = getString(R.string.engine_mojeek); break;
+            case Config.ENGINE_METAGER: engineName = getString(R.string.engine_metager); break;
+        }
+        
         tvCurrentEngine.setText(engineName);
     }
     private void showBackgroundEffectDialog() {

@@ -8,6 +8,15 @@
     <string name="action_back">后退</string>
     <string name="title_new_tab">新标签页</string>
     <string name="title_settings">设置</string>
+    <string name="action_close_all_tabs_in_group">关闭当前组的所有标签</string>
+    <string name="action_save_to_new_group">放入新分组</string>
+    <string name="action_switch_to_group">切换到分组: %1$s</string>
+    <string name="action_return_to_default_group">返回默认分组</string>
+    <string name="title_new_tab_group">新分组名称</string>
+    <string name="hint_tab_group_name">请输入分组名称</string>
+    <string name="msg_tab_group_saved">已保存到新分组</string>
+    <string name="default_group_name">默认分组</string>
+    <string name="msg_group_closed">分组 %1$s 已关闭</string>
     <string name="label_default_search_engine">默认搜索引擎</string>
     <string name="engine_baidu">百度</string>
     <string name="engine_google">谷歌</string>
@@ -347,4 +356,32 @@ URL: %1$s</string>
     <string name="ai_tool_exit_ai">正在关闭助手并退出托管模式...</string>
     <string name="ai_tool_eval_js">执行脚本自动化...</string>
     <string name="ai_thinking_dots">思考中...</string>
+    <string name="engine_bing">必应</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">雅虎</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">搜狗</string>
+    <string name="engine_360">360搜索</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">领主模式</string>
+    <string name="title_normal_mode">常规模式</string>
+    <string name="msg_lord_mode_intro">“领主模式”已开启。在此模式下：\n\n1. 您的网页浏览历史记录将不会被保存。\n2. 当网站尝试申请 Cookies 或本地存储时，系统会弹出警告，您可以自由选择允许或禁止。\n3. 您将拥有对数据的绝对控制权。</string>
+    <string name="title_cookie_warning">Cookies/数据存储请求</string>
+    <string name="msg_cookie_warning">网站“%1$s”正在申请启用 Cookies 或本地存储数据。\n\n在领主模式下，您可以限制此行为。是否允许该网站记录数据？</string>
+    <string name="title_location_warning">位置信息申请</string>
+    <string name="msg_location_warning">网站“%1$s”正在申请获取您的当前位置信息。是否确认允许？</string>
+    <string name="msg_no_location_permission">应用尚未获得系统的位置权限。请前往“设置 -&gt; 应用详情”手动开启权限后再试。</string>
+    <string name="action_always_deny">始终拒绝</string>
+    <string name="title_restricted_sites">位置权限管理</string>
+    <string name="msg_restricted_sites_desc">在此管理已设置为“始终拒绝”访问位置信息的网站。</string>
+    <string name="action_remove">移除限制</string>
 </resources>

@@ -345,4 +345,41 @@
     <string name="ai_tool_exit_ai">असिस्टेंट बंद कर रहे हैं और बाहर निकल रहे हैं...</string>
     <string name="ai_tool_eval_js">स्क्रिप्ट चला रहे हैं...</string>
     <string name="ai_thinking_dots">सोच रहा है...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">लॉर्ड मोड</string>
+    <string name="title_normal_mode">सामान्य मोड</string>
+    <string name="msg_lord_mode_intro">\"लॉर्ड मोड\" अब सक्रिय है। इस मोड में:\n\n1. आपका ब्राउज़िंग इतिहास सहेजा नहीं जाएगा।\n2. जब वेबसाइटें कुकीज़ या स्थानीय स्टोरेज का अनुरोध करती हैं, तो एक चेतावनी दिखाई देगी, जिससे आप इसे अनुमति दे सकते हैं या अस्वीकार कर सकते हैं।\n3. आपके पास अपने डेटा पर पूर्ण नियंत्रण है।</string>
+    <string name="title_cookie_warning">कुकीज़/स्टोरेज अनुरोध</string>
+    <string name="msg_cookie_warning">वेबसाइट \"%1$s\" कुकीज़ या स्थानीय स्टोरेज का उपयोग करने का अनुरोध कर रही है।\n\nलॉर्ड मोड में, आप इस व्यवहार को प्रतिबंधित कर सकते हैं। क्या आप इस वेबसाइट को डेटा स्टोर करने की अनुमति देना चाहते हैं?</string>
+    <string name="title_location_warning">स्थान अनुरोध</string>
+    <string name="msg_location_warning">वेबसाइट \"%1$s\" आपके वर्तमान स्थान का अनुरोध कर रही है। क्या आप इसकी अनुमति देना चाहते हैं?</string>
+    <string name="msg_no_location_permission">ऐप को स्थान अनुमति नहीं दी गई है। कृपया इसे \"सेटिंग -&gt; ऐप जानकारी\" में सक्षम करें और पुन: प्रयास करें।</string>
+    <string name="action_always_deny">हमेशा अस्वीकार करें</string>
+    <string name="title_restricted_sites">स्थान अनुमतियाँ</string>
+    <string name="msg_restricted_sites_desc">उन साइटों को प्रबंधित करें जिन्हें स्थान पहुंच के लिए "हमेशा अस्वीकार करें" पर सेट किया गया है।</string>
+    <string name="action_remove">प्रतिबंध हटाएँ</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

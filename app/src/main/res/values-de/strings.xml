@@ -336,4 +336,41 @@
     <string name="ai_tool_exit_ai">Assistent wird beendet und verlassen...</string>
     <string name="ai_tool_eval_js">Skript ausführen...</string>
     <string name="ai_thinking_dots">Nachdenken...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Lord-Modus</string>
+    <string name="title_normal_mode">Normaler Modus</string>
+    <string name="msg_lord_mode_intro">"Der \"Lord-Modus\" ist jetzt aktiv. In diesem Modus:\n\n1. Ihr Browserverlauf wird nicht gespeichert.\n2. Wenn Websites Cookies oder lokalen Speicher anfordern, erscheint eine Warnung, mit der Sie dies zulassen oder ablehnen können.\n3. Sie haben die absolute Kontrolle über Ihre Daten."</string>
+    <string name="title_cookie_warning">"Cookie-/Speicheranfrage"</string>
+    <string name="msg_cookie_warning">"Die Website \"%1$s\" möchte Cookies oder lokalen Speicher verwenden.\n\nIm Lord-Modus können Sie dieses Verhalten einschränken. Möchten Sie zulassen, dass diese Website Daten speichert?"</string>
+    <string name="title_location_warning">"Standortanfrage"</string>
+    <string name="msg_location_warning">"Die Website \"%1$s\" möchte auf Ihren aktuellen Standort zugreifen. Möchten Sie dies zulassen?"</string>
+    <string name="msg_no_location_permission">"Der App wurde keine Standortberechtigung erteilt. Bitte aktivieren Sie diese in den \"Einstellungen -&gt; App-Info\" und versuchen Sie es erneut."</string>
+    <string name="action_always_deny">"Immer ablehnen"</string>
+    <string name="title_restricted_sites">"Standortberechtigungen"</string>
+    <string name="msg_restricted_sites_desc">"Verwalten Sie Websites, für die der Standortzugriff auf \"Immer ablehnen\" gesetzt wurde."</string>
+    <string name="action_remove">Einschränkung entfernen</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

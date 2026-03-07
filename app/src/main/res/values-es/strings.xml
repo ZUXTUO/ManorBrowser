@@ -336,4 +336,41 @@
     <string name="ai_tool_exit_ai">Cerrando asistente y saliendo...</string>
     <string name="ai_tool_eval_js">Ejecutando guion...</string>
     <string name="ai_thinking_dots">Pensando...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Modo Lord</string>
+    <string name="title_normal_mode">Modo Normal</string>
+    <string name="msg_lord_mode_intro">El \"Modo Lord\" está ahora activo. En este modo:\n\n1. Su historial de navegación no se guardará.\n2. Cuando los sitios web soliciten Cookies o almacenamiento local, aparecerá una advertencia que le permitirá permitirlos o denegarlos.\n3. Usted tiene control absoluto sobre sus datos.</string>
+    <string name="title_cookie_warning">Solicitud de Cookies/Almacenamiento</string>
+    <string name="msg_cookie_warning">El sitio web \"%1$s\" solicita utilizar Cookies o almacenamiento local.\n\nEn Modo Lord, puede restringir este comportamiento. ¿Desea permitir que este sitio web almacene datos?</string>
+    <string name="title_location_warning">Solicitud de Ubicación</string>
+    <string name="msg_location_warning">El sitio web \"%1$s\" solicita su ubicación actual. ¿Desea permitirlo?</string>
+    <string name="msg_no_location_permission">La aplicación no tiene el permiso de ubicación. Por favor, actívelo en \"Ajustes -&gt; Información de la aplicación\" e inténtelo de nuevo.</string>
+    <string name="action_always_deny">Denegar siempre</string>
+    <string name="title_restricted_sites">Permisos de Ubicación</string>
+    <string name="msg_restricted_sites_desc">Gestione los sitios que están configurados como \"Denegar siempre\" para el acceso a la ubicación.</string>
+    <string name="action_remove">Eliminar restricción</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

@@ -24,9 +24,9 @@ public class AiChatAdapter extends RecyclerView.Adapter<AiChatAdapter.VH> {
     public static final int TYPE_AI   = 1;
 
     public static class ChatMessage {
-        public int type;          // TYPE_USER / TYPE_AI
+        public int type;          // 消息类型: 用户(TYPE_USER) / AI(TYPE_AI)
         public String text;       // 消息文本
-        public String toolCall;   // tool调用描述（可选）
+        public String toolCall;   // 工具调用描述（可选）
         public boolean thinking;  // 是否正在思考
         public final List<Boolean> thinkExpandedStates = new ArrayList<>(); // 记录每一段思考的展开状态
         public String statusText; // 状态文字

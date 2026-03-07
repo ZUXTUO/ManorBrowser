@@ -345,4 +345,41 @@
     <string name="ai_tool_exit_ai">Zamykanie asystenta i wychodzenie...</string>
     <string name="ai_tool_eval_js">Uruchamianie skryptu...</string>
     <string name="ai_thinking_dots">Myślenie...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Tryb Lorda</string>
+    <string name="title_normal_mode">Tryb Normalny</string>
+    <string name="msg_lord_mode_intro">\"Tryb Lorda\" jest teraz aktywny. W tym trybie:\n\n1. Twoja historia przeglądania nie będzie zapisywana.\n2. Gdy strony internetowe zażądają plików cookie lub lokalnej pamięci, pojawi się ostrzeżenie, pozwalające na ich zaakceptowanie lub odrzucenie.\n3. Masz całkowitą kontrolę nad swoimi danymi.</string>
+    <string name="title_cookie_warning">Żądanie Plików Cookie/Pamięci</string>
+    <string name="msg_cookie_warning">Witryna \"%1$s\" prosi o użycie plików cookie lub lokalnej pamięci.\n\nW Trybie Lorda możesz ograniczyć to zachowanie. Czy chcesz zezwolić tej witrynie na przechowywanie danych?</string>
+    <string name="title_location_warning">Żądanie Lokalizacji</string>
+    <string name="msg_location_warning">Witryna \"%1$s\" prosi o dostęp do Twojej aktualnej lokalizacji. Czy chcesz na to zezwolić?</string>
+    <string name="msg_no_location_permission">Aplikacja nie otrzymała pozwolenia na lokalizację. Włącz je w \"Ustawienia -&gt; Informacje o aplikacji\" i spróbuj ponownie.</string>
+    <string name="action_always_deny">Zawsze odmawiaj</string>
+    <string name="title_restricted_sites">Uprawnienia Lokalizacji</string>
+    <string name="msg_restricted_sites_desc">Zarządzaj witrynami, dla których dostęp do lokalizacji jest ustawiony na „Zawsze odmawiaj”.</string>
+    <string name="action_remove">Usuń ograniczenie</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

@@ -336,4 +336,41 @@
     <string name="ai_tool_exit_ai">إغلاق المساعد والخروج...</string>
     <string name="ai_tool_eval_js">تشغيل البرمجية...</string>
     <string name="ai_thinking_dots">يفكر...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">وضع اللورد</string>
+    <string name="title_normal_mode">الوضع العادي</string>
+    <string name="msg_lord_mode_intro">\"وضع اللورد\" نشط الآن. في هذا الوضع:\n\n1. لن يتم حفظ تاريخ التصفح الخاص بك.\n2. عندما تطلب المواقع ملفات تعريف الارتباط أو التخزين المحلي، سيظهر تحذير يتيح لك السماح أو الرفض.\n3. لديك سيطرة كاملة على بياناتك.</string>
+    <string name="title_cookie_warning">طلب ملفات تعريف الارتباط/التخزين</string>
+    <string name="msg_cookie_warning">يطلب موقع الويب \"%1$s\" استخدام ملفات تعريف الارتباط أو التخزين المحلي.\n\nفي وضع اللورد، يمكنك تقييد هذا السلوك. هل تريد السماح لهذا الموقع بتخزين البيانات؟</string>
+    <string name="title_location_warning">طلب الموقع</string>
+    <string name="msg_location_warning">يطلب موقع الويب \"%1$s\" موقعك الحالي. هل تريد السماح له؟</string>
+    <string name="msg_no_location_permission">لم يتم منح التطبيق إذن الموقع. يرجى توفيره في \"الإعدادات -&gt; معلومات التطبيق\" والمحاولة مرة أخرى.</string>
+    <string name="action_always_deny">الرفض دائماً</string>
+    <string name="title_restricted_sites">أذونات الموقع</string>
+    <string name="msg_restricted_sites_desc">إدارة المواقع التي تم ضبطها على \"الرفض دائماً\" للوصول إلى الموقع.</string>
+    <string name="action_remove">إزالة القيد</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

@@ -345,4 +345,41 @@
     <string name="ai_tool_exit_ai">Asistan kapatılıyor ve çıkılıyor...</string>
     <string name="ai_tool_eval_js">Komut dosyası çalıştırılıyor...</string>
     <string name="ai_thinking_dots">Düşünüyor...</string>
+    <string name="engine_bing">Bing</string>
+    <string name="engine_duckduckgo">DuckDuckGo</string>
+    <string name="engine_yahoo">Yahoo</string>
+    <string name="engine_yandex">Yandex</string>
+    <string name="engine_ecosia">Ecosia</string>
+    <string name="engine_brave">Brave</string>
+    <string name="engine_startpage">Startpage</string>
+    <string name="engine_sogou">Sogou</string>
+    <string name="engine_360">360 Search</string>
+    <string name="engine_qwant">Qwant</string>
+    <string name="engine_naver">Naver</string>
+    <string name="engine_seznam">Seznam</string>
+    <string name="engine_mojeek">Mojeek</string>
+    <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Lord Modu</string>
+    <string name="title_normal_mode">Normal Mod</string>
+    <string name="msg_lord_mode_intro">"\"Lord Modu\" şu anda aktif. Bu modda:\n\n1. Tarama geçmişiniz kaydedilmeyecektir.\n2. Web siteleri Tanımlama Bilgileri (Cookie) veya yerel depolama istediğinde, izin vermenize veya reddetmenize olanak tanıyan bir uyarı görünecektir.\n3. Verileriniz üzerinde tam kontrole sahipsiniz."</string>
+    <string name="title_cookie_warning">"Tanımlama Bilgisi/Depolama İsteği"</string>
+    <string name="msg_cookie_warning">"\"%1$s\" web sitesi Tanımlama Bilgileri veya yerel depolama kullanmak istiyor.\n\nLord Modu'nda bu davranışı kısıtlayabilirsiniz. Bu web sitesinin veri depolamasına izin vermek istiyor musunuz?"</string>
+    <string name="title_location_warning">"Konum İsteği"</string>
+    <string name="msg_location_warning">"\"%1$s\" web sitesi mevcut konumunuzu istiyor. İzin vermek istiyor musunuz?"</string>
+    <string name="msg_no_location_permission">"Uygulamaya konum izni verilmedi. Lütfen bunu \"Ayarlar -&gt; Uygulama bilgisi\" kısmından etkinleştirin ve tekrar deneyin."</string>
+    <string name="action_always_deny">"Her Zaman Reddet"</string>
+    <string name="title_restricted_sites">"Konum İzinleri"</string>
+    <string name="msg_restricted_sites_desc">"Konum erişimi için \"Her Zaman Reddet\" olarak ayarlanan siteleri yönetin."</string>
+    <string name="action_remove">Kısıtlamayı Kaldır</string>
+    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
+    <string name="action_save_to_new_group">Save to new group</string>
+    <string name="action_switch_to_group">Switch to group: %1$s</string>
+    <string name="action_return_to_default_group">Return to default group</string>
+    <string name="title_new_tab_group">New Group Name</string>
+    <string name="hint_tab_group_name">Enter group name</string>
+    <string name="msg_tab_group_saved">Saved to new group</string>
+    <string name="default_group_name">Default Group</string>
+    <string name="msg_group_closed">Group %1$s has been closed</string>
 </resources>

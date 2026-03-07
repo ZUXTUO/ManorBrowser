@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSwitchingTab = false; // 防止switchToTab重入导致的崩溃和逻辑混乱
     private boolean isProcessingAction = false; // 全局锁，防止多重点击导致的 PixelCopy 并发或状态异常
     private boolean isFullScreenMode = false;
+    private String currentTabGroup = null;
     private GeckoResult<PromptDelegate.PromptResponse> mFilePromptResult = null;
     private PromptDelegate.FilePrompt mCurrentFilePrompt = null;
     private ActivityResultLauncher<android.content.Intent> mFilePickerLauncher;
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     /** JS 标题桥调用: 待处理的回调和原始标题 */
     private volatile BrowserCommandServer.EvalCallback pendingJsCallback = null;
     private volatile String pendingJsOriginalTitle = null;
+    private boolean isLordMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -413,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @SuppressLint("NotifyDataSetChanged")
     private void restoreTabsOrInit() {
-        List<TabInfo> savedTabs = TabStorage.loadTabs(this);
+        List<TabInfo> savedTabs = TabStorage.loadTabs(this, currentTabGroup);
         if (savedTabs != null && !savedTabs.isEmpty()) {
             tabs.clear();
             tabs.addAll(savedTabs);
@@ -538,7 +540,9 @@ public class MainActivity extends AppCompatActivity {
                        }
                    }
                    if(tabInfo != null && tabInfo.url != null && !tabInfo.url.equals("about:blank")){
-                        HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
+                        if (!isLordMode) {
+                            HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
+                        }
                    }
                 }
             }
@@ -669,7 +673,64 @@ public class MainActivity extends AppCompatActivity {
         session.setPermissionDelegate(new GeckoSession.PermissionDelegate() {
             @Override
             public GeckoResult<Integer> onContentPermissionRequest(@NonNull GeckoSession session, @NonNull GeckoSession.PermissionDelegate.ContentPermission perm) {
+                if (perm.permission == GeckoSession.PermissionDelegate.PERMISSION_GEOLOCATION) {
+                    // 检查网站是否始终被拒绝访问位置
+                    if (isLocationRestricted(perm.uri)) {
+                        return GeckoResult.fromValue(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY);
+                    }
+
+                    // 首先检查系统权限
+                    if (androidx.core.content.ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_no_location_permission, Toast.LENGTH_LONG).show());
+                        return GeckoResult.fromValue(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY);
+                    }
+                    
+                    final GeckoResult<Integer> result = new GeckoResult<>();
+                    runOnUiThread(() -> {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(R.string.title_location_warning)
+                            .setMessage(getString(R.string.msg_location_warning, perm.uri))
+                            .setPositiveButton(R.string.action_allow, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_ALLOW))
+                            .setNegativeButton(R.string.action_deny, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY))
+                            .setNeutralButton(R.string.action_always_deny, (d, w) -> {
+                                addLocationRestriction(perm.uri);
+                                result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY);
+                            })
+                            .setCancelable(false)
+                            .show();
+                    });
+                    return result;
+                } else if (isLordMode && perm.permission == GeckoSession.PermissionDelegate.PERMISSION_PERSISTENT_STORAGE) {
+                    final GeckoResult<Integer> result = new GeckoResult<>();
+                    runOnUiThread(() -> {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(R.string.title_cookie_warning)
+                            .setMessage(getString(R.string.msg_cookie_warning, perm.uri))
+                            .setPositiveButton(R.string.action_allow, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_ALLOW))
+                            .setNegativeButton(R.string.action_deny, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY))
+                            .setCancelable(false)
+                            .show();
+                    });
+                    return result;
+                }
                 return GeckoResult.fromValue(GeckoSession.PermissionDelegate.ContentPermission.VALUE_ALLOW);
+            }
+
+            private boolean isLocationRestricted(String uri) {
+                android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                java.util.Set<String> restricted = prefs.getStringSet(Config.PREF_KEY_LOCATION_RESTRICTED_SITES, new java.util.HashSet<>());
+                String host = android.net.Uri.parse(uri).getHost();
+                return host != null && restricted.contains(host);
+            }
+
+            private void addLocationRestriction(String uri) {
+                android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                java.util.Set<String> restricted = new java.util.HashSet<>(prefs.getStringSet(Config.PREF_KEY_LOCATION_RESTRICTED_SITES, new java.util.HashSet<>()));
+                String host = android.net.Uri.parse(uri).getHost();
+                if (host != null) {
+                    restricted.add(host);
+                    prefs.edit().putStringSet(Config.PREF_KEY_LOCATION_RESTRICTED_SITES, restricted).apply();
+                }
             }
 
             @Override
@@ -1010,6 +1071,23 @@ public class MainActivity extends AppCompatActivity {
                     @NonNull GeckoSession session,
                     @NonNull LoadRequest request) {
                 String uri = request.uri;
+
+                // 检查是否是 .onion 域名
+                try {
+                    android.net.Uri parsedUri = android.net.Uri.parse(uri);
+                    String host = parsedUri.getHost();
+                    if (host != null && host.toLowerCase().endsWith(".onion")) {
+                        // 如果没有特殊的允许标记，则重定向到警告页面
+                        if (!uri.contains("allow_onion=1")) {
+                            String encodedUrl = android.net.Uri.encode(uri);
+                            String warningUrl = "resource://android/assets/warning_onion.html?url=" + encodedUrl;
+                            runOnUiThread(() -> session.loadUri(warningUrl));
+                            return GeckoResult.fromValue(AllowOrDeny.DENY);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 
                 // 使用改进的IntentHelper处理外部应用跳转
                 if (com.olsc.manorbrowser.utils.IntentHelper.shouldInterceptUrl(uri)) {
@@ -1143,7 +1221,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         // 传递副本以确保后台线程保存时的线程安全
-        TabStorage.saveTabs(this, new ArrayList<>(tabs));
+        TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
     }
     @Override
     protected void onDestroy() {
@@ -1424,6 +1502,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             } else if (id == R.id.nav_desktop_mode) {
                 toggleDesktopMode();
+            } else if (id == R.id.nav_lord_mode) {
+                toggleLordMode();
             } else if (id == R.id.nav_fullscreen) {
                 toggleFullScreenMode();
             } else if (id == R.id.nav_extensions_action) {
@@ -1492,6 +1572,7 @@ public class MainActivity extends AppCompatActivity {
             if (fsItem != null) {
                 fsItem.setChecked(isFullScreenMode);
             }
+            updateLordModeMenuItem();
         }
     }
     private GeckoSession createNewTab(String url) {
@@ -1606,7 +1687,27 @@ public class MainActivity extends AppCompatActivity {
         tabs.remove(position);
         
         if (tabs.isEmpty()) {
-            createNewTab("about:blank");
+            if (currentTabGroup != null) {
+                TabStorage.deleteGroup(this, currentTabGroup);
+                Toast.makeText(this, getString(R.string.msg_group_closed, currentTabGroup), Toast.LENGTH_SHORT).show();
+                currentTabGroup = null;
+                
+                List<TabInfo> savedTabs = TabStorage.loadTabs(this, null);
+                if (savedTabs != null && !savedTabs.isEmpty()) {
+                    tabs.addAll(savedTabs);
+                    for (TabInfo t : tabs) {
+                        initializeSessionForTab(t);
+                    }
+                    if (tabSwitcherAdapter != null) {
+                        tabSwitcherAdapter.notifyDataSetChanged();
+                    }
+                    switchToTab(tabs.size() - 1);
+                } else {
+                    createNewTab(Config.URL_BLANK);
+                }
+            } else {
+                createNewTab(Config.URL_BLANK);
+            }
             if (tabSwitcherAdapter != null) {
                 tabSwitcherAdapter.notifyDataSetChanged();
             }
@@ -1694,16 +1795,102 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showTabManagerOptionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String[] options = {getString(R.string.action_close_all_tabs)};
+        String title = currentTabGroup != null ? currentTabGroup : getString(R.string.default_group_name);
+        builder.setTitle(title);
         
-        builder.setItems(options, (dialog, which) -> {
+        List<CharSequence> options = new ArrayList<>();
+        options.add(getString(R.string.action_close_all_tabs_in_group));
+        options.add(getString(R.string.action_save_to_new_group));
+        
+        List<String> groups = TabStorage.getGroups(this);
+        int[] groupColors = {0xFFE53935, 0xFF1E88E5, 0xFF43A047, 0xFFFDD835, 0xFF8E24AA, 0xFFF4511E, 0xFF00ACC1};
+        int colorIdx = 0;
+        
+        for (String g : groups) {
+            String mark = (currentTabGroup != null && currentTabGroup.equals(g)) ? " *" : "";
+            String fullStr = getString(R.string.action_switch_to_group, g) + mark;
+            android.text.SpannableString sp = new android.text.SpannableString(fullStr);
+            sp.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, fullStr.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sp.setSpan(new android.text.style.ForegroundColorSpan(groupColors[colorIdx % groupColors.length]), 0, fullStr.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            options.add(sp);
+            colorIdx++;
+        }
+        if (currentTabGroup != null) {
+            options.add(getString(R.string.action_return_to_default_group));
+        }
+        
+        builder.setItems(options.toArray(new CharSequence[0]), (dialog, which) -> {
             if (which == 0) {
-                // 关闭所有标签页
                 showCloseAllTabsConfirmDialog();
+            } else if (which == 1) {
+                showSaveToNewGroupDialog();
+            } else {
+                int groupIndex = which - 2;
+                if (groupIndex < groups.size()) {
+                    switchToGroup(groups.get(groupIndex));
+                } else {
+                    switchToGroup(null);
+                }
             }
         });
         
         builder.show();
+    }
+    
+    private void showSaveToNewGroupDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.title_new_tab_group);
+        
+        final EditText input = new EditText(this);
+        input.setHint(R.string.hint_tab_group_name);
+        builder.setView(input);
+        
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            String newGroup = input.getText().toString().trim();
+            if (!newGroup.isEmpty()) {
+
+                TabStorage.saveTabs(this, newGroup, new ArrayList<>(tabs));
+
+                TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>());
+
+                currentTabGroup = newGroup;
+                
+                Toast.makeText(this, R.string.msg_tab_group_saved, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
+    }
+
+    private void switchToGroup(String newGroup) {
+        TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
+        
+        for (TabInfo tab : tabs) {
+            if (tab.session != null) {
+                tab.session.close();
+            }
+        }
+        tabs.clear();
+        currentTabIndex = -1;
+        
+        currentTabGroup = newGroup;
+        
+        List<TabInfo> savedTabs = TabStorage.loadTabs(this, currentTabGroup);
+        if (savedTabs != null && !savedTabs.isEmpty()) {
+            tabs.addAll(savedTabs);
+            for (TabInfo tab : tabs) {
+                initializeSessionForTab(tab);
+            }
+            if (tabSwitcherAdapter != null) {
+                tabSwitcherAdapter.notifyDataSetChanged();
+            }
+            switchToTab(tabs.size() - 1);
+            updateBottomTabCounter();
+        } else {
+            createNewTab(Config.URL_BLANK);
+        }
+        
+        if (isTabSwitcherVisible) toggleTabSwitcher();
     }
     
     private void showCloseAllTabsConfirmDialog() {
@@ -1732,19 +1919,38 @@ public class MainActivity extends AppCompatActivity {
         tabs.clear();
         currentTabIndex = -1;
         
-        // 保存空的标签页状态（传递副本以确保线程安全）
-        TabStorage.saveTabs(this, new ArrayList<>(tabs));
+        if (currentTabGroup != null) {
+            TabStorage.deleteGroup(this, currentTabGroup);
+            Toast.makeText(this, getString(R.string.msg_group_closed, currentTabGroup), Toast.LENGTH_SHORT).show();
+            currentTabGroup = null;
+            
+            List<TabInfo> savedTabs = TabStorage.loadTabs(this, null);
+            if (savedTabs != null && !savedTabs.isEmpty()) {
+                tabs.addAll(savedTabs);
+                for (TabInfo t : tabs) {
+                    initializeSessionForTab(t);
+                }
+                if (tabSwitcherAdapter != null) {
+                    tabSwitcherAdapter.notifyDataSetChanged();
+                }
+                switchToTab(tabs.size() - 1);
+            } else {
+                createNewTab(Config.URL_BLANK);
+            }
+        } else {
+            // 保存空的标签页状态（传递副本以确保线程安全）
+            TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
+            // 创建一个新的空白标签页
+            createNewTab(Config.URL_BLANK);
+            Toast.makeText(this, R.string.msg_all_tabs_closed, Toast.LENGTH_SHORT).show();
+        }
         
-        // 创建一个新的空白标签页
-        createNewTab(Config.URL_BLANK);
+        updateBottomTabCounter();
         
         // 如果当前在标签页切换器界面，关闭它
         if (isTabSwitcherVisible) {
             toggleTabSwitcher();
         }
-        
-        // 显示提示消息
-        Toast.makeText(this, R.string.msg_all_tabs_closed, Toast.LENGTH_SHORT).show();
     }
     private void toggleTabSwitcher() {
         if (isProcessingAction) return;
@@ -2489,7 +2695,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!newTitle.isEmpty()) {
                     tab.title = newTitle;
                     tabSwitcherAdapter.notifyItemChanged(position);
-                    TabStorage.saveTabs(this, tabs);
+                    TabStorage.saveTabs(this, currentTabGroup, tabs);
                     Toast.makeText(this, R.string.msg_tab_updated, Toast.LENGTH_SHORT).show();
                 }
             })
@@ -3104,4 +3310,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 更新侧边栏领主模式菜单项的状态
+     */
+    private void updateLordModeMenuItem() {
+        if (navigationView != null) {
+            android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            isLordMode = prefs.getBoolean(Config.PREF_KEY_LORD_MODE, false);
+            android.view.Menu menu = navigationView.getMenu();
+            android.view.MenuItem lordItem = menu.findItem(R.id.nav_lord_mode);
+            if (lordItem != null) {
+                lordItem.setChecked(isLordMode);
+                lordItem.setTitle(!isLordMode ? R.string.title_lord_mode : R.string.title_normal_mode);
+            }
+        }
+    }
+
+    /**
+     * 切换领主模式（Lord Mode）
+     */
+    private void toggleLordMode() {
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        isLordMode = !isLordMode;
+        prefs.edit().putBoolean(Config.PREF_KEY_LORD_MODE, isLordMode).apply();
+        
+        updateLordModeMenuItem();
+        
+        if (isLordMode) {
+            boolean introShown = prefs.getBoolean(Config.PREF_KEY_LORD_MODE_INTRO_SHOWN, false);
+            if (!introShown) {
+                showLordModeIntro();
+                prefs.edit().putBoolean(Config.PREF_KEY_LORD_MODE_INTRO_SHOWN, true).apply();
+            }
+        }
+        
+        Toast.makeText(this, !isLordMode ? R.string.title_lord_mode : R.string.title_normal_mode, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showLordModeIntro() {
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.title_lord_mode)
+            .setMessage(R.string.msg_lord_mode_intro)
+            .setPositiveButton(android.R.string.ok, null)
+            .show();
+    }
 }

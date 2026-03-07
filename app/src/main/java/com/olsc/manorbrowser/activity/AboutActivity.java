@@ -95,7 +95,7 @@ public class AboutActivity extends AppCompatActivity {
             return BuildConfig.MOZ_APP_VERSION;
         } catch (Exception e) {
             // 如果无法获取 GeckoView 版本，则返回编译时的版本号
-            return getString(R.string.default_gecko_version); // fallback
+            return getString(R.string.default_gecko_version); // 备选方案 (fallback)
         }
     }
     @Override
