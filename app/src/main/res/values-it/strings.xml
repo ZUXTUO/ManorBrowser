@@ -244,6 +244,12 @@
     <string name="dialog_title_confirm">Conferma</string>
     <string name="dialog_title_prompt">Inserimento</string>
     <string name="dialog_title_select">Selezione</string>
+    <string name="action_scan_qr_code">Scansiona codice QR</string>
+    <string name="msg_qr_code_found">Risultato codice QR:</string>
+    <string name="msg_no_qr_code_found">Nessun codice QR trovato in questa immagine.</string>
+    <string name="msg_scanning">Scansione…</string>
+    <string name="msg_load_error">Caricamento risorsa fallito.</string>
+    <string name="action_open_url">Apri URL</string>
     <string name="title_download_apk">Scaricare l\'APK?</string>
     <string name="msg_download_apk">Questo link è per un file di installazione di un\'applicazione (APK). Vuoi scaricarlo?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Personalizzazione pulsante Home</string>

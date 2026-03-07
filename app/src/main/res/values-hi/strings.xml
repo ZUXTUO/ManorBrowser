@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">पुष्टि करें</string>
     <string name="dialog_title_prompt">इनपुट</string>
     <string name="dialog_title_select">चुनें</string>
+    <string name="action_scan_qr_code">क्यूआर कोड स्कैन करें</string>
+    <string name="msg_qr_code_found">क्यूआर कोड परिणाम:</string>
+    <string name="msg_no_qr_code_found">इस छवि में कोई क्यूआर कोड नहीं मिला।</string>
+    <string name="msg_scanning">स्कैन किया जा रहा है…</string>
+    <string name="msg_load_error">संसाधन लोड करने में विफल।</string>
+    <string name="action_open_url">URL खोलें</string>
     <string name="title_download_apk">APK डाउनलोड करें?</string>
     <string name="msg_download_apk">यह लिंक किसी एप्लिकेशन इंस्टॉलेशन फ़ाइल (APK) के लिए है। क्या आप इसे डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
     <string name="title_custom_home_button">होम बटन अनुकूलन</string>

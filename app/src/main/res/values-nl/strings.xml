@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">Bevestigen</string>
     <string name="dialog_title_prompt">Invoer</string>
     <string name="dialog_title_select">Selecteren</string>
+    <string name="action_scan_qr_code">QR-code scannen</string>
+    <string name="msg_qr_code_found">QR-code resultaat:</string>
+    <string name="msg_no_qr_code_found">Geen QR-code gevonden in deze afbeelding.</string>
+    <string name="msg_scanning">Scannen…</string>
+    <string name="msg_load_error">Laden van bron mislukt.</string>
+    <string name="action_open_url">URL openen</string>
     <string name="title_download_apk">APK downloaden?</string>
     <string name="msg_download_apk">Deze link is voor een installatiebestand (APK). Wilt u dit downloaden?\n\nBestand: %1$s</string>
     <string name="title_custom_home_button">Aanpassing startknop</string>

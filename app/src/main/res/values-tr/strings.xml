@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">Onayla</string>
     <string name="dialog_title_prompt">Giriş</string>
     <string name="dialog_title_select">Seç</string>
+    <string name="action_scan_qr_code">QR Kodunu Tara</string>
+    <string name="msg_qr_code_found">QR Kodu Sonucu:</string>
+    <string name="msg_no_qr_code_found">Bu görselde QR kodu bulunamadı.</string>
+    <string name="msg_scanning">Taranıyor…</string>
+    <string name="msg_load_error">Kaynak yüklenemedi.</string>
+    <string name="action_open_url">URL\'yi Aç</string>
     <string name="title_download_apk">APK indirilsin mi?</string>
     <string name="msg_download_apk">Bu bağlantı bir uygulama yükleme dosyası (APK) içindir. İndirmek istiyor musunuz?\n\nDosya: %1$s</string>
     <string name="title_custom_home_button">Giriş Düğmesi Özelleştirme</string>

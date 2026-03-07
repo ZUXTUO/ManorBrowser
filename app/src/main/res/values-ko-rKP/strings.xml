@@ -254,6 +254,12 @@
     <string name="dialog_title_confirm">확인</string>
     <string name="dialog_title_prompt">입력</string>
     <string name="dialog_title_select">선택</string>
+    <string name="action_scan_qr_code">레이저코드 인식</string>
+    <string name="msg_qr_code_found">레이저코드 인식 결과:</string>
+    <string name="msg_no_qr_code_found">화상에서 레이저코드를 찾을수 없습니다.</string>
+    <string name="msg_scanning">인식중…</string>
+    <string name="msg_load_error">자원을 불러오지 못했습니다.</string>
+    <string name="action_open_url">주소 열기</string>
     <string name="title_download_apk">APK를 다운로드하시겠습니까?</string>
     <string name="msg_download_apk">이 링크는 애플리케이션 설치 파일 (APK) 입니다. 다운로드하시겠습니까?\n\n파일: %1$s</string>
     <string name="title_custom_home_button">홈 단추 사용자 정의</string>

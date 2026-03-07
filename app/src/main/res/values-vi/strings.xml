@@ -255,6 +255,12 @@
     <string name="dialog_title_confirm">Xác nhận</string>
     <string name="dialog_title_prompt">Nhập</string>
     <string name="dialog_title_select">Chọn</string>
+    <string name="action_scan_qr_code">Quét mã QR</string>
+    <string name="msg_qr_code_found">Kết quả quét mã QR:</string>
+    <string name="msg_no_qr_code_found">Không tìm thấy mã QR trong hình ảnh này.</string>
+    <string name="msg_scanning">Đang quét…</string>
+    <string name="msg_load_error">Tải tài nguyên thất bại.</string>
+    <string name="action_open_url">Mở URL</string>
     <string name="title_custom_home_button">Tùy chỉnh nút trang chủ</string>
     <string name="desc_custom_home_button">Tùy chỉnh chức năng của nút đầu tiên trên thanh dưới cùng</string>
     <string name="label_current_function">Chức năng hiện tại</string>

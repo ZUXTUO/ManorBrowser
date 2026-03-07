@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">Konfirmasi</string>
     <string name="dialog_title_prompt">Masukan</string>
     <string name="dialog_title_select">Pilih</string>
+    <string name="action_scan_qr_code">Pindai Kode QR</string>
+    <string name="msg_qr_code_found">Hasil Kode QR:</string>
+    <string name="msg_no_qr_code_found">Kode QR tidak ditemukan dalam gambar ini.</string>
+    <string name="msg_scanning">Memindai…</string>
+    <string name="msg_load_error">Gagal memuat sumber daya.</string>
+    <string name="action_open_url">Buka URL</string>
     <string name="title_download_apk">Unduh APK?</string>
     <string name="msg_download_apk">Tautan ini adalah untuk file instalasi aplikasi (APK). Apakah Anda ingin mengunduhnya?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Kustomisasi Tombol Beranda</string>

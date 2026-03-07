@@ -243,7 +243,13 @@
     <string name="dialog_title_alert">تنبيه</string>
     <string name="dialog_title_confirm">تأكيد</string>
     <string name="dialog_title_prompt">إدخال</string>
-    <string name="dialog_title_select">اختر</string>
+    <string name="dialog_title_select">تحديد</string>
+    <string name="action_scan_qr_code">مسح رمز الاستجابة السريعة</string>
+    <string name="msg_qr_code_found">نتيجة رمز الاستجابة السريعة:</string>
+    <string name="msg_no_qr_code_found">لم يتم العثور على رمز استجابة سريعة في هذه الصورة.</string>
+    <string name="msg_scanning">جاري المسح…</string>
+    <string name="msg_load_error">فشل تحميل المورد.</string>
+    <string name="action_open_url">فتح الرابط</string>
     <string name="title_download_apk">هل تريد تحميل ملف APK؟</string>
     <string name="msg_download_apk">هذا الرابط خاص بملف تثبيت تطبيق (APK). هل تريد تحميله؟\n\nالملف: %1$s</string>
     <string name="title_custom_home_button">تخصيص زر الصفحة الرئيسية</string>

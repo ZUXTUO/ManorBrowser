@@ -75,6 +75,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import org.mozilla.geckoview.GeckoSession.PromptDelegate;
 
+import com.olsc.manorbrowser.utils.QrCodeHelper;
+import android.graphics.BitmapFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -2391,6 +2397,11 @@ public class MainActivity extends AppCompatActivity {
             items.add(getString(R.string.action_copy_image_link));
             actions.add(4);
         }
+
+        if (element.type == ContextElement.TYPE_IMAGE && element.srcUri != null) {
+            items.add(getString(R.string.action_scan_qr_code));
+            actions.add(7);
+        }
         
         items.add(getString(R.string.action_reader_mode));
         actions.add(5);
@@ -2412,10 +2423,65 @@ public class MainActivity extends AppCompatActivity {
                     enableReaderMode();
                 } else if (action == 6) {
                     copyLinkTextAtPoint();
+                } else if (action == 7) {
+                    handleScanQrCode(element.srcUri);
                 }
             })
             .show();
     }
+
+    private void handleScanQrCode(String imageUrl) {
+        if (imageUrl == null) return;
+        
+        Toast.makeText(this, R.string.msg_scanning, Toast.LENGTH_SHORT).show();
+        
+        new Thread(() -> {
+            try {
+                Request request = new Request.Builder()
+                        .url(imageUrl)
+                        .header("User-Agent", "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36")
+                        .build();
+
+                try (Response response = com.olsc.manorbrowser.utils.BrowserDownloader.getClient().newCall(request).execute()) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        try (InputStream is = response.body().byteStream()) {
+                            android.graphics.Bitmap bitmap = BitmapFactory.decodeStream(is);
+                            String result = QrCodeHelper.scanQrCode(bitmap);
+                            
+                            runOnUiThread(() -> {
+                                if (result != null) {
+                                    showQrResultDialog(result);
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.msg_no_qr_code_found, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    } else {
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_load_error, Toast.LENGTH_SHORT).show());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_load_error, Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    private void showQrResultDialog(String result) {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder builder = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.action_scan_qr_code)
+                .setMessage(getString(R.string.msg_qr_code_found) + "\n\n" + result)
+                .setPositiveButton(android.R.string.copy, (dialog, which) -> copyToClipboard(result))
+                .setNegativeButton(android.R.string.cancel, null);
+
+        String trimmed = result.trim();
+        if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+            builder.setNeutralButton(R.string.action_open_url, (dialog, which) -> loadUrlInCurrentTab(trimmed));
+        }
+
+        builder.show();
+    }
+
     private void copyLinkTextAtPoint() {
         GeckoSession session = getCurrentSession();
         if (session != null) {

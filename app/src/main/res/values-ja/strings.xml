@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">確認</string>
     <string name="dialog_title_prompt">入力</string>
     <string name="dialog_title_select">選択</string>
+    <string name="action_scan_qr_code">QRコードをスキャン</string>
+    <string name="msg_qr_code_found">QRコードのスキャン結果：</string>
+    <string name="msg_no_qr_code_found">この画像にはQRコードが見つかりません。</string>
+    <string name="msg_scanning">スキャン中…</string>
+    <string name="msg_load_error">リソースの読み込みに失敗しました。</string>
+    <string name="action_open_url">URLを開く</string>
     <string name="title_download_apk">APKをダウンロードしますか？</string>
     <string name="msg_download_apk">このリンクはアプリケーションのインストールファイル (APK) です。ダウンロードしますか？\n\nファイル: %1$s</string>
     <string name="title_custom_home_button">ホームボタンのカスタマイズ</string>

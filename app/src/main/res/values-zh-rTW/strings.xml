@@ -252,6 +252,12 @@
     <string name="dialog_title_confirm">確認</string>
     <string name="dialog_title_prompt">請輸入</string>
     <string name="dialog_title_select">請選擇</string>
+    <string name="action_scan_qr_code">識別二維碼</string>
+    <string name="msg_qr_code_found">二維碼識別結果：</string>
+    <string name="msg_no_qr_code_found">未在此圖片中發現二維碼。</string>
+    <string name="msg_scanning">正在識別…</string>
+    <string name="msg_load_error">載入資源失敗。</string>
+    <string name="action_open_url">打開連結</string>
     <string name="title_download_apk">下載 APK 檔案？</string>
     <string name="msg_download_apk">檢測到此連結為安卓應用安裝包 (APK)，是否確認下載？\n\n檔案：%1$s</string>
     <string name="title_custom_home_button">主頁按鈕自定義</string>

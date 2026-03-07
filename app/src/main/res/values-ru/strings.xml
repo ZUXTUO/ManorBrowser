@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">Подтверждение</string>
     <string name="dialog_title_prompt">Ввод</string>
     <string name="dialog_title_select">Выбор</string>
+    <string name="action_scan_qr_code">Сканировать QR-код</string>
+    <string name="msg_qr_code_found">Результат QR-кода:</string>
+    <string name="msg_no_qr_code_found">QR-код на этом изображении не найден.</string>
+    <string name="msg_scanning">Сканирование…</string>
+    <string name="msg_load_error">Ошибка загрузки ресурса.</string>
+    <string name="action_open_url">Открыть URL</string>
     <string name="title_download_apk">Скачать APK?</string>
     <string name="msg_download_apk">Эта ссылка ведет на файл установки приложения (APK). Вы хотите его скачать?\n\nФайл: %1$s</string>
     <string name="title_custom_home_button">Настройка кнопки «Домой»</string>

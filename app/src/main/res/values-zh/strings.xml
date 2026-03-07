@@ -266,7 +266,13 @@ URL: %1$s</string>
     <string name="dialog_title_alert">提示</string>
     <string name="dialog_title_confirm">确认</string>
     <string name="dialog_title_prompt">请输入</string>
-    <string name="dialog_title_select">请选择</string>
+    <string name="dialog_title_select">选择</string>
+    <string name="action_scan_qr_code">识别二维码</string>
+    <string name="msg_qr_code_found">二维码识别结果：</string>
+    <string name="msg_no_qr_code_found">未在此图片中发现二维码。</string>
+    <string name="msg_scanning">正在识别…</string>
+    <string name="msg_load_error">加载资源失败。</string>
+    <string name="action_open_url">打开链接</string>
     <string name="title_download_apk">下载 APK 文件？</string>
     <string name="msg_download_apk">检测到此链接为安卓应用安装包 (APK)，是否确认下载？\n\n文件：%1$s</string>
     <string name="title_custom_home_button">主页按钮自定义</string>
