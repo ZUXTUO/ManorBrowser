@@ -180,16 +180,16 @@ public class PasswordManagerActivity extends AppCompatActivity {
                         getString(R.string.action_delete)
                     }, (dialog, which) -> {
                         switch (which) {
-                            case 0: // Edit
+                            case 0: // 编辑
                                 showEditPasswordDialog(position);
                                 break;
-                            case 1: // Show
+                            case 1: // 查看
                                 showPasswordDialog(item);
                                 break;
-                            case 2: // Copy
+                            case 2: // 复制
                                 copyToClipboard(item.password);
                                 break;
-                            case 3: // Delete
+                            case 3: // 删除
                                 deletePassword(position);
                                 break;
                         }

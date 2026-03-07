@@ -372,4 +372,18 @@ URL: %1$s</string>
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Lord Mode</string>
+    <string name="title_normal_mode">Normal Mode</string>
+    <string name="msg_lord_mode_intro">\"Lord Mode\" is now active. In this mode:\n\n1. Your browsing history will not be saved.\n2. When websites request Cookies or local storage, a warning will appear, allowing you to permit or deny it.\n3. You have absolute control over your data.</string>
+    <string name="title_cookie_warning">Cookies/Storage Request</string>
+    <string name="msg_cookie_warning">The website \"%1$s\" is requesting to use Cookies or local storage.\n\nIn Lord Mode, you can restrict this behavior. Do you want to allow this website to store data?</string>
+    <string name="title_location_warning">Location Request</string>
+    <string name="msg_location_warning">The website \"%1$s\" is requesting your current location. Do you want to allow it?</string>
+    <string name="msg_no_location_permission">The app has not been granted location permission. Please enable it in \"Settings -&gt; App info\" and try again.</string>
+    <string name="action_always_deny">Always Deny</string>
+    <string name="title_restricted_sites">Location Permissions</string>
+    <string name="msg_restricted_sites_desc">Manage sites that are set to \"Always Deny\" for location access.</string>
+    <string name="action_remove">Remove Restriction</string>
 </resources>

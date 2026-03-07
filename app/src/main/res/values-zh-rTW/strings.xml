@@ -340,10 +340,10 @@
     <string name="ai_tool_get_downloads">檢查下載狀態...</string>
     <string name="ai_tool_clear_history">正在清理歷史記錄...</string>
     <string name="ai_tool_clear_downloads">正在清理下載列表...</string>
-    <string name="ai_tool_exit_ai">正在關閉助手並退出托管模式...</string>
+    <string name="ai_tool_exit_ai">正在關閉助手並退出代管模式...</string>
     <string name="ai_tool_eval_js">執行腳本自動化...</string>
     <string name="ai_thinking_dots">思考中...</string>
-    <string name="engine_bing">必应</string>
+    <string name="engine_bing">必應</string>
     <string name="engine_duckduckgo">DuckDuckGo</string>
     <string name="engine_yahoo">雅虎</string>
     <string name="engine_yandex">Yandex</string>
@@ -357,6 +357,21 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">領主模式</string>
+    <string name="title_normal_mode">常規模式</string>
+    <string name="msg_lord_mode_intro">「領主模式」已開啟。在此模式下：\n\n1. 您的網頁瀏覽歷史記錄將不會被儲存。\n2. 當網站嘗試申請 Cookies 或本地儲存時，系統會彈出警告，您可以自由選擇允許或禁止。\n3. 您將擁有對資料的絕對控制權。</string>
+    <string name="title_cookie_warning">Cookies/資料儲存請求</string>
+    <string name="msg_cookie_warning">網站「%1$s」正在申請啟用 Cookies 或本地儲存資料。\n\n在領主模式下，您可以限制此行為。是否允許該網站記錄資料？</string>
+    <string name="title_location_warning">位置資訊申請</string>
+    <string name="msg_location_warning">網站「%1$s」正在申請獲取您的目前位置資訊。是否確認允許？</string>
+    <string name="msg_no_location_permission">應用程式尚未獲得系統的位置權限。請前往「設定 -&gt; 應用程式詳情」手動開啟權限後再試。</string>
+    <string name="action_always_deny">始終拒絕</string>
+    <string name="title_restricted_sites">位置權限管理</string>
+    <string name="msg_restricted_sites_desc">在此管理已設置為「始終拒絕」訪問位置資訊的網站。</string>
+    <string name="action_remove">移除限制</string>
+    
     <string name="action_close_all_tabs_in_group">關閉目前群組的所有分頁</string>
     <string name="action_save_to_new_group">放入新群組</string>
     <string name="action_switch_to_group">切換到群組: %1$s</string>

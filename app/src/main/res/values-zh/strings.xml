@@ -370,4 +370,18 @@ URL: %1$s</string>
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">领主模式</string>
+    <string name="title_normal_mode">常规模式</string>
+    <string name="msg_lord_mode_intro">“领主模式”已开启。在此模式下：\n\n1. 您的网页浏览历史记录将不会被保存。\n2. 当网站尝试申请 Cookies 或本地存储时，系统会弹出警告，您可以自由选择允许或禁止。\n3. 您将拥有对数据的绝对控制权。</string>
+    <string name="title_cookie_warning">Cookies/数据存储请求</string>
+    <string name="msg_cookie_warning">网站“%1$s”正在申请启用 Cookies 或本地存储数据。\n\n在领主模式下，您可以限制此行为。是否允许该网站记录数据？</string>
+    <string name="title_location_warning">位置信息申请</string>
+    <string name="msg_location_warning">网站“%1$s”正在申请获取您的当前位置信息。是否确认允许？</string>
+    <string name="msg_no_location_permission">应用尚未获得系统的位置权限。请前往“设置 -&gt; 应用详情”手动开启权限后再试。</string>
+    <string name="action_always_deny">始终拒绝</string>
+    <string name="title_restricted_sites">位置权限管理</string>
+    <string name="msg_restricted_sites_desc">在此管理已设置为“始终拒绝”访问位置信息的网站。</string>
+    <string name="action_remove">移除限制</string>
 </resources>

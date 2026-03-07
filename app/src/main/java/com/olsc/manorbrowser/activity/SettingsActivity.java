@@ -150,6 +150,14 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
+        // 位置权限管理
+        View containerRestrictedSites = findViewById(R.id.container_restricted_sites);
+        if (containerRestrictedSites != null) {
+            containerRestrictedSites.setOnClickListener(v -> {
+                startActivity(new android.content.Intent(this, RestrictedSitesActivity.class));
+            });
+        }
+
         // 智能托管 (AI 远程控制)
         androidx.appcompat.widget.SwitchCompat swAiRemote = findViewById(R.id.sw_ai_remote);
         View containerAiServer = findViewById(R.id.container_ai_server_url);

@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     /** JS 标题桥调用: 待处理的回调和原始标题 */
     private volatile BrowserCommandServer.EvalCallback pendingJsCallback = null;
     private volatile String pendingJsOriginalTitle = null;
+    private boolean isLordMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -539,7 +540,9 @@ public class MainActivity extends AppCompatActivity {
                        }
                    }
                    if(tabInfo != null && tabInfo.url != null && !tabInfo.url.equals("about:blank")){
-                        HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
+                        if (!isLordMode) {
+                            HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
+                        }
                    }
                 }
             }
@@ -670,7 +673,64 @@ public class MainActivity extends AppCompatActivity {
         session.setPermissionDelegate(new GeckoSession.PermissionDelegate() {
             @Override
             public GeckoResult<Integer> onContentPermissionRequest(@NonNull GeckoSession session, @NonNull GeckoSession.PermissionDelegate.ContentPermission perm) {
+                if (perm.permission == GeckoSession.PermissionDelegate.PERMISSION_GEOLOCATION) {
+                    // 检查网站是否始终被拒绝访问位置
+                    if (isLocationRestricted(perm.uri)) {
+                        return GeckoResult.fromValue(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY);
+                    }
+
+                    // 首先检查系统权限
+                    if (androidx.core.content.ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, R.string.msg_no_location_permission, Toast.LENGTH_LONG).show());
+                        return GeckoResult.fromValue(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY);
+                    }
+                    
+                    final GeckoResult<Integer> result = new GeckoResult<>();
+                    runOnUiThread(() -> {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(R.string.title_location_warning)
+                            .setMessage(getString(R.string.msg_location_warning, perm.uri))
+                            .setPositiveButton(R.string.action_allow, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_ALLOW))
+                            .setNegativeButton(R.string.action_deny, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY))
+                            .setNeutralButton(R.string.action_always_deny, (d, w) -> {
+                                addLocationRestriction(perm.uri);
+                                result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY);
+                            })
+                            .setCancelable(false)
+                            .show();
+                    });
+                    return result;
+                } else if (isLordMode && perm.permission == GeckoSession.PermissionDelegate.PERMISSION_PERSISTENT_STORAGE) {
+                    final GeckoResult<Integer> result = new GeckoResult<>();
+                    runOnUiThread(() -> {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(R.string.title_cookie_warning)
+                            .setMessage(getString(R.string.msg_cookie_warning, perm.uri))
+                            .setPositiveButton(R.string.action_allow, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_ALLOW))
+                            .setNegativeButton(R.string.action_deny, (d, w) -> result.complete(GeckoSession.PermissionDelegate.ContentPermission.VALUE_DENY))
+                            .setCancelable(false)
+                            .show();
+                    });
+                    return result;
+                }
                 return GeckoResult.fromValue(GeckoSession.PermissionDelegate.ContentPermission.VALUE_ALLOW);
+            }
+
+            private boolean isLocationRestricted(String uri) {
+                android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                java.util.Set<String> restricted = prefs.getStringSet(Config.PREF_KEY_LOCATION_RESTRICTED_SITES, new java.util.HashSet<>());
+                String host = android.net.Uri.parse(uri).getHost();
+                return host != null && restricted.contains(host);
+            }
+
+            private void addLocationRestriction(String uri) {
+                android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                java.util.Set<String> restricted = new java.util.HashSet<>(prefs.getStringSet(Config.PREF_KEY_LOCATION_RESTRICTED_SITES, new java.util.HashSet<>()));
+                String host = android.net.Uri.parse(uri).getHost();
+                if (host != null) {
+                    restricted.add(host);
+                    prefs.edit().putStringSet(Config.PREF_KEY_LOCATION_RESTRICTED_SITES, restricted).apply();
+                }
             }
 
             @Override
@@ -1442,6 +1502,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             } else if (id == R.id.nav_desktop_mode) {
                 toggleDesktopMode();
+            } else if (id == R.id.nav_lord_mode) {
+                toggleLordMode();
             } else if (id == R.id.nav_fullscreen) {
                 toggleFullScreenMode();
             } else if (id == R.id.nav_extensions_action) {
@@ -1510,6 +1572,7 @@ public class MainActivity extends AppCompatActivity {
             if (fsItem != null) {
                 fsItem.setChecked(isFullScreenMode);
             }
+            updateLordModeMenuItem();
         }
     }
     private GeckoSession createNewTab(String url) {
@@ -3247,4 +3310,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 更新侧边栏领主模式菜单项的状态
+     */
+    private void updateLordModeMenuItem() {
+        if (navigationView != null) {
+            android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            isLordMode = prefs.getBoolean(Config.PREF_KEY_LORD_MODE, false);
+            android.view.Menu menu = navigationView.getMenu();
+            android.view.MenuItem lordItem = menu.findItem(R.id.nav_lord_mode);
+            if (lordItem != null) {
+                lordItem.setChecked(isLordMode);
+                lordItem.setTitle(!isLordMode ? R.string.title_lord_mode : R.string.title_normal_mode);
+            }
+        }
+    }
+
+    /**
+     * 切换领主模式（Lord Mode）
+     */
+    private void toggleLordMode() {
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        isLordMode = !isLordMode;
+        prefs.edit().putBoolean(Config.PREF_KEY_LORD_MODE, isLordMode).apply();
+        
+        updateLordModeMenuItem();
+        
+        if (isLordMode) {
+            boolean introShown = prefs.getBoolean(Config.PREF_KEY_LORD_MODE_INTRO_SHOWN, false);
+            if (!introShown) {
+                showLordModeIntro();
+                prefs.edit().putBoolean(Config.PREF_KEY_LORD_MODE_INTRO_SHOWN, true).apply();
+            }
+        }
+        
+        Toast.makeText(this, !isLordMode ? R.string.title_lord_mode : R.string.title_normal_mode, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showLordModeIntro() {
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.title_lord_mode)
+            .setMessage(R.string.msg_lord_mode_intro)
+            .setPositiveButton(android.R.string.ok, null)
+            .show();
+    }
 }

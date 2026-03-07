@@ -350,6 +350,20 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
+    
+    <!-- Lord Mode -->
+    <string name="title_lord_mode">Modalità Lord</string>
+    <string name="title_normal_mode">Modalità Normale</string>
+    <string name="msg_lord_mode_intro">"La \"Modalità Lord\" è ora attiva. In questa modalità:\n\n1. La cronologia di navigazione non verrà salvata.\n2. Quando i siti web richiedono cookie o memoria locale, apparirà un avviso che ti permetterà di consentire o negare.\n3. Hai il controllo assoluto sui tuoi dati."</string>
+    <string name="title_cookie_warning">"Richiesta Cookie/Memoria"</string>
+    <string name="msg_cookie_warning">"Il sito web \"%1$s\" richiede di utilizzare cookie o memoria locale.\n\nIn Modalità Lord, puoi limitare questo comportamento. Vuoi consentire a questo sito di salvare i dati?"</string>
+    <string name="title_location_warning">"Richiesta Posizione"</string>
+    <string name="msg_location_warning">"Il sito web \"%1$s\" richiede la tua posizione attuale. Vuoi consentirlo?"</string>
+    <string name="msg_no_location_permission">"L'app non ha ottenuto il permesso per la posizione. Abilitalo in \"Impostazioni -&gt; Informazioni app\" e riprova."</string>
+    <string name="action_always_deny">"Nega sempre"</string>
+    <string name="title_restricted_sites">"Permessi Posizione"</string>
+    <string name="msg_restricted_sites_desc">"Gestisci i siti impostati su \"Nega sempre\" per l'accesso alla posizione."</string>
+    <string name="action_remove">Rimuovi restrizione</string>
     <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
     <string name="action_save_to_new_group">Save to new group</string>
     <string name="action_switch_to_group">Switch to group: %1$s</string>

@@ -9,7 +9,7 @@ public class Config {
     // --- User Agent (用户代理) 相关 ---
     /** 默认 User Agent (Firefox Mobile) */
     public static final String DEFAULT_UA = "Mozilla/5.0 (Android 14; Mobile; rv:130.0) Gecko/130.0 Firefox/130.0";
-    /** Chrome Mobile User Agent */
+    /** Chrome 移动版 User Agent */
     public static final String CHROME_UA = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
     /** 桌面版 User Agent (Windows Firefox) */
     public static final String DESKTOP_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0";
@@ -41,6 +41,12 @@ public class Config {
     public static final String PREF_KEY_AI_REMOTE_ENABLED = "ai_remote_enabled";
     /** 自定义背景图片路径 (String) */
     public static final String PREF_KEY_CUSTOM_BG_IMAGE = "custom_bg_image";
+    /** 领主模式开启状态 (boolean) */
+    public static final String PREF_KEY_LORD_MODE = "lord_mode_enabled";
+    /** 是否已显示过领主模式介绍 (boolean) */
+    public static final String PREF_KEY_LORD_MODE_INTRO_SHOWN = "lord_mode_intro_shown";
+    /** 地理位置访问受限网站列表 (Set<String>) */
+    public static final String PREF_KEY_LOCATION_RESTRICTED_SITES = "location_restricted_sites";
 
     // --- 按钮功能值 ---
     public static final String FUNC_HOME = "home";
@@ -69,21 +75,21 @@ public class Config {
     public static final String ENGINE_ECOSIA = "ecosia";
     /** Brave 搜索 */
     public static final String ENGINE_BRAVE = "brave";
-    /** Startpage */
+    /** Startpage 搜索 */
     public static final String ENGINE_STARTPAGE = "startpage";
     /** 搜狗搜索 */
     public static final String ENGINE_SOGOU = "sogou";
     /** 360搜索 */
     public static final String ENGINE_360 = "360";
-    /** Qwant */
+    /** Qwant 搜索 */
     public static final String ENGINE_QWANT = "qwant";
-    /** Naver */
+    /** Naver 搜索 */
     public static final String ENGINE_NAVER = "naver";
-    /** Seznam */
+    /** Seznam 搜索 */
     public static final String ENGINE_SEZNAM = "seznam";
-    /** Mojeek */
+    /** Mojeek 搜索 */
     public static final String ENGINE_MOJEEK = "mojeek";
-    /** MetaGer */
+    /** MetaGer 搜索 */
     public static final String ENGINE_METAGER = "metager";
 
     // --- URL 常量 ---

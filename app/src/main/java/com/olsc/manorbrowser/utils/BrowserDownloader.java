@@ -387,7 +387,7 @@ public class BrowserDownloader {
                         }
                     } 
                     
-                    // Fallback 或 低版本 Android
+                    // 回退方案或低版本 Android
                     if (os == null) {
                         File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                         if (!downloadDir.exists()) downloadDir.mkdirs();

@@ -53,8 +53,15 @@ public class LocaleHelper {
      */
     private static Context updateResources(Context context, String language) {
         Locale locale;
-        // 处理区域代码，如 "zh-CN"
-        if (language.contains("-")) {
+        if (language == null || language.isEmpty()) {
+            // "跟随系统"模式：清空自定义 Locale，还原为系统默认配置。
+            // 此时不应创建 new Locale("")，而应获取系统真正的 Language 代码。
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                locale = android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0);
+            } else {
+                locale = android.content.res.Resources.getSystem().getConfiguration().locale;
+            }
+        } else if (language.contains("-")) {
             String[] parts = language.split("-");
             if (parts.length > 1) {
                 locale = new Locale(parts[0], parts[1]);

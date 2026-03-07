@@ -27,6 +27,11 @@
             android:title="@string/title_desktop_mode"
             android:checkable="true" />
         <item
+            android:id="@+id/nav_lord_mode"
+            android:icon="@drawable/ic_castle"
+            android:title="@string/title_lord_mode"
+            android:checkable="true" />
+        <item
             android:id="@+id/nav_fullscreen"
             android:icon="@drawable/ic_fullscreen"
             android:title="@string/action_fullscreen"
