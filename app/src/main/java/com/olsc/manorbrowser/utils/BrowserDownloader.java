@@ -45,7 +45,7 @@ public class BrowserDownloader {
     /**
      * 获取 OkHttpClient 单例，针对局域网环境进行深度优化
      */
-    private static synchronized OkHttpClient getClient() {
+    public static synchronized OkHttpClient getClient() {
         if (client == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .connectTimeout(30, TimeUnit.SECONDS)

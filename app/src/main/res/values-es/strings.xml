@@ -244,6 +244,12 @@
     <string name="dialog_title_confirm">Confirmar</string>
     <string name="dialog_title_prompt">Entrada</string>
     <string name="dialog_title_select">Seleccionar</string>
+    <string name="action_scan_qr_code">Escanear código QR</string>
+    <string name="msg_qr_code_found">Resultado del código QR:</string>
+    <string name="msg_no_qr_code_found">No se encontró ningún código QR en esta imagen.</string>
+    <string name="msg_scanning">Escaneando…</string>
+    <string name="msg_load_error">Error al cargar el recurso.</string>
+    <string name="action_open_url">Abrir URL</string>
     <string name="title_download_apk">¿Descargar APK?</string>
     <string name="msg_download_apk">Este enlace es para un archivo de instalación de aplicación (APK). ¿Desea descargarlo?\n\nArchivo: %1$s</string>
     <string name="title_custom_home_button">Personalización del botón de inicio</string>
@@ -364,13 +370,14 @@
     <string name="title_restricted_sites">Permisos de Ubicación</string>
     <string name="msg_restricted_sites_desc">Gestione los sitios que están configurados como \"Denegar siempre\" para el acceso a la ubicación.</string>
     <string name="action_remove">Eliminar restricción</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Cerrar todas las pestañas del grupo</string>
+    <string name="action_save_to_new_group">Guardar en nuevo grupo</string>
+    <string name="action_switch_to_group">Cambiar al grupo: %1$s</string>
+    <string name="action_return_to_default_group">Volver al grupo predeterminado</string>
+    <string name="title_new_tab_group">Nombre del nuevo grupo</string>
+    <string name="hint_tab_group_name">Ingrese el nombre del grupo</string>
+    <string name="msg_tab_group_saved">Guardado en nuevo grupo</string>
+    <string name="default_group_name">Grupo predeterminado</string>
+    <string name="msg_group_closed">El grupo %1$s ha sido cerrado</string>
+    <string name="msg_load_timeout">Tiempo de espera agotado, carga detenida</string>
 </resources>

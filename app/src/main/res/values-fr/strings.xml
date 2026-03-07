@@ -244,6 +244,12 @@
     <string name="dialog_title_confirm">Confirmer</string>
     <string name="dialog_title_prompt">Saisie</string>
     <string name="dialog_title_select">Sélection</string>
+    <string name="action_scan_qr_code">Scanner le code QR</string>
+    <string name="msg_qr_code_found">Résultat du code QR :</string>
+    <string name="msg_no_qr_code_found">Aucun code QR trouvé dans cette image.</string>
+    <string name="msg_scanning">Numérisation…</string>
+    <string name="msg_load_error">Échec du chargement de la ressource.</string>
+    <string name="action_open_url">Ouvrir l\'URL</string>
     <string name="title_download_apk">Télécharger l\'APK ?</string>
     <string name="msg_download_apk">Ce lien est destiné à un fichier d\'installation d\'application (APK). Voulez-vous le télécharger ?\n\nFichier : %1$s</string>
     <string name="title_custom_home_button">Personnalisation du bouton d\'accueil</string>
@@ -364,13 +370,14 @@
     <string name="title_restricted_sites">Autorisations de localisation</string>
     <string name="msg_restricted_sites_desc">Gérez les sites configurés sur \"Toujours refuser\" pour l\'accès à la localisation.</string>
     <string name="action_remove">Supprimer la restriction</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Fermer tous les onglets du groupe</string>
+    <string name="action_save_to_new_group">Enregistrer dans un nouveau groupe</string>
+    <string name="action_switch_to_group">Passer au groupe : %1$s</string>
+    <string name="action_return_to_default_group">Retour au groupe par défaut</string>
+    <string name="title_new_tab_group">Nom du nouveau groupe</string>
+    <string name="hint_tab_group_name">Entrez le nom du groupe</string>
+    <string name="msg_tab_group_saved">Enregistré dans le nouveau groupe</string>
+    <string name="default_group_name">Groupe par défaut</string>
+    <string name="msg_group_closed">Le groupe %1$s a été fermé</string>
+    <string name="msg_load_timeout">Délai d\'attente dépassé, chargement arrêté</string>
 </resources>

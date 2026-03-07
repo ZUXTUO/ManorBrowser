@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">पुष्टि करें</string>
     <string name="dialog_title_prompt">इनपुट</string>
     <string name="dialog_title_select">चुनें</string>
+    <string name="action_scan_qr_code">क्यूआर कोड स्कैन करें</string>
+    <string name="msg_qr_code_found">क्यूआर कोड परिणाम:</string>
+    <string name="msg_no_qr_code_found">इस छवि में कोई क्यूआर कोड नहीं मिला।</string>
+    <string name="msg_scanning">स्कैन किया जा रहा है…</string>
+    <string name="msg_load_error">संसाधन लोड करने में विफल।</string>
+    <string name="action_open_url">URL खोलें</string>
     <string name="title_download_apk">APK डाउनलोड करें?</string>
     <string name="msg_download_apk">यह लिंक किसी एप्लिकेशन इंस्टॉलेशन फ़ाइल (APK) के लिए है। क्या आप इसे डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
     <string name="title_custom_home_button">होम बटन अनुकूलन</string>
@@ -373,13 +379,14 @@
     <string name="title_restricted_sites">स्थान अनुमतियाँ</string>
     <string name="msg_restricted_sites_desc">उन साइटों को प्रबंधित करें जिन्हें स्थान पहुंच के लिए "हमेशा अस्वीकार करें" पर सेट किया गया है।</string>
     <string name="action_remove">प्रतिबंध हटाएँ</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">समूह के सभी टैब बंद करें</string>
+    <string name="action_save_to_new_group">नए समूह में सहेजें</string>
+    <string name="action_switch_to_group">समूह पर स्विच करें: %1$s</string>
+    <string name="action_return_to_default_group">डिफ़ॉल्ट समूह पर लौटें</string>
+    <string name="title_new_tab_group">नया समूह नाम</string>
+    <string name="hint_tab_group_name">समूह का नाम दर्ज करें</string>
+    <string name="msg_tab_group_saved">नए समूह में सहेजा गया</string>
+    <string name="default_group_name">डिफ़ॉल्ट समूह</string>
+    <string name="msg_group_closed">समूह %1$s बंद कर दिया गया है</string>
+    <string name="msg_load_timeout">पृष्ठ लोड होने का समय समाप्त, लोड होना बंद हो गया</string>
 </resources>

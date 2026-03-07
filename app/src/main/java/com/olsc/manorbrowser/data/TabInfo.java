@@ -21,6 +21,10 @@ public class TabInfo {
     public int scrollY = 0;
     /** 后退状态缓存 */
     public boolean canGoBack = false;
+    /** 超时终止任务，用于检测并处理加载卡死 */
+    public transient Runnable timeoutRunnable;
+    /** 上次记录的进度值，辅助判断是否有实质进度 */
+    public int lastProgress = 0;
 
     public TabInfo(GeckoSession session) {
         this.id = System.currentTimeMillis();

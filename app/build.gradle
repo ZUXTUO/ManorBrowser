@@ -46,6 +46,7 @@ dependencies {
     implementation libs.swiperefreshlayout
     implementation libs.preference
     implementation libs.okhttp
+    implementation libs.zxing.core
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

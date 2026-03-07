@@ -253,6 +253,12 @@
     <string name="dialog_title_confirm">Bevestigen</string>
     <string name="dialog_title_prompt">Invoer</string>
     <string name="dialog_title_select">Selecteren</string>
+    <string name="action_scan_qr_code">QR-code scannen</string>
+    <string name="msg_qr_code_found">QR-code resultaat:</string>
+    <string name="msg_no_qr_code_found">Geen QR-code gevonden in deze afbeelding.</string>
+    <string name="msg_scanning">Scannen…</string>
+    <string name="msg_load_error">Laden van bron mislukt.</string>
+    <string name="action_open_url">URL openen</string>
     <string name="title_download_apk">APK downloaden?</string>
     <string name="msg_download_apk">Deze link is voor een installatiebestand (APK). Wilt u dit downloaden?\n\nBestand: %1$s</string>
     <string name="title_custom_home_button">Aanpassing startknop</string>
@@ -373,13 +379,14 @@
     <string name="title_restricted_sites">Locatierechten</string>
     <string name="msg_restricted_sites_desc">Beheer sites die op \"Altijd weigeren\" zijn ingesteld voor locatietoegang.</string>
     <string name="action_remove">Beperking verwijderen</string>
-    <string name="action_close_all_tabs_in_group">Close all tabs in current group</string>
-    <string name="action_save_to_new_group">Save to new group</string>
-    <string name="action_switch_to_group">Switch to group: %1$s</string>
-    <string name="action_return_to_default_group">Return to default group</string>
-    <string name="title_new_tab_group">New Group Name</string>
-    <string name="hint_tab_group_name">Enter group name</string>
-    <string name="msg_tab_group_saved">Saved to new group</string>
-    <string name="default_group_name">Default Group</string>
-    <string name="msg_group_closed">Group %1$s has been closed</string>
+    <string name="action_close_all_tabs_in_group">Alle tabbladen in groep sluiten</string>
+    <string name="action_save_to_new_group">Opslaan in nieuwe groep</string>
+    <string name="action_switch_to_group">Wisselen naar groep: %1$s</string>
+    <string name="action_return_to_default_group">Terug naar standaardgroep</string>
+    <string name="title_new_tab_group">Nieuwe groepsnaam</string>
+    <string name="hint_tab_group_name">Voer groepsnaam in</string>
+    <string name="msg_tab_group_saved">Opgeslagen in nieuwe groep</string>
+    <string name="default_group_name">Standaardgroep</string>
+    <string name="msg_group_closed">Groep %1$s is gesloten</string>
+    <string name="msg_load_timeout">Pagina laadtijd verstreken, laden gestopt</string>
 </resources>

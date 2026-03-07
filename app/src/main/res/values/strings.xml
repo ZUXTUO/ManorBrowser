@@ -265,6 +265,12 @@ URL: %1$s</string>
     <string name="dialog_title_confirm">Confirm</string>
     <string name="dialog_title_prompt">Input</string>
     <string name="dialog_title_select">Select</string>
+    <string name="action_scan_qr_code">Scan QR Code</string>
+    <string name="msg_qr_code_found">QR Code Result:</string>
+    <string name="msg_no_qr_code_found">No QR code found in this image.</string>
+    <string name="msg_scanning">Scanning…</string>
+    <string name="msg_load_error">Failed to load resource.</string>
+    <string name="action_open_url">Open URL</string>
     <string name="title_download_apk">Download APK?</string>
     <string name="msg_download_apk">This link is for an application installation file (APK). Do you want to download it?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Home Button Customization</string>
@@ -386,4 +392,5 @@ URL: %1$s</string>
     <string name="title_restricted_sites">Location Permissions</string>
     <string name="msg_restricted_sites_desc">Manage sites that are set to \"Always Deny\" for location access.</string>
     <string name="action_remove">Remove Restriction</string>
+    <string name="msg_load_timeout">Page load timeout, stopped loading</string>
 </resources>
