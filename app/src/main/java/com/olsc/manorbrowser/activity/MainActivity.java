@@ -36,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -87,6 +88,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.olsc.manorbrowser.utils.BrowserCommandServer;
+import java.util.Locale;
+import android.text.Spanned;
+import io.noties.markwon.Markwon;
+
 
 public class MainActivity extends AppCompatActivity {
     // --- UI 基础控件 ---
@@ -140,6 +145,11 @@ public class MainActivity extends AppCompatActivity {
     private volatile String pendingJsOriginalTitle = null;
     private boolean isLordMode = false;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    // --- 历史推荐与闲时整理 ---
+    private androidx.cardview.widget.CardView recommendationsContainer;
+    private RecyclerView rvRecommendations;
+    private com.olsc.manorbrowser.adapter.RecommendationAdapter recommendationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +248,20 @@ public class MainActivity extends AppCompatActivity {
         fullscreenMenuContainer = findViewById(R.id.fullscreen_menu_container);
         btnFullscreenMenu = findViewById(R.id.btn_fullscreen_menu);
         
+        // 初始化历史推荐列表
+        recommendationsContainer = findViewById(R.id.recommendations_container);
+        rvRecommendations = findViewById(R.id.rv_recommendations);
+        if (rvRecommendations != null) {
+            rvRecommendations.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+            recommendationAdapter = new com.olsc.manorbrowser.adapter.RecommendationAdapter(item -> {
+                loadUrlInCurrentTab(item.url);
+                recommendationsContainer.setVisibility(View.GONE);
+                urlInput.clearFocus();
+                hideKeyboard();
+            });
+            rvRecommendations.setAdapter(recommendationAdapter);
+        }
+        
         // 4. 应用窗口 Insets 监听 (解决刘海屏、导航栏遮挡)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, windowInsets) -> {
             Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -295,24 +319,80 @@ public class MainActivity extends AppCompatActivity {
      * 强制弹窗显示隐私政策，仅在首次运行或未同意时调用
      */
     private void showPrivacyDialog() {
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+        String fileName;
+        String lang = Locale.getDefault().getLanguage();
+        if ("zh".equals(lang)) {
+            fileName = "legal/UserPrivacyAgreement_zh.txt";
+        } else {
+            fileName = "legal/UserPrivacyAgreement_en.txt";
+        }
+
+        String markdown = readAssetFile(fileName);
+        final Markwon markwon = Markwon.create(this);
+        final Spanned spannedMarkdown = markwon.toMarkdown(markdown);
+
+        // 创建自定义布局以监听滚动
+        android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
+        android.widget.TextView textView = new android.widget.TextView(this);
+        int padding = (int) (20 * getResources().getDisplayMetrics().density);
+        textView.setPadding(padding, padding, padding, padding);
+        textView.setText(spannedMarkdown);
+        textView.setTextSize(14);
+        scrollView.addView(textView);
+
+        androidx.appcompat.app.AlertDialog dialog = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(R.string.title_privacy_policy)
-            .setMessage(R.string.msg_privacy_policy)
+            .setView(scrollView)
             .setCancelable(false)
-            .setPositiveButton(R.string.action_agree, (dialog, which) -> {
+            .setPositiveButton(R.string.action_agree, (d, which) -> {
                 setPrivacyAgreed();
                 initializeApp();
             })
-            .setNegativeButton(R.string.action_disagree, (dialog, which) -> {
+            .setNegativeButton(R.string.action_disagree, (d, which) -> {
                 finish();
             })
-            .show();
+            .create();
+
+        dialog.setOnShowListener(d -> {
+            android.widget.Button btnAgree = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE);
+            btnAgree.setEnabled(false); // 初始禁用
+
+            scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
+                if (scrollView.getChildAt(0).getBottom() <= (scrollView.getHeight() + scrollView.getScrollY())) {
+                    btnAgree.setEnabled(true);
+                }
+            });
+            
+            // 如果内容很短不需要滚动，直接启用
+            textView.post(() -> {
+                if (scrollView.getChildAt(0).getBottom() <= scrollView.getHeight()) {
+                    btnAgree.setEnabled(true);
+                }
+            });
+        });
+
+        dialog.show();
     }
+
+    private String readAssetFile(String fileName) {
+        try (InputStream is = getAssets().open(fileName)) {
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            return new String(buffer, "UTF-8");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
     /**
      * 核心初始化流程：包括引擎启动、标签页恢复、监听器挂载
      */
     private void initializeApp() {
+        initDefaultSearchEngine();
+
         // 初始化添加标签按钮
         ImageButton btnAddTab = findViewById(R.id.btn_add_tab);
         if (btnAddTab != null) {
@@ -371,11 +451,30 @@ public class MainActivity extends AppCompatActivity {
         // 4. 初始化各种子组件
         setupListeners();
         setupSwipeRefresh();
-        requestInitialPermissions();
         
         // 初始化内置 HTTP 命令服务器
         initAiRemoteAssistant();
     }
+
+    /**
+     * 初始化默认搜索引擎：
+     * 初次启动时，由于偏好设置尚未建立，根据系统语言分配搜索引擎。
+     * 中国 (zh) 和朝鲜 (ko) 语言时默认使用百度，其他语言默认使用谷歌。
+     */
+    private void initDefaultSearchEngine() {
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.contains(Config.PREF_KEY_SEARCH_ENGINE)) {
+            String lang = Locale.getDefault().getLanguage();
+            String defaultEngine;
+            if ("zh".equals(lang) || "ko".equals(lang)) {
+                defaultEngine = Config.ENGINE_BAIDU;
+            } else {
+                defaultEngine = Config.ENGINE_GOOGLE;
+            }
+            prefs.edit().putString(Config.PREF_KEY_SEARCH_ENGINE, defaultEngine).apply();
+        }
+    }
+
     
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -566,7 +665,10 @@ public class MainActivity extends AppCompatActivity {
                    }
                    if(tabInfo != null && tabInfo.url != null && !tabInfo.url.equals("about:blank")){
                         if (!isLordMode) {
+                            // 1. 记录基础历史并增加权重
                             HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
+                            // 2. 尝试获取网页摘要（通过 alert 桥接异步传回提示，再由 onAlertPrompt 处理）
+                            session.loadUri("javascript:alert('HISTORY_SNIPPET:' + document.body.innerText.substring(0, 500))");
                         }
                    }
                 }
@@ -817,6 +919,20 @@ public class MainActivity extends AppCompatActivity {
                         cb.onResult(resultData);
                     }
                     return GeckoResult.fromValue(prompt.dismiss());
+                } else if (message != null && message.startsWith("HISTORY_SNIPPET:")) {
+                    // 历史记录摘要回传
+                    String snippet = message.substring("HISTORY_SNIPPET:".length());
+                    TabInfo tab = null;
+                    for (TabInfo t : tabs) {
+                        if (t.session == session) {
+                            tab = t;
+                            break;
+                        }
+                    }
+                    if (tab != null && tab.url != null) {
+                        HistoryStorage.updateHistoryContent(MainActivity.this, tab.url, snippet);
+                    }
+                    return GeckoResult.fromValue(prompt.dismiss());
                 }
                 // 显示真实的网页 alert 对话框
                 GeckoResult<PromptResponse> result = new GeckoResult<>();
@@ -1053,16 +1169,16 @@ public class MainActivity extends AppCompatActivity {
                 // 根据错误类别分发不同的错误页面
                 switch (error.category) {
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_NETWORK:
-                        return GeckoResult.fromValue("resource://android/assets/offline.html");
+                        return GeckoResult.fromValue("resource://android/assets/html/offline.html");
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_URI:
-                        return GeckoResult.fromValue("resource://android/assets/404.html");
+                        return GeckoResult.fromValue("resource://android/assets/html/404.html");
                     default:
                         // 其他错误检查是否是因为超时导致的
                         if (error.code == org.mozilla.geckoview.WebRequestError.ERROR_CONNECTION_REFUSED || 
                             error.code == org.mozilla.geckoview.WebRequestError.ERROR_NET_TIMEOUT) {
-                            return GeckoResult.fromValue("resource://android/assets/timeout.html");
+                            return GeckoResult.fromValue("resource://android/assets/html/timeout.html");
                         }
-                        return GeckoResult.fromValue("resource://android/assets/404.html");
+                        return GeckoResult.fromValue("resource://android/assets/html/404.html");
                 }
             }
 
@@ -1136,7 +1252,7 @@ public class MainActivity extends AppCompatActivity {
                         // 如果没有特殊的允许标记，则重定向到警告页面
                         if (!uri.contains("allow_onion=1")) {
                             String encodedUrl = android.net.Uri.encode(uri);
-                            String warningUrl = "resource://android/assets/warning_onion.html?url=" + encodedUrl;
+                            String warningUrl = "resource://android/assets/html/warning_onion.html?url=" + encodedUrl;
                             runOnUiThread(() -> session.loadUri(warningUrl));
                             return GeckoResult.fromValue(AllowOrDeny.DENY);
                         }
@@ -1283,6 +1399,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         // 传递副本以确保后台线程保存时的线程安全
         TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
+        
+        // 触发闲时历史整理
+        com.olsc.manorbrowser.data.HistoryStorage.runIdleOrganization(this);
     }
     @Override
     protected void onDestroy() {
@@ -1371,11 +1490,13 @@ public class MainActivity extends AppCompatActivity {
         
         urlInput.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                // 获得焦点时，重置为第一次点击状态
+                // 获得焦点时，重置为第一次点击状态并展示候选列表
                 urlInputFirstClick = true;
+                updateRecommendations(urlInput.getText().toString());
             } else {
-                // 失去焦点时，重置状态
+                // 失去焦点时，延迟隐藏（给列表点击留出响应时间）
                 urlInputFirstClick = true;
+                mainHandler.postDelayed(() -> recommendationsContainer.setVisibility(View.GONE), 200);
             }
         });
         
@@ -1393,9 +1514,23 @@ public class MainActivity extends AppCompatActivity {
             urlInput.selectAll();
             return true; // 返回true表示已处理，不再执行默认行为
         });
+
+        // 核心：处理输入建议
+        urlInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                if (urlInput.hasFocus()) {
+                    updateRecommendations(s.toString());
+                }
+            }
+        });
+
         urlInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                recommendationsContainer.setVisibility(View.GONE);
                 android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(urlInput.getWindowToken(), 0);
@@ -3597,5 +3732,40 @@ public class MainActivity extends AppCompatActivity {
             .setMessage(R.string.msg_lord_mode_intro)
             .setPositiveButton(android.R.string.ok, null)
             .show();
+    }
+
+    /**
+     * 更新历史建议列表
+     */
+    private void updateRecommendations(String query) {
+        if (recommendationAdapter == null || recommendationsContainer == null) return;
+        
+        // 基于线程池进行异步查询，避免卡顿主线程
+        new Thread(() -> {
+            List<com.olsc.manorbrowser.data.HistoryStorage.HistoryItem> suggestions = 
+                com.olsc.manorbrowser.data.HistoryStorage.getRecommendations(this, query);
+            
+            runOnUiThread(() -> {
+                // 如果搜索框失去焦点或输入已变更（对于延迟返回的旧请求），则不再处理
+                if (!urlInput.hasFocus()) {
+                    recommendationsContainer.setVisibility(View.GONE);
+                    return;
+                }
+                
+                if (suggestions == null || suggestions.isEmpty()) {
+                    recommendationsContainer.setVisibility(View.GONE);
+                } else {
+                    recommendationAdapter.setItems(suggestions);
+                    recommendationsContainer.setVisibility(View.VISIBLE);
+                }
+            });
+        }).start();
+    }
+
+    private void hideKeyboard() {
+        android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+        if (imm != null && urlInput != null) {
+            imm.hideSoftInputFromWindow(urlInput.getWindowToken(), 0);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Cerca o inserisci indirizzo</string>
@@ -196,7 +196,6 @@
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">Informativa sulla Privacy</string>
-    <string name="msg_privacy_policy">Benvenuto in Manor Browser.\n\nPer proteggere i tuoi diritti, ti preghiamo di leggere attentamente la nostra Informativa sulla Privacy prima dell’uso.\n\n1. Diamo priorità alla tua privacy e non raccogliamo informazioni personali sensibili senza consenso.\n2. Usiamo la memoria locale per i tuoi preferiti, la cronologia e le impostazioni.\n3. Potremmo richiedere autorizzazioni (Memoria, Notifiche) solo quando necessario per funzioni come il download.\n\nTi preghiamo di accettare per continuare a utilizzare l’app.</string>
     <string name="action_agree">Accetta e continua</string>
     <string name="action_disagree">Rifiuta ed esci</string>
     <string name="title_download_settings">Impostazioni download</string>
@@ -211,7 +210,7 @@
     <string name="msg_desktop_mode_on">Passato alla modalità desktop</string>
     <string name="msg_desktop_mode_off">Passato alla modalità mobile</string>
     <string name="title_file_exists">Il file esiste già</string>
-    <string name="msg_file_exists">Il file "%1$s" esiste già. Scaricare una nuova copia?</string>
+    <string name="msg_file_exists">Il file &quot;%1$s&quot; esiste già. Scaricare una nuova copia?</string>
     <string name="action_download_new">Scarica nuova copia</string>
     <string name="title_cookies">Cookie e dati dei siti</string>
     <string name="msg_clear_all_cookies">Cancellare tutti i cookie e i dati dei siti?</string>
@@ -281,7 +280,6 @@
     <string name="msg_remote_control_disconnected">Controllo remoto disconnesso</string>
     <string name="msg_remote_server_started">Controllo remoto pronto: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Impossibile avviare il server dei comandi</string>
-
     <string name="settings_group_ai_control">Hosting Intelligente</string>
     <string name="title_ai_remote_control">Hosting Intelligente</string>
     <string name="label_ai_server_address">Indirizzo server</string>
@@ -291,8 +289,6 @@
     <string name="msg_ai_connected">Connesso (Polling)</string>
     <string name="msg_ai_connecting">Tentativo di connessione (Fallito)...</string>
     <string name="msg_ai_config_server_first">Configura prima l\'indirizzo del server</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Assistente Manor AI</string>
     <string name="ai_monitoring_current_page">Monitoraggio pagina corrente...</string>
     <string name="ai_monitoring_with_title">Monitoraggio: %1$s</string>
@@ -356,19 +352,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Modalità Lord</string>
     <string name="title_normal_mode">Modalità Normale</string>
-    <string name="msg_lord_mode_intro">"La \"Modalità Lord\" è ora attiva. In questa modalità:\n\n1. La cronologia di navigazione non verrà salvata.\n2. Quando i siti web richiedono cookie o memoria locale, apparirà un avviso che ti permetterà di consentire o negare.\n3. Hai il controllo assoluto sui tuoi dati."</string>
-    <string name="title_cookie_warning">"Richiesta Cookie/Memoria"</string>
-    <string name="msg_cookie_warning">"Il sito web \"%1$s\" richiede di utilizzare cookie o memoria locale.\n\nIn Modalità Lord, puoi limitare questo comportamento. Vuoi consentire a questo sito di salvare i dati?"</string>
-    <string name="title_location_warning">"Richiesta Posizione"</string>
-    <string name="msg_location_warning">"Il sito web \"%1$s\" richiede la tua posizione attuale. Vuoi consentirlo?"</string>
-    <string name="msg_no_location_permission">"L'app non ha ottenuto il permesso per la posizione. Abilitalo in \"Impostazioni -&gt; Informazioni app\" e riprova."</string>
-    <string name="action_always_deny">"Nega sempre"</string>
-    <string name="title_restricted_sites">"Permessi Posizione"</string>
-    <string name="msg_restricted_sites_desc">"Gestisci i siti impostati su \"Nega sempre\" per l'accesso alla posizione."</string>
+    <string name="msg_lord_mode_intro">&quot;La \&quot;Modalità Lord\&quot; è ora attiva. In questa modalità:\n\n1. La cronologia di navigazione non verrà salvata.\n2. Quando i siti web richiedono cookie o memoria locale, apparirà un avviso che ti permetterà di consentire o negare.\n3. Hai il controllo assoluto sui tuoi dati.&quot;</string>
+    <string name="title_cookie_warning">&quot;Richiesta Cookie/Memoria&quot;</string>
+    <string name="msg_cookie_warning">&quot;Il sito web \&quot;%1$s\&quot; richiede di utilizzare cookie o memoria locale.\n\nIn Modalità Lord, puoi limitare questo comportamento. Vuoi consentire a questo sito di salvare i dati?&quot;</string>
+    <string name="title_location_warning">&quot;Richiesta Posizione&quot;</string>
+    <string name="msg_location_warning">&quot;Il sito web \&quot;%1$s\&quot; richiede la tua posizione attuale. Vuoi consentirlo?&quot;</string>
+    <string name="msg_no_location_permission">&quot;L'app non ha ottenuto il permesso per la posizione. Abilitalo in \&quot;Impostazioni -&gt; Informazioni app\&quot; e riprova.&quot;</string>
+    <string name="action_always_deny">&quot;Nega sempre&quot;</string>
+    <string name="title_restricted_sites">&quot;Permessi Posizione&quot;</string>
+    <string name="msg_restricted_sites_desc">&quot;Gestisci i siti impostati su \&quot;Nega sempre\&quot; per l'accesso alla posizione.&quot;</string>
     <string name="action_remove">Rimuovi restrizione</string>
     <string name="action_close_all_tabs_in_group">Chiudi tutte le schede nel gruppo</string>
     <string name="action_save_to_new_group">Salva in un nuovo gruppo</string>
@@ -380,4 +374,5 @@
     <string name="default_group_name">Gruppo predefinito</string>
     <string name="msg_group_closed">Il gruppo %1$s è stato chiuso</string>
     <string name="msg_load_timeout">Tempo di caricamento della pagina scaduto, caricamento interrotto</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

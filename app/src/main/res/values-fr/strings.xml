@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Rechercher ou saisir l\'adresse</string>
@@ -196,7 +196,6 @@
     <string name="label_sdk_version_value">Android : %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">Politique de confidentialité</string>
-    <string name="msg_privacy_policy">Bienvenue sur Manor Browser.\n\nPour protéger vos droits, veuillez lire attentivement notre Politique de confidentialité avant toute utilisation.\n\n1. Nous accordons la priorité à votre vie privée et ne collectons pas d\'informations personnelles sensibles sans consentement.\n2. Nous utilisons le stockage local pour vos favoris, votre historique et vos paramètres.\n3. Nous pouvons demander des autorisations (Stockage, Notifications) uniquement lorsque cela est nécessaire pour des fonctionnalités telles que le téléchargement.\n\nVeuillez accepter pour continuer à utiliser l\'application.</string>
     <string name="action_agree">Accepter et continuer</string>
     <string name="action_disagree">Refuser et quitter</string>
     <string name="title_download_settings">Paramètres de téléchargement</string>
@@ -281,7 +280,6 @@
     <string name="msg_remote_control_disconnected">Contrôle à distance déconnecté</string>
     <string name="msg_remote_server_started">Contrôle à distance prêt : %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Échec du démarrage du serveur de commandes</string>
-
     <string name="settings_group_ai_control">Hébergement Intelligent</string>
     <string name="title_ai_remote_control">Hébergement Intelligent</string>
     <string name="label_ai_server_address">Adresse du serveur</string>
@@ -291,8 +289,6 @@
     <string name="msg_ai_connected">Connecté (Interrogation)</string>
     <string name="msg_ai_connecting">Tentative de connexion (Échec)...</string>
     <string name="msg_ai_config_server_first">Veuillez d\'abord configurer l\'adresse du serveur</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Assistant IA Manor</string>
     <string name="ai_monitoring_current_page">Surveillance de la page actuelle...</string>
     <string name="ai_monitoring_with_title">Surveillance : %1$s</string>
@@ -356,19 +352,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Mode Lord</string>
     <string name="title_normal_mode">Mode Normal</string>
-    <string name="msg_lord_mode_intro">Le \"Mode Lord\" est maintenant actif. Dans ce mode :\n\n1. Votre historique de navigation ne sera pas enregistré.\n2. Lorsque des sites Web demandent des cookies ou un stockage local, un avertissement apparaîtra, vous permettant de les autoriser ou de les refuser.\n3. Vous avez un contrôle absolu sur vos données.</string>
+    <string name="msg_lord_mode_intro">Le \&quot;Mode Lord\&quot; est maintenant actif. Dans ce mode :\n\n1. Votre historique de navigation ne sera pas enregistré.\n2. Lorsque des sites Web demandent des cookies ou un stockage local, un avertissement apparaîtra, vous permettant de les autoriser ou de les refuser.\n3. Vous avez un contrôle absolu sur vos données.</string>
     <string name="title_cookie_warning">Demande de Cookies/Stockage</string>
-    <string name="msg_cookie_warning">Le site Web \"%1$s\" demande à utiliser des cookies ou un stockage local.\n\nEn mode Lord, vous pouvez restreindre ce comportement. Voulez-vous autoriser ce site Web à stocker des données ?</string>
+    <string name="msg_cookie_warning">Le site Web \&quot;%1$s\&quot; demande à utiliser des cookies ou un stockage local.\n\nEn mode Lord, vous pouvez restreindre ce comportement. Voulez-vous autoriser ce site Web à stocker des données ?</string>
     <string name="title_location_warning">Demande de Localisation</string>
-    <string name="msg_location_warning">Le site Web \"%1$s\" demande votre position actuelle. Voulez-vous l\'autoriser ?</string>
-    <string name="msg_no_location_permission">L\'application n\'a pas reçu l\'autorisation de localisation. Veuillez l\'activer dans \"Paramètres -&gt; Infos application\" et réessayer.</string>
+    <string name="msg_location_warning">Le site Web \&quot;%1$s\&quot; demande votre position actuelle. Voulez-vous l\'autoriser ?</string>
+    <string name="msg_no_location_permission">L\'application n\'a pas reçu l\'autorisation de localisation. Veuillez l\'activer dans \&quot;Paramètres -&gt; Infos application\&quot; et réessayer.</string>
     <string name="action_always_deny">Toujours refuser</string>
     <string name="title_restricted_sites">Autorisations de localisation</string>
-    <string name="msg_restricted_sites_desc">Gérez les sites configurés sur \"Toujours refuser\" pour l\'accès à la localisation.</string>
+    <string name="msg_restricted_sites_desc">Gérez les sites configurés sur \&quot;Toujours refuser\&quot; pour l\'accès à la localisation.</string>
     <string name="action_remove">Supprimer la restriction</string>
     <string name="action_close_all_tabs_in_group">Fermer tous les onglets du groupe</string>
     <string name="action_save_to_new_group">Enregistrer dans un nouveau groupe</string>
@@ -380,4 +374,5 @@
     <string name="default_group_name">Groupe par défaut</string>
     <string name="msg_group_closed">Le groupe %1$s a été fermé</string>
     <string name="msg_load_timeout">Délai d\'attente dépassé, chargement arrêté</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

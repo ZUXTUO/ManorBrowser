@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Cari atau masukkan alamat</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">Tab diperbarui</string>
     <string name="msg_reader_mode_loading">Memuat mode baca...</string>
     <string name="msg_reader_mode_failed">Gagal mengekstrak konten</string>
-    
     <string name="title_password_manager">Pengelola Kata Sandi</string>
     <string name="title_add_password">Tambah Kata Sandi</string>
     <string name="title_edit_password">Edit Kata Sandi</string>
@@ -176,14 +175,12 @@
     <string name="title_selected_count">Terpilih: %1$d</string>
     <string name="msg_confirm_delete_history">Hapus item riwayat ini?</string>
     <string name="msg_confirm_delete_selected">Hapus %1$d item terpilih?</string>
-
     <string name="title_external_app_redirect">Pengalihan Aplikasi Eksternal</string>
     <string name="msg_external_app_redirect">Apakah Anda ingin membuka tautan ini di aplikasi eksternal?\n\nURL: %1$s</string>
     <string name="action_allow">Izinkan</string>
     <string name="action_deny">Tolak</string>
     <string name="error_no_app_found">Tidak ada aplikasi yang ditemukan untuk menangani tautan ini</string>
     <string name="error_invalid_uri">Format URI tidak valid</string>
-
     <string name="label_author">Penulis</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Lisensi</string>
@@ -191,7 +188,6 @@
     <string name="app_introduction">Browser modern berbasis mesin Firefox.</string>
     <string name="label_source_code">Kode Sumber</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">Versi Aplikasi</string>
     <string name="label_gecko_version">Versi GeckoView</string>
     <string name="label_sdk_version">Versi Android SDK</string>
@@ -199,28 +195,22 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_privacy_policy">Kebijakan Privasi</string>
-    <string name="msg_privacy_policy">Selamat datang di Manor Browser.\n\nUntuk melindungi hak-hak Anda, harap baca Kebijakan Privasi kami dengan cermat sebelum menggunakan.\n\n1. Kami memprioritaskan privasi Anda dan tidak mengumpulkan informasi pribadi yang sensitif tanpa persetujuan.\n2. Kami menggunakan penyimpanan lokal untuk bookmark, riwayat, dan pengaturan Anda.\n3. Kami mungkin meminta izin (Penyimpanan, Notifikasi) hanya jika diperlukan untuk fitur seperti mengunduh.\n\nHarap setujui untuk melanjutkan penggunaan aplikasi.</string>
     <string name="action_agree">Setuju dan Lanjutkan</string>
     <string name="action_disagree">Tidak Setuju dan Keluar</string>
-    
     <string name="title_download_settings">Pengaturan Unduhan</string>
     <string name="pref_use_system_downloader">Gunakan Pengunduh Sistem</string>
     <string name="pref_use_system_downloader_desc">Gunakan pengelola unduhan sistem Android</string>
     <string name="pref_use_builtin_downloader">Gunakan Pengunduh Browser</string>
     <string name="pref_use_builtin_downloader_desc">Gunakan pengelola unduhan bawaan browser (Direkomendasikan)</string>
-    
     <string name="title_desktop_mode">Mode Desktop</string>
     <string name="title_mobile_mode">Mode Seluler</string>
     <string name="pref_desktop_mode">Minta Situs Desktop</string>
     <string name="pref_desktop_mode_desc">Muat situs web sebagai versi desktop</string>
-    
     <string name="msg_desktop_mode_on">Beralih ke Mode Desktop</string>
     <string name="msg_desktop_mode_off">Beralih ke Mode Seluler</string>
-    
     <string name="title_file_exists">File Sudah Ada</string>
-    <string name="msg_file_exists">File "%1$s" sudah ada. Unduh salinan baru?</string>
+    <string name="msg_file_exists">File &quot;%1$s&quot; sudah ada. Unduh salinan baru?</string>
     <string name="action_download_new">Unduh Salinan Baru</string>
     <string name="title_cookies">Cookie &amp; Data Situs</string>
     <string name="msg_clear_all_cookies">Hapus semua cookie dan data situs?</string>
@@ -290,7 +280,6 @@
     <string name="msg_remote_control_disconnected">Kontrol jarak jauh terputus</string>
     <string name="msg_remote_server_started">Kontrol jarak jauh siap: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Gagal memulai server perintah</string>
-
     <string name="settings_group_ai_control">Hosting Cerdas</string>
     <string name="title_ai_remote_control">Hosting Cerdas</string>
     <string name="label_ai_server_address">Alamat Server</string>
@@ -300,8 +289,6 @@
     <string name="msg_ai_connected">Terhubung (Polling)</string>
     <string name="msg_ai_connecting">Mencoba Terhubung (Gagal)...</string>
     <string name="msg_ai_config_server_first">Harap konfigurasikan alamat server terlebih dahulu</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Asisten AI Manor</string>
     <string name="ai_monitoring_current_page">Memantau halaman saat ini...</string>
     <string name="ai_monitoring_with_title">Memantau: %1$s</string>
@@ -365,19 +352,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Mode Lord</string>
     <string name="title_normal_mode">Mode Normal</string>
-    <string name="msg_lord_mode_intro">\"Mode Lord\" sekarang aktif. Dalam mode ini:\n\n1. Riwayat penelusuran Anda tidak akan disimpan.\n2. Saat situs web meminta Cookie atau penyimpanan lokal, peringatan akan muncul, memungkinkan Anda untuk mengizinkan or menolaknya.\n3. Anda memiliki kontrol mutlak atas data Anda.</string>
+    <string name="msg_lord_mode_intro">\&quot;Mode Lord\&quot; sekarang aktif. Dalam mode ini:\n\n1. Riwayat penelusuran Anda tidak akan disimpan.\n2. Saat situs web meminta Cookie atau penyimpanan lokal, peringatan akan muncul, memungkinkan Anda untuk mengizinkan or menolaknya.\n3. Anda memiliki kontrol mutlak atas data Anda.</string>
     <string name="title_cookie_warning">Permintaan Cookie/Penyimpanan</string>
-    <string name="msg_cookie_warning">Situs web \"%1$s\" meminta untuk menggunakan Cookie or penyimpanan lokal.\n\nDalam Mode Lord, Anda dapat membatasi perilaku ini. Apakah Anda ingin mengizinkan situs web ini menyimpan data?</string>
+    <string name="msg_cookie_warning">Situs web \&quot;%1$s\&quot; meminta untuk menggunakan Cookie or penyimpanan lokal.\n\nDalam Mode Lord, Anda dapat membatasi perilaku ini. Apakah Anda ingin mengizinkan situs web ini menyimpan data?</string>
     <string name="title_location_warning">Permintaan Lokasi</string>
-    <string name="msg_location_warning">Situs web \"%1$s\" meminta lokasi Anda saat ini. Apakah Anda ingin mengizinkannya?</string>
-    <string name="msg_no_location_permission">Aplikasi belum diberikan izin lokasi. Harap aktifkan di \"Setelan -&gt; Info aplikasi\" dan coba lagi.</string>
+    <string name="msg_location_warning">Situs web \&quot;%1$s\&quot; meminta lokasi Anda saat ini. Apakah Anda ingin mengizinkannya?</string>
+    <string name="msg_no_location_permission">Aplikasi belum diberikan izin lokasi. Harap aktifkan di \&quot;Setelan -&gt; Info aplikasi\&quot; dan coba lagi.</string>
     <string name="action_always_deny">Selalu Tolak</string>
     <string name="title_restricted_sites">Izin Lokasi</string>
-    <string name="msg_restricted_sites_desc">Kelola situs yang disetel ke \"Selalu Tolak\" untuk akses lokasi.</string>
+    <string name="msg_restricted_sites_desc">Kelola situs yang disetel ke \&quot;Selalu Tolak\&quot; untuk akses lokasi.</string>
     <string name="action_remove">Hapus Batasan</string>
     <string name="action_close_all_tabs_in_group">Tutup semua tab dalam grup</string>
     <string name="action_save_to_new_group">Simpan ke grup baru</string>
@@ -389,4 +374,5 @@
     <string name="default_group_name">Grup Default</string>
     <string name="msg_group_closed">Grup %1$s telah ditutup</string>
     <string name="msg_load_timeout">Waktu pemuatan halaman habis, pemuatan dihentikan</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

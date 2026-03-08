@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Поиск или ввод адреса</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">Вкладка обновлена</string>
     <string name="msg_reader_mode_loading">Загрузка режима чтения...</string>
     <string name="msg_reader_mode_failed">Не удалось извлечь содержимое</string>
-    
     <string name="title_password_manager">Диспетчер паролей</string>
     <string name="title_add_password">Добавить пароль</string>
     <string name="title_edit_password">Редактировать пароль</string>
@@ -176,7 +175,6 @@
     <string name="title_selected_count">Выбрано: %1$d</string>
     <string name="msg_confirm_delete_history">Удалить этот элемент истории?</string>
     <string name="msg_confirm_delete_selected">Удалить %1$d выбранных элементов?</string>
-    
     <string name="label_author">Автор</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Лицензия</string>
@@ -184,7 +182,6 @@
     <string name="app_introduction">Современный браузер на базе движка Firefox.</string>
     <string name="label_source_code">Исходный код</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">Версия приложения</string>
     <string name="label_gecko_version">Версия GeckoView</string>
     <string name="label_sdk_version">Версия Android SDK</string>
@@ -192,33 +189,26 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_external_app_redirect">Переход во внешнее приложение</string>
     <string name="msg_external_app_redirect">Вы хотите открыть эту ссылку во внешнем приложении?\n\nURL: %1$s</string>
     <string name="action_allow">Разрешить</string>
     <string name="action_deny">Отклонить</string>
     <string name="error_no_app_found">Приложение для обработки данной ссылки не найдено</string>
     <string name="error_invalid_uri">Недопустимый формат URI</string>
-
     <string name="title_privacy_policy">Политика конфиденциальности</string>
-    <string name="msg_privacy_policy">Добро пожаловать в Manor Browser.\n\nДля защиты ваших прав, пожалуйста, внимательно прочтите нашу Политику конфиденциальности перед использованием.\n\n1. Мы ценим вашу конфиденциальность и не собираем конфиденциальную личную информацию без согласия.\n2. Мы используем локальное хранилище для ваших закладок, истории и настроек.\n3. Мы можем запрашивать разрешения (хранилище, уведомления) только тогда, когда это необходимо для таких функций, как загрузка.\n\nПожалуйста, согласитесь, чтобы продолжить использование приложения.</string>
     <string name="action_agree">Согласиться и продолжить</string>
     <string name="action_disagree">Не соглашаться и выйти</string>
-    
     <string name="title_download_settings">Настройки загрузок</string>
     <string name="pref_use_system_downloader">Использовать системный загрузчик</string>
     <string name="pref_use_system_downloader_desc">Использовать менеджер загрузок Android</string>
     <string name="pref_use_builtin_downloader">Использовать встроенный загрузчик</string>
     <string name="pref_use_builtin_downloader_desc">Использовать встроенный менеджер загрузок браузера (рекомендуется)</string>
-    
     <string name="title_desktop_mode">Версия для ПК</string>
     <string name="title_mobile_mode">Мобильная версия</string>
     <string name="pref_desktop_mode">Запрашивать версию для ПК</string>
     <string name="pref_desktop_mode_desc">Загружать веб-сайты как на компьютере</string>
-    
     <string name="msg_desktop_mode_on">Переключено на версию для ПК</string>
     <string name="msg_desktop_mode_off">Переключено на мобильную версию</string>
-    
     <string name="title_file_exists">Файл уже существует</string>
     <string name="msg_file_exists">Файл «%1$s» уже существует. Скачать новую копию?</string>
     <string name="action_download_new">Скачать новую копию</string>
@@ -290,7 +280,6 @@
     <string name="msg_remote_control_disconnected">Удаленное управление отключено</string>
     <string name="msg_remote_server_started">Удаленное управление готово: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Не удалось запустить сервер команд</string>
-
     <string name="settings_group_ai_control">Интеллектуальный хостинг</string>
     <string name="title_ai_remote_control">Интеллектуальный хостинг</string>
     <string name="label_ai_server_address">Адрес сервера</string>
@@ -300,8 +289,6 @@
     <string name="msg_ai_connected">Подключено (Опрос)</string>
     <string name="msg_ai_connecting">Попытка подключения (Ошибка)...</string>
     <string name="msg_ai_config_server_first">Сначала настройте адрес сервера</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">AI-ассистент Manor</string>
     <string name="ai_monitoring_current_page">Мониторинг текущей страницы...</string>
     <string name="ai_monitoring_with_title">Мониторинг: %1$s</string>
@@ -365,19 +352,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Режим Лорда</string>
     <string name="title_normal_mode">Обычный режим</string>
-    <string name="msg_lord_mode_intro">\"Режим Лорда\" теперь активен. В этом режиме:\n\n1. Ваша история просмотров не будет сохранена.\n2. Когда веб-сайты запрашивают файлы Cookie или локальное хранилище, будет появляться предупреждение, позволяющее вам разрешить или запретить это.\n3. У вас есть абсолютный контроль над вашими данными.</string>
+    <string name="msg_lord_mode_intro">\&quot;Режим Лорда\&quot; теперь активен. В этом режиме:\n\n1. Ваша история просмотров не будет сохранена.\n2. Когда веб-сайты запрашивают файлы Cookie или локальное хранилище, будет появляться предупреждение, позволяющее вам разрешить или запретить это.\n3. У вас есть абсолютный контроль над вашими данными.</string>
     <string name="title_cookie_warning">Запрос Cookie/Хранилища</string>
-    <string name="msg_cookie_warning">Веб-сайт \"%1$s\" запрашивает использование файлов Cookie или локального хранилища.\n\nВ режиме Лорда вы можете ограничить это поведение. Хотите ли вы разрешить этому веб-сайту сохранять данные?</string>
+    <string name="msg_cookie_warning">Веб-сайт \&quot;%1$s\&quot; запрашивает использование файлов Cookie или локального хранилища.\n\nВ режиме Лорда вы можете ограничить это поведение. Хотите ли вы разрешить этому веб-сайту сохранять данные?</string>
     <string name="title_location_warning">Запрос Местоположения</string>
-    <string name="msg_location_warning">Веб-сайт \"%1$s\" запрашивает ваше текущее местоположение. Хотите ли вы разрешить это?</string>
-    <string name="msg_no_location_permission">Приложению не предоставлено разрешение на определение местоположения. Пожалуйста, включите его в \"Настройках -&gt; О приложении\" и попробуйте снова.</string>
+    <string name="msg_location_warning">Веб-сайт \&quot;%1$s\&quot; запрашивает ваше текущее местоположение. Хотите ли вы разрешить это?</string>
+    <string name="msg_no_location_permission">Приложению не предоставлено разрешение на определение местоположения. Пожалуйста, включите его в \&quot;Настройках -&gt; О приложении\&quot; и попробуйте снова.</string>
     <string name="action_always_deny">Всегда запрещать</string>
     <string name="title_restricted_sites">Разрешения на местоположение</string>
-    <string name="msg_restricted_sites_desc">Управляйте сайтами, для которых доступ к местоположению установлен на "Всегда запрещать".</string>
+    <string name="msg_restricted_sites_desc">Управляйте сайтами, для которых доступ к местоположению установлен на &quot;Всегда запрещать&quot;.</string>
     <string name="action_remove">Удалить ограничение</string>
     <string name="action_close_all_tabs_in_group">Закрыть все вкладки в группе</string>
     <string name="action_save_to_new_group">Сохранить в новую группу</string>
@@ -389,4 +374,5 @@
     <string name="default_group_name">Основная группа</string>
     <string name="msg_group_closed">Группа %1$s закрыта</string>
     <string name="msg_load_timeout">Время ожидания загрузки страницы истекло, загрузка остановлена</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

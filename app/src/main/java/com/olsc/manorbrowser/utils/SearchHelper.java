@@ -50,7 +50,8 @@ public class SearchHelper {
 
         // 4. 否则视为搜索关键词，拼接对应搜索引擎 URL
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String engine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
+        String engine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_GOOGLE);
+
 
         if (Config.ENGINE_GOOGLE.equals(engine)) {
             return "https://www.google.com/search?q=" + query;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">بحث أو إدخال عنوان</string>
@@ -196,7 +196,6 @@
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">سياسة الخصوصية</string>
-    <string name="msg_privacy_policy">مرحباً بكم في متصفح Manor Browser.\n\nلحماية حقوقكم، يرجى قراءة سياسة الخصوصية الخاصة بنا بعناية قبل الاستخدام.\n\n1. نحن نولي الأولوية لخصوصيتكم ولا نجمع معلومات شخصية حساسة دون موافقة.\n2. نستخدم التخزين المحلي لإشاراتكم المرجعية، والسجل، والإعدادات.\n3. قد نطلب أذونات (التخزين، الإشعارات) فقط عند الضرورة لميزات مثل التنزيل.\n\nيرجى الموافقة للمتابعة في استخدام التطبيق.</string>
     <string name="action_agree">موافق ومتابعة</string>
     <string name="action_disagree">غير موافق وخروج</string>
     <string name="title_download_settings">إعدادات التنزيل</string>
@@ -211,7 +210,7 @@
     <string name="msg_desktop_mode_on">تم التبديل لوضع الكمبيوتر</string>
     <string name="msg_desktop_mode_off">تم التبديل لوضع الهاتف</string>
     <string name="title_file_exists">الملف موجود بالفعل</string>
-    <string name="msg_file_exists">الملف "%1$s" موجود بالفعل. هل تريد تنزيل نسخة جديدة؟</string>
+    <string name="msg_file_exists">الملف &quot;%1$s&quot; موجود بالفعل. هل تريد تنزيل نسخة جديدة؟</string>
     <string name="action_download_new">تنزيل نسخة جديدة</string>
     <string name="title_cookies">ملفات تعريف الارتباط وبيانات الموقع</string>
     <string name="msg_clear_all_cookies">مسح جميع ملفات تعريف الارتباط وبيانات الموقع؟</string>
@@ -281,7 +280,6 @@
     <string name="msg_remote_control_disconnected">تم فصل التحكم عن بعد</string>
     <string name="msg_remote_server_started">التحكم عن بعد جاهز: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">فشل بدء خادم الأوامر</string>
-
     <string name="settings_group_ai_control">الاستضافة الذكية</string>
     <string name="title_ai_remote_control">الاستضافة الذكية</string>
     <string name="label_ai_server_address">عنوان الخادم</string>
@@ -291,8 +289,6 @@
     <string name="msg_ai_connected">متصل (استطلاع)</string>
     <string name="msg_ai_connecting">محاولة الاتصال (فشلت)...</string>
     <string name="msg_ai_config_server_first">يرجى تهيئة عنوان الخادم أولاً</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">مساعد Manor AI</string>
     <string name="ai_monitoring_current_page">مراقبة الصفحة الحالية...</string>
     <string name="ai_monitoring_with_title">مراقبة: %1$s</string>
@@ -356,19 +352,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">وضع اللورد</string>
     <string name="title_normal_mode">الوضع العادي</string>
-    <string name="msg_lord_mode_intro">\"وضع اللورد\" نشط الآن. في هذا الوضع:\n\n1. لن يتم حفظ تاريخ التصفح الخاص بك.\n2. عندما تطلب المواقع ملفات تعريف الارتباط أو التخزين المحلي، سيظهر تحذير يتيح لك السماح أو الرفض.\n3. لديك سيطرة كاملة على بياناتك.</string>
+    <string name="msg_lord_mode_intro">\&quot;وضع اللورد\&quot; نشط الآن. في هذا الوضع:\n\n1. لن يتم حفظ تاريخ التصفح الخاص بك.\n2. عندما تطلب المواقع ملفات تعريف الارتباط أو التخزين المحلي، سيظهر تحذير يتيح لك السماح أو الرفض.\n3. لديك سيطرة كاملة على بياناتك.</string>
     <string name="title_cookie_warning">طلب ملفات تعريف الارتباط/التخزين</string>
-    <string name="msg_cookie_warning">يطلب موقع الويب \"%1$s\" استخدام ملفات تعريف الارتباط أو التخزين المحلي.\n\nفي وضع اللورد، يمكنك تقييد هذا السلوك. هل تريد السماح لهذا الموقع بتخزين البيانات؟</string>
+    <string name="msg_cookie_warning">يطلب موقع الويب \&quot;%1$s\&quot; استخدام ملفات تعريف الارتباط أو التخزين المحلي.\n\nفي وضع اللورد، يمكنك تقييد هذا السلوك. هل تريد السماح لهذا الموقع بتخزين البيانات؟</string>
     <string name="title_location_warning">طلب الموقع</string>
-    <string name="msg_location_warning">يطلب موقع الويب \"%1$s\" موقعك الحالي. هل تريد السماح له؟</string>
-    <string name="msg_no_location_permission">لم يتم منح التطبيق إذن الموقع. يرجى توفيره في \"الإعدادات -&gt; معلومات التطبيق\" والمحاولة مرة أخرى.</string>
+    <string name="msg_location_warning">يطلب موقع الويب \&quot;%1$s\&quot; موقعك الحالي. هل تريد السماح له؟</string>
+    <string name="msg_no_location_permission">لم يتم منح التطبيق إذن الموقع. يرجى توفيره في \&quot;الإعدادات -&gt; معلومات التطبيق\&quot; والمحاولة مرة أخرى.</string>
     <string name="action_always_deny">الرفض دائماً</string>
     <string name="title_restricted_sites">أذونات الموقع</string>
-    <string name="msg_restricted_sites_desc">إدارة المواقع التي تم ضبطها على \"الرفض دائماً\" للوصول إلى الموقع.</string>
+    <string name="msg_restricted_sites_desc">إدارة المواقع التي تم ضبطها على \&quot;الرفض دائماً\&quot; للوصول إلى الموقع.</string>
     <string name="action_remove">إزالة القيد</string>
     <string name="action_close_all_tabs_in_group">إغلاق كل علامات التبويب في المجموعة</string>
     <string name="action_save_to_new_group">حفظ في مجموعة جديدة</string>
@@ -380,4 +374,5 @@
     <string name="default_group_name">المجموعة الافتراضية</string>
     <string name="msg_group_closed">تم إغلاق المجموعة %1$s</string>
     <string name="msg_load_timeout">انتهت مهلة تحميل الصفحة، توقف التحميل</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

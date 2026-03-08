@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">领域浏览器</string>
     <string name="action_search">搜尋或輸入網址</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">標籤已更新</string>
     <string name="msg_reader_mode_loading">正在載入閱讀模式...</string>
     <string name="msg_reader_mode_failed">無法提取內容</string>
-    
     <string name="title_password_manager">密碼管理</string>
     <string name="title_add_password">添加密碼</string>
     <string name="title_edit_password">編輯密碼</string>
@@ -176,7 +175,6 @@
     <string name="title_selected_count">已選擇: %1$d</string>
     <string name="msg_confirm_delete_history">刪除此歷史記錄？</string>
     <string name="msg_confirm_delete_selected">刪除 %1$d 個所選項目？</string>
-    
     <string name="label_author">作者</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">許可證</string>
@@ -184,7 +182,6 @@
     <string name="app_introduction">一款基於火狐內核的開源現代化瀏覽器。</string>
     <string name="label_source_code">開源連結</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">應用版本</string>
     <string name="label_gecko_version">GeckoView 版本</string>
     <string name="label_sdk_version">安卓 SDK 版本</string>
@@ -192,7 +189,6 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">安卓: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_external_app_redirect">外部應用跳轉</string>
     <string name="msg_external_app_redirect">您是否要在外部應用中打開此連結？\n\nURL: %1$s</string>
     <string name="action_allow">允許</string>
@@ -200,26 +196,21 @@
     <string name="error_no_app_found">未找到可處理此連結的應用</string>
     <string name="error_invalid_uri">無效的URI格式</string>
     <string name="title_privacy_policy">隱私政策</string>
-    <string name="msg_privacy_policy">歡迎使用領域瀏覽器！\n\n為了更好地保護您的權益，請您在使用前仔細閱讀並同意《隱私政策》。\n\n1. 我們重視您的隱私，不會在未經同意的情況下收集您的個人敏感信息。\n2. 我們使用本地存儲來保存您的書籤、歷史記錄和設定。\n3. 我們僅在必要時請求權限（如存儲、通知）以提供下載等功能。\n\n請您同意並繼續使用本應用。</string>
     <string name="action_agree">同意並繼續</string>
     <string name="action_disagree">不同意並退出</string>
-    
     <string name="title_download_settings">下載設定</string>
     <string name="pref_use_system_downloader">使用系統下載器</string>
     <string name="pref_use_system_downloader_desc">使用安卓系統下載管理器下載檔案</string>
     <string name="pref_use_builtin_downloader">使用瀏覽器下載器</string>
     <string name="pref_use_builtin_downloader_desc">使用瀏覽器內建下載管理器</string>
-    
     <string name="title_desktop_mode">桌面模式</string>
     <string name="title_mobile_mode">移動模式</string>
     <string name="pref_desktop_mode">請求桌面網站</string>
     <string name="pref_desktop_mode_desc">以桌面版本載入網頁</string>
-    
     <string name="msg_desktop_mode_on">已切換到桌面模式</string>
     <string name="msg_desktop_mode_off">已切換到移動模式</string>
-    
     <string name="title_file_exists">檔案已存在</string>
-    <string name="msg_file_exists">檔案 "%1$s" 已存在，是否下載新副本？</string>
+    <string name="msg_file_exists">檔案 &quot;%1$s&quot; 已存在，是否下載新副本？</string>
     <string name="action_download_new">下載新副本</string>
     <string name="title_cookies">Cookies 與 網站數據</string>
     <string name="msg_clear_all_cookies">清除所有 Cookies 和網站數據嗎？</string>
@@ -298,8 +289,6 @@
     <string name="msg_ai_connected">已連接 (正常輪詢中)</string>
     <string name="msg_ai_connecting">正在嘗試連接 (失敗)...</string>
     <string name="msg_ai_config_server_first">請先設置伺服器地址</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Manor AI 助手</string>
     <string name="ai_monitoring_current_page">正在監控當前網頁...</string>
     <string name="ai_monitoring_with_title">監控中: %1$s</string>
@@ -363,8 +352,6 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">領主模式</string>
     <string name="title_normal_mode">常規模式</string>
     <string name="msg_lord_mode_intro">「領主模式」已開啟。在此模式下：\n\n1. 您的網頁瀏覽歷史記錄將不會被儲存。\n2. 當網站嘗試申請 Cookies 或本地儲存時，系統會彈出警告，您可以自由選擇允許或禁止。\n3. 您將擁有對資料的絕對控制權。</string>
@@ -377,7 +364,6 @@
     <string name="title_restricted_sites">位置權限管理</string>
     <string name="msg_restricted_sites_desc">在此管理已設置為「始終拒絕」訪問位置資訊的網站。</string>
     <string name="action_remove">移除限制</string>
-    
     <string name="action_close_all_tabs_in_group">關閉目前群組的所有分頁</string>
     <string name="action_save_to_new_group">放入新群組</string>
     <string name="action_switch_to_group">切換到群組: %1$s</string>
@@ -388,4 +374,5 @@
     <string name="default_group_name">預設群組</string>
     <string name="msg_group_closed">群組 %1$s 已關閉</string>
     <string name="msg_load_timeout">網頁載入超時，已停止載入</string>
+    <string name="language_ryu">琉球語 (沖繩語) (不完善)</string>
 </resources>

@@ -223,7 +223,7 @@ public class BookmarkStorage {
         // 只有当语言为 ko 且地区为 KP 时才载入（区分于通用韩文 ko-rKR）
         if ("KP".equalsIgnoreCase(country) && "ko".equalsIgnoreCase(language)) {
             try {
-                InputStream is = context.getAssets().open("default_bookmarks_ko_rkp.json");
+                InputStream is = context.getAssets().open("data/default_bookmarks_ko_rkp.json");
                 int size = is.available();
                 byte[] buffer = new byte[size];
                 is.read(buffer);

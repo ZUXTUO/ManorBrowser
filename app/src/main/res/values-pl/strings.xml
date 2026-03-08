@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Szukaj lub wpisz adres</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">Karta zaktualizowana</string>
     <string name="msg_reader_mode_loading">Ładowanie trybu czytania...</string>
     <string name="msg_reader_mode_failed">Nie udało się wyodrębnić treści</string>
-    
     <string name="title_password_manager">Menedżer haseł</string>
     <string name="title_add_password">Dodaj hasło</string>
     <string name="title_edit_password">Edytuj hasło</string>
@@ -176,14 +175,12 @@
     <string name="title_selected_count">Zaznaczone: %1$d</string>
     <string name="msg_confirm_delete_history">Usunąć ten element historii?</string>
     <string name="msg_confirm_delete_selected">Usunąć %1$d zaznaczone elementy?</string>
-
     <string name="title_external_app_redirect">Przekierowanie do aplikacji zewnętrznej</string>
     <string name="msg_external_app_redirect">Czy chcesz otworzyć ten link w zewnętrznej aplikacji?\n\nURL: %1$s</string>
     <string name="action_allow">Zezwól</string>
     <string name="action_deny">Odrzuć</string>
     <string name="error_no_app_found">Nie znaleziono aplikacji do obsługi tego linku</string>
     <string name="error_invalid_uri">Nieprawidłowy format URI</string>
-
     <string name="label_author">Autor</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Licencja</string>
@@ -191,7 +188,6 @@
     <string name="app_introduction">Nowoczesna przeglądarka oparta na silniku Firefox.</string>
     <string name="label_source_code">Kod źródłowy</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">Wersja aplikacji</string>
     <string name="label_gecko_version">Wersja GeckoView</string>
     <string name="label_sdk_version">Wersja Android SDK</string>
@@ -199,28 +195,22 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_privacy_policy">Polityka prywatności</string>
-    <string name="msg_privacy_policy">Witamy w Manor Browser.\n\nW celu ochrony Twoich praw, prosimy o dokładne zapoznanie się z naszą Polityką prywatności przed rozpoczęciem korzystania.\n\n1. Priorytetowo traktujemy Twoją prywatność i nie gromadzimy wrażliwych danych osobowych bez zgody.\n2. Używamy lokalnej pamięci masowej dla Twoich zakładek, historii i ustawień.\n3. Możemy prosić o uprawnienia (pamięć, powiadomienia) tylko wtedy, gdy jest to niezbędne dla funkcji takich jak pobieranie.\n\nProsimy o wyrażenie zgody, aby kontynuować korzystanie z aplikacji.</string>
     <string name="action_agree">Zgadzam się i kontynuuj</string>
     <string name="action_disagree">Nie zgadzam się i wyjdź</string>
-    
     <string name="title_download_settings">Ustawienia pobierania</string>
     <string name="pref_use_system_downloader">Użyj systemowego menedżera pobierania</string>
     <string name="pref_use_system_downloader_desc">Użyj systemowego menedżera pobierania systemu Android</string>
     <string name="pref_use_builtin_downloader">Użyj menedżera pobierania przeglądarki</string>
     <string name="pref_use_builtin_downloader_desc">Użyj wbudowanego menedżera pobierania przeglądarki (zalecane)</string>
-    
     <string name="title_desktop_mode">Tryb komputerowy</string>
     <string name="title_mobile_mode">Tryb mobilny</string>
     <string name="pref_desktop_mode">Żądaj wersji na komputer</string>
     <string name="pref_desktop_mode_desc">Ładuj witryny jako wersję na komputer</string>
-    
     <string name="msg_desktop_mode_on">Przełączono na tryb komputerowy</string>
     <string name="msg_desktop_mode_off">Przełączono na tryb mobilny</string>
-    
     <string name="title_file_exists">Plik już istnieje</string>
-    <string name="msg_file_exists">Plik "%1$s" już istnieje. Pobrać nową kopię?</string>
+    <string name="msg_file_exists">Plik &quot;%1$s&quot; już istnieje. Pobrać nową kopię?</string>
     <string name="action_download_new">Pobierz nową kopię</string>
     <string name="title_cookies">Pliki cookie i dane witryn</string>
     <string name="msg_clear_all_cookies">Wyczyścić wszystkie pliki cookie i dane witryn?</string>
@@ -290,7 +280,6 @@
     <string name="msg_remote_control_disconnected">Zdalne sterowanie rozłączone</string>
     <string name="msg_remote_server_started">Zdalne sterowanie gotowe: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Nie udało się uruchomić serwera poleceń</string>
-
     <string name="settings_group_ai_control">Inteligentny Hosting</string>
     <string name="title_ai_remote_control">Inteligentny Hosting</string>
     <string name="label_ai_server_address">Adres serwera</string>
@@ -300,8 +289,6 @@
     <string name="msg_ai_connected">Połączono (Odpytywanie)</string>
     <string name="msg_ai_connecting">Próba połączenia (Nieudana)...</string>
     <string name="msg_ai_config_server_first">Najpierw skonfiguruj adres serwera</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Asystent Manor AI</string>
     <string name="ai_monitoring_current_page">Monitorowanie bieżącej strony...</string>
     <string name="ai_monitoring_with_title">Monitorowanie: %1$s</string>
@@ -365,16 +352,14 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Tryb Lorda</string>
     <string name="title_normal_mode">Tryb Normalny</string>
-    <string name="msg_lord_mode_intro">\"Tryb Lorda\" jest teraz aktywny. W tym trybie:\n\n1. Twoja historia przeglądania nie będzie zapisywana.\n2. Gdy strony internetowe zażądają plików cookie lub lokalnej pamięci, pojawi się ostrzeżenie, pozwalające na ich zaakceptowanie lub odrzucenie.\n3. Masz całkowitą kontrolę nad swoimi danymi.</string>
+    <string name="msg_lord_mode_intro">\&quot;Tryb Lorda\&quot; jest teraz aktywny. W tym trybie:\n\n1. Twoja historia przeglądania nie będzie zapisywana.\n2. Gdy strony internetowe zażądają plików cookie lub lokalnej pamięci, pojawi się ostrzeżenie, pozwalające na ich zaakceptowanie lub odrzucenie.\n3. Masz całkowitą kontrolę nad swoimi danymi.</string>
     <string name="title_cookie_warning">Żądanie Plików Cookie/Pamięci</string>
-    <string name="msg_cookie_warning">Witryna \"%1$s\" prosi o użycie plików cookie lub lokalnej pamięci.\n\nW Trybie Lorda możesz ograniczyć to zachowanie. Czy chcesz zezwolić tej witrynie na przechowywanie danych?</string>
+    <string name="msg_cookie_warning">Witryna \&quot;%1$s\&quot; prosi o użycie plików cookie lub lokalnej pamięci.\n\nW Trybie Lorda możesz ograniczyć to zachowanie. Czy chcesz zezwolić tej witrynie na przechowywanie danych?</string>
     <string name="title_location_warning">Żądanie Lokalizacji</string>
-    <string name="msg_location_warning">Witryna \"%1$s\" prosi o dostęp do Twojej aktualnej lokalizacji. Czy chcesz na to zezwolić?</string>
-    <string name="msg_no_location_permission">Aplikacja nie otrzymała pozwolenia na lokalizację. Włącz je w \"Ustawienia -&gt; Informacje o aplikacji\" i spróbuj ponownie.</string>
+    <string name="msg_location_warning">Witryna \&quot;%1$s\&quot; prosi o dostęp do Twojej aktualnej lokalizacji. Czy chcesz na to zezwolić?</string>
+    <string name="msg_no_location_permission">Aplikacja nie otrzymała pozwolenia na lokalizację. Włącz je w \&quot;Ustawienia -&gt; Informacje o aplikacji\&quot; i spróbuj ponownie.</string>
     <string name="action_always_deny">Zawsze odmawiaj</string>
     <string name="title_restricted_sites">Uprawnienia Lokalizacji</string>
     <string name="msg_restricted_sites_desc">Zarządzaj witrynami, dla których dostęp do lokalizacji jest ustawiony na „Zawsze odmawiaj”.</string>
@@ -389,4 +374,5 @@
     <string name="default_group_name">Grupa domyślna</string>
     <string name="msg_group_closed">Grupa %1$s została zamknięta</string>
     <string name="msg_load_timeout">Przekroczono czas ładowania strony, zatrzymano ładowanie</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>
