@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">검색 또는 URL 입력</string>
@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">입력</string>
     <string name="dialog_title_select">선택</string>
     <string name="action_scan_qr_code">레이저코드 인식</string>
-    <string name="msg_qr_code_found">레이저코드 인식 결과:</string>
+    <string name="msg_qr_code_found">레이저코드를 인식했습니다:</string>
+    <string name="msg_multi_qr_codes_found">여러 개의 레이저코드가 인식되였습니다. 분석할 코드를 선택하십시오:</string>
     <string name="msg_no_qr_code_found">화상에서 레이저코드를 찾을수 없습니다.</string>
     <string name="msg_scanning">인식중…</string>
     <string name="msg_load_error">자원을 불러오지 못했습니다.</string>

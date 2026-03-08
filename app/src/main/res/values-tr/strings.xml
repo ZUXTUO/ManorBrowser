@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">Giriş</string>
     <string name="dialog_title_select">Seç</string>
     <string name="action_scan_qr_code">QR Kodunu Tara</string>
-    <string name="msg_qr_code_found">QR Kodu Sonucu:</string>
+    <string name="msg_qr_code_found">QR kodu bulundu:</string>
+    <string name="msg_multi_qr_codes_found">Birden fazla QR kodu bulundu. Lütfen taramak için birini seçin:</string>
     <string name="msg_no_qr_code_found">Bu görselde QR kodu bulunamadı.</string>
     <string name="msg_scanning">Taranıyor…</string>
     <string name="msg_load_error">Kaynak yüklenemedi.</string>

@@ -256,8 +256,9 @@ URL: %1$s</string>
     <string name="dialog_title_prompt">请输入</string>
     <string name="dialog_title_select">选择</string>
     <string name="action_scan_qr_code">识别二维码</string>
-    <string name="msg_qr_code_found">二维码识别结果：</string>
-    <string name="msg_no_qr_code_found">未在此图片中发现二维码。</string>
+    <string name="msg_qr_code_found">识别到二维码：</string>
+    <string name="msg_multi_qr_codes_found">识别到多个二维码，请选择一个进行解析：</string>
+    <string name="msg_no_qr_code_found">未在图中找到二维码。</string>
     <string name="msg_scanning">正在识别…</string>
     <string name="msg_load_error">加载资源失败。</string>
     <string name="action_open_url">打开链接</string>

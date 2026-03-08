@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">领域浏览器</string>
     <string name="action_search">搜尋或輸入網址</string>
@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">請輸入</string>
     <string name="dialog_title_select">請選擇</string>
     <string name="action_scan_qr_code">識別二維碼</string>
-    <string name="msg_qr_code_found">二維碼識別結果：</string>
+    <string name="msg_qr_code_found">識別到二維碼：</string>
+    <string name="msg_multi_qr_codes_found">識別到多個二維碼，請選擇一個進行解析：</string>
     <string name="msg_no_qr_code_found">未在此圖片中發現二維碼。</string>
     <string name="msg_scanning">正在識別…</string>
     <string name="msg_load_error">載入資源失敗。</string>

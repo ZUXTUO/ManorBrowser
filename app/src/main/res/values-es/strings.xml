@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Buscar o introducir dirección</string>
@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">Entrada</string>
     <string name="dialog_title_select">Seleccionar</string>
     <string name="action_scan_qr_code">Escanear código QR</string>
-    <string name="msg_qr_code_found">Resultado del código QR:</string>
+    <string name="msg_qr_code_found">Código QR encontrado:</string>
+    <string name="msg_multi_qr_codes_found">Se han encontrado varios códigos QR. Seleccione uno para escanear:</string>
     <string name="msg_no_qr_code_found">No se encontró ningún código QR en esta imagen.</string>
     <string name="msg_scanning">Escaneando…</string>
     <string name="msg_load_error">Error al cargar el recurso.</string>

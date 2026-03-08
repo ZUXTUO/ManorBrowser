@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">بحث أو إدخال عنوان</string>
@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">إدخال</string>
     <string name="dialog_title_select">تحديد</string>
     <string name="action_scan_qr_code">مسح رمز الاستجابة السريعة</string>
-    <string name="msg_qr_code_found">نتيجة رمز الاستجابة السريعة:</string>
+    <string name="msg_qr_code_found">تم العثور على رمز QR:</string>
+    <string name="msg_multi_qr_codes_found">تم العثور على عدة رموز QR. يرجى اختيار أحدها للمسح:</string>
     <string name="msg_no_qr_code_found">لم يتم العثور على رمز استجابة سريعة في هذه الصورة.</string>
     <string name="msg_scanning">جاري المسح…</string>
     <string name="msg_load_error">فشل تحميل المورد.</string>
