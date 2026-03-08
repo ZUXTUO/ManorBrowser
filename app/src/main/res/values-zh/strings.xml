@@ -1,4 +1,5 @@
-﻿<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <string name="app_name">领域浏览器</string>
     <string name="action_search">搜索或输入网址</string>
     <string name="action_home">主页</string>
@@ -126,6 +127,7 @@
     <string name="language_id">印尼语</string>
     <string name="language_pl">波兰语</string>
     <string name="language_nl">荷兰语</string>
+    <string name="language_ryu">琉球语 (冲绳语) (不完善)</string>
     <string name="action_move_to">移动到文件夹</string>
     <string name="msg_move_success">书签已移动！</string>
     <string name="msg_no_folders">没有可用的文件夹</string>
@@ -152,10 +154,6 @@
     <string name="msg_tab_updated">标签已更新</string>
     <string name="msg_reader_mode_loading">正在加载阅读模式...</string>
     <string name="msg_reader_mode_failed">无法提取内容</string>
-    <string name="title_update_password">更新密码？</string>
-    <string name="msg_update_password">是否更新 %1$s 的密码？</string>
-    <string name="action_update">更新</string>
-    
     <string name="title_password_manager">密码管理</string>
     <string name="title_add_password">添加密码</string>
     <string name="title_edit_password">编辑密码</string>
@@ -187,23 +185,6 @@
     <string name="title_selected_count">已选择: %1$d</string>
     <string name="msg_confirm_delete_history">删除此历史记录？</string>
     <string name="msg_confirm_delete_selected">删除 %1$d 个所选项目？</string>
-    
-    <string name="label_author">作者</string>
-    <string name="author_name">Olsc</string>
-    <string name="label_license">许可证</string>
-    <string name="license_name">Apache-2.0</string>
-    <string name="app_introduction">一款基于火狐内核的开源现代化浏览器。</string>
-    <string name="label_source_code">开源链接</string>
-    <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
-    <string name="label_app_version">应用版本</string>
-    <string name="label_gecko_version">GeckoView 版本</string>
-    <string name="label_sdk_version">安卓 SDK 版本</string>
-    <string name="label_app_version_value">应用版本: %1$s</string>
-    <string name="label_gecko_version_value">GeckoView: %1$s</string>
-    <string name="label_sdk_version_value">安卓: %1$s</string>
-    <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_external_app_redirect">外部应用跳转</string>
     <string name="msg_external_app_redirect">您是否要在外部应用中打开此链接？
 
@@ -212,26 +193,35 @@ URL: %1$s</string>
     <string name="action_deny">拒绝</string>
     <string name="error_no_app_found">未找到可处理此链接的应用</string>
     <string name="error_invalid_uri">无效的URI格式</string>
-
+    <string name="label_author">作者</string>
+    <string name="author_name">Olsc</string>
+    <string name="label_license">许可证</string>
+    <string name="license_name">Apache-2.0</string>
+    <string name="app_introduction">一款基于火狐内核的开源现代化浏览器。</string>
+    <string name="label_source_code">开源链接</string>
+    <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
+    <string name="label_app_version">应用版本</string>
+    <string name="label_gecko_version">GeckoView 版本</string>
+    <string name="label_sdk_version">安卓 SDK 版本</string>
+    <string name="label_app_version_value">应用版本: %1$s</string>
+    <string name="label_gecko_version_value">GeckoView: %1$s</string>
+    <string name="label_sdk_version_value">安卓: %1$s</string>
+    <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">隐私政策</string>
     <string name="msg_privacy_policy">欢迎使用领域浏览器！\n\n为了更好地保护您的权益，请您在使用前仔细阅读并同意《隐私政策》。\n\n1. 我们重视您的隐私，不会在未经同意的情况下收集您的个人敏感信息。\n2. 我们使用本地存储来保存您的书签、历史记录和设置。\n3. 我们仅在必要时请求权限（如存储、通知）以提供下载等功能。\n\n请您同意并继续使用本应用。</string>
     <string name="action_agree">同意并继续</string>
     <string name="action_disagree">不同意并退出</string>
-    
     <string name="title_download_settings">下载设置</string>
     <string name="pref_use_system_downloader">使用系统下载器</string>
     <string name="pref_use_system_downloader_desc">使用安卓系统下载管理器下载文件</string>
     <string name="pref_use_builtin_downloader">使用浏览器下载器</string>
     <string name="pref_use_builtin_downloader_desc">使用浏览器内置下载管理器</string>
-    
     <string name="title_desktop_mode">桌面模式</string>
     <string name="title_mobile_mode">移动模式</string>
     <string name="pref_desktop_mode">请求桌面网站</string>
     <string name="pref_desktop_mode_desc">以桌面版本加载网页</string>
-    
     <string name="msg_desktop_mode_on">已切换到桌面模式</string>
     <string name="msg_desktop_mode_off">已切换到移动模式</string>
-    
     <string name="title_file_exists">文件已存在</string>
     <string name="msg_file_exists">文件 "%1$s" 已存在，是否下载新副本？</string>
     <string name="action_download_new">下载新副本</string>
@@ -250,8 +240,8 @@ URL: %1$s</string>
     <string name="action_manage_extensions">插件管理</string>
     <string name="msg_extension_installed">已安装插件：%1$s</string>
     <string name="msg_extension_install_failed">插件安装失败</string>
-    <string name="msg_confirm_uninstall_extension">确定卸载插件 %1$s？</string>
     <string name="msg_installing_extension">正在安装插件...</string>
+    <string name="msg_confirm_uninstall_extension">确定卸载插件 %1$s？</string>
     <string name="msg_no_extensions">暂无已安装的插件</string>
     <string name="label_version_value">版本号：%1$s</string>
     <string name="action_extensions">已安装插件</string>
@@ -262,7 +252,6 @@ URL: %1$s</string>
     <string name="title_default_browser">默认浏览器设置</string>
     <string name="desc_default_browser">将领域浏览器设置为您的默认浏览器</string>
     <string name="action_set_default_browser">去设置</string>
-
     <string name="dialog_title_alert">提示</string>
     <string name="dialog_title_confirm">确认</string>
     <string name="dialog_title_prompt">请输入</string>
@@ -286,6 +275,9 @@ URL: %1$s</string>
     <string name="func_desktop_mode">桌面模式</string>
     <string name="func_add_bookmark">收藏当前页面</string>
     <string name="func_theme">白天/夜间模式</string>
+    <string name="title_update_password">更新密码？</string>
+    <string name="msg_update_password">是否更新 %1$s 的密码？</string>
+    <string name="action_update">更新</string>
     <string name="settings_group_general">常规设置</string>
     <string name="settings_group_personalization">个性化</string>
     <string name="settings_group_privacy">隐私与安全</string>
@@ -301,7 +293,6 @@ URL: %1$s</string>
     <string name="msg_remote_control_disconnected">远程控制已断开</string>
     <string name="msg_remote_server_started">远程控制已就绪: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">命令服务器启动失败</string>
-
     <string name="settings_group_ai_control">智能托管</string>
     <string name="title_ai_remote_control">智能托管</string>
     <string name="label_ai_server_address">服务器地址</string>
@@ -311,8 +302,6 @@ URL: %1$s</string>
     <string name="msg_ai_connected">已连接 (正常轮询中)</string>
     <string name="msg_ai_connecting">正在尝试连接 (失败)...</string>
     <string name="msg_ai_config_server_first">请先设置服务器地址</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Manor AI 助手</string>
     <string name="ai_monitoring_current_page">正在监控当前网页...</string>
     <string name="ai_monitoring_with_title">监控中: %1$s</string>
@@ -376,8 +365,6 @@ URL: %1$s</string>
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">领主模式</string>
     <string name="title_normal_mode">常规模式</string>
     <string name="msg_lord_mode_intro">“领主模式”已开启。在此模式下：\n\n1. 您的网页浏览历史记录将不会被保存。\n2. 当网站尝试申请 Cookies 或本地存储时，系统会弹出警告，您可以自由选择允许或禁止。\n3. 您将拥有对数据的绝对控制权。</string>

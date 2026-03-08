@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Buscar o introducir dirección</string>
@@ -211,7 +211,7 @@
     <string name="msg_desktop_mode_on">Cambiado a modo escritorio</string>
     <string name="msg_desktop_mode_off">Cambiado a modo móvil</string>
     <string name="title_file_exists">El archivo ya existe</string>
-    <string name="msg_file_exists">El archivo "%1$s" ya existe. ¿Descargar una nueva copia?</string>
+    <string name="msg_file_exists">El archivo &quot;%1$s&quot; ya existe. ¿Descargar una nueva copia?</string>
     <string name="action_download_new">Descargar nueva copia</string>
     <string name="title_cookies">Cookies y datos del sitio</string>
     <string name="msg_clear_all_cookies">¿Borrar todas las cookies y datos del sitio?</string>
@@ -281,7 +281,6 @@
     <string name="msg_remote_control_disconnected">Control remoto desconectado</string>
     <string name="msg_remote_server_started">Control remoto listo: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Error al iniciar el servidor de comandos</string>
-
     <string name="settings_group_ai_control">Hosting Inteligente</string>
     <string name="title_ai_remote_control">Hosting Inteligente</string>
     <string name="label_ai_server_address">Dirección del servidor</string>
@@ -291,8 +290,6 @@
     <string name="msg_ai_connected">Conectado (Sondeando)</string>
     <string name="msg_ai_connecting">Intentando conectar (Fallido)...</string>
     <string name="msg_ai_config_server_first">Por favor, configure primero la dirección del servidor</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Asistente de IA Manor</string>
     <string name="ai_monitoring_current_page">Monitoreando página actual...</string>
     <string name="ai_monitoring_with_title">Monitoreando: %1$s</string>
@@ -356,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Modo Lord</string>
     <string name="title_normal_mode">Modo Normal</string>
-    <string name="msg_lord_mode_intro">El \"Modo Lord\" está ahora activo. En este modo:\n\n1. Su historial de navegación no se guardará.\n2. Cuando los sitios web soliciten Cookies o almacenamiento local, aparecerá una advertencia que le permitirá permitirlos o denegarlos.\n3. Usted tiene control absoluto sobre sus datos.</string>
+    <string name="msg_lord_mode_intro">El \&quot;Modo Lord\&quot; está ahora activo. En este modo:\n\n1. Su historial de navegación no se guardará.\n2. Cuando los sitios web soliciten Cookies o almacenamiento local, aparecerá una advertencia que le permitirá permitirlos o denegarlos.\n3. Usted tiene control absoluto sobre sus datos.</string>
     <string name="title_cookie_warning">Solicitud de Cookies/Almacenamiento</string>
-    <string name="msg_cookie_warning">El sitio web \"%1$s\" solicita utilizar Cookies o almacenamiento local.\n\nEn Modo Lord, puede restringir este comportamiento. ¿Desea permitir que este sitio web almacene datos?</string>
+    <string name="msg_cookie_warning">El sitio web \&quot;%1$s\&quot; solicita utilizar Cookies o almacenamiento local.\n\nEn Modo Lord, puede restringir este comportamiento. ¿Desea permitir que este sitio web almacene datos?</string>
     <string name="title_location_warning">Solicitud de Ubicación</string>
-    <string name="msg_location_warning">El sitio web \"%1$s\" solicita su ubicación actual. ¿Desea permitirlo?</string>
-    <string name="msg_no_location_permission">La aplicación no tiene el permiso de ubicación. Por favor, actívelo en \"Ajustes -&gt; Información de la aplicación\" e inténtelo de nuevo.</string>
+    <string name="msg_location_warning">El sitio web \&quot;%1$s\&quot; solicita su ubicación actual. ¿Desea permitirlo?</string>
+    <string name="msg_no_location_permission">La aplicación no tiene el permiso de ubicación. Por favor, actívelo en \&quot;Ajustes -&gt; Información de la aplicación\&quot; e inténtelo de nuevo.</string>
     <string name="action_always_deny">Denegar siempre</string>
     <string name="title_restricted_sites">Permisos de Ubicación</string>
-    <string name="msg_restricted_sites_desc">Gestione los sitios que están configurados como \"Denegar siempre\" para el acceso a la ubicación.</string>
+    <string name="msg_restricted_sites_desc">Gestione los sitios que están configurados como \&quot;Denegar siempre\&quot; para el acceso a la ubicación.</string>
     <string name="action_remove">Eliminar restricción</string>
     <string name="action_close_all_tabs_in_group">Cerrar todas las pestañas del grupo</string>
     <string name="action_save_to_new_group">Guardar en nuevo grupo</string>
@@ -380,4 +375,5 @@
     <string name="default_group_name">Grupo predeterminado</string>
     <string name="msg_group_closed">El grupo %1$s ha sido cerrado</string>
     <string name="msg_load_timeout">Tiempo de espera agotado, carga detenida</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

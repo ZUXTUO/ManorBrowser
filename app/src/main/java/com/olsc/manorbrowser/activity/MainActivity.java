@@ -36,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -141,6 +142,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLordMode = false;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
+    // --- 历史推荐与闲时整理 ---
+    private androidx.cardview.widget.CardView recommendationsContainer;
+    private RecyclerView rvRecommendations;
+    private com.olsc.manorbrowser.adapter.RecommendationAdapter recommendationAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 加载主题色调（深色模式或亮色模式）
@@ -237,6 +243,20 @@ public class MainActivity extends AppCompatActivity {
         contentContainer = findViewById(R.id.content_container);
         fullscreenMenuContainer = findViewById(R.id.fullscreen_menu_container);
         btnFullscreenMenu = findViewById(R.id.btn_fullscreen_menu);
+        
+        // 初始化历史推荐列表
+        recommendationsContainer = findViewById(R.id.recommendations_container);
+        rvRecommendations = findViewById(R.id.rv_recommendations);
+        if (rvRecommendations != null) {
+            rvRecommendations.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+            recommendationAdapter = new com.olsc.manorbrowser.adapter.RecommendationAdapter(item -> {
+                loadUrlInCurrentTab(item.url);
+                recommendationsContainer.setVisibility(View.GONE);
+                urlInput.clearFocus();
+                hideKeyboard();
+            });
+            rvRecommendations.setAdapter(recommendationAdapter);
+        }
         
         // 4. 应用窗口 Insets 监听 (解决刘海屏、导航栏遮挡)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, windowInsets) -> {
@@ -566,7 +586,10 @@ public class MainActivity extends AppCompatActivity {
                    }
                    if(tabInfo != null && tabInfo.url != null && !tabInfo.url.equals("about:blank")){
                         if (!isLordMode) {
+                            // 1. 记录基础历史并增加权重
                             HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
+                            // 2. 尝试获取网页摘要（通过 alert 桥接异步传回提示，再由 onAlertPrompt 处理）
+                            session.loadUri("javascript:alert('HISTORY_SNIPPET:' + document.body.innerText.substring(0, 500))");
                         }
                    }
                 }
@@ -815,6 +838,20 @@ public class MainActivity extends AppCompatActivity {
                     pendingJsCallback = null;
                     if (cb != null) {
                         cb.onResult(resultData);
+                    }
+                    return GeckoResult.fromValue(prompt.dismiss());
+                } else if (message != null && message.startsWith("HISTORY_SNIPPET:")) {
+                    // 历史记录摘要回传
+                    String snippet = message.substring("HISTORY_SNIPPET:".length());
+                    TabInfo tab = null;
+                    for (TabInfo t : tabs) {
+                        if (t.session == session) {
+                            tab = t;
+                            break;
+                        }
+                    }
+                    if (tab != null && tab.url != null) {
+                        HistoryStorage.updateHistoryContent(MainActivity.this, tab.url, snippet);
                     }
                     return GeckoResult.fromValue(prompt.dismiss());
                 }
@@ -1283,6 +1320,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         // 传递副本以确保后台线程保存时的线程安全
         TabStorage.saveTabs(this, currentTabGroup, new ArrayList<>(tabs));
+        
+        // 触发闲时历史整理
+        com.olsc.manorbrowser.data.HistoryStorage.runIdleOrganization(this);
     }
     @Override
     protected void onDestroy() {
@@ -1371,11 +1411,13 @@ public class MainActivity extends AppCompatActivity {
         
         urlInput.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                // 获得焦点时，重置为第一次点击状态
+                // 获得焦点时，重置为第一次点击状态并展示候选列表
                 urlInputFirstClick = true;
+                updateRecommendations(urlInput.getText().toString());
             } else {
-                // 失去焦点时，重置状态
+                // 失去焦点时，延迟隐藏（给列表点击留出响应时间）
                 urlInputFirstClick = true;
+                mainHandler.postDelayed(() -> recommendationsContainer.setVisibility(View.GONE), 200);
             }
         });
         
@@ -1393,9 +1435,23 @@ public class MainActivity extends AppCompatActivity {
             urlInput.selectAll();
             return true; // 返回true表示已处理，不再执行默认行为
         });
+
+        // 核心：处理输入建议
+        urlInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                if (urlInput.hasFocus()) {
+                    updateRecommendations(s.toString());
+                }
+            }
+        });
+
         urlInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                recommendationsContainer.setVisibility(View.GONE);
                 android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(urlInput.getWindowToken(), 0);
@@ -3597,5 +3653,40 @@ public class MainActivity extends AppCompatActivity {
             .setMessage(R.string.msg_lord_mode_intro)
             .setPositiveButton(android.R.string.ok, null)
             .show();
+    }
+
+    /**
+     * 更新历史建议列表
+     */
+    private void updateRecommendations(String query) {
+        if (recommendationAdapter == null || recommendationsContainer == null) return;
+        
+        // 基于线程池进行异步查询，避免卡顿主线程
+        new Thread(() -> {
+            List<com.olsc.manorbrowser.data.HistoryStorage.HistoryItem> suggestions = 
+                com.olsc.manorbrowser.data.HistoryStorage.getRecommendations(this, query);
+            
+            runOnUiThread(() -> {
+                // 如果搜索框失去焦点或输入已变更（对于延迟返回的旧请求），则不再处理
+                if (!urlInput.hasFocus()) {
+                    recommendationsContainer.setVisibility(View.GONE);
+                    return;
+                }
+                
+                if (suggestions == null || suggestions.isEmpty()) {
+                    recommendationsContainer.setVisibility(View.GONE);
+                } else {
+                    recommendationAdapter.setItems(suggestions);
+                    recommendationsContainer.setVisibility(View.VISIBLE);
+                }
+            });
+        }).start();
+    }
+
+    private void hideKeyboard() {
+        android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+        if (imm != null && urlInput != null) {
+            imm.hideSoftInputFromWindow(urlInput.getWindowToken(), 0);
+        }
     }
 }

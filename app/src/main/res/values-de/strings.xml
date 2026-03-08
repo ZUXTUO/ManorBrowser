@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Suchen oder Adresse eingeben</string>
@@ -211,7 +211,7 @@
     <string name="msg_desktop_mode_on">In den Desktop-Modus gewechselt</string>
     <string name="msg_desktop_mode_off">In den Mobil-Modus gewechselt</string>
     <string name="title_file_exists">Datei existiert bereits</string>
-    <string name="msg_file_exists">Datei "%1$s" existiert bereits. Neue Kopie herunterladen?</string>
+    <string name="msg_file_exists">Datei &quot;%1$s&quot; existiert bereits. Neue Kopie herunterladen?</string>
     <string name="action_download_new">Neue Kopie herunterladen</string>
     <string name="title_cookies">Cookies &amp; Websitedaten</string>
     <string name="msg_clear_all_cookies">Alle Cookies und Websitedaten löschen?</string>
@@ -281,7 +281,6 @@
     <string name="msg_remote_control_disconnected">Fernsteuerung getrennt</string>
     <string name="msg_remote_server_started">Fernsteuerung bereit: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Befehlsserver konnte nicht gestartet werden</string>
-
     <string name="settings_group_ai_control">Intelligentes Hosting</string>
     <string name="title_ai_remote_control">Intelligent Hosting</string>
     <string name="label_ai_server_address">Serveradresse</string>
@@ -291,8 +290,6 @@
     <string name="msg_ai_connected">Verbunden (Abfrage)</string>
     <string name="msg_ai_connecting">Verbindungsversuch (Fehlgeschlagen)...</string>
     <string name="msg_ai_config_server_first">Bitte konfigurieren Sie zuerst die Serveradresse</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Manor AI Assistent</string>
     <string name="ai_monitoring_current_page">Aktuelle Seite wird überwacht...</string>
     <string name="ai_monitoring_with_title">Überwachung: %1$s</string>
@@ -356,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Lord-Modus</string>
     <string name="title_normal_mode">Normaler Modus</string>
-    <string name="msg_lord_mode_intro">"Der \"Lord-Modus\" ist jetzt aktiv. In diesem Modus:\n\n1. Ihr Browserverlauf wird nicht gespeichert.\n2. Wenn Websites Cookies oder lokalen Speicher anfordern, erscheint eine Warnung, mit der Sie dies zulassen oder ablehnen können.\n3. Sie haben die absolute Kontrolle über Ihre Daten."</string>
-    <string name="title_cookie_warning">"Cookie-/Speicheranfrage"</string>
-    <string name="msg_cookie_warning">"Die Website \"%1$s\" möchte Cookies oder lokalen Speicher verwenden.\n\nIm Lord-Modus können Sie dieses Verhalten einschränken. Möchten Sie zulassen, dass diese Website Daten speichert?"</string>
-    <string name="title_location_warning">"Standortanfrage"</string>
-    <string name="msg_location_warning">"Die Website \"%1$s\" möchte auf Ihren aktuellen Standort zugreifen. Möchten Sie dies zulassen?"</string>
-    <string name="msg_no_location_permission">"Der App wurde keine Standortberechtigung erteilt. Bitte aktivieren Sie diese in den \"Einstellungen -&gt; App-Info\" und versuchen Sie es erneut."</string>
-    <string name="action_always_deny">"Immer ablehnen"</string>
-    <string name="title_restricted_sites">"Standortberechtigungen"</string>
-    <string name="msg_restricted_sites_desc">"Verwalten Sie Websites, für die der Standortzugriff auf \"Immer ablehnen\" gesetzt wurde."</string>
+    <string name="msg_lord_mode_intro">&quot;Der \&quot;Lord-Modus\&quot; ist jetzt aktiv. In diesem Modus:\n\n1. Ihr Browserverlauf wird nicht gespeichert.\n2. Wenn Websites Cookies oder lokalen Speicher anfordern, erscheint eine Warnung, mit der Sie dies zulassen oder ablehnen können.\n3. Sie haben die absolute Kontrolle über Ihre Daten.&quot;</string>
+    <string name="title_cookie_warning">&quot;Cookie-/Speicheranfrage&quot;</string>
+    <string name="msg_cookie_warning">&quot;Die Website \&quot;%1$s\&quot; möchte Cookies oder lokalen Speicher verwenden.\n\nIm Lord-Modus können Sie dieses Verhalten einschränken. Möchten Sie zulassen, dass diese Website Daten speichert?&quot;</string>
+    <string name="title_location_warning">&quot;Standortanfrage&quot;</string>
+    <string name="msg_location_warning">&quot;Die Website \&quot;%1$s\&quot; möchte auf Ihren aktuellen Standort zugreifen. Möchten Sie dies zulassen?&quot;</string>
+    <string name="msg_no_location_permission">&quot;Der App wurde keine Standortberechtigung erteilt. Bitte aktivieren Sie diese in den \&quot;Einstellungen -&gt; App-Info\&quot; und versuchen Sie es erneut.&quot;</string>
+    <string name="action_always_deny">&quot;Immer ablehnen&quot;</string>
+    <string name="title_restricted_sites">&quot;Standortberechtigungen&quot;</string>
+    <string name="msg_restricted_sites_desc">&quot;Verwalten Sie Websites, für die der Standortzugriff auf \&quot;Immer ablehnen\&quot; gesetzt wurde.&quot;</string>
     <string name="action_remove">Einschränkung entfernen</string>
     <string name="action_close_all_tabs_in_group">Alle Tabs in aktueller Gruppe schließen</string>
     <string name="action_save_to_new_group">In neuer Gruppe speichern</string>
@@ -380,4 +375,5 @@
     <string name="default_group_name">Standardgruppe</string>
     <string name="msg_group_closed">Gruppe %1$s wurde geschlossen</string>
     <string name="msg_load_timeout">Zeitüberschreitung beim Laden der Seite, Ladevorgang gestoppt</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Zoek of typ een adres</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">Tabblad bijgewerkt</string>
     <string name="msg_reader_mode_loading">Leesmodus laden...</string>
     <string name="msg_reader_mode_failed">Inhoud extraheren mislukt</string>
-    
     <string name="title_password_manager">Wachtwoordbeheer</string>
     <string name="title_add_password">Wachtwoord toevoegen</string>
     <string name="title_edit_password">Wachtwoord bewerken</string>
@@ -176,14 +175,12 @@
     <string name="title_selected_count">Geselecteerd: %1$d</string>
     <string name="msg_confirm_delete_history">Dit geschiedenisitem verwijderen?</string>
     <string name="msg_confirm_delete_selected">%1$d geselecteerde items verwijderen?</string>
-
     <string name="title_external_app_redirect">Externe app-omleiding</string>
     <string name="msg_external_app_redirect">Wilt u deze link in een externe app openen?\n\nURL: %1$s</string>
     <string name="action_allow">Toestaan</string>
     <string name="action_deny">Weigeren</string>
     <string name="error_no_app_found">Geen app gevonden om deze link af te handelen</string>
     <string name="error_invalid_uri">Ongeldig URI-formaat</string>
-
     <string name="label_author">Auteur</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Licentie</string>
@@ -191,7 +188,6 @@
     <string name="app_introduction">Een moderne browser gebaseerd op de Firefox-engine.</string>
     <string name="label_source_code">Broncode</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">App-versie</string>
     <string name="label_gecko_version">GeckoView-versie</string>
     <string name="label_sdk_version">Android SDK-versie</string>
@@ -199,28 +195,23 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_privacy_policy">Privacybeleid</string>
     <string name="msg_privacy_policy">Welkom bij Manor Browser.\n\nOm uw rechten te beschermen, verzoeken wij u ons privacybeleid zorgvuldig te lezen alvorens u de app gebruikt.\n\n1. Wij geven prioriteit aan uw privacy en verzamelen geen gevoelige persoonlijke informatie zonder toestemming.\n2. Wij gebruiken lokale opslag voor uw bladwijzers, geschiedenis en instellingen.\n3. Wij kunnen alleen toestemming vragen (Opslag, Meldingen) wanneer dit noodzakelijk is voor functies zoals downloaden.\n\nGa akkoord om de app te blijven gebruiken.</string>
     <string name="action_agree">Akkoord en doorgaan</string>
     <string name="action_disagree">Niet akkoord en afsluiten</string>
-    
     <string name="title_download_settings">Downloadinstellingen</string>
     <string name="pref_use_system_downloader">Systeemdownloader gebruiken</string>
     <string name="pref_use_system_downloader_desc">Android-systeemdownloadbeheer gebruiken</string>
     <string name="pref_use_builtin_downloader">Browserdownloader gebruiken</string>
     <string name="pref_use_builtin_downloader_desc">Ingebouwde downloadbeheerder van de browser gebruiken (Aanbevolen)</string>
-    
     <string name="title_desktop_mode">Desktopmodus</string>
     <string name="title_mobile_mode">Mobiele modus</string>
     <string name="pref_desktop_mode">Desktopsite opvragen</string>
     <string name="pref_desktop_mode_desc">Websites laden als desktopversie</string>
-    
     <string name="msg_desktop_mode_on">Gezwitched naar desktopmodus</string>
     <string name="msg_desktop_mode_off">Gezwitched naar mobiele modus</string>
-    
     <string name="title_file_exists">Bestand bestaat al</string>
-    <string name="msg_file_exists">Bestand "%1$s" bestaat al. Nieuwe kopie downloaden?</string>
+    <string name="msg_file_exists">Bestand &quot;%1$s&quot; bestaat al. Nieuwe kopie downloaden?</string>
     <string name="action_download_new">Nieuwe kopie downloaden</string>
     <string name="title_cookies">Cookies en sitegegevens</string>
     <string name="msg_clear_all_cookies">Alle cookies en sitegegevens wissen?</string>
@@ -290,7 +281,6 @@
     <string name="msg_remote_control_disconnected">Afstandsbediening ontkoppeld</string>
     <string name="msg_remote_server_started">Afstandsbediening gereed: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Kan commandoserver niet starten</string>
-
     <string name="settings_group_ai_control">Intelligente Hosting</string>
     <string name="title_ai_remote_control">Intelligente Hosting</string>
     <string name="label_ai_server_address">Serveradres</string>
@@ -300,8 +290,6 @@
     <string name="msg_ai_connected">Verbonden (Polling)</string>
     <string name="msg_ai_connecting">Verbinding proberen (Mislukt)...</string>
     <string name="msg_ai_config_server_first">Configureer eerst het serveradres</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Manor AI-assistent</string>
     <string name="ai_monitoring_current_page">Huidige pagina monitoren...</string>
     <string name="ai_monitoring_with_title">Monitoren: %1$s</string>
@@ -365,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Lord-modus</string>
     <string name="title_normal_mode">Normale modus</string>
-    <string name="msg_lord_mode_intro">\"Lord-modus\" is nu actief. In deze modus:\n\n1. Uw browsergeschiedenis wordt niet opgeslagen.\n2. Wanneer websites om cookies of lokale opslag vragen, verschijnt er een waarschuwing waarmee u dit kunt toestaan of weigeren.\n3. U heeft absolute controle over uw gegevens.</string>
+    <string name="msg_lord_mode_intro">\&quot;Lord-modus\&quot; is nu actief. In deze modus:\n\n1. Uw browsergeschiedenis wordt niet opgeslagen.\n2. Wanneer websites om cookies of lokale opslag vragen, verschijnt er een waarschuwing waarmee u dit kunt toestaan of weigeren.\n3. U heeft absolute controle over uw gegevens.</string>
     <string name="title_cookie_warning">Cookie-/opslagverzoek</string>
-    <string name="msg_cookie_warning">De website \"%1$s\" vraagt om cookies of lokale opslag te gebruiken.\n\nIn de Lord-modus kunt u dit gedrag beperken. Wilt u deze website toestaan gegevens op te slaan?</string>
+    <string name="msg_cookie_warning">De website \&quot;%1$s\&quot; vraagt om cookies of lokale opslag te gebruiken.\n\nIn de Lord-modus kunt u dit gedrag beperken. Wilt u deze website toestaan gegevens op te slaan?</string>
     <string name="title_location_warning">Locatieverzoek</string>
-    <string name="msg_location_warning">De website \"%1$s\" vraagt om uw huidige locatie. Wilt u dit toestaan?</string>
-    <string name="msg_no_location_permission">De app heeft geen locatietoestemming gekregen. Schakel dit in via \"Instellingen -&gt; App-info\" en probeer het opnieuw.</string>
+    <string name="msg_location_warning">De website \&quot;%1$s\&quot; vraagt om uw huidige locatie. Wilt u dit toestaan?</string>
+    <string name="msg_no_location_permission">De app heeft geen locatietoestemming gekregen. Schakel dit in via \&quot;Instellingen -&gt; App-info\&quot; en probeer het opnieuw.</string>
     <string name="action_always_deny">Altijd weigeren</string>
     <string name="title_restricted_sites">Locatierechten</string>
-    <string name="msg_restricted_sites_desc">Beheer sites die op \"Altijd weigeren\" zijn ingesteld voor locatietoegang.</string>
+    <string name="msg_restricted_sites_desc">Beheer sites die op \&quot;Altijd weigeren\&quot; zijn ingesteld voor locatietoegang.</string>
     <string name="action_remove">Beperking verwijderen</string>
     <string name="action_close_all_tabs_in_group">Alle tabbladen in groep sluiten</string>
     <string name="action_save_to_new_group">Opslaan in nieuwe groep</string>
@@ -389,4 +375,5 @@
     <string name="default_group_name">Standaardgroep</string>
     <string name="msg_group_closed">Groep %1$s is gesloten</string>
     <string name="msg_load_timeout">Pagina laadtijd verstreken, laden gestopt</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Pesquisar ou digitar endereço</string>
@@ -211,7 +211,7 @@
     <string name="msg_desktop_mode_on">Mudou para modo desktop</string>
     <string name="msg_desktop_mode_off">Mudou para modo móvel</string>
     <string name="title_file_exists">Arquivo já existe</string>
-    <string name="msg_file_exists">O arquivo "%1$s" já existe. Baixar uma nova cópia?</string>
+    <string name="msg_file_exists">O arquivo &quot;%1$s&quot; já existe. Baixar uma nova cópia?</string>
     <string name="action_download_new">Baixar nova cópia</string>
     <string name="title_cookies">Cookies e dados do site</string>
     <string name="msg_clear_all_cookies">Limpar todos os cookies e dados do site?</string>
@@ -281,7 +281,6 @@
     <string name="msg_remote_control_disconnected">Controle remoto desconectado</string>
     <string name="msg_remote_server_started">Controle remoto pronto: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Falha ao iniciar o servidor de comando</string>
-
     <string name="settings_group_ai_control">Hospedagem Inteligente</string>
     <string name="title_ai_remote_control">Hospedagem Inteligente</string>
     <string name="label_ai_server_address">Endereço do servidor</string>
@@ -291,8 +290,6 @@
     <string name="msg_ai_connected">Conectado (Polling)</string>
     <string name="msg_ai_connecting">Tentando conectar (Falhou)...</string>
     <string name="msg_ai_config_server_first">Por favor, configure o endereço do servidor primeiro</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Assistente Manor AI</string>
     <string name="ai_monitoring_current_page">Monitorando a página atual...</string>
     <string name="ai_monitoring_with_title">Monitorando: %1$s</string>
@@ -356,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Modo Lord</string>
     <string name="title_normal_mode">Modo Normal</string>
-    <string name="msg_lord_mode_intro">"O \"Modo Lord\" está agora ativo. Neste modo:\n\n1. O seu histórico de navegação não será guardado.\n2. Quando os sites solicitarem Cookies ou armazenamento local, aparecerá um aviso, permitindo-lhe permitir ou negar.\n3. Tem controlo absoluto sobre os seus dados."</string>
-    <string name="title_cookie_warning">"Pedido de Cookies/Armazenamento"</string>
-    <string name="msg_cookie_warning">"O site \"%1$s\" está a solicitar a utilização de Cookies ou armazenamento local.\n\nNo Modo Lord, pode restringir este comportamento. Deseja permitir que este site armazene dados?"</string>
-    <string name="title_location_warning">"Pedido de Localização"</string>
-    <string name="msg_location_warning">"O site \"%1$s\" está a solicitar a sua localização atual. Deseja permitir?"</string>
-    <string name="msg_no_location_permission">"A aplicação não tem permissão de localização. Ative-a em \"Definições -&gt; Informações da aplicação\" e tente novamente."</string>
-    <string name="action_always_deny">"Negar sempre"</string>
-    <string name="title_restricted_sites">"Permissões de Localização"</string>
-    <string name="msg_restricted_sites_desc">"Gerir os sites que estão definidos como \"Negar sempre\" para o acesso à localização."</string>
+    <string name="msg_lord_mode_intro">&quot;O \&quot;Modo Lord\&quot; está agora ativo. Neste modo:\n\n1. O seu histórico de navegação não será guardado.\n2. Quando os sites solicitarem Cookies ou armazenamento local, aparecerá um aviso, permitindo-lhe permitir ou negar.\n3. Tem controlo absoluto sobre os seus dados.&quot;</string>
+    <string name="title_cookie_warning">&quot;Pedido de Cookies/Armazenamento&quot;</string>
+    <string name="msg_cookie_warning">&quot;O site \&quot;%1$s\&quot; está a solicitar a utilização de Cookies ou armazenamento local.\n\nNo Modo Lord, pode restringir este comportamento. Deseja permitir que este site armazene dados?&quot;</string>
+    <string name="title_location_warning">&quot;Pedido de Localização&quot;</string>
+    <string name="msg_location_warning">&quot;O site \&quot;%1$s\&quot; está a solicitar a sua localização atual. Deseja permitir?&quot;</string>
+    <string name="msg_no_location_permission">&quot;A aplicação não tem permissão de localização. Ative-a em \&quot;Definições -&gt; Informações da aplicação\&quot; e tente novamente.&quot;</string>
+    <string name="action_always_deny">&quot;Negar sempre&quot;</string>
+    <string name="title_restricted_sites">&quot;Permissões de Localização&quot;</string>
+    <string name="msg_restricted_sites_desc">&quot;Gerir os sites que estão definidos como \&quot;Negar sempre\&quot; para o acesso à localização.&quot;</string>
     <string name="action_remove">Remover restrição</string>
     <string name="action_close_all_tabs_in_group">Fechar todos os separadores no grupo</string>
     <string name="action_save_to_new_group">Guardar em novo grupo</string>
@@ -380,4 +375,5 @@
     <string name="default_group_name">Grupo predefinido</string>
     <string name="msg_group_closed">O grupo %1$s foi fechado</string>
     <string name="msg_load_timeout">O tempo de carregamento da página expirou, o carregamento foi interrompido</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">खोजें या पता टाइप करें</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">टैब अपडेट किया गया</string>
     <string name="msg_reader_mode_loading">रीडर मोड लोड हो रहा है...</string>
     <string name="msg_reader_mode_failed">सामग्री निकालने में विफल</string>
-    
     <string name="title_password_manager">पासवर्ड मैनेजर</string>
     <string name="title_add_password">पासवर्ड जोड़ें</string>
     <string name="title_edit_password">पासवर्ड संपादित करें</string>
@@ -176,14 +175,12 @@
     <string name="title_selected_count">चयनित: %1$d</string>
     <string name="msg_confirm_delete_history">इस इतिहास आइटम को हटाएं?</string>
     <string name="msg_confirm_delete_selected">%1$d चयनित आइटम हटाएं?</string>
-    
     <string name="title_external_app_redirect">बाहरी ऐप रीडायरेक्ट</string>
     <string name="msg_external_app_redirect">क्या आप इस लिंक को बाहरी ऐप में खोलना चाहते हैं?\n\nURL: %1$s</string>
     <string name="action_allow">अनुमति दें</string>
     <string name="action_deny">अस्वीकार करें</string>
     <string name="error_no_app_found">इस लिंक को संभालने के लिए कोई ऐप नहीं मिला</string>
     <string name="error_invalid_uri">अमान्य URI प्रारूप</string>
-
     <string name="label_author">लेखक</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">लाइसेंस</string>
@@ -191,7 +188,6 @@
     <string name="app_introduction">फ़ायरफ़ॉक्स इंजन पर आधारित एक आधुनिक ब्राउज़र।</string>
     <string name="label_source_code">सोर्स कोड</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">ऐप संस्करण</string>
     <string name="label_gecko_version">GeckoView संस्करण</string>
     <string name="label_sdk_version">Android SDK संस्करण</string>
@@ -199,28 +195,23 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_privacy_policy">गोपनीयता नीति</string>
     <string name="msg_privacy_policy">मनोर ब्राउज़र में आपका स्वागत है।\n\nअपने अधिकारों की रक्षा के लिए, कृपया उपयोग करने से पहले हमारी गोपनीयता नीति को ध्यान से पढ़ें।\n\n1. हम आपकी गोपनीयता को प्राथमिकता देते हैं और सहमति के बिना संवेदनशील व्यक्तिगत जानकारी एकत्र नहीं करते हैं।\n2. हम आपके बुकमार्क, इतिहास और सेटिंग्स के लिए स्थानीय स्टोरेज का उपयोग करते हैं।\n3. हम केवल डाउनलोड करने जैसी सुविधाओं के लिए आवश्यक होने पर अनुमति (स्टोरेज, अधिसूचना) का अनुरोध कर सकते हैं।\n\nकृपया ऐप का उपयोग जारी रखने के लिए सहमत हों।</string>
     <string name="action_agree">सहमत हों और जारी रखें</string>
     <string name="action_disagree">असहमत हों और बाहर निकलें</string>
-    
     <string name="title_download_settings">डाउनलोड सेटिंग्स</string>
     <string name="pref_use_system_downloader">सिस्टम डाउनलोडर का उपयोग करें</string>
     <string name="pref_use_system_downloader_desc">Android सिस्टम डाउनलोड प्रबंधक का उपयोग करें</string>
     <string name="pref_use_builtin_downloader">ब्राउज़र डाउनलोडर का उपयोग करें</string>
     <string name="pref_use_builtin_downloader_desc">ब्राउज़र के अंतर्निहित डाउनलोड प्रबंधक का उपयोग करें (अनुशंसित)</string>
-    
     <string name="title_desktop_mode">डेस्कटॉप मोड</string>
     <string name="title_mobile_mode">मोबाइल मोड</string>
     <string name="pref_desktop_mode">डेस्कटॉप साइट का अनुरोध करें</string>
     <string name="pref_desktop_mode_desc">वेबसाइटों को डेस्कटॉप संस्करण के रूप में लोड करें</string>
-    
     <string name="msg_desktop_mode_on">डेस्कटॉप मोड पर स्विच किया गया</string>
     <string name="msg_desktop_mode_off">मोबाइल मोड पर स्विच किया गया</string>
-    
     <string name="title_file_exists">फ़ाइल पहले से मौजूद है</string>
-    <string name="msg_file_exists">फ़ाइल "%1$s" पहले से मौजूद है। नई प्रति डाउनलोड करें?</string>
+    <string name="msg_file_exists">फ़ाइल &quot;%1$s&quot; पहले से मौजूद है। नई प्रति डाउनलोड करें?</string>
     <string name="action_download_new">नई प्रति डाउनलोड करें</string>
     <string name="title_cookies">कुकीज़ और साइट डेटा</string>
     <string name="msg_clear_all_cookies">सभी कुकीज़ और साइट डेटा साफ़ करें?</string>
@@ -290,7 +281,6 @@
     <string name="msg_remote_control_disconnected">रिमोट कंट्रोल डिस्कनेक्ट हो गया</string>
     <string name="msg_remote_server_started">रिमोट कंट्रोल तैयार: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">कमांड सर्वर शुरू करने में विफल</string>
-
     <string name="settings_group_ai_control">इंटेलिजेंट होस्टिंग</string>
     <string name="title_ai_remote_control">इंटेलिजेंट होस्टिंग</string>
     <string name="label_ai_server_address">सर्वर पता</string>
@@ -300,8 +290,6 @@
     <string name="msg_ai_connected">कनेक्टेड (पॉलिंग)</string>
     <string name="msg_ai_connecting">कनेक्ट करने का प्रयास (विफल)...</string>
     <string name="msg_ai_config_server_first">कृपया पहले सर्वर पता कॉन्फ़िगर करें</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">मनोर AI सहायक</string>
     <string name="ai_monitoring_current_page">वर्तमान पृष्ठ की निगरानी...</string>
     <string name="ai_monitoring_with_title">निगरानी: %1$s</string>
@@ -365,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">लॉर्ड मोड</string>
     <string name="title_normal_mode">सामान्य मोड</string>
-    <string name="msg_lord_mode_intro">\"लॉर्ड मोड\" अब सक्रिय है। इस मोड में:\n\n1. आपका ब्राउज़िंग इतिहास सहेजा नहीं जाएगा।\n2. जब वेबसाइटें कुकीज़ या स्थानीय स्टोरेज का अनुरोध करती हैं, तो एक चेतावनी दिखाई देगी, जिससे आप इसे अनुमति दे सकते हैं या अस्वीकार कर सकते हैं।\n3. आपके पास अपने डेटा पर पूर्ण नियंत्रण है।</string>
+    <string name="msg_lord_mode_intro">\&quot;लॉर्ड मोड\&quot; अब सक्रिय है। इस मोड में:\n\n1. आपका ब्राउज़िंग इतिहास सहेजा नहीं जाएगा।\n2. जब वेबसाइटें कुकीज़ या स्थानीय स्टोरेज का अनुरोध करती हैं, तो एक चेतावनी दिखाई देगी, जिससे आप इसे अनुमति दे सकते हैं या अस्वीकार कर सकते हैं।\n3. आपके पास अपने डेटा पर पूर्ण नियंत्रण है।</string>
     <string name="title_cookie_warning">कुकीज़/स्टोरेज अनुरोध</string>
-    <string name="msg_cookie_warning">वेबसाइट \"%1$s\" कुकीज़ या स्थानीय स्टोरेज का उपयोग करने का अनुरोध कर रही है।\n\nलॉर्ड मोड में, आप इस व्यवहार को प्रतिबंधित कर सकते हैं। क्या आप इस वेबसाइट को डेटा स्टोर करने की अनुमति देना चाहते हैं?</string>
+    <string name="msg_cookie_warning">वेबसाइट \&quot;%1$s\&quot; कुकीज़ या स्थानीय स्टोरेज का उपयोग करने का अनुरोध कर रही है।\n\nलॉर्ड मोड में, आप इस व्यवहार को प्रतिबंधित कर सकते हैं। क्या आप इस वेबसाइट को डेटा स्टोर करने की अनुमति देना चाहते हैं?</string>
     <string name="title_location_warning">स्थान अनुरोध</string>
-    <string name="msg_location_warning">वेबसाइट \"%1$s\" आपके वर्तमान स्थान का अनुरोध कर रही है। क्या आप इसकी अनुमति देना चाहते हैं?</string>
-    <string name="msg_no_location_permission">ऐप को स्थान अनुमति नहीं दी गई है। कृपया इसे \"सेटिंग -&gt; ऐप जानकारी\" में सक्षम करें और पुन: प्रयास करें।</string>
+    <string name="msg_location_warning">वेबसाइट \&quot;%1$s\&quot; आपके वर्तमान स्थान का अनुरोध कर रही है। क्या आप इसकी अनुमति देना चाहते हैं?</string>
+    <string name="msg_no_location_permission">ऐप को स्थान अनुमति नहीं दी गई है। कृपया इसे \&quot;सेटिंग -&gt; ऐप जानकारी\&quot; में सक्षम करें और पुन: प्रयास करें।</string>
     <string name="action_always_deny">हमेशा अस्वीकार करें</string>
     <string name="title_restricted_sites">स्थान अनुमतियाँ</string>
-    <string name="msg_restricted_sites_desc">उन साइटों को प्रबंधित करें जिन्हें स्थान पहुंच के लिए "हमेशा अस्वीकार करें" पर सेट किया गया है।</string>
+    <string name="msg_restricted_sites_desc">उन साइटों को प्रबंधित करें जिन्हें स्थान पहुंच के लिए &quot;हमेशा अस्वीकार करें&quot; पर सेट किया गया है।</string>
     <string name="action_remove">प्रतिबंध हटाएँ</string>
     <string name="action_close_all_tabs_in_group">समूह के सभी टैब बंद करें</string>
     <string name="action_save_to_new_group">नए समूह में सहेजें</string>
@@ -389,4 +375,5 @@
     <string name="default_group_name">डिफ़ॉल्ट समूह</string>
     <string name="msg_group_closed">समूह %1$s बंद कर दिया गया है</string>
     <string name="msg_load_timeout">पृष्ठ लोड होने का समय समाप्त, लोड होना बंद हो गया</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

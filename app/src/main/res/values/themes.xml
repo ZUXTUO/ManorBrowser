@@ -1,4 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <style name="Theme.ManorBrowser" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -32,33 +33,33 @@
         <item name="buttonBarNegativeButtonStyle">@style/DialogNegativeButton</item>
         <item name="buttonBarNeutralButtonStyle">@style/DialogNeutralButton</item>
     </style>
-    
+
     <style name="DialogCorners">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
-    
+
     <style name="DialogTitleText" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>
-    
+
     <style name="DialogBodyText" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:lineSpacingExtra">4dp</item>
     </style>
-    
+
     <style name="DialogPositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/purple_500</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="DialogNegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/text_secondary</item>
     </style>
-    
+
     <style name="DialogNeutralButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/text_secondary</item>
     </style>

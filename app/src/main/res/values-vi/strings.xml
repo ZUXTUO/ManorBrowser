@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Tìm kiếm hoặc nhập địa chỉ</string>
@@ -146,7 +146,6 @@
     <string name="msg_tab_updated">Tab đã được cập nhật</string>
     <string name="msg_reader_mode_loading">Đang tải chế độ đọc...</string>
     <string name="msg_reader_mode_failed">Trích xuất nội dung thất bại</string>
-    
     <string name="title_password_manager">Quản lý mật khẩu</string>
     <string name="title_add_password">Thêm mật khẩu</string>
     <string name="title_edit_password">Sửa mật khẩu</string>
@@ -178,14 +177,12 @@
     <string name="title_selected_count">Đã chọn: %1$d</string>
     <string name="msg_confirm_delete_history">Xóa mục lịch sử này?</string>
     <string name="msg_confirm_delete_selected">Xóa %1$d mục đã chọn?</string>
-
     <string name="title_external_app_redirect">Chuyển hướng ứng dụng bên ngoài</string>
     <string name="msg_external_app_redirect">Bạn có muốn mở liên kết này trong ứng dụng bên ngoài không?\n\nURL: %1$s</string>
     <string name="action_allow">Cho phép</string>
     <string name="action_deny">Từ chối</string>
     <string name="error_no_app_found">Không tìm thấy ứng dụng nào để xử lý liên kết này</string>
     <string name="error_invalid_uri">Định dạng URI không hợp lệ</string>
-
     <string name="label_author">Tác giả</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Giấy phép</string>
@@ -193,7 +190,6 @@
     <string name="app_introduction">Trình duyệt hiện đại dựa trên nhân Firefox.</string>
     <string name="label_source_code">Mã nguồn</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">Phiên bản ứng dụng</string>
     <string name="label_gecko_version">Phiên bản GeckoView</string>
     <string name="label_sdk_version">Phiên bản Android SDK</string>
@@ -201,28 +197,23 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_privacy_policy">Chính sách bảo mật</string>
     <string name="msg_privacy_policy">Chào mừng bạn đến với Manor Browser.\n\nĐể bảo vệ quyền lợi của bạn, vui lòng đọc kỹ Chính sách Bảo mật của chúng tôi trước khi sử dụng.\n\n1. Chúng tôi ưu tiên quyền riêng tư của bạn và không thu thập thông tin cá nhân nhạy cảm khi chưa được sự đồng ý.\n2. Chúng tôi sử dụng bộ nhớ cục bộ cho dấu trang, lịch sử và cài đặt của bạn.\n3. Chúng tôi chỉ yêu cầu quyền (Bộ nhớ, Thông báo) khi cần thiết cho các tính năng như tải xuống.\n\nVui lòng đồng ý để tiếp tục sử dụng ứng dụng.</string>
     <string name="action_agree">Đồng ý và Tiếp tục</string>
     <string name="action_disagree">Từ chối và Thoát</string>
-    
     <string name="title_download_settings">Cài đặt tải xuống</string>
     <string name="pref_use_system_downloader">Dùng trình tải xuống hệ thống</string>
     <string name="pref_use_system_downloader_desc">Dùng trình quản lý tải xuống của hệ thống Android</string>
     <string name="pref_use_builtin_downloader">Dùng trình tải xuống trình duyệt</string>
     <string name="pref_use_builtin_downloader_desc">Dùng trình quản lý tải xuống tích hợp của trình duyệt (Khuyến nghị)</string>
-    
     <string name="title_desktop_mode">Chế độ máy tính</string>
     <string name="title_mobile_mode">Chế độ di động</string>
     <string name="pref_desktop_mode">Yêu cầu trang web cho máy tính</string>
     <string name="pref_desktop_mode_desc">Tải trang web dưới dạng phiên bản máy tính</string>
-    
     <string name="msg_desktop_mode_on">Đã chuyển sang Chế độ máy tính</string>
     <string name="msg_desktop_mode_off">Đã chuyển sang Chế độ di động</string>
-    
     <string name="title_file_exists">Tệp đã tồn tại</string>
-    <string name="msg_file_exists">Tệp "%1$s" đã tồn tại. Tải xuống bản sao mới?</string>
+    <string name="msg_file_exists">Tệp &quot;%1$s&quot; đã tồn tại. Tải xuống bản sao mới?</string>
     <string name="action_download_new">Tải xuống bản sao mới</string>
     <string name="title_cookies">Cookie và dữ liệu trang web</string>
     <string name="msg_clear_all_cookies">Xóa tất cả cookie và dữ liệu trang web?</string>
@@ -290,7 +281,6 @@
     <string name="msg_remote_control_disconnected">Đã ngắt kết nối điều khiển từ xa</string>
     <string name="msg_remote_server_started">Điều khiển từ xa sẵn sàng: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Không thể khởi động máy chủ lệnh</string>
-
     <string name="settings_group_ai_control">Lưu trữ Thông minh</string>
     <string name="title_ai_remote_control">Lưu trữ Thông minh</string>
     <string name="label_ai_server_address">Địa chỉ máy chủ</string>
@@ -300,8 +290,6 @@
     <string name="msg_ai_connected">Đã kết nối (Đang thăm dò)</string>
     <string name="msg_ai_connecting">Đang thử kết nối (Thất bại)...</string>
     <string name="msg_ai_config_server_first">Vui lòng cấu hình địa chỉ máy chủ trước</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Trợ lý AI Manor</string>
     <string name="ai_monitoring_current_page">Đang giám sát trang hiện tại...</string>
     <string name="ai_monitoring_with_title">Giám sát: %1$s</string>
@@ -365,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Chế độ Chúa tể</string>
     <string name="title_normal_mode">Chế độ Thường</string>
-    <string name="msg_lord_mode_intro">\"Chế độ Chúa tể\" hiện đã được kích hoạt. Trong chế độ này:\n\n1. Lịch sử duyệt web của bạn sẽ không được lưu lại.\n2. Khi các trang web yêu cầu Cookie hoặc bộ nhớ cục bộ, một cảnh báo sẽ xuất hiện, cho phép bạn chấp nhận hoặc từ chối.\n3. Bạn có quyền kiểm soát tuyệt đối đối với dữ liệu của mình.</string>
+    <string name="msg_lord_mode_intro">\&quot;Chế độ Chúa tể\&quot; hiện đã được kích hoạt. Trong chế độ này:\n\n1. Lịch sử duyệt web của bạn sẽ không được lưu lại.\n2. Khi các trang web yêu cầu Cookie hoặc bộ nhớ cục bộ, một cảnh báo sẽ xuất hiện, cho phép bạn chấp nhận hoặc từ chối.\n3. Bạn có quyền kiểm soát tuyệt đối đối với dữ liệu của mình.</string>
     <string name="title_cookie_warning">Yêu cầu Cookie/Bộ nhớ</string>
-    <string name="msg_cookie_warning">Trang web \"%1$s\" đang yêu cầu sử dụng Cookie hoặc bộ nhớ cục bộ.\n\nTrong Chế độ Chúa tể, bạn có thể hạn chế hành vi này. Bạn có muốn cho phép trang web này lưu trữ dữ liệu không?</string>
+    <string name="msg_cookie_warning">Trang web \&quot;%1$s\&quot; đang yêu cầu sử dụng Cookie hoặc bộ nhớ cục bộ.\n\nTrong Chế độ Chúa tể, bạn có thể hạn chế hành vi này. Bạn có muốn cho phép trang web này lưu trữ dữ liệu không?</string>
     <string name="title_location_warning">Yêu cầu Vị trí</string>
-    <string name="msg_location_warning">Trang web \"%1$s\" đang yêu cầu vị trí hiện tại của bạn. Bạn có muốn cho phép không?</string>
-    <string name="msg_no_location_permission">Ứng dụng chưa được cấp quyền vị trí. Vui lòng bật nó trong \"Cài đặt -&gt; Thông tin ứng dụng\" và thử lại.</string>
+    <string name="msg_location_warning">Trang web \&quot;%1$s\&quot; đang yêu cầu vị trí hiện tại của bạn. Bạn có muốn cho phép không?</string>
+    <string name="msg_no_location_permission">Ứng dụng chưa được cấp quyền vị trí. Vui lòng bật nó trong \&quot;Cài đặt -&gt; Thông tin ứng dụng\&quot; và thử lại.</string>
     <string name="action_always_deny">Luôn từ chối</string>
     <string name="title_restricted_sites">Quyền Vị trí</string>
-    <string name="msg_restricted_sites_desc">Quản lý các trang web được đặt thành \"Luôn từ chối\" khi truy cập vị trí.</string>
+    <string name="msg_restricted_sites_desc">Quản lý các trang web được đặt thành \&quot;Luôn từ chối\&quot; khi truy cập vị trí.</string>
     <string name="action_remove">Gỡ bỏ hạn chế</string>
     <string name="action_close_all_tabs_in_group">Đóng tất cả các tab trong nhóm</string>
     <string name="action_save_to_new_group">Lưu vào nhóm mới</string>
@@ -389,4 +375,5 @@
     <string name="default_group_name">Nhóm mặc định</string>
     <string name="msg_group_closed">Nhóm %1$s đã đóng</string>
     <string name="msg_load_timeout">Hết thời gian tải trang, đã dừng tải</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>

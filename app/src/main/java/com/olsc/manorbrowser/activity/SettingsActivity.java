@@ -496,6 +496,7 @@ public class SettingsActivity extends AppCompatActivity {
         else if ("id".equals(currentLang)) checkedItem = 17;
         else if ("pl".equals(currentLang)) checkedItem = 18;
         else if ("nl".equals(currentLang)) checkedItem = 19;
+        else if ("ryu".equals(currentLang)) checkedItem = 20;
 
         String[] languages = {
             getString(R.string.language_system),
@@ -517,9 +518,10 @@ public class SettingsActivity extends AppCompatActivity {
             getString(R.string.language_vi),
             getString(R.string.language_id),
             getString(R.string.language_pl),
-            getString(R.string.language_nl)
+            getString(R.string.language_nl),
+            getString(R.string.language_ryu)
         };
-        String[] values = {"", "en", "zh", "zh-TW", "ko", "ru", "ja", "ko-KP", "es", "de", "fr", "it", "pt", "ar", "hi", "tr", "vi", "id", "pl", "nl"};
+        String[] values = {"", "en", "zh", "zh-TW", "ko", "ru", "ja", "ko-KP", "es", "de", "fr", "it", "pt", "ar", "hi", "tr", "vi", "id", "pl", "nl", "ryu"};
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.title_language)
                 .setSingleChoiceItems(languages, checkedItem, (dialog, which) -> {
@@ -567,6 +569,7 @@ public class SettingsActivity extends AppCompatActivity {
         else if ("id".equals(currentLang)) display = getString(R.string.language_id);
         else if ("pl".equals(currentLang)) display = getString(R.string.language_pl);
         else if ("nl".equals(currentLang)) display = getString(R.string.language_nl);
+        else if ("ryu".equals(currentLang)) display = getString(R.string.language_ryu);
         else display = getString(R.string.language_system);
         
         tvLanguage.setText(display);

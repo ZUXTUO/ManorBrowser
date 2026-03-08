@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Arama yapın veya adres girin</string>
@@ -144,7 +144,6 @@
     <string name="msg_tab_updated">Sekme güncellendi</string>
     <string name="msg_reader_mode_loading">Okuyucu modu yükleniyor...</string>
     <string name="msg_reader_mode_failed">İçerik çıkarılamadı</string>
-    
     <string name="title_password_manager">Şifre Yöneticisi</string>
     <string name="title_add_password">Şifre Ekle</string>
     <string name="title_edit_password">Şifreyi Düzenle</string>
@@ -176,14 +175,12 @@
     <string name="title_selected_count">Seçildi: %1$d</string>
     <string name="msg_confirm_delete_history">Bu geçmiş öğesi silinsin mi?</string>
     <string name="msg_confirm_delete_selected">%1$d seçili öğe silinsin mi?</string>
-
     <string name="title_external_app_redirect">Harici Uygulama Yönlendirmesi</string>
     <string name="msg_external_app_redirect">Bu bağlantıyı harici bir uygulamada açmak ister misiniz?\n\nURL: %1$s</string>
     <string name="action_allow">İzin Ver</string>
     <string name="action_deny">Reddet</string>
     <string name="error_no_app_found">Bu bağlantıyı işlemek için uygulama bulunamadı</string>
     <string name="error_invalid_uri">Geçersiz URI formatı</string>
-
     <string name="label_author">Yazar</string>
     <string name="author_name">Olsc</string>
     <string name="label_license">Lisans</string>
@@ -191,7 +188,6 @@
     <string name="app_introduction">Firefox motoruna dayalı modern bir tarayıcı.</string>
     <string name="label_source_code">Kaynak Kodu</string>
     <string name="source_code_url">https://github.com/Olsc/ManorBrowser</string>
-    
     <string name="label_app_version">Uygulama Versiyonu</string>
     <string name="label_gecko_version">GeckoView Versiyonu</string>
     <string name="label_sdk_version">Android SDK Versiyonu</string>
@@ -199,28 +195,23 @@
     <string name="label_gecko_version_value">GeckoView: %1$s</string>
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
-    
     <string name="title_privacy_policy">Gizlilik Politikası</string>
     <string name="msg_privacy_policy">Manor Browser\'a hoş geldiniz.\n\nHaklarınızı korumak için lütfen kullanmadan önce Gizlilik Politikamızı dikkatlice okuyun.\n\n1. Gizliliğinize öncelik veriyoruz ve onayınız olmadan hassas kişisel bilgileri toplamıyoruz.\n2. Yer işaretleriniz, geçmişiniz ve ayarlarınız için yerel depolama kullanıyoruz.\n3. Sadece indirme gibi özellikler için gerekli olduğunda izin (Depolama, Bildirimler) isteyebiliriz.\n\nLütfen uygulamayı kullanmaya devam etmek için kabul edin.</string>
     <string name="action_agree">Kabul Et ve Devam Et</string>
     <string name="action_disagree">Kabul Etme ve Çık</string>
-    
     <string name="title_download_settings">İndirme Ayarları</string>
     <string name="pref_use_system_downloader">Sistem İndiricisini Kullan</string>
     <string name="pref_use_system_downloader_desc">Android sistem indirme yöneticisini kullan</string>
     <string name="pref_use_builtin_downloader">Tarayıcı İndiricisini Kullan</string>
     <string name="pref_use_builtin_downloader_desc">Tarayıcının yerleşik indirme yöneticisini kullan (Önerilen)</string>
-    
     <string name="title_desktop_mode">Masaüstü Modu</string>
     <string name="title_mobile_mode">Mobil Mod</string>
     <string name="pref_desktop_mode">Masaüstü Sitesi İste</string>
     <string name="pref_desktop_mode_desc">Web sitelerini masaüstü sürümü olarak yükle</string>
-    
     <string name="msg_desktop_mode_on">Masaüstü moduna geçildi</string>
     <string name="msg_desktop_mode_off">Mobil moda geçildi</string>
-    
     <string name="title_file_exists">Dosya Zaten Mevcut</string>
-    <string name="msg_file_exists">"%1$s" dosyası zaten mevcut. Yeni bir kopya indirilsin mi?</string>
+    <string name="msg_file_exists">&quot;%1$s&quot; dosyası zaten mevcut. Yeni bir kopya indirilsin mi?</string>
     <string name="action_download_new">Yeni Kopyayı İndir</string>
     <string name="title_cookies">Çerezler ve Site Verileri</string>
     <string name="msg_clear_all_cookies">Tüm çerezleri ve site verilerini temizle?</string>
@@ -290,7 +281,6 @@
     <string name="msg_remote_control_disconnected">Uzaktan kontrol bağlantısı kesildi</string>
     <string name="msg_remote_server_started">Uzaktan kontrol hazır: %1$s:%2$d</string>
     <string name="msg_remote_server_failed">Komut sunucusu başlatılamadı</string>
-
     <string name="settings_group_ai_control">Akıllı Hosting</string>
     <string name="title_ai_remote_control">Akıllı Hosting</string>
     <string name="label_ai_server_address">Sunucu Adresi</string>
@@ -300,8 +290,6 @@
     <string name="msg_ai_connected">Bağlı (Sorgulama)</string>
     <string name="msg_ai_connecting">Bağlanmaya çalışılıyor (Başarısız)...</string>
     <string name="msg_ai_config_server_first">Lütfen önce sunucu adresini yapılandırın</string>
-
-    <!-- AI Overlay / AI Assistant -->
     <string name="ai_assistant_name">Manor AI Asistanı</string>
     <string name="ai_monitoring_current_page">Mevcut sayfa izleniyor...</string>
     <string name="ai_monitoring_with_title">İzleme: %1$s</string>
@@ -365,19 +353,17 @@
     <string name="engine_seznam">Seznam</string>
     <string name="engine_mojeek">Mojeek</string>
     <string name="engine_metager">MetaGer</string>
-    
-    <!-- Lord Mode -->
     <string name="title_lord_mode">Lord Modu</string>
     <string name="title_normal_mode">Normal Mod</string>
-    <string name="msg_lord_mode_intro">"\"Lord Modu\" şu anda aktif. Bu modda:\n\n1. Tarama geçmişiniz kaydedilmeyecektir.\n2. Web siteleri Tanımlama Bilgileri (Cookie) veya yerel depolama istediğinde, izin vermenize veya reddetmenize olanak tanıyan bir uyarı görünecektir.\n3. Verileriniz üzerinde tam kontrole sahipsiniz."</string>
-    <string name="title_cookie_warning">"Tanımlama Bilgisi/Depolama İsteği"</string>
-    <string name="msg_cookie_warning">"\"%1$s\" web sitesi Tanımlama Bilgileri veya yerel depolama kullanmak istiyor.\n\nLord Modu'nda bu davranışı kısıtlayabilirsiniz. Bu web sitesinin veri depolamasına izin vermek istiyor musunuz?"</string>
-    <string name="title_location_warning">"Konum İsteği"</string>
-    <string name="msg_location_warning">"\"%1$s\" web sitesi mevcut konumunuzu istiyor. İzin vermek istiyor musunuz?"</string>
-    <string name="msg_no_location_permission">"Uygulamaya konum izni verilmedi. Lütfen bunu \"Ayarlar -&gt; Uygulama bilgisi\" kısmından etkinleştirin ve tekrar deneyin."</string>
-    <string name="action_always_deny">"Her Zaman Reddet"</string>
-    <string name="title_restricted_sites">"Konum İzinleri"</string>
-    <string name="msg_restricted_sites_desc">"Konum erişimi için \"Her Zaman Reddet\" olarak ayarlanan siteleri yönetin."</string>
+    <string name="msg_lord_mode_intro">&quot;\&quot;Lord Modu\&quot; şu anda aktif. Bu modda:\n\n1. Tarama geçmişiniz kaydedilmeyecektir.\n2. Web siteleri Tanımlama Bilgileri (Cookie) veya yerel depolama istediğinde, izin vermenize veya reddetmenize olanak tanıyan bir uyarı görünecektir.\n3. Verileriniz üzerinde tam kontrole sahipsiniz.&quot;</string>
+    <string name="title_cookie_warning">&quot;Tanımlama Bilgisi/Depolama İsteği&quot;</string>
+    <string name="msg_cookie_warning">&quot;\&quot;%1$s\&quot; web sitesi Tanımlama Bilgileri veya yerel depolama kullanmak istiyor.\n\nLord Modu'nda bu davranışı kısıtlayabilirsiniz. Bu web sitesinin veri depolamasına izin vermek istiyor musunuz?&quot;</string>
+    <string name="title_location_warning">&quot;Konum İsteği&quot;</string>
+    <string name="msg_location_warning">&quot;\&quot;%1$s\&quot; web sitesi mevcut konumunuzu istiyor. İzin vermek istiyor musunuz?&quot;</string>
+    <string name="msg_no_location_permission">&quot;Uygulamaya konum izni verilmedi. Lütfen bunu \&quot;Ayarlar -&gt; Uygulama bilgisi\&quot; kısmından etkinleştirin ve tekrar deneyin.&quot;</string>
+    <string name="action_always_deny">&quot;Her Zaman Reddet&quot;</string>
+    <string name="title_restricted_sites">&quot;Konum İzinleri&quot;</string>
+    <string name="msg_restricted_sites_desc">&quot;Konum erişimi için \&quot;Her Zaman Reddet\&quot; olarak ayarlanan siteleri yönetin.&quot;</string>
     <string name="action_remove">Kısıtlamayı Kaldır</string>
     <string name="action_close_all_tabs_in_group">Gruptaki tüm sekmeleri kapat</string>
     <string name="action_save_to_new_group">Yeni gruba kaydet</string>
@@ -389,4 +375,5 @@
     <string name="default_group_name">Varsayılan Grup</string>
     <string name="msg_group_closed">%1$s grubu kapatıldı</string>
     <string name="msg_load_timeout">Sayfa yükleme zaman aşımı, yükleme durduruldu</string>
+    <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
 </resources>
