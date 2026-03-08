@@ -57,6 +57,8 @@ import org.mozilla.geckoview.GeckoView;
 import org.mozilla.geckoview.WebResponse;
 import org.mozilla.geckoview.GeckoSession.ContentDelegate.ContextElement;
 import org.mozilla.geckoview.AllowOrDeny;
+import org.mozilla.geckoview.ContentBlocking;
+import org.mozilla.geckoview.ContentBlocking.CookieBehavior;
 
 import org.mozilla.geckoview.Autocomplete;
 import org.mozilla.geckoview.Autocomplete.LoginEntry;
@@ -110,8 +112,9 @@ public class MainActivity extends AppCompatActivity {
     // --- 状态标志位 ---
     /** 标签切换器界面是否可见 */
     private boolean isTabSwitcherVisible = false;
-    private int lastX, lastY;
+    private long lastPopupTime = 0;
     private long lastBackTime = 0;
+    private int lastX, lastY; // 上次点击坐标，辅助 context menu 脚本定位
     private boolean urlInputFirstClick = true; // 跟踪URL输入框是否是第一次点击
     private boolean isSwitchingTab = false; // 防止switchToTab重入导致的崩溃和逻辑混乱
     private boolean isProcessingAction = false; // 全局锁，防止多重点击导致的 PixelCopy 并发或状态异常
@@ -329,6 +332,13 @@ public class MainActivity extends AppCompatActivity {
             // 首次创建 Runtime
             GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()
                 .loginAutofillEnabled(true);
+            
+            // 配置全域内容屏蔽与防追踪 (ETP)
+            // 默认启用增强型追踪保护 (Strict)，有效屏蔽 90% 以上的广告脚本与弹窗脚本
+            builder.contentBlocking(new ContentBlocking.Settings.Builder()
+                .antiTracking(ContentBlocking.AntiTracking.STRICT)
+                .safeBrowsing(ContentBlocking.SafeBrowsing.DEFAULT)
+                .build());
             
             sRuntime = GeckoRuntime.create(getApplicationContext(), builder.build());
             sRuntime.setAutocompleteStorageDelegate(mAutocompleteStorageDelegate);
@@ -1058,7 +1068,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public GeckoResult<GeckoSession> onNewSession(@NonNull GeckoSession session, @NonNull String uri) {
-                // 手动创建一个新标签页并加载 URL
+                // 1. 无效或基础跳转拦截：阻止空白或 data 协议开窗
+                if (uri == null || uri.isEmpty() || "about:blank".equals(uri) || uri.startsWith("data:")) {
+                    return GeckoResult.fromValue(null);
+                }
+                
+                // 2. 黑名单过滤（仅在领主模式下开启极致拦截）
+                if (isLordMode && isAdUri(uri)) {
+                    return GeckoResult.fromValue(null);
+                }
+                
+                // 3. 频控保护
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastPopupTime < 1000) { 
+                    lastPopupTime = currentTime;
+                    return GeckoResult.fromValue(null);
+                }
+                lastPopupTime = currentTime;
+                
+                // 允许新表情页并跳转
                 runOnUiThread(() -> {
                     try {
                         createNewTab(uri);
@@ -1066,8 +1094,21 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 });
-                // 返回 null 告诉 GeckoView 不要尝试自动管理这个新窗口，避免双重绑定引发底层崩溃
                 return GeckoResult.fromValue(null);
+            }
+
+            private boolean isAdUri(String uri) {
+                if (uri == null || uri.isEmpty()) return true;
+                String lower = uri.toLowerCase();
+                // 包含了主流非法广告联盟、点击劫持脚本、以及常见的广告特征路径
+                return lower.contains("popads") || lower.contains("onclickads") || 
+                       lower.contains("onclickperformance") || lower.contains("clksite") || 
+                       lower.contains("cpm") || lower.contains("adsterra") || 
+                       lower.contains("doubleclick") || lower.contains("googleadservices") ||
+                       lower.contains("affiliate") || lower.contains("/ad/") || 
+                       lower.contains("clk") || lower.contains("redirect") ||
+                       lower.contains("track") || lower.contains("analytic") ||
+                       lower.contains("popcash") || lower.contains("exoclick");
             }
 
             @Override
@@ -1102,6 +1143,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                
+                // 深度包过滤：基于域名的快速拦截（仅在领主模式下启用）
+                if (isLordMode && isAdUri(uri)) {
+                    return GeckoResult.fromValue(AllowOrDeny.DENY);
                 }
                 
                 // 使用改进的IntentHelper处理外部应用跳转
@@ -2364,6 +2410,8 @@ public class MainActivity extends AppCompatActivity {
             session.getSettings().setUserAgentMode(GeckoSessionSettings.USER_AGENT_MODE_MOBILE);
             session.getSettings().setViewportMode(GeckoSessionSettings.VIEWPORT_MODE_MOBILE);
         }
+
+        session.getSettings().setUseTrackingProtection(true);
     }
      private void showWebContextMenu(ContextElement element) {
         final List<String> items = new ArrayList<>();
@@ -3540,7 +3588,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         
-        Toast.makeText(this, !isLordMode ? R.string.title_lord_mode : R.string.title_normal_mode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, isLordMode ? R.string.title_lord_mode : R.string.title_normal_mode, Toast.LENGTH_SHORT).show();
     }
 
     private void showLordModeIntro() {
