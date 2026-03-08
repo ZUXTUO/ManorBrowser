@@ -1,0 +1,77 @@
+"Manor Browser User Privacy Agreement"
+
+This agreement is jointly concluded by you and Olsc (the browser developer). This agreement has contractual effect. Please ensure you read and fully understand all terms, especially those exempting or limiting Olsc's liability ("Exemption Clauses"), and terms restricting user rights ("Restriction Clauses"), etc.
+
+In accordance with the "Cybersecurity Law of the People's Republic of China," "Information Security Technology - Personal Information Security Specification" (GB/T 35273-2020), "Personal Information Protection Law," and other relevant laws, regulations, and technical specifications, this policy is formulated to protect the privacy rights of browser users and standardize the use of users' personal information.
+
+Please read all content below carefully. If the user does not agree with any content of this policy, please do not use the services provided by Manor Browser. By downloading, installing, or using this software, users indicate that they have reached an agreement with the independent developer Olsc (hereinafter referred to as "Olsc") and voluntarily accept all contents of this policy. Hereafter, users may not use the failure to read this policy as any form of defense.
+
+If you are under 18 years of age, please read this agreement accompanied by a legal guardian, and pay special attention to the minor use clauses. If you are a legal guardian of a minor, please guide the child to use the internet healthily.
+
+Respecting user privacy is a basic principle for Olsc.
+
+### 1. Open Source and Transparency Statement
+1. **Open Source**: Manor Browser is open-source software, with its source code hosted on GitHub. You can review the code at any time to audit privacy and security practices.
+2. **Community Driven**: We encourage community participation. If you find any security vulnerabilities or privacy concerns, please provide feedback through Issues or Pull Requests.
+3. **Distribution Versions**: This agreement primarily applies to official releases. If you are using a third-party distribution based on this source code, its privacy practices may differ.
+
+---
+
+### 2. Privacy Information and Permission Usage
+We understand the importance of personal information to you and will do our best to protect your personal information security. We do not collect your browsing history, bookmarks, passwords, or other personal data. To implement core functions and improve user experience, the browser may request or use certain device permissions. Here is an explanation of the purposes of relevant permissions and the information that may be collected:
+
+1. **Storage Permission**: Used to save downloaded files, web cache, and your local configuration information.
+2. **Network Permission**: Used to load webpages, update components, and communicate with the remote AI server you autonomously configure.
+3. **Location Permission**: The browser does not obtain your location by default. Geographic location is only provided when a website requests it and you explicitly authorize it.
+4. **Camera/Microphone**: Requested only when you actively use the QR code scanning or web audio/video calling features, and will not be accessed in the background.
+5. **Device Information and Diagnostic Data**: When the browser crashes or technical errors occur, we may collect necessary device information (such as device model, system version, application version number) and error logs to identify and fix problems. This information is only used to improve browser stability and will not be associated with your personal identity. If you submit a crash report through official channels, the processing of relevant data will follow this agreement.
+6. **Remote AI Connection**: If you configure a custom AI server, data will be sent to that server. Olsc does not access such data; please refer to the privacy policy of your chosen AI service provider.
+
+---
+
+### 3. Third-Party Statement
+1. **Rendering Engine**: This application uses Mozilla's GeckoView engine. Please refer to its privacy policy at: https://www.mozilla.org/privacy/
+2. **Browser Extensions**: Supported third-party extensions are the responsibility of their respective developers.
+3. **Website Services**: The websites you visit may collect your IP or Cookies, which is the behavior of the website operators.
+
+---
+
+### 4. Disclaimers
+1. **Open Source and Usage Restrictions**: The source code of this application is released under the Apache License 2.0. You are free to use, modify, and distribute the code within the scope permitted by this license. However, for the compiled official versions directly provided by the developer (Olsc), you may not reverse engineer, decompile, disassemble, or directly modify and redistribute the official installation packages based on them without written authorization from the developer, in order to protect the integrity and security of the software.
+2. **Responsibility for Browsing Content**: Manor Browser only provides a web browsing tool for users. Any website content accessed by users through the browser (including but not limited to text, images, videos, links, advertisements, etc.) is provided by third-party websites and does not represent Olsc's position or view. Users should judge the legality and safety of the content themselves and bear corresponding risks. Olsc is not responsible for the accuracy, completeness, or legality of third-party content.
+3. **User Behavior Responsibility**: Users shall not use Manor Browser to engage in any activities that violate laws and regulations, including but not limited to:
+   - Spreading illegal information, infringing on others' intellectual property or privacy;
+   - Conducting network attacks, maliciously crawling data, or sending spam emails;
+   - Engaging in any acts that endanger national security, honor, and interests;
+   - Inciting ethnic hatred or discrimination, and undermining national unity.
+   Any legal disputes resulting from user behavior shall be borne by the user.
+4. **Minor Guardianship Responsibility**: According to the Law on the Protection of Minors, guardians should strengthen guidance and supervision of minors' internet use. Olsc cannot actively monitor user behavior. Olsc is not responsible if a minor becomes addicted to the internet or is exposed to harmful information due to improper supervision by guardians.
+5. **Third-Party Service Disclaimer**:
+   - **Custom AI Server**: If you use a third-party remote AI server, the data transmission and processing between you and the third-party service provider are your own responsibility. Olsc does not control or review the content and privacy practices of third-party AI services, and any resulting issues shall be resolved between you and the service provider.
+   - **Browser Extensions**: Manor Browser supports Firefox extensions (Extensions), which are provided by third-party developers. Their data collection behavior follows the extensions' own privacy policies, and Olsc is not responsible for them.
+6. **Force Majeure and External Factors**: Olsc is exempt from liability within the scope permitted by laws and regulations for user data leakage, loss, or service interruption caused by force majeure such as hacker attacks, computer viruses, telecommunications failures, government controls, or natural disasters.
+
+---
+
+### 5. Restriction Clauses
+1. **Protection of Minors**: Manor Browser is not designed for a specific age group, but it is recommended that minors use it under the guidance of a guardian. Guardians should reasonably set usage time to avoid addiction.
+2. **Regional Compliance**: Users should comply with the laws and regulations of their country/region when using this browser. If your behavior violates local laws, you should bear the responsibility independently.
+3. **Prohibition of Illegal Uses**: Users shall not use this browser to engage in any behavior that violates laws and regulations. If we discover or receive reports confirming obvious illegal behavior by a user, we reserve the right to suspend or terminate services.
+
+---
+
+### 6. Policy Changes
+We may revise this privacy agreement from time to time. If a material change occurs, we will notify you before the change takes effect through browser update notifications or official website announcements. Your continued use of this browser constitutes acceptance of the revised agreement. If you do not agree to the changes, please stop using this software.
+
+---
+
+### 7. Contact Us
+If you have any questions, comments, or complaints about this privacy agreement, please contact us via:
+Email: OlscStudio@outlook.com
+GitHub: https://github.com/Olsc/ManorBrowser
+
+Resist harmful information, reject malicious applications; pay attention to self-protection, beware of online fraud; use the internet reasonably, live a healthy browsing life.
+
+<br> Independent Developer: Olsc
+<br> Version: 2026.1
+<br> March 2026

@@ -196,7 +196,6 @@
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">गोपनीयता नीति</string>
-    <string name="msg_privacy_policy">मनोर ब्राउज़र में आपका स्वागत है।\n\nअपने अधिकारों की रक्षा के लिए, कृपया उपयोग करने से पहले हमारी गोपनीयता नीति को ध्यान से पढ़ें।\n\n1. हम आपकी गोपनीयता को प्राथमिकता देते हैं और सहमति के बिना संवेदनशील व्यक्तिगत जानकारी एकत्र नहीं करते हैं।\n2. हम आपके बुकमार्क, इतिहास और सेटिंग्स के लिए स्थानीय स्टोरेज का उपयोग करते हैं।\n3. हम केवल डाउनलोड करने जैसी सुविधाओं के लिए आवश्यक होने पर अनुमति (स्टोरेज, अधिसूचना) का अनुरोध कर सकते हैं।\n\nकृपया ऐप का उपयोग जारी रखने के लिए सहमत हों।</string>
     <string name="action_agree">सहमत हों और जारी रखें</string>
     <string name="action_disagree">असहमत हों और बाहर निकलें</string>
     <string name="title_download_settings">डाउनलोड सेटिंग्स</string>

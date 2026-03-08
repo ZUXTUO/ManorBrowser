@@ -88,6 +88,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.olsc.manorbrowser.utils.BrowserCommandServer;
+import java.util.Locale;
+import android.text.Spanned;
+import io.noties.markwon.Markwon;
+
 
 public class MainActivity extends AppCompatActivity {
     // --- UI 基础控件 ---
@@ -315,24 +319,80 @@ public class MainActivity extends AppCompatActivity {
      * 强制弹窗显示隐私政策，仅在首次运行或未同意时调用
      */
     private void showPrivacyDialog() {
-        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+        String fileName;
+        String lang = Locale.getDefault().getLanguage();
+        if ("zh".equals(lang)) {
+            fileName = "legal/UserPrivacyAgreement_zh.txt";
+        } else {
+            fileName = "legal/UserPrivacyAgreement_en.txt";
+        }
+
+        String markdown = readAssetFile(fileName);
+        final Markwon markwon = Markwon.create(this);
+        final Spanned spannedMarkdown = markwon.toMarkdown(markdown);
+
+        // 创建自定义布局以监听滚动
+        android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
+        android.widget.TextView textView = new android.widget.TextView(this);
+        int padding = (int) (20 * getResources().getDisplayMetrics().density);
+        textView.setPadding(padding, padding, padding, padding);
+        textView.setText(spannedMarkdown);
+        textView.setTextSize(14);
+        scrollView.addView(textView);
+
+        androidx.appcompat.app.AlertDialog dialog = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setTitle(R.string.title_privacy_policy)
-            .setMessage(R.string.msg_privacy_policy)
+            .setView(scrollView)
             .setCancelable(false)
-            .setPositiveButton(R.string.action_agree, (dialog, which) -> {
+            .setPositiveButton(R.string.action_agree, (d, which) -> {
                 setPrivacyAgreed();
                 initializeApp();
             })
-            .setNegativeButton(R.string.action_disagree, (dialog, which) -> {
+            .setNegativeButton(R.string.action_disagree, (d, which) -> {
                 finish();
             })
-            .show();
+            .create();
+
+        dialog.setOnShowListener(d -> {
+            android.widget.Button btnAgree = dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE);
+            btnAgree.setEnabled(false); // 初始禁用
+
+            scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
+                if (scrollView.getChildAt(0).getBottom() <= (scrollView.getHeight() + scrollView.getScrollY())) {
+                    btnAgree.setEnabled(true);
+                }
+            });
+            
+            // 如果内容很短不需要滚动，直接启用
+            textView.post(() -> {
+                if (scrollView.getChildAt(0).getBottom() <= scrollView.getHeight()) {
+                    btnAgree.setEnabled(true);
+                }
+            });
+        });
+
+        dialog.show();
     }
+
+    private String readAssetFile(String fileName) {
+        try (InputStream is = getAssets().open(fileName)) {
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            return new String(buffer, "UTF-8");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
     /**
      * 核心初始化流程：包括引擎启动、标签页恢复、监听器挂载
      */
     private void initializeApp() {
+        initDefaultSearchEngine();
+
         // 初始化添加标签按钮
         ImageButton btnAddTab = findViewById(R.id.btn_add_tab);
         if (btnAddTab != null) {
@@ -391,11 +451,30 @@ public class MainActivity extends AppCompatActivity {
         // 4. 初始化各种子组件
         setupListeners();
         setupSwipeRefresh();
-        requestInitialPermissions();
         
         // 初始化内置 HTTP 命令服务器
         initAiRemoteAssistant();
     }
+
+    /**
+     * 初始化默认搜索引擎：
+     * 初次启动时，由于偏好设置尚未建立，根据系统语言分配搜索引擎。
+     * 中国 (zh) 和朝鲜 (ko) 语言时默认使用百度，其他语言默认使用谷歌。
+     */
+    private void initDefaultSearchEngine() {
+        android.content.SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.contains(Config.PREF_KEY_SEARCH_ENGINE)) {
+            String lang = Locale.getDefault().getLanguage();
+            String defaultEngine;
+            if ("zh".equals(lang) || "ko".equals(lang)) {
+                defaultEngine = Config.ENGINE_BAIDU;
+            } else {
+                defaultEngine = Config.ENGINE_GOOGLE;
+            }
+            prefs.edit().putString(Config.PREF_KEY_SEARCH_ENGINE, defaultEngine).apply();
+        }
+    }
+
     
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -1090,16 +1169,16 @@ public class MainActivity extends AppCompatActivity {
                 // 根据错误类别分发不同的错误页面
                 switch (error.category) {
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_NETWORK:
-                        return GeckoResult.fromValue("resource://android/assets/offline.html");
+                        return GeckoResult.fromValue("resource://android/assets/html/offline.html");
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_URI:
-                        return GeckoResult.fromValue("resource://android/assets/404.html");
+                        return GeckoResult.fromValue("resource://android/assets/html/404.html");
                     default:
                         // 其他错误检查是否是因为超时导致的
                         if (error.code == org.mozilla.geckoview.WebRequestError.ERROR_CONNECTION_REFUSED || 
                             error.code == org.mozilla.geckoview.WebRequestError.ERROR_NET_TIMEOUT) {
-                            return GeckoResult.fromValue("resource://android/assets/timeout.html");
+                            return GeckoResult.fromValue("resource://android/assets/html/timeout.html");
                         }
-                        return GeckoResult.fromValue("resource://android/assets/404.html");
+                        return GeckoResult.fromValue("resource://android/assets/html/404.html");
                 }
             }
 
@@ -1173,7 +1252,7 @@ public class MainActivity extends AppCompatActivity {
                         // 如果没有特殊的允许标记，则重定向到警告页面
                         if (!uri.contains("allow_onion=1")) {
                             String encodedUrl = android.net.Uri.encode(uri);
-                            String warningUrl = "resource://android/assets/warning_onion.html?url=" + encodedUrl;
+                            String warningUrl = "resource://android/assets/html/warning_onion.html?url=" + encodedUrl;
                             runOnUiThread(() -> session.loadUri(warningUrl));
                             return GeckoResult.fromValue(AllowOrDeny.DENY);
                         }

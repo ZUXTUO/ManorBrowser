@@ -198,7 +198,6 @@
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">Chính sách bảo mật</string>
-    <string name="msg_privacy_policy">Chào mừng bạn đến với Manor Browser.\n\nĐể bảo vệ quyền lợi của bạn, vui lòng đọc kỹ Chính sách Bảo mật của chúng tôi trước khi sử dụng.\n\n1. Chúng tôi ưu tiên quyền riêng tư của bạn và không thu thập thông tin cá nhân nhạy cảm khi chưa được sự đồng ý.\n2. Chúng tôi sử dụng bộ nhớ cục bộ cho dấu trang, lịch sử và cài đặt của bạn.\n3. Chúng tôi chỉ yêu cầu quyền (Bộ nhớ, Thông báo) khi cần thiết cho các tính năng như tải xuống.\n\nVui lòng đồng ý để tiếp tục sử dụng ứng dụng.</string>
     <string name="action_agree">Đồng ý và Tiếp tục</string>
     <string name="action_disagree">Từ chối và Thoát</string>
     <string name="title_download_settings">Cài đặt tải xuống</string>

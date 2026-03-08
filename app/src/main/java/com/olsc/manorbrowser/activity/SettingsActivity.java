@@ -324,7 +324,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void showSearchEngineDialog() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
+        String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_GOOGLE);
+
         
         String[] engines = {
             getString(R.string.engine_baidu), getString(R.string.engine_google),
@@ -368,7 +369,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void updateCurrentEngineText() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_BAIDU);
+        String currentEngine = prefs.getString(Config.PREF_KEY_SEARCH_ENGINE, Config.ENGINE_GOOGLE);
+
         
         String engineName = getString(R.string.engine_baidu);
         switch (currentEngine) {

@@ -197,7 +197,6 @@
     <string name="error_no_app_found">このリンクを処理できるアプリが見つかりません</string>
     <string name="error_invalid_uri">無効なURI形式です</string>
     <string name="title_privacy_policy">プライバシーポリシー</string>
-    <string name="msg_privacy_policy">Manor Browser へようこそ。\n\nお客様の権利を保護するため、ご利用前にプライバシーポリシーをよくお読みください。\n\n1. 当社はお客様のプライバシーを最優先し、同意なしに機密性の高い個人情報を収集することはありません。\n2. ブックマーク、履歴、設定の保存にはデバイスのローカルストレージを使用します。\n3. ダウンロードなどの機能に必要な場合にのみ、権限（ストレージ、通知）を要求することがあります。\n\n同意してアプリの利用を続けてください。</string>
     <string name="action_agree">同意して続行</string>
     <string name="action_disagree">同意せずに終了</string>
     <string name="title_download_settings">ダウンロード設定</string>

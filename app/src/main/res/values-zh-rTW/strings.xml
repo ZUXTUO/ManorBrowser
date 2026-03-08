@@ -196,7 +196,6 @@
     <string name="error_no_app_found">未找到可處理此連結的應用</string>
     <string name="error_invalid_uri">無效的URI格式</string>
     <string name="title_privacy_policy">隱私政策</string>
-    <string name="msg_privacy_policy">歡迎使用領域瀏覽器！\n\n為了更好地保護您的權益，請您在使用前仔細閱讀並同意《隱私政策》。\n\n1. 我們重視您的隱私，不會在未經同意的情況下收集您的個人敏感信息。\n2. 我們使用本地存儲來保存您的書籤、歷史記錄和設定。\n3. 我們僅在必要時請求權限（如存儲、通知）以提供下載等功能。\n\n請您同意並繼續使用本應用。</string>
     <string name="action_agree">同意並繼續</string>
     <string name="action_disagree">不同意並退出</string>
     <string name="title_download_settings">下載設定</string>

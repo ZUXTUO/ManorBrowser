@@ -196,7 +196,6 @@
     <string name="label_sdk_version_value">Android: %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">Gizlilik Politikası</string>
-    <string name="msg_privacy_policy">Manor Browser\'a hoş geldiniz.\n\nHaklarınızı korumak için lütfen kullanmadan önce Gizlilik Politikamızı dikkatlice okuyun.\n\n1. Gizliliğinize öncelik veriyoruz ve onayınız olmadan hassas kişisel bilgileri toplamıyoruz.\n2. Yer işaretleriniz, geçmişiniz ve ayarlarınız için yerel depolama kullanıyoruz.\n3. Sadece indirme gibi özellikler için gerekli olduğunda izin (Depolama, Bildirimler) isteyebiliriz.\n\nLütfen uygulamayı kullanmaya devam etmek için kabul edin.</string>
     <string name="action_agree">Kabul Et ve Devam Et</string>
     <string name="action_disagree">Kabul Etme ve Çık</string>
     <string name="title_download_settings">İndirme Ayarları</string>

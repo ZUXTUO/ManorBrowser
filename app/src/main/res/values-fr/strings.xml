@@ -196,7 +196,6 @@
     <string name="label_sdk_version_value">Android : %1$s</string>
     <string name="default_gecko_version">GeckoView</string>
     <string name="title_privacy_policy">Politique de confidentialité</string>
-    <string name="msg_privacy_policy">Bienvenue sur Manor Browser.\n\nPour protéger vos droits, veuillez lire attentivement notre Politique de confidentialité avant toute utilisation.\n\n1. Nous accordons la priorité à votre vie privée et ne collectons pas d\'informations personnelles sensibles sans consentement.\n2. Nous utilisons le stockage local pour vos favoris, votre historique et vos paramètres.\n3. Nous pouvons demander des autorisations (Stockage, Notifications) uniquement lorsque cela est nécessaire pour des fonctionnalités telles que le téléchargement.\n\nVeuillez accepter pour continuer à utiliser l\'application.</string>
     <string name="action_agree">Accepter et continuer</string>
     <string name="action_disagree">Refuser et quitter</string>
     <string name="title_download_settings">Paramètres de téléchargement</string>
