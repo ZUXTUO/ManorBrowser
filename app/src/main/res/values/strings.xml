@@ -256,7 +256,8 @@ URL: %1$s</string>
     <string name="dialog_title_prompt">Input</string>
     <string name="dialog_title_select">Select</string>
     <string name="action_scan_qr_code">Scan QR Code</string>
-    <string name="msg_qr_code_found">QR Code Result:</string>
+    <string name="msg_qr_code_found">QR Code found:</string>
+    <string name="msg_multi_qr_codes_found">Multiple QR codes found. Please select one:</string>
     <string name="msg_no_qr_code_found">No QR code found in this image.</string>
     <string name="msg_scanning">Scanning…</string>
     <string name="msg_load_error">Failed to load resource.</string>

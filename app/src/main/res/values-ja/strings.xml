@@ -245,7 +245,8 @@
     <string name="dialog_title_prompt">入力</string>
     <string name="dialog_title_select">選択</string>
     <string name="action_scan_qr_code">QRコードをスキャン</string>
-    <string name="msg_qr_code_found">QRコードのスキャン結果：</string>
+    <string name="msg_qr_code_found">QRコードを検出しました：</string>
+    <string name="msg_multi_qr_codes_found">複数のQRコードを検出しました。解析するものを選択してください：</string>
     <string name="msg_no_qr_code_found">この画像にはQRコードが見つかりません。</string>
     <string name="msg_scanning">スキャン中…</string>
     <string name="msg_load_error">リソースの読み込みに失敗しました。</string>

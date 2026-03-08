@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">इनपुट</string>
     <string name="dialog_title_select">चुनें</string>
     <string name="action_scan_qr_code">क्यूआर कोड स्कैन करें</string>
-    <string name="msg_qr_code_found">क्यूआर कोड परिणाम:</string>
+    <string name="msg_qr_code_found">क्यूआर कोड मिला:</string>
+    <string name="msg_multi_qr_codes_found">कई क्यूआर कोड मिले। कृपया स्कैन करने के लिए एक चुनें:</string>
     <string name="msg_no_qr_code_found">इस छवि में कोई क्यूआर कोड नहीं मिला।</string>
     <string name="msg_scanning">स्कैन किया जा रहा है…</string>
     <string name="msg_load_error">संसाधन लोड करने में विफल।</string>

@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">Inserimento</string>
     <string name="dialog_title_select">Selezione</string>
     <string name="action_scan_qr_code">Scansiona codice QR</string>
-    <string name="msg_qr_code_found">Risultato codice QR:</string>
+    <string name="msg_qr_code_found">Codice QR trovato:</string>
+    <string name="msg_multi_qr_codes_found">Trovati più codici QR. Selezionane uno da scansionare:</string>
     <string name="msg_no_qr_code_found">Nessun codice QR trovato in questa immagine.</string>
     <string name="msg_scanning">Scansione…</string>
     <string name="msg_load_error">Caricamento risorsa fallito.</string>

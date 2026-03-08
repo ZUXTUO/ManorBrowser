@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">Masukan</string>
     <string name="dialog_title_select">Pilih</string>
     <string name="action_scan_qr_code">Pindai Kode QR</string>
-    <string name="msg_qr_code_found">Hasil Kode QR:</string>
+    <string name="msg_qr_code_found">Kode QR ditemukan:</string>
+    <string name="msg_multi_qr_codes_found">Beberapa kode QR ditemukan. Pilih satu untuk dipindai:</string>
     <string name="msg_no_qr_code_found">Kode QR tidak ditemukan dalam gambar ini.</string>
     <string name="msg_scanning">Memindai…</string>
     <string name="msg_load_error">Gagal memuat sumber daya.</string>

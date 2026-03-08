@@ -2629,11 +2629,15 @@ public class MainActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         try (InputStream is = response.body().byteStream()) {
                             android.graphics.Bitmap bitmap = BitmapFactory.decodeStream(is);
-                            String result = QrCodeHelper.scanQrCode(bitmap);
+                            String[] results = QrCodeHelper.scanMultiQrCodes(bitmap);
                             
                             runOnUiThread(() -> {
-                                if (result != null) {
-                                    showQrResultDialog(result);
+                                if (results != null && results.length > 0) {
+                                    if (results.length == 1) {
+                                        showQrResultDialog(results[0]);
+                                    } else {
+                                        showMultiQrResultDialog(results);
+                                    }
                                 } else {
                                     Toast.makeText(MainActivity.this, R.string.msg_no_qr_code_found, Toast.LENGTH_LONG).show();
                                 }
@@ -2650,10 +2654,20 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void showMultiQrResultDialog(String[] results) {
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.msg_multi_qr_codes_found)
+                .setItems(results, (dialog, which) -> {
+                    showQrResultDialog(results[which]);
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
     private void showQrResultDialog(String result) {
         com.google.android.material.dialog.MaterialAlertDialogBuilder builder = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.action_scan_qr_code)
-                .setMessage(getString(R.string.msg_qr_code_found) + "\n\n" + result)
+                .setTitle(R.string.msg_qr_code_found)
+                .setMessage(result)
                 .setPositiveButton(android.R.string.copy, (dialog, which) -> copyToClipboard(result))
                 .setNegativeButton(android.R.string.cancel, null);
 

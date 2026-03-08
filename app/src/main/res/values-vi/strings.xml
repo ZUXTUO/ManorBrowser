@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Tìm kiếm hoặc nhập địa chỉ</string>
@@ -246,7 +246,8 @@
     <string name="dialog_title_prompt">Nhập</string>
     <string name="dialog_title_select">Chọn</string>
     <string name="action_scan_qr_code">Quét mã QR</string>
-    <string name="msg_qr_code_found">Kết quả quét mã QR:</string>
+    <string name="msg_qr_code_found">Đã tìm thấy mã QR:</string>
+    <string name="msg_multi_qr_codes_found">Tìm thấy nhiều mã QR. Vui lòng chọn một để giải mã:</string>
     <string name="msg_no_qr_code_found">Không tìm thấy mã QR trong hình ảnh này.</string>
     <string name="msg_scanning">Đang quét…</string>
     <string name="msg_load_error">Tải tài nguyên thất bại.</string>

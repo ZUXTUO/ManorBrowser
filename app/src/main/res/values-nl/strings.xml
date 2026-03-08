@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Zoek of typ een adres</string>
@@ -244,7 +244,8 @@
     <string name="dialog_title_prompt">Invoer</string>
     <string name="dialog_title_select">Selecteren</string>
     <string name="action_scan_qr_code">QR-code scannen</string>
-    <string name="msg_qr_code_found">QR-code resultaat:</string>
+    <string name="msg_qr_code_found">QR-code gevonden:</string>
+    <string name="msg_multi_qr_codes_found">Meerdere QR-codes gevonden. Selecteer er een om te scannen:</string>
     <string name="msg_no_qr_code_found">Geen QR-code gevonden in deze afbeelding.</string>
     <string name="msg_scanning">Scannen…</string>
     <string name="msg_load_error">Laden van bron mislukt.</string>
