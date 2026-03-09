@@ -11,7 +11,7 @@
 ## 🌟 核心特色
 
 ### 1. 智能托管 & AI 助手 (Intelligent Hosting)
-*   **内置 AI 助手**: 悬浮式交互窗口，可直接阅读、理解并分析当前网页。
+*   **内置 AI 助手**: 悬浮式交互窗口，可直接阅读、理解并实时分析当前网页。
 *   **自动化操作**: 支持通过 AI 进行网页导航、内容搜索、UI 结构解析、点击/输入模拟以及标签页管理。
 *   **远程服务器连接**: 支持配置自定义 AI 服务器地址（兼容 OpenAI 等主流 API），实现复杂的自动化决策与批量任务。
 *   **全功能工具集**: AI 可直接调动浏览器底层功能，如清理历史、管理下载、执行自定义脚本 (JS Evaluation) 等。
@@ -45,10 +45,11 @@
 ---
 
 ## 🛠️ 技术栈
+
 *   **核心引擎**: Mozilla GeckoView
 *   **编程语言**: Java
 *   **网络通讯**: OkHttp
-*   **UI 框架**: Material Design
+*   **UI 框架**: Material Design 3
 *   **部署环境**: Compile SDK 36, Min SDK 26 (Android 8.0+)
 
 ---
@@ -77,7 +78,7 @@
 
 ## 🛡️ 隐私与安全
 领域浏览器尊重每一位用户的隐私。应用本身不收集任何个人敏感信息，所有历史记录与 Cookie 均可在本地管理或销毁。
-更多详情请参阅 [用户隐私协议](app/src/main/assets/UserPrivacyAgreement_zh.txt)。
+更多详情请参阅 [用户隐私协议](app/src/main/assets/legal/UserPrivacyAgreement_zh.txt)。
 
 ## 📄 许可证
 本项目基于 [Apache License 2.0](LICENSE) 协议开源。
@@ -88,5 +89,3 @@
 
 ---
 *您的私人领地，由此开启。*
-
-
