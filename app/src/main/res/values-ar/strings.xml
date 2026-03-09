@@ -217,6 +217,11 @@
     <string name="action_clear_all">مسح الكل</string>
     <string name="msg_cookies_cleared">تم مسح جميع ملفات تعريف الارتباط وبيانات الموقع</string>
     <string name="msg_cookie_deleted">تم حذف ملف تعريف الارتباط</string>
+    <string name="title_modify_cookie_warning">عملية خطيرة</string>
+    <string name="msg_modify_cookie_warning">لا يُنصح بشدة بتعديل قيم ملفات تعريف الارتباط. قد يؤدي التعديل إلى فشل تسجيل الدخول أو تلف البيانات أو مشكلات خطيرة أخرى. هل لا تزال ترغب في المتابعة؟</string>
+    <string name="title_edit_cookie">تعديل ملف تعريف الارتباط</string>
+    <string name="label_modify_cookie_value">تعديل قيمة ملف تعريف الارتباط</string>
+    <string name="msg_cookie_updated">تم تحديث قيمة ملف تعريف الارتباط محليًا (قد يتطلب إعادة التشغيل أو إعادة التحميل)</string>
     <string name="label_domain">النطاق: %s</string>
     <string name="label_path">المسار: %s</string>
     <string name="label_value">القيمة: %s</string>

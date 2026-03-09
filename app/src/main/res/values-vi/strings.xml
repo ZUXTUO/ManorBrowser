@@ -219,6 +219,11 @@
     <string name="action_clear_all">Xóa tất cả</string>
     <string name="msg_cookies_cleared">Đã xóa tất cả cookie và dữ liệu trang web</string>
     <string name="msg_cookie_deleted">Đã xóa cookie</string>
+    <string name="title_modify_cookie_warning">Thao tác nguy hiểm</string>
+    <string name="msg_modify_cookie_warning">Tuyệt đối không nên sửa đổi giá trị cookie. Việc sửa đổi có thể gây ra lỗi đăng nhập, hỏng dữ liệu hoặc các vấn đề nghiêm trọng khác. Bạn vẫn muốn tiếp tục?</string>
+    <string name="title_edit_cookie">Sửa Cookie</string>
+    <string name="label_modify_cookie_value">Sửa giá trị Cookie</string>
+    <string name="msg_cookie_updated">Giá trị cookie đã được cập nhật cục bộ (có thể cần khởi động lại hoặc tải lại)</string>
     <string name="label_domain">Tên miền: %s</string>
     <string name="label_path">Đường dẫn: %s</string>
     <string name="label_value">Giá trị: %s</string>

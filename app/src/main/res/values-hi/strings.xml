@@ -217,6 +217,11 @@
     <string name="action_clear_all">सभी साफ़ करें</string>
     <string name="msg_cookies_cleared">सभी कुकीज़ और साइट डेटा साफ़ कर दिए गए</string>
     <string name="msg_cookie_deleted">कुकी हटा दी गई</string>
+    <string name="title_modify_cookie_warning">खतरनाक ऑपरेशन</string>
+    <string name="msg_modify_cookie_warning">कुकी मानों को संशोधित करने की कड़ाई से अनुशंसा नहीं की जाती है। संशोधन के कारण लॉगिन विफलता, डेटा भ्रष्टाचार, या अन्य गंभीर समस्याएं हो सकती हैं। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
+    <string name="title_edit_cookie">कुकी संपादित करें</string>
+    <string name="label_modify_cookie_value">कुकी मान संशोधित करें</string>
+    <string name="msg_cookie_updated">कुकी मान स्थानीय रूपतः अपडेट किया गया (पुनः प्रारंभ या पुनः लोड की आवश्यकता हो सकती है)</string>
     <string name="label_domain">डोमेन: %s</string>
     <string name="label_path">पथ: %s</string>
     <string name="label_value">मान: %s</string>

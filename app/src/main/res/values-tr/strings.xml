@@ -217,6 +217,11 @@
     <string name="action_clear_all">Hepsini Temizle</string>
     <string name="msg_cookies_cleared">Tüm çerezler ve site verileri temizlendi</string>
     <string name="msg_cookie_deleted">Çerez silindi</string>
+    <string name="title_modify_cookie_warning">Tehlikeli İşlem</string>
+    <string name="msg_modify_cookie_warning">Çerez değerlerinin değiştirilmesi kesinlikle önerilmez. Değiştirme, oturum açma hatasına, veri bozulmasına veya diğer ciddi sorunlara neden olabilir. Yine de devam etmek istiyor musunuz?</string>
+    <string name="title_edit_cookie">Çerezi Düzenle</string>
+    <string name="label_modify_cookie_value">Çerez Değerini Değiştir</string>
+    <string name="msg_cookie_updated">Çerez değeri yerel olarak güncellendi (yeniden başlatma veya yeniden yükleme gerekebilir)</string>
     <string name="label_domain">Alan Adı: %s</string>
     <string name="label_path">Yol: %s</string>
     <string name="label_value">Değer: %s</string>

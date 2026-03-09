@@ -217,6 +217,11 @@
     <string name="action_clear_all">Alle löschen</string>
     <string name="msg_cookies_cleared">Alle Cookies und Websitedaten gelöscht</string>
     <string name="msg_cookie_deleted">Cookie gelöscht</string>
+    <string name="title_modify_cookie_warning">Gefährlicher Vorgang</string>
+    <string name="msg_modify_cookie_warning">Es wird dringend davon abgeraten, Cookie-Werte zu ändern. Änderungen können zu Anmeldefehlern, Datenbeschädigungen oder anderen schwerwiegenden Problemen führen. Möchten Sie dennoch fortfahren?</string>
+    <string name="title_edit_cookie">Cookie bearbeiten</string>
+    <string name="label_modify_cookie_value">Cookie-Wert ändern</string>
+    <string name="msg_cookie_updated">Cookie-Wert lokal aktualisiert (erfordert möglicherweise Neustart oder Neuladen)</string>
     <string name="label_domain">Domain: %s</string>
     <string name="label_path">Pfad: %s</string>
     <string name="label_value">Wert: %s</string>

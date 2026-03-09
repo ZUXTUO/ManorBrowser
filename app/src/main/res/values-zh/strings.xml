@@ -229,6 +229,11 @@ URL: %1$s</string>
     <string name="action_clear_all">清除全部</string>
     <string name="msg_cookies_cleared">已清除所有 Cookies 和网站数据</string>
     <string name="msg_cookie_deleted">Cookie 已删除</string>
+    <string name="title_modify_cookie_warning">危险操作提示</string>
+    <string name="msg_modify_cookie_warning">严禁不具备专业知识的用户修改 Cookie 值。修改 Cookie 可能会导致登录失效、账号异常、网页加载错误等不可预知的后果。是否确认修改？</string>
+    <string name="title_edit_cookie">修改 Cookie 值</string>
+    <string name="label_modify_cookie_value">新 Cookie 值</string>
+    <string name="msg_cookie_updated">Cookie 已手动修改（可能需要重启应用或刷新网页生效）</string>
     <string name="label_domain">域名: %s</string>
     <string name="label_path">路径: %s</string>
     <string name="label_value">值: %s</string>

@@ -227,6 +227,11 @@
     <string name="action_clear_all">すべて消去</string>
     <string name="msg_cookies_cleared">Cookie消しびたん</string>
     <string name="msg_cookie_deleted">Cookie を削除しびたん</string>
+    <string name="title_modify_cookie_warning">あやなーぬうしむぬ</string>
+    <string name="msg_modify_cookie_warning">Cookie ぬあたいをいじるぬわー、まことにあぶねーくとぅやり、おすすめしびらん。いじるとぅ、ログインできなん、データがくるったり、うふなむぬがうくるるくとぅがあいびーん。なゆーいじ리ぶしゃみ？</string>
+    <string name="title_edit_cookie">Cookie ぬあたいぬなおし</string>
+    <string name="label_modify_cookie_value">みーぬ Cookie あたい</string>
+    <string name="msg_cookie_updated">Cookie あたいがなおしびたん（アプリぬはじまりんか、ページぬなおしが必要がやもしらん）</string>
     <string name="label_domain">ドメイン: %s</string>
     <string name="label_path">パス: %s</string>
     <string name="label_value">値: %s</string>

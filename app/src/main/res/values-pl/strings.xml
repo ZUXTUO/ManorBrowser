@@ -217,6 +217,11 @@
     <string name="action_clear_all">Wyczyść wszystko</string>
     <string name="msg_cookies_cleared">Wszystkie pliki cookie i dane witryn zostały wyczyszczone</string>
     <string name="msg_cookie_deleted">Plik cookie usunięty</string>
+    <string name="title_modify_cookie_warning">Niebezpieczna operacja</string>
+    <string name="msg_modify_cookie_warning">Zdecydowanie nie zaleca się modyfikowania wartości plików cookie. Modyfikacja może spowodować błędy logowania, uszkodzenie danych lub inne poważne problemy. Czy nadal chcesz kontynuować?</string>
+    <string name="title_edit_cookie">Edytuj plik cookie</string>
+    <string name="label_modify_cookie_value">Zmień wartość pliku cookie</string>
+    <string name="msg_cookie_updated">Wartość pliku cookie zaktualizowana lokalnie (może wymagać restartu lub odświeżenia)</string>
     <string name="label_domain">Domena: %s</string>
     <string name="label_path">Ścieżka: %s</string>
     <string name="label_value">Wartość: %s</string>

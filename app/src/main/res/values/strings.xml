@@ -229,6 +229,11 @@ URL: %1$s</string>
     <string name="action_clear_all">Clear All</string>
     <string name="msg_cookies_cleared">All cookies and site data cleared</string>
     <string name="msg_cookie_deleted">Cookie deleted</string>
+    <string name="title_modify_cookie_warning">Dangerous Operation</string>
+    <string name="msg_modify_cookie_warning">It is strictly not recommended to modify cookie values. Modification may cause login failure, data corruption, or other serious issues. Do you still want to proceed?</string>
+    <string name="title_edit_cookie">Edit Cookie</string>
+    <string name="label_modify_cookie_value">Modify Cookie Value</string>
+    <string name="msg_cookie_updated">Cookie value updated locally (may require restart or reload)</string>
     <string name="label_domain">Domain: %s</string>
     <string name="label_path">Path: %s</string>
     <string name="label_value">Value: %s</string>

@@ -217,6 +217,11 @@
     <string name="action_clear_all">Alles wissen</string>
     <string name="msg_cookies_cleared">Alle cookies en sitegegevens zijn gewist</string>
     <string name="msg_cookie_deleted">Cookie verwijderd</string>
+    <string name="title_modify_cookie_warning">Gevaarlijke operatie</string>
+    <string name="msg_modify_cookie_warning">Het wordt ten zeerste afgeraden om cookie-waarden te wijzigen. Wijzigingen kunnen leiden tot inlogfouten, gegevenscorruptie of andere ernstige problemen. Wilt u toch doorgaan?</string>
+    <string name="title_edit_cookie">Cookie bewerken</string>
+    <string name="label_modify_cookie_value">Cookie-waarde wijzigen</string>
+    <string name="msg_cookie_updated">Cookie-waarde lokaal bijgewerkt (vereist mogelijk herstart of opnieuw laden)</string>
     <string name="label_domain">Domein: %s</string>
     <string name="label_path">Pad: %s</string>
     <string name="label_value">Waarde: %s</string>

@@ -217,6 +217,11 @@
     <string name="action_clear_all">Очистить всё</string>
     <string name="msg_cookies_cleared">Все файлы cookie и данные сайтов очищены</string>
     <string name="msg_cookie_deleted">Cookie удалено</string>
+    <string name="title_modify_cookie_warning">Опасная операция</string>
+    <string name="msg_modify_cookie_warning">Строго не рекомендуется изменять значения файлов cookie. Изменение может привести к ошибкам входа, повреждению данных или другим серьезным проблемам. Вы все еще хотите продолжить?</string>
+    <string name="title_edit_cookie">Редактировать куки</string>
+    <string name="label_modify_cookie_value">Изменить значение куки</string>
+    <string name="msg_cookie_updated">Значение куки обновлено локально (может потребоваться перезапуск или перезагрузка)</string>
     <string name="label_domain">Домен: %s</string>
     <string name="label_path">Путь: %s</string>
     <string name="label_value">Значение: %s</string>

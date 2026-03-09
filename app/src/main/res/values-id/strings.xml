@@ -217,6 +217,11 @@
     <string name="action_clear_all">Hapus Semua</string>
     <string name="msg_cookies_cleared">Semua cookie dan data situs dihapus</string>
     <string name="msg_cookie_deleted">Cookie dihapus</string>
+    <string name="title_modify_cookie_warning">Operasi Berbahaya</string>
+    <string name="msg_modify_cookie_warning">Sangat tidak disarankan untuk mengubah nilai cookie. Modifikasi dapat menyebabkan kegagalan login, kerusakan data, atau masalah serius lainnya. Apakah Anda tetap ingin melanjutkan?</string>
+    <string name="title_edit_cookie">Edit Cookie</string>
+    <string name="label_modify_cookie_value">Ubah Nilai Cookie</string>
+    <string name="msg_cookie_updated">Nilai cookie diperbarui secara lokal (mungkin memerlukan restart atau muat ulang)</string>
     <string name="label_domain">Domain: %s</string>
     <string name="label_path">Jalur: %s</string>
     <string name="label_value">Nilai: %s</string>

@@ -217,6 +217,11 @@
     <string name="action_clear_all">清除全部</string>
     <string name="msg_cookies_cleared">已清除所有 Cookies 和網站數據</string>
     <string name="msg_cookie_deleted">Cookie 已刪除</string>
+    <string name="title_modify_cookie_warning">危險操作提示</string>
+    <string name="msg_modify_cookie_warning">嚴禁不具備專業知識的用戶修改 Cookie 值。修改 Cookie 可能會導致登錄失效、帳號異常、網頁加載錯誤等不可預見的後果。是否確認修改？</string>
+    <string name="title_edit_cookie">修改 Cookie 值</string>
+    <string name="label_modify_cookie_value">新 Cookie 值</string>
+    <string name="msg_cookie_updated">Cookie 已手動修改（可能需要重啟應用或刷新網頁生效）</string>
     <string name="label_domain">域名: %s</string>
     <string name="label_path">路徑: %s</string>
     <string name="label_value">值: %s</string>

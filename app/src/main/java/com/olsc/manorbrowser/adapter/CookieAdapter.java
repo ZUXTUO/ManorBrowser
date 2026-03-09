@@ -18,6 +18,7 @@ public class CookieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void onDomainClick(String domain);
         void onDomainLongClick(String domain);
         void onDeleteCookie(CookieItem item, int position);
+        void onCookieLongClick(CookieItem item, int position);
     }
 
     private static final int VIEW_TYPE_GROUP = 0;
@@ -74,6 +75,13 @@ public class CookieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (listener != null) {
                     listener.onDeleteCookie(item, holder.getBindingAdapterPosition());
                 }
+            });
+            cookieHolder.itemView.setOnLongClickListener(v -> {
+                if (listener != null) {
+                    listener.onCookieLongClick(item, holder.getBindingAdapterPosition());
+                    return true;
+                }
+                return false;
             });
         }
     }
