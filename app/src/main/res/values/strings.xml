@@ -269,6 +269,8 @@ URL: %1$s</string>
     <string name="action_open_url">Open URL</string>
     <string name="title_download_apk">Download APK?</string>
     <string name="msg_download_apk">This link is for an application installation file (APK). Do you want to download it?\n\nFile: %1$s</string>
+    <string name="title_download_confirm">Confirm Download</string>
+    <string name="msg_download_confirm">Do you want to download this file?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Home Button Customization</string>
     <string name="desc_custom_home_button">Customize the function of the first button in the bottom bar</string>
     <string name="label_current_function">Current Function</string>

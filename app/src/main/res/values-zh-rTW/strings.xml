@@ -257,6 +257,8 @@
     <string name="action_open_url">打開連結</string>
     <string name="title_download_apk">下載 APK 檔案？</string>
     <string name="msg_download_apk">檢測到此連結為安卓應用安裝包 (APK)，是否確認下載？\n\n檔案：%1$s</string>
+    <string name="title_download_confirm">確認下載</string>
+    <string name="msg_download_confirm">偵測到有檔案需要下載，是否確認？\n\n檔案：%1$s</string>
     <string name="title_custom_home_button">主頁按鈕自定義</string>
     <string name="desc_custom_home_button">自定義底部欄第一個按鈕的功能</string>
     <string name="label_current_function">當前功能</string>

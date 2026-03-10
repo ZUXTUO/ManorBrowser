@@ -257,6 +257,8 @@
     <string name="action_open_url">Buka URL</string>
     <string name="title_download_apk">Unduh APK?</string>
     <string name="msg_download_apk">Tautan ini adalah untuk file instalasi aplikasi (APK). Apakah Anda ingin mengunduhnya?\n\nFile: %1$s</string>
+    <string name="title_download_confirm">Konfirmasi Unduhan</string>
+    <string name="msg_download_confirm">Apakah Anda ingin mengunduh file ini?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Kustomisasi Tombol Beranda</string>
     <string name="desc_custom_home_button">Kustomisasi fungsi tombol pertama di bilah bawah</string>
     <string name="label_current_function">Fungsi Saat Ini</string>

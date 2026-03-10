@@ -257,6 +257,8 @@
     <string name="action_open_url">فتح الرابط</string>
     <string name="title_download_apk">هل تريد تحميل ملف APK؟</string>
     <string name="msg_download_apk">هذا الرابط خاص بملف تثبيت تطبيق (APK). هل تريد تحميله؟\n\nالملف: %1$s</string>
+    <string name="title_download_confirm">تأكيد التنزيل</string>
+    <string name="msg_download_confirm">هل تريد تنزيل هذا الملف؟\n\nالملف: %1$s</string>
     <string name="title_custom_home_button">تخصيص زر الصفحة الرئيسية</string>
     <string name="desc_custom_home_button">تخصيص وظيفة الزر الأول في الشريط السفلي</string>
     <string name="label_current_function">الوظيفة الحالية</string>

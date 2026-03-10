@@ -739,7 +739,15 @@ public class MainActivity extends AppCompatActivity {
                 final org.mozilla.geckoview.WebResponse finalResponse = response;
 
                 runOnUiThread(() -> {
-                    triggerDownloadWithHeaders(session, url, finalDisp, finalMime, finalResponse);
+                    String filename = com.olsc.manorbrowser.utils.DownloadHelper.guessFileName(url, finalDisp, finalMime);
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle(R.string.title_download_confirm)
+                        .setMessage(getString(R.string.msg_download_confirm, filename))
+                        .setPositiveButton(R.string.action_download, (dialog, which) -> {
+                            triggerDownloadWithHeaders(session, url, finalDisp, finalMime, finalResponse);
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
                 });
             }
 

@@ -257,6 +257,8 @@
     <string name="action_open_url">Otwórz URL</string>
     <string name="title_download_apk">Pobrać APK?</string>
     <string name="msg_download_apk">Ten link prowadzi do pliku instalacyjnego aplikacji (APK). Czy chcesz go pobrać?\n\nPlik: %1$s</string>
+    <string name="title_download_confirm">Potwierdź pobieranie</string>
+    <string name="msg_download_confirm">Czy chcesz pobrać ten plik?\n\nPlik: %1$s</string>
     <string name="title_custom_home_button">Dostosowanie przycisku głównego</string>
     <string name="desc_custom_home_button">Dostosuj funkcję pierwszego przycisku na dolnym pasku</string>
     <string name="label_current_function">Bieżąca funkcja</string>

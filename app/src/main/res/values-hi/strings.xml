@@ -257,6 +257,8 @@
     <string name="action_open_url">URL खोलें</string>
     <string name="title_download_apk">APK डाउनलोड करें?</string>
     <string name="msg_download_apk">यह लिंक किसी एप्लिकेशन इंस्टॉलेशन फ़ाइल (APK) के लिए है। क्या आप इसे डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
+    <string name="title_download_confirm">डाउनलोड की पुष्टि करें</string>
+    <string name="msg_download_confirm">क्या आप इस फ़ाइल को डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
     <string name="title_custom_home_button">होम बटन अनुकूलन</string>
     <string name="desc_custom_home_button">निचली पट्टी में पहले बटन के कार्य को अनुकूलित करें</string>
     <string name="label_current_function">वर्तमान कार्य</string>

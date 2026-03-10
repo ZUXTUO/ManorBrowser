@@ -257,6 +257,8 @@
     <string name="action_open_url">URL openen</string>
     <string name="title_download_apk">APK downloaden?</string>
     <string name="msg_download_apk">Deze link is voor een installatiebestand (APK). Wilt u dit downloaden?\n\nBestand: %1$s</string>
+    <string name="title_download_confirm">Download bevestigen</string>
+    <string name="msg_download_confirm">Wilt u dit bestand downloaden?\n\nBestand: %1$s</string>
     <string name="title_custom_home_button">Aanpassing startknop</string>
     <string name="desc_custom_home_button">Pas de functie aan van de eerste knop in de onderste balk</string>
     <string name="label_current_function">Huidige functie</string>

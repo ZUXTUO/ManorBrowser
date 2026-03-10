@@ -257,6 +257,8 @@
     <string name="action_open_url">주소 열기</string>
     <string name="title_download_apk">APK를 다운로드하시겠습니까?</string>
     <string name="msg_download_apk">이 링크는 애플리케이션 설치 파일 (APK) 입니다. 다운로드하시겠습니까?\n\n파일: %1$s</string>
+    <string name="title_download_confirm">다운로드 확인</string>
+    <string name="msg_download_confirm">이 파일을 다운로드하시겠습니까?\n\n파일: %1$s</string>
     <string name="title_custom_home_button">홈 단추 사용자 정의</string>
     <string name="desc_custom_home_button">하단 바의 첫 번째 단추 기능을 사용자 정의합니다</string>
     <string name="label_current_function">현재 기능</string>

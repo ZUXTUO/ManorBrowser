@@ -257,6 +257,8 @@
     <string name="action_open_url">URL\'yi Aç</string>
     <string name="title_download_apk">APK indirilsin mi?</string>
     <string name="msg_download_apk">Bu bağlantı bir uygulama yükleme dosyası (APK) içindir. İndirmek istiyor musunuz?\n\nDosya: %1$s</string>
+    <string name="title_download_confirm">İndirmeyi Onayla</string>
+    <string name="msg_download_confirm">Bu dosyayı indirmek istiyor musunuz?\n\nDosya: %1$s</string>
     <string name="title_custom_home_button">Giriş Düğmesi Özelleştirme</string>
     <string name="desc_custom_home_button">Alt çubuktaki ilk düğmenin işlevini özelleştirin</string>
     <string name="label_current_function">Mevcut İşlev</string>

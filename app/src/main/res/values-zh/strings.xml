@@ -269,6 +269,8 @@ URL: %1$s</string>
     <string name="action_open_url">打开链接</string>
     <string name="title_download_apk">下载 APK 文件？</string>
     <string name="msg_download_apk">检测到此链接为安卓应用安装包 (APK)，是否确认下载？\n\n文件：%1$s</string>
+    <string name="title_download_confirm">确认下载</string>
+    <string name="msg_download_confirm">检测到有文件需要下载，是否确认？\n\n文件：%1$s</string>
     <string name="title_custom_home_button">主页按钮自定义</string>
     <string name="desc_custom_home_button">自定义底部栏第一个按钮的功能</string>
     <string name="label_current_function">当前功能</string>
