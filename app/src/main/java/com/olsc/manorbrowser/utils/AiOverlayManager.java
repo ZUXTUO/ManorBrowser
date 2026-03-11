@@ -59,7 +59,8 @@ public class AiOverlayManager {
 
     private ExecutorService networkExecutor;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private boolean isRequesting = false;
+    private volatile boolean isRequesting = false;
+    private volatile HttpURLConnection currentConn;
 
     public AiOverlayManager(Activity activity, View rootOverlay, AiCommandClient aiClient, BrowserCommandServer.CommandHandler handler) {
         this.activity = activity;
@@ -69,7 +70,7 @@ public class AiOverlayManager {
 
         initViews();
         setupListeners();
-        networkExecutor = Executors.newSingleThreadExecutor();
+        networkExecutor = Executors.newCachedThreadPool();
     }
 
     /**
@@ -124,7 +125,13 @@ public class AiOverlayManager {
             hide();
         });
 
-        btnSend.setOnClickListener(v -> sendMessage());
+        btnSend.setOnClickListener(v -> {
+            if (isRequesting) {
+                stopTask();
+            } else {
+                sendMessage();
+            }
+        });
 
         etInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND ||
@@ -211,7 +218,7 @@ public class AiOverlayManager {
 
         etInput.setText("");
         isRequesting = true;
-        btnSend.setEnabled(false);
+        btnSend.setImageResource(R.drawable.ic_stop);
 
         // 添加用户消息
         chatAdapter.addMessage(AiChatAdapter.ChatMessage.userMsg(text));
@@ -233,7 +240,8 @@ public class AiOverlayManager {
         networkExecutor.execute(() -> {
             try {
                 URL url = new URL(baseUrl + "/api/chat");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                currentConn = (HttpURLConnection) url.openConnection();
+                HttpURLConnection conn = currentConn;
                 conn.setRequestMethod("POST");
                 conn.setConnectTimeout(10000);
                 conn.setReadTimeout(120000); // 长时间等待事件流 (EventStream)
@@ -264,7 +272,7 @@ public class AiOverlayManager {
                 final boolean[] isThinkingMode = {false};
                 final boolean[] hasStartedThinkTag = {false};
 
-                while ((line = reader.readLine()) != null) {
+                while (isRequesting && (line = reader.readLine()) != null) {
                     if (line.trim().isEmpty()) continue;
                     if (line.startsWith("data: ")) {
                         String dataStr = line.substring(6).trim();
@@ -274,6 +282,7 @@ public class AiOverlayManager {
                             String type = data.optString("type");
 
                             mainHandler.post(() -> {
+                                if (!isRequesting) return; // 如果已停止，不再接收
                                 if ("thinking".equals(type)) {
                                     String c = data.optString("content");
                                     if (c != null && !c.isEmpty()) {
@@ -328,7 +337,11 @@ public class AiOverlayManager {
 
             } catch (Exception e) {
                 Log.e(TAG, "SSE 通信错误", e);
-                mainHandler.post(() -> chatAdapter.updateLastAiMessage(activity.getString(R.string.ai_msg_comm_error, e.getMessage())));
+                mainHandler.post(() -> {
+                    if (isRequesting) {
+                        chatAdapter.updateLastAiMessage(activity.getString(R.string.ai_msg_comm_error, e.getMessage()));
+                    }
+                });
             }
 
             finishRequest();
@@ -341,9 +354,51 @@ public class AiOverlayManager {
     private void finishRequest() {
         mainHandler.post(() -> {
             isRequesting = false;
+            currentConn = null;
             btnSend.setEnabled(true);
+            btnSend.setImageResource(R.drawable.ic_search);
             thinkingBar.setVisibility(View.GONE);
             chatAdapter.finalizeLastAiMessage();
+        });
+    }
+
+    /**
+     * 停止当前 AI 任务
+     */
+    private void stopTask() {
+        if (!isRequesting) return;
+        
+        // 1. 立即停止 UI 状态，设为 false
+        isRequesting = false;
+        btnSend.setEnabled(false); // 暂时禁用，防止连点
+        chatAdapter.updateLastAiMessage(activity.getString(R.string.ai_msg_stopped));
+
+        networkExecutor.execute(() -> {
+            // 2. 断开当前的 SSE 连接 (此举会打断 readLine 调用)
+            if (currentConn != null) {
+                try {
+                    currentConn.disconnect();
+                } catch (Exception e) {}
+                currentConn = null;
+            }
+
+            // 3. 通知服务端强制停止任务
+            String baseUrl = aiClient.getServerUrl();
+            if (baseUrl != null && !baseUrl.isEmpty()) {
+                try {
+                    URL stopUrl = new URL(baseUrl + "/api/chat/stop");
+                    HttpURLConnection conn = (HttpURLConnection) stopUrl.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.getResponseCode();
+                } catch (Exception e) {
+                    Log.w(TAG, "通知服务端停止失败: " + e.getMessage());
+                }
+            }
+
+            // 4. 完成后清理并还原图标
+            mainHandler.post(this::finishRequest);
         });
     }
 

@@ -383,4 +383,5 @@
     <string name="msg_group_closed">%1$s grubu kapatıldı</string>
     <string name="msg_load_timeout">Sayfa yükleme zaman aşımı, yükleme durduruldu</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Görev durduruldu.</string>
 </resources>

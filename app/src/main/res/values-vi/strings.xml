@@ -383,4 +383,5 @@
     <string name="msg_group_closed">Nhóm %1$s đã đóng</string>
     <string name="msg_load_timeout">Hết thời gian tải trang, đã dừng tải</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Nhiệm vụ đã dừng.</string>
 </resources>

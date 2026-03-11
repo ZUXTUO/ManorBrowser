@@ -383,4 +383,5 @@
     <string name="msg_group_closed">समूह %1$s बंद कर दिया गया है</string>
     <string name="msg_load_timeout">पृष्ठ लोड होने का समय समाप्त, लोड होना बंद हो गया</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">कार्य रुक गया।</string>
 </resources>

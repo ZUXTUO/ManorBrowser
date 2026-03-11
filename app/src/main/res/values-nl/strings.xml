@@ -383,4 +383,5 @@
     <string name="msg_group_closed">Groep %1$s is gesloten</string>
     <string name="msg_load_timeout">Pagina laadtijd verstreken, laden gestopt</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Taak gestopt.</string>
 </resources>

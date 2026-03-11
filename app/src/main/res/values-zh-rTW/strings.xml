@@ -383,4 +383,5 @@
     <string name="msg_group_closed">群組 %1$s 已關閉</string>
     <string name="msg_load_timeout">網頁載入超時，已停止載入</string>
     <string name="language_ryu">琉球語 (沖繩語) (不完善)</string>
+    <string name="ai_msg_stopped">任務已停止。</string>
 </resources>

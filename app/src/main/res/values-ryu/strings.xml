@@ -383,4 +383,5 @@
     <string name="msg_restricted_sites_desc">位置情報アクセスを「常に拒否」に設定したサイトを管理します。</string>
     <string name="action_remove">制限を解除</string>
     <string name="msg_load_timeout">ページの読み込みがタイムアウトしました。読み込みを停止しました。</string>
+    <string name="ai_msg_stopped">タスク已停止。</string>
 </resources>

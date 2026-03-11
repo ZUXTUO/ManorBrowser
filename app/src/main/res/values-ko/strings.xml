@@ -383,4 +383,5 @@
     <string name="msg_group_closed">%1$s 그룹이 닫혔습니다</string>
     <string name="msg_load_timeout">페이지 로드 시간 초과, 로드가 중지되었습니다</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">작업이 중단되었습니다.</string>
 </resources>

@@ -383,4 +383,5 @@
     <string name="msg_group_closed">Группа %1$s закрыта</string>
     <string name="msg_load_timeout">Время ожидания загрузки страницы истекло, загрузка остановлена</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Задача остановлена.</string>
 </resources>

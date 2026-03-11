@@ -385,4 +385,5 @@ URL: %1$s</string>
     <string name="msg_restricted_sites_desc">Manage sites that are set to \&quot;Always Deny\&quot; for location access.</string>
     <string name="action_remove">Remove Restriction</string>
     <string name="msg_load_timeout">Page load timeout, stopped loading</string>
+    <string name="ai_msg_stopped">Task stopped.</string>
 </resources>

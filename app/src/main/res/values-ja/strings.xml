@@ -383,4 +383,5 @@
     <string name="default_group_name">デフォルトグループ</string>
     <string name="msg_group_closed">グループ %1$s を閉じました</string>
     <string name="msg_load_timeout">ページの読み込みがタイムアウトしました。読み込みを停止しました。</string>
+    <string name="ai_msg_stopped">タスクが停止されました。</string>
 </resources>

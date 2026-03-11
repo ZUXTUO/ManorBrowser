@@ -383,4 +383,5 @@
     <string name="msg_group_closed">El grupo %1$s ha sido cerrado</string>
     <string name="msg_load_timeout">Tiempo de espera agotado, carga detenida</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Tarea detenida.</string>
 </resources>
