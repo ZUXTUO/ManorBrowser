@@ -384,4 +384,12 @@
     <string name="msg_load_timeout">Zeitüberschreitung beim Laden der Seite, Ladevorgang gestoppt</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Aufgabe gestoppt.</string>
+    <string name="title_ssl_error">Sicherheitswarnung</string>
+    <string name="msg_ssl_error">Das SSL-Zertifikat für \"%1$s\" ist ungültig oder abgelaufen. Möchten Sie fortfahren?</string>
+    <string name="action_allow_once">Einmal zulassen</string>
+    <string name="action_always_allow">Immer vertrauen</string>
+    <string name="title_trusted_certificates">Vertrauenswürdige Zertifikate</string>
+    <string name="msg_trusted_certificates_desc">Manuell vertrauenswürdige SSL-Zertifikate anzeigen und verwalten.</string>
+    <string name="msg_no_trusted_certificates">Keine vertrauenswürdigen Zertifikate</string>
+    <string name="msg_confirm_delete_certificate">Sind Sie sicher, dass Sie das Vertrauen für \"%1$s\" entfernen möchten?</string>
 </resources>

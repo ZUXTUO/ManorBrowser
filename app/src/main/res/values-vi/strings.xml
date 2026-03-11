@@ -384,4 +384,12 @@
     <string name="msg_load_timeout">Hết thời gian tải trang, đã dừng tải</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Nhiệm vụ đã dừng.</string>
+    <string name="title_ssl_error">Cảnh báo bảo mật</string>
+    <string name="msg_ssl_error">Chứng chỉ SSL cho \"%1$s\" không hợp lệ hoặc đã hết hạn. Bạn có muốn tiếp tục?</string>
+    <string name="action_allow_once">Cho phép một lần</string>
+    <string name="action_always_allow">Luôn tin tưởng</string>
+    <string name="title_trusted_certificates">Chứng chỉ tin cậy</string>
+    <string name="msg_trusted_certificates_desc">Xem và quản lý chứng chỉ SSL tin cậy thủ công.</string>
+    <string name="msg_no_trusted_certificates">Không có chứng chỉ tin cậy</string>
+    <string name="msg_confirm_delete_certificate">Bạn có chắc chắn muốn xóa tin cậy cho \"%1$s\"?</string>
 </resources>

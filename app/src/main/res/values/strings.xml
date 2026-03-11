@@ -386,4 +386,12 @@ URL: %1$s</string>
     <string name="action_remove">Remove Restriction</string>
     <string name="msg_load_timeout">Page load timeout, stopped loading</string>
     <string name="ai_msg_stopped">Task stopped.</string>
+    <string name="title_ssl_error">Security Warning</string>
+    <string name="msg_ssl_error">The SSL certificate for \"%1$s\" is invalid or expired. This could mean someone is trying to intercept your communication.\n\nDo you want to proceed?</string>
+    <string name="action_allow_once">Allow Once</string>
+    <string name="action_always_allow">Always Trust</string>
+    <string name="title_trusted_certificates">Trusted Certificates</string>
+    <string name="msg_trusted_certificates_desc">View and manage manually trusted SSL certificates.</string>
+    <string name="msg_no_trusted_certificates">No trusted certificates</string>
+    <string name="msg_confirm_delete_certificate">Are you sure you want to remove trust for \"%1$s\"?</string>
 </resources>

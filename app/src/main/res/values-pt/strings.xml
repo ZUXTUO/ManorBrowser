@@ -384,4 +384,12 @@
     <string name="msg_load_timeout">O tempo de carregamento da página expirou, o carregamento foi interrompido</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tarefa interrompida.</string>
+    <string name="title_ssl_error">Aviso de segurança</string>
+    <string name="msg_ssl_error">O certificado SSL para \"%1$s\" é inválido ou expirou. Deseja continuar?</string>
+    <string name="action_allow_once">Permitir uma vez</string>
+    <string name="action_always_allow">Sempre confiar</string>
+    <string name="title_trusted_certificates">Certificados confiáveis</string>
+    <string name="msg_trusted_certificates_desc">Ver e gerenciar certificados SSL confiáveis manualmente.</string>
+    <string name="msg_no_trusted_certificates">Sem certificados confiáveis</string>
+    <string name="msg_confirm_delete_certificate">Tem certeza de que deseja remover a confiança de \"%1$s\"?</string>
 </resources>

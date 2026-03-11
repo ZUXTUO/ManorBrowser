@@ -384,4 +384,12 @@
     <string name="msg_load_timeout">Tiempo de espera agotado, carga detenida</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tarea detenida.</string>
+    <string name="title_ssl_error">Advertencia de seguridad</string>
+    <string name="msg_ssl_error">El certificado SSL para \"%1$s\" no es válido o ha expirado. ¿Desea continuar?</string>
+    <string name="action_allow_once">Permitir una vez</string>
+    <string name="action_always_allow">Confiar siempre</string>
+    <string name="title_trusted_certificates">Certificados de confianza</string>
+    <string name="msg_trusted_certificates_desc">Ver y administrar certificados SSL de confianza manualmente.</string>
+    <string name="msg_no_trusted_certificates">No hay certificados de confianza</string>
+    <string name="msg_confirm_delete_certificate">¿Está seguro de que desea eliminar la confianza para \"%1$s\"?</string>
 </resources>

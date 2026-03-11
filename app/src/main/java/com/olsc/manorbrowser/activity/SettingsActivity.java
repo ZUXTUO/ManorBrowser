@@ -158,6 +158,14 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
+        // 已信任证书管理
+        View containerTrustedCertificates = findViewById(R.id.container_trusted_certificates);
+        if (containerTrustedCertificates != null) {
+            containerTrustedCertificates.setOnClickListener(v -> {
+                startActivity(new android.content.Intent(this, TrustedCertificateActivity.class));
+            });
+        }
+
         // 智能托管 (AI 远程控制)
         androidx.appcompat.widget.SwitchCompat swAiRemote = findViewById(R.id.sw_ai_remote);
         View containerAiServer = findViewById(R.id.container_ai_server_url);

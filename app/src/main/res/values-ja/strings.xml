@@ -384,4 +384,12 @@
     <string name="msg_group_closed">グループ %1$s を閉じました</string>
     <string name="msg_load_timeout">ページの読み込みがタイムアウトしました。読み込みを停止しました。</string>
     <string name="ai_msg_stopped">タスクが停止されました。</string>
+    <string name="title_ssl_error">セキュリティ警告</string>
+    <string name="msg_ssl_error">「%1$s」のSSL証明書が無効または期限切れです。続行しますか？</string>
+    <string name="action_allow_once">今回のみ許可</string>
+    <string name="action_always_allow">常に信頼する</string>
+    <string name="title_trusted_certificates">信頼された証明書</string>
+    <string name="msg_trusted_certificates_desc">手動で信頼されたSSL証明書を表示・管理します。</string>
+    <string name="msg_no_trusted_certificates">信頼された証明書はありません</string>
+    <string name="msg_confirm_delete_certificate">「%1$s」の信頼を削除してもよろしいですか？</string>
 </resources>

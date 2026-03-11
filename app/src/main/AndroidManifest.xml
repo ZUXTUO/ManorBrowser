@@ -385,6 +385,12 @@
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/Theme.ManorBrowser" />
 
+        <activity
+            android:name=".activity.TrustedCertificateActivity"
+            android:label="@string/title_trusted_certificates"
+            android:parentActivityName=".activity.SettingsActivity"
+            android:theme="@style/Theme.ManorBrowser" />
+
     </application>
 
 </manifest>

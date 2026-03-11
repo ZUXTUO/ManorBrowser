@@ -384,4 +384,14 @@
     <string name="msg_load_timeout">網頁載入超時，已停止載入</string>
     <string name="language_ryu">琉球語 (沖繩語) (不完善)</string>
     <string name="ai_msg_stopped">任務已停止。</string>
+    <string name="title_ssl_error">安全警告</string>
+    <string name="msg_ssl_error">網站「%1$s」的 SSL 安全憑證無效或已過期。這可能意味著您的通訊正被攔截或該網站不安全。
+
+您是否仍要繼續瀏覽？</string>
+    <string name="action_allow_once">僅允許本次</string>
+    <string name="action_always_allow">始終信任 (保存到本地)</string>
+    <string name="title_trusted_certificates">已信任的憑證</string>
+    <string name="msg_trusted_certificates_desc">查看和管理已手動允許的過期或私有憑證。</string>
+    <string name="msg_no_trusted_certificates">暫無已信任的憑證</string>
+    <string name="msg_confirm_delete_certificate">確定要取消對「%1$s」的信任嗎？</string>
 </resources>

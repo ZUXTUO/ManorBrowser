@@ -88,6 +88,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.olsc.manorbrowser.utils.BrowserCommandServer;
+import com.olsc.manorbrowser.data.TrustedCertificateStorage;
+
+import java.security.cert.X509Certificate;
 import java.util.Locale;
 import android.text.Spanned;
 import io.noties.markwon.Markwon;
@@ -1307,6 +1310,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
         if (tab.url != null && !tab.url.isEmpty() && !Config.URL_BLANK.equals(tab.url)) {
             session.loadUri(tab.url);
         }
@@ -3788,6 +3793,25 @@ public class MainActivity extends AppCompatActivity {
         android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
         if (imm != null && urlInput != null) {
             imm.hideSoftInputFromWindow(urlInput.getWindowToken(), 0);
+        }
+    }
+
+    private String getCertificateFingerprint(java.security.cert.X509Certificate cert) {
+        if (cert == null) return null;
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] der = cert.getEncoded();
+            md.update(der);
+            byte[] digest = md.digest();
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : digest) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString().toUpperCase();
+        } catch (Exception e) {
+            return null;
         }
     }
 }

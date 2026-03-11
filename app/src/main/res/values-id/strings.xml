@@ -384,4 +384,12 @@
     <string name="msg_load_timeout">Waktu pemuatan halaman habis, pemuatan dihentikan</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tugas dihentikan.</string>
+    <string name="title_ssl_error">Peringatan Keamanan</string>
+    <string name="msg_ssl_error">Sertifikat SSL untuk \"%1$s\" tidak valid atau kedaluwarsa. Anda ingin melanjutkan?</string>
+    <string name="action_allow_once">Izinkan sekali</string>
+    <string name="action_always_allow">Selalu percayai</string>
+    <string name="title_trusted_certificates">Sertifikat Tepercaya</string>
+    <string name="msg_trusted_certificates_desc">Lihat dan kelola sertifikat SSL tepercaya secara manual.</string>
+    <string name="msg_no_trusted_certificates">Tidak ada sertifikat tepercaya</string>
+    <string name="msg_confirm_delete_certificate">Apakah Anda yakin ingin menghapus kepercayaan untuk \"%1$s\"?</string>
 </resources>
