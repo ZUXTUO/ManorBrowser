@@ -217,6 +217,11 @@
     <string name="action_clear_all">Cancella tutto</string>
     <string name="msg_cookies_cleared">Tutti i cookie e i dati dei siti cancellati</string>
     <string name="msg_cookie_deleted">Cookie eliminato</string>
+    <string name="title_modify_cookie_warning">Operazione pericolosa</string>
+    <string name="msg_modify_cookie_warning">Si sconsiglia caldamente di modificare i valori dei cookie. La modifica può causare errori di accesso, corruzione dei dati o altri problemi gravi. Vuoi procedere comunque?</string>
+    <string name="title_edit_cookie">Modifica cookie</string>
+    <string name="label_modify_cookie_value">Modifica valore cookie</string>
+    <string name="msg_cookie_updated">Valore del cookie aggiornato localmente (potrebbe richiedere il riavvio o il caricamento)</string>
     <string name="label_domain">Dominio: %s</string>
     <string name="label_path">Percorso: %s</string>
     <string name="label_value">Valore: %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">Apri URL</string>
     <string name="title_download_apk">Scaricare l\'APK?</string>
     <string name="msg_download_apk">Questo link è per un file di installazione di un\'applicazione (APK). Vuoi scaricarlo?\n\nFile: %1$s</string>
+    <string name="title_download_confirm">Conferma download</string>
+    <string name="msg_download_confirm">Vuoi scaricare questo file?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Personalizzazione pulsante Home</string>
     <string name="desc_custom_home_button">Personalizza la funzione del primo pulsante nella barra inferiore</string>
     <string name="label_current_function">Funzione attuale</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">Il gruppo %1$s è stato chiuso</string>
     <string name="msg_load_timeout">Tempo di caricamento della pagina scaduto, caricamento interrotto</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Attività interrotta.</string>
 </resources>

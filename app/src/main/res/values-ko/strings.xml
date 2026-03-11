@@ -217,6 +217,11 @@
     <string name="action_clear_all">모두 삭제</string>
     <string name="msg_cookies_cleared">모든 쿠키와 사이트 데이터가 삭제되었습니다</string>
     <string name="msg_cookie_deleted">쿠키가 삭제되었습니다</string>
+    <string name="title_modify_cookie_warning">위험한 작업 경고</string>
+    <string name="msg_modify_cookie_warning">전문 지식이 없는 사용자가 쿠키 값을 수정하는 것은 엄격히 금지됩니다. 쿠키를 수정하면 로그인 실패, 계정 이상, 페이지 로딩 오류 등 예기치 않은 결과가 발생할 수 있습니다. 정말 수정하시겠습니까?</string>
+    <string name="title_edit_cookie">쿠키 값 수정</string>
+    <string name="label_modify_cookie_value">새 쿠키 값</string>
+    <string name="msg_cookie_updated">쿠키 값이 로컬에서 업데이트되었습니다 (앱을 다시 시작하거나 페이지를 새로고침해야 할 수도 있습니다)</string>
     <string name="label_domain">도메인: %s</string>
     <string name="label_path">경로: %s</string>
     <string name="label_value">값: %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">URL 열기</string>
     <string name="title_download_apk">APK를 다운로드하시겠습니까?</string>
     <string name="msg_download_apk">이 링크는 애플리케이션 설치 파일 (APK) 입니다. 다운로드하시겠습니까?\n\n파일: %1$s</string>
+    <string name="title_download_confirm">다운로드 확인</string>
+    <string name="msg_download_confirm">이 파일을 다운로드하시겠습니까?\n\n파일: %1$s</string>
     <string name="title_custom_home_button">홈 버튼 사용자 정의</string>
     <string name="desc_custom_home_button">하단 바의 첫 번째 버튼 기능을 사용자 정의합니다</string>
     <string name="label_current_function">현재 기능</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">%1$s 그룹이 닫혔습니다</string>
     <string name="msg_load_timeout">페이지 로드 시간 초과, 로드가 중지되었습니다</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">작업이 중단되었습니다.</string>
 </resources>

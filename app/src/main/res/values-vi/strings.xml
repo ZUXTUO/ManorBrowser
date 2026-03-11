@@ -68,6 +68,8 @@
     <string name="download_status_unknown">Không xác định</string>
     <string name="title_download_apk">Tải về APK?</string>
     <string name="msg_download_apk">Liên kết này dành cho tệp cài đặt ứng dụng (APK). Bạn có muốn tải về không?\n\nTệp: %1$s</string>
+    <string name="title_download_confirm">Xác nhận tải xuống</string>
+    <string name="msg_download_confirm">Bạn có muốn tải xuống tệp này không?\n\nTệp: %1$s</string>
     <string name="msg_download_start">Bắt đầu tải: %1$s</string>
     <string name="msg_download_failed">Tải xuống thất bại: %1$s</string>
     <string name="msg_download_cancelled">Đã hủy</string>
@@ -219,6 +221,11 @@
     <string name="action_clear_all">Xóa tất cả</string>
     <string name="msg_cookies_cleared">Đã xóa tất cả cookie và dữ liệu trang web</string>
     <string name="msg_cookie_deleted">Đã xóa cookie</string>
+    <string name="title_modify_cookie_warning">Thao tác nguy hiểm</string>
+    <string name="msg_modify_cookie_warning">Tuyệt đối không nên sửa đổi giá trị cookie. Việc sửa đổi có thể gây ra lỗi đăng nhập, hỏng dữ liệu hoặc các vấn đề nghiêm trọng khác. Bạn vẫn muốn tiếp tục?</string>
+    <string name="title_edit_cookie">Sửa Cookie</string>
+    <string name="label_modify_cookie_value">Sửa giá trị Cookie</string>
+    <string name="msg_cookie_updated">Giá trị cookie đã được cập nhật cục bộ (có thể cần khởi động lại hoặc tải lại)</string>
     <string name="label_domain">Tên miền: %s</string>
     <string name="label_path">Đường dẫn: %s</string>
     <string name="label_value">Giá trị: %s</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">Nhóm %1$s đã đóng</string>
     <string name="msg_load_timeout">Hết thời gian tải trang, đã dừng tải</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Nhiệm vụ đã dừng.</string>
 </resources>

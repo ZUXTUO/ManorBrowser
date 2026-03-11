@@ -217,6 +217,11 @@
     <string name="action_clear_all">Hapus Semua</string>
     <string name="msg_cookies_cleared">Semua cookie dan data situs dihapus</string>
     <string name="msg_cookie_deleted">Cookie dihapus</string>
+    <string name="title_modify_cookie_warning">Operasi Berbahaya</string>
+    <string name="msg_modify_cookie_warning">Sangat tidak disarankan untuk mengubah nilai cookie. Modifikasi dapat menyebabkan kegagalan login, kerusakan data, atau masalah serius lainnya. Apakah Anda tetap ingin melanjutkan?</string>
+    <string name="title_edit_cookie">Edit Cookie</string>
+    <string name="label_modify_cookie_value">Ubah Nilai Cookie</string>
+    <string name="msg_cookie_updated">Nilai cookie diperbarui secara lokal (mungkin memerlukan restart atau muat ulang)</string>
     <string name="label_domain">Domain: %s</string>
     <string name="label_path">Jalur: %s</string>
     <string name="label_value">Nilai: %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">Buka URL</string>
     <string name="title_download_apk">Unduh APK?</string>
     <string name="msg_download_apk">Tautan ini adalah untuk file instalasi aplikasi (APK). Apakah Anda ingin mengunduhnya?\n\nFile: %1$s</string>
+    <string name="title_download_confirm">Konfirmasi Unduhan</string>
+    <string name="msg_download_confirm">Apakah Anda ingin mengunduh file ini?\n\nFile: %1$s</string>
     <string name="title_custom_home_button">Kustomisasi Tombol Beranda</string>
     <string name="desc_custom_home_button">Kustomisasi fungsi tombol pertama di bilah bawah</string>
     <string name="label_current_function">Fungsi Saat Ini</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">Grup %1$s telah ditutup</string>
     <string name="msg_load_timeout">Waktu pemuatan halaman habis, pemuatan dihentikan</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Tugas dihentikan.</string>
 </resources>

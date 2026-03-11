@@ -217,6 +217,11 @@
     <string name="action_clear_all">Borrar todo</string>
     <string name="msg_cookies_cleared">Todas las cookies y datos del sitio borrados</string>
     <string name="msg_cookie_deleted">Cookie eliminada</string>
+    <string name="title_modify_cookie_warning">Operación peligrosa</string>
+    <string name="msg_modify_cookie_warning">Se recomienda estrictamente no modificar los valores de las cookies. La modificación puede provocar fallos en el inicio de sesión, corrupción de datos u otros problemas graves. ¿Desea continuar?</string>
+    <string name="title_edit_cookie">Editar cookie</string>
+    <string name="label_modify_cookie_value">Modificar valor de la cookie</string>
+    <string name="msg_cookie_updated">Valor de la cookie actualizado localmente (puede requerir reinicio o recarga)</string>
     <string name="label_domain">Dominio: %s</string>
     <string name="label_path">Ruta: %s</string>
     <string name="label_value">Valor: %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">Abrir URL</string>
     <string name="title_download_apk">¿Descargar APK?</string>
     <string name="msg_download_apk">Este enlace es para un archivo de instalación de aplicación (APK). ¿Desea descargarlo?\n\nArchivo: %1$s</string>
+    <string name="title_download_confirm">Confirmar descarga</string>
+    <string name="msg_download_confirm">¿Quieres descargar este archivo?\n\nArchivo: %1$s</string>
     <string name="title_custom_home_button">Personalización del botón de inicio</string>
     <string name="desc_custom_home_button">Personaliza la función del primer botón en la barra inferior</string>
     <string name="label_current_function">Función actual</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">El grupo %1$s ha sido cerrado</string>
     <string name="msg_load_timeout">Tiempo de espera agotado, carga detenida</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Tarea detenida.</string>
 </resources>

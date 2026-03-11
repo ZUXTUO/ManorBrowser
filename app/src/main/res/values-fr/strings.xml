@@ -217,6 +217,11 @@
     <string name="action_clear_all">Tout effacer</string>
     <string name="msg_cookies_cleared">Tous les cookies et données de site ont été effacés</string>
     <string name="msg_cookie_deleted">Cookie supprimé</string>
+    <string name="title_modify_cookie_warning">Opération dangereuse</string>
+    <string name="msg_modify_cookie_warning">Il est strictement déconseillé de modifier les valeurs des cookies. Toute modification peut entraîner des échecs de connexion, une corruption des données ou d\'autres problèmes graves. Voulez-vous continuer ?</string>
+    <string name="title_edit_cookie">Modifier le cookie</string>
+    <string name="label_modify_cookie_value">Modifier la valeur du cookie</string>
+    <string name="msg_cookie_updated">Valeur du cookie mise à jour localement (peut nécessiter un redémarrage ou un rechargement)</string>
     <string name="label_domain">Domaine : %s</string>
     <string name="label_path">Chemin : %s</string>
     <string name="label_value">Valeur : %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">Ouvrir l\'URL</string>
     <string name="title_download_apk">Télécharger l\'APK ?</string>
     <string name="msg_download_apk">Ce lien est destiné à un fichier d\'installation d\'application (APK). Voulez-vous le télécharger ?\n\nFichier : %1$s</string>
+    <string name="title_download_confirm">Confirmer le téléchargement</string>
+    <string name="msg_download_confirm">Voulez-vous télécharger ce fichier ?\n\nFichier : %1$s</string>
     <string name="title_custom_home_button">Personnalisation du bouton d\'accueil</string>
     <string name="desc_custom_home_button">Personnalisez la fonction du premier bouton dans la barre inférieure</string>
     <string name="label_current_function">Fonction actuelle</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">Le groupe %1$s a été fermé</string>
     <string name="msg_load_timeout">Délai d\'attente dépassé, chargement arrêté</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Tâche arrêtée.</string>
 </resources>

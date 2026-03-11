@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +52,7 @@ public class CookieManagerActivity extends AppCompatActivity {
     private String currentDomain = null;
     private TextView tvEmpty;
     private Toolbar toolbar;
+    private File sourceDbFile;
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -104,6 +110,11 @@ public class CookieManagerActivity extends AppCompatActivity {
             @Override
             public void onDeleteCookie(CookieItem item, int position) {
                 deleteCookieFromHost(item, position);
+            }
+
+            @Override
+            public void onCookieLongClick(CookieItem item, int position) {
+                showModifyWarningDialog(item);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -175,6 +186,7 @@ public class CookieManagerActivity extends AppCompatActivity {
     }
 
     private void loadFromDatabase(File dbFile) {
+        this.sourceDbFile = dbFile;
         File tempDb = new File(getCacheDir(), "temp_cookies.sqlite");
         try {
             copyFile(dbFile, tempDb);
@@ -279,6 +291,74 @@ public class CookieManagerActivity extends AppCompatActivity {
             tvEmpty.setVisibility(View.VISIBLE);
         } else {
             tvEmpty.setVisibility(View.GONE);
+        }
+    }
+
+    private void showModifyWarningDialog(CookieItem item) {
+        // 使用红色样式的警告弹窗
+        TextView titleView = new TextView(this);
+        titleView.setText(R.string.title_modify_cookie_warning);
+        titleView.setPadding(60, 40, 60, 0);
+        titleView.setTextSize(20);
+        titleView.setTextColor(Color.RED);
+        titleView.setTypeface(null, Typeface.BOLD);
+
+        new MaterialAlertDialogBuilder(this)
+            .setCustomTitle(titleView)
+            .setMessage(R.string.msg_modify_cookie_warning)
+            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                showEditCookieValueDialog(item);
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+    }
+
+    private void showEditCookieValueDialog(CookieItem item) {
+        EditText input = new EditText(this);
+        input.setText(item.value);
+        int padding = (int) (20 * getResources().getDisplayMetrics().density);
+        
+        FrameLayout container = new FrameLayout(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = padding;
+        params.rightMargin = padding;
+        input.setLayoutParams(params);
+        container.addView(input);
+
+        new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.title_edit_cookie)
+            .setMessage(item.name)
+            .setView(container)
+            .setPositiveButton(R.string.action_save, (dialog, which) -> {
+                String newValue = input.getText().toString();
+                updateCookieValue(item, newValue);
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .show();
+    }
+
+    private void updateCookieValue(CookieItem item, String newValue) {
+        if (sourceDbFile == null || !sourceDbFile.exists()) {
+            Toast.makeText(this, "Database file not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            // 直接修改原始数据库
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(sourceDbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
+            db.execSQL("UPDATE moz_cookies SET value = ? WHERE name = ? AND host = ? AND path = ?", 
+                new Object[]{newValue, item.name, item.domain, item.path});
+            db.close();
+            
+            // 更新当前内存数据并刷新 UI
+            item.value = newValue;
+            refreshDisplayList();
+            Toast.makeText(this, R.string.msg_cookie_updated, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating cookie in database", e);
+            Toast.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

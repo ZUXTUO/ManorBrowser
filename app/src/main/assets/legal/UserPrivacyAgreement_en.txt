@@ -72,6 +72,6 @@ GitHub: https://github.com/Olsc/ManorBrowser
 
 Resist harmful information, reject malicious applications; pay attention to self-protection, beware of online fraud; use the internet reasonably, live a healthy browsing life.
 
-<br> Independent Developer: Olsc
-<br> Version: 2026.1
-<br> March 2026
+Independent Developer: Olsc  
+Version: 2026.1  
+March 2026

@@ -218,6 +218,11 @@
     <string name="action_clear_all">すべて消去</string>
     <string name="msg_cookies_cleared">すべての Cookie とサイトデータを消去しました</string>
     <string name="msg_cookie_deleted">Cookie を削除しました</string>
+    <string name="title_modify_cookie_warning">危険な操作の警告</string>
+    <string name="msg_modify_cookie_warning">専門知識のないユーザーがCookieの値を変更することは厳禁です。Cookieを変更すると、ログインの失敗、アカウントの異常、ページの読み込みエラーなど、予期しない結果を招く可能性があります。本当に変更しますか？</string>
+    <string name="title_edit_cookie">Cookie値の編集</string>
+    <string name="label_modify_cookie_value">新しいCookie値</string>
+    <string name="msg_cookie_updated">Cookie値がローカルで更新されました（アプリの再起動またはページの更新が必要な場合があります）</string>
     <string name="label_domain">ドメイン: %s</string>
     <string name="label_path">パス: %s</string>
     <string name="label_value">値: %s</string>
@@ -253,6 +258,8 @@
     <string name="action_open_url">URLを開く</string>
     <string name="title_download_apk">APKをダウンロードしますか？</string>
     <string name="msg_download_apk">このリンクはアプリケーションのインストールファイル (APK) です。ダウンロードしますか？\n\nファイル: %1$s</string>
+    <string name="title_download_confirm">ダウンロードの確認</string>
+    <string name="msg_download_confirm">このファイルをダウンロードしますか？\n\nファイル: %1$s</string>
     <string name="title_custom_home_button">ホームボタンのカスタマイズ</string>
     <string name="desc_custom_home_button">ボトムバーの最初のボタンの機能をカスタマイズします</string>
     <string name="label_current_function">現在の機能</string>
@@ -376,4 +383,5 @@
     <string name="default_group_name">デフォルトグループ</string>
     <string name="msg_group_closed">グループ %1$s を閉じました</string>
     <string name="msg_load_timeout">ページの読み込みがタイムアウトしました。読み込みを停止しました。</string>
+    <string name="ai_msg_stopped">タスクが停止されました。</string>
 </resources>

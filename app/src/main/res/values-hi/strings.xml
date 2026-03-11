@@ -217,6 +217,11 @@
     <string name="action_clear_all">सभी साफ़ करें</string>
     <string name="msg_cookies_cleared">सभी कुकीज़ और साइट डेटा साफ़ कर दिए गए</string>
     <string name="msg_cookie_deleted">कुकी हटा दी गई</string>
+    <string name="title_modify_cookie_warning">खतरनाक ऑपरेशन</string>
+    <string name="msg_modify_cookie_warning">कुकी मानों को संशोधित करने की कड़ाई से अनुशंसा नहीं की जाती है। संशोधन के कारण लॉगिन विफलता, डेटा भ्रष्टाचार, या अन्य गंभीर समस्याएं हो सकती हैं। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
+    <string name="title_edit_cookie">कुकी संपादित करें</string>
+    <string name="label_modify_cookie_value">कुकी मान संशोधित करें</string>
+    <string name="msg_cookie_updated">कुकी मान स्थानीय रूपतः अपडेट किया गया (पुनः प्रारंभ या पुनः लोड की आवश्यकता हो सकती है)</string>
     <string name="label_domain">डोमेन: %s</string>
     <string name="label_path">पथ: %s</string>
     <string name="label_value">मान: %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">URL खोलें</string>
     <string name="title_download_apk">APK डाउनलोड करें?</string>
     <string name="msg_download_apk">यह लिंक किसी एप्लिकेशन इंस्टॉलेशन फ़ाइल (APK) के लिए है। क्या आप इसे डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
+    <string name="title_download_confirm">डाउनलोड की पुष्टि करें</string>
+    <string name="msg_download_confirm">क्या आप इस फ़ाइल को डाउनलोड करना चाहते हैं?\n\nफ़ाइल: %1$s</string>
     <string name="title_custom_home_button">होम बटन अनुकूलन</string>
     <string name="desc_custom_home_button">निचली पट्टी में पहले बटन के कार्य को अनुकूलित करें</string>
     <string name="label_current_function">वर्तमान कार्य</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">समूह %1$s बंद कर दिया गया है</string>
     <string name="msg_load_timeout">पृष्ठ लोड होने का समय समाप्त, लोड होना बंद हो गया</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">कार्य रुक गया।</string>
 </resources>

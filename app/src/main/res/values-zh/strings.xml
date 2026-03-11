@@ -229,6 +229,11 @@ URL: %1$s</string>
     <string name="action_clear_all">清除全部</string>
     <string name="msg_cookies_cleared">已清除所有 Cookies 和网站数据</string>
     <string name="msg_cookie_deleted">Cookie 已删除</string>
+    <string name="title_modify_cookie_warning">危险操作提示</string>
+    <string name="msg_modify_cookie_warning">严禁不具备专业知识的用户修改 Cookie 值。修改 Cookie 可能会导致登录失效、账号异常、网页加载错误等不可预知的后果。是否确认修改？</string>
+    <string name="title_edit_cookie">修改 Cookie 值</string>
+    <string name="label_modify_cookie_value">新 Cookie 值</string>
+    <string name="msg_cookie_updated">Cookie 已手动修改（可能需要重启应用或刷新网页生效）</string>
     <string name="label_domain">域名: %s</string>
     <string name="label_path">路径: %s</string>
     <string name="label_value">值: %s</string>
@@ -264,6 +269,8 @@ URL: %1$s</string>
     <string name="action_open_url">打开链接</string>
     <string name="title_download_apk">下载 APK 文件？</string>
     <string name="msg_download_apk">检测到此链接为安卓应用安装包 (APK)，是否确认下载？\n\n文件：%1$s</string>
+    <string name="title_download_confirm">确认下载</string>
+    <string name="msg_download_confirm">检测到有文件需要下载，是否确认？\n\n文件：%1$s</string>
     <string name="title_custom_home_button">主页按钮自定义</string>
     <string name="desc_custom_home_button">自定义底部栏第一个按钮的功能</string>
     <string name="label_current_function">当前功能</string>
@@ -378,4 +385,5 @@ URL: %1$s</string>
     <string name="msg_restricted_sites_desc">在此管理已设置为“始终拒绝”访问位置信息的网站。</string>
     <string name="action_remove">移除限制</string>
     <string name="msg_load_timeout">网页加载超时，已停止加载</string>
+    <string name="ai_msg_stopped">任务已停止。</string>
 </resources>

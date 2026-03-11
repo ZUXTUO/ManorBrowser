@@ -217,6 +217,11 @@
     <string name="action_clear_all">Limpar tudo</string>
     <string name="msg_cookies_cleared">Todos os cookies e dados do site limpos</string>
     <string name="msg_cookie_deleted">Cookie excluído</string>
+    <string name="title_modify_cookie_warning">Operação Perigosa</string>
+    <string name="msg_modify_cookie_warning">Não é estritamente recomendada a modificação dos valores dos cookies. A modificação pode causar falha no login, corrupção de dados ou outros problemas graves. Deseja continuar?</string>
+    <string name="title_edit_cookie">Editar Cookie</string>
+    <string name="label_modify_cookie_value">Modificar Valor do Cookie</string>
+    <string name="msg_cookie_updated">Valor do cookie atualizado localmente (pode exigir reinício ou recarga)</string>
     <string name="label_domain">Domínio: %s</string>
     <string name="label_path">Caminho: %s</string>
     <string name="label_value">Valor: %s</string>
@@ -252,6 +257,8 @@
     <string name="action_open_url">Abrir URL</string>
     <string name="title_download_apk">Baixar APK?</string>
     <string name="msg_download_apk">Este link é para um arquivo de instalação de aplicativo (APK). Deseja baixá-lo?\n\nArquivo: %1$s</string>
+    <string name="title_download_confirm">Confirmar download</string>
+    <string name="msg_download_confirm">Deseja baixar este arquivo?\n\nArquivo: %1$s</string>
     <string name="title_custom_home_button">Personalização do botão de início</string>
     <string name="desc_custom_home_button">Personalize a função do primeiro botão na barra inferior</string>
     <string name="label_current_function">Função atual</string>
@@ -376,4 +383,5 @@
     <string name="msg_group_closed">O grupo %1$s foi fechado</string>
     <string name="msg_load_timeout">O tempo de carregamento da página expirou, o carregamento foi interrompido</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
+    <string name="ai_msg_stopped">Tarefa interrompida.</string>
 </resources>
