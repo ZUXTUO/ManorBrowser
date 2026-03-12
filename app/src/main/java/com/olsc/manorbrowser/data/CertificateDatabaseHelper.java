@@ -9,12 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class CertificateDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "manor_certificates.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // 版本 2 增加证书数据列
 
     public static final String TABLE_CERTIFICATES = "trusted_certificates";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_HOST = "host";
     public static final String COLUMN_FINGERPRINT = "fingerprint";
+    public static final String COLUMN_CERT_DATA = "certificate_data";
     public static final String COLUMN_ADDED_TIME = "added_time";
 
     public CertificateDatabaseHelper(Context context) {
@@ -27,6 +28,7 @@ public class CertificateDatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_HOST + " TEXT,"
                 + COLUMN_FINGERPRINT + " TEXT,"
+                + COLUMN_CERT_DATA + " BLOB,"
                 + COLUMN_ADDED_TIME + " INTEGER,"
                 + "UNIQUE(" + COLUMN_HOST + ", " + COLUMN_FINGERPRINT + ")"
                 + ")";
@@ -36,7 +38,8 @@ public class CertificateDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CERTIFICATES);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_CERTIFICATES + " ADD COLUMN " + COLUMN_CERT_DATA + " BLOB");
+        }
     }
 }

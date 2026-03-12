@@ -20,12 +20,14 @@ public class TrustedCertificateStorage {
         public long id;
         public String host;
         public String fingerprint;
+        public byte[] certificateData;
         public long addedTime;
 
-        public TrustedCertificate(long id, String host, String fingerprint, long addedTime) {
+        public TrustedCertificate(long id, String host, String fingerprint, byte[] certificateData, long addedTime) {
             this.id = id;
             this.host = host;
             this.fingerprint = fingerprint;
+            this.certificateData = certificateData;
             this.addedTime = addedTime;
         }
     }
@@ -33,7 +35,7 @@ public class TrustedCertificateStorage {
     /**
      * 添加信任证书
      */
-    public static void addTrustedCertificate(Context context, String host, String fingerprint) {
+    public static void addTrustedCertificate(Context context, String host, String fingerprint, byte[] certificateData) {
         if (host == null || fingerprint == null) return;
         executor.execute(() -> {
             CertificateDatabaseHelper dbHelper = new CertificateDatabaseHelper(context);
@@ -41,6 +43,7 @@ public class TrustedCertificateStorage {
             ContentValues values = new ContentValues();
             values.put(CertificateDatabaseHelper.COLUMN_HOST, host);
             values.put(CertificateDatabaseHelper.COLUMN_FINGERPRINT, fingerprint);
+            values.put(CertificateDatabaseHelper.COLUMN_CERT_DATA, certificateData);
             values.put(CertificateDatabaseHelper.COLUMN_ADDED_TIME, System.currentTimeMillis());
             
             // 使用 replace 避免重复
@@ -83,6 +86,7 @@ public class TrustedCertificateStorage {
                         cursor.getLong(cursor.getColumnIndexOrThrow(CertificateDatabaseHelper.COLUMN_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(CertificateDatabaseHelper.COLUMN_HOST)),
                         cursor.getString(cursor.getColumnIndexOrThrow(CertificateDatabaseHelper.COLUMN_FINGERPRINT)),
+                        cursor.getBlob(cursor.getColumnIndexOrThrow(CertificateDatabaseHelper.COLUMN_CERT_DATA)),
                         cursor.getLong(cursor.getColumnIndexOrThrow(CertificateDatabaseHelper.COLUMN_ADDED_TIME))
                 ));
             }

@@ -90,7 +90,12 @@ import java.util.List;
 import com.olsc.manorbrowser.utils.BrowserCommandServer;
 import com.olsc.manorbrowser.data.TrustedCertificateStorage;
 
+import org.mozilla.geckoview.GeckoSession.WebResponseInfo;
 import java.security.cert.X509Certificate;
+import java.security.cert.CertificateFactory;
+import java.io.ByteArrayInputStream;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Locale;
 import android.text.Spanned;
 import io.noties.markwon.Markwon;
@@ -111,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     // --- 引擎与数据管理器 ---
     /** 全局共享的 GeckoRuntime，一个进程通常只需要一个 */
     public static GeckoRuntime sRuntime;
+    private static final Set<String> sSessionAcceptedCerts = new HashSet<>();
     /** 当前会话中维护的所有标签页列表 */
     private final List<TabInfo> tabs = new ArrayList<>();
     private TabSwitcherAdapter tabSwitcherAdapter;
@@ -426,6 +432,7 @@ public class MainActivity extends AppCompatActivity {
             sRuntime = GeckoRuntime.create(getApplicationContext(), builder.build());
             sRuntime.setAutocompleteStorageDelegate(mAutocompleteStorageDelegate);
             sRuntime.getWebExtensionController().setPromptDelegate(new com.olsc.manorbrowser.utils.ExtensionPromptDelegate(this));
+            preloadTrustedCertificates();
         } else {
             // Runtime 已存在
         }
@@ -1178,6 +1185,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 
                 // 根据错误类别分发不同的错误页面
+                android.util.Log.d("ManorBrowser", "onLoadError: cat=" + error.category + ", code=" + error.code + ", uri=" + uri + ", cert=" + (error.certificate != null));
+                
+                if (error.category == org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_SECURITY || error.certificate != null) {
+                    // 只要有证书信息或者是安全分类错误，都尝试进入 SSL 处理逻辑
+                    return handleSslError(session, uri, error);
+                }
+
                 switch (error.category) {
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_NETWORK:
                         return GeckoResult.fromValue("resource://android/assets/html/offline.html");
@@ -3813,5 +3827,127 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private void preloadTrustedCertificates() {
+        if (sRuntime == null) return;
+        new Thread(() -> {
+            try {
+                java.util.List<com.olsc.manorbrowser.data.TrustedCertificateStorage.TrustedCertificate> trustedList = 
+                    com.olsc.manorbrowser.data.TrustedCertificateStorage.loadAll(this);
+                for (com.olsc.manorbrowser.data.TrustedCertificateStorage.TrustedCertificate cert : trustedList) {
+                    if (cert.host != null && cert.fingerprint != null) {
+                        sSessionAcceptedCerts.add(cert.host + ":" + cert.fingerprint);
+                        
+                        if (cert.certificateData != null) {
+                            try {
+                                CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                                X509Certificate x509 = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(cert.certificateData));
+                                // 尝试通过反射注入异常，绕过由于 SDK 版本导致的 SecurityController 隐藏问题
+                                try {
+                                    Object sc = sRuntime.getClass().getMethod("getSecurityController").invoke(sRuntime);
+                                    sc.getClass().getMethod("addTrustException", X509Certificate.class, int.class)
+                                            .invoke(sc, x509, 2); // 2 = CERT_TRUST_ANY_OVERRIDE
+                                } catch (Exception ignored) {}
+                            } catch (Exception e) {
+                                android.util.Log.e("MainActivity", "Failed to restore trust for " + cert.host, e);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ignored) {}
+        }).start();
+    }
+
+    private GeckoResult<String> handleSslError(final GeckoSession session, String uri, final org.mozilla.geckoview.WebRequestError error) {
+        final GeckoResult<String> result = new GeckoResult<>();
+        
+        if (uri == null || uri.isEmpty()) {
+            uri = "unknown";
+        }
+
+        String tempHost = "unknown";
+        try {
+            android.net.Uri parsed = android.net.Uri.parse(uri);
+            String h = parsed.getHost();
+            if (h == null) h = parsed.getAuthority();
+            if (h != null) tempHost = h;
+        } catch (Exception ignored) {}
+        final String host = tempHost;
+
+        final X509Certificate x509 = error.certificate;
+        final String fingerprint = (x509 != null) ? getCertificateFingerprint(x509) : null;
+        final String certKey = (fingerprint != null) ? host + ":" + fingerprint : null;
+
+        // 1. 如果已经在信任列表中，尝试注入异常并直接返回（绕过错误页）
+        if (certKey != null && (sSessionAcceptedCerts.contains(certKey) || 
+            com.olsc.manorbrowser.data.TrustedCertificateStorage.isCertificateTrusted(this, host, fingerprint))) {
+            
+            sSessionAcceptedCerts.add(certKey);
+            if (x509 != null) {
+                try {
+                    Object sc = sRuntime.getClass().getMethod("getSecurityController").invoke(sRuntime);
+                    sc.getClass().getMethod("addTrustException", X509Certificate.class, int.class)
+                            .invoke(sc, x509, 2);
+                } catch (Exception ignored) {}
+            }
+            // 返回 null 通知 GeckoView 错误已处理
+            result.complete(null);
+            return result;
+        }
+
+        // 2. 未信任，弹出对话框
+        runOnUiThread(() -> {
+            com.google.android.material.dialog.MaterialAlertDialogBuilder builder = 
+                new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                    .setTitle(R.string.title_ssl_error)
+                    .setMessage(getString(R.string.msg_ssl_error, host))
+                    .setCancelable(false);
+
+            if (x509 != null && certKey != null) {
+                // 有证书信息时，提供“始终允许”选项
+                builder.setPositiveButton(R.string.action_always_allow, (dialog, which) -> {
+                    try {
+                        byte[] certData = x509.getEncoded();
+                        com.olsc.manorbrowser.data.TrustedCertificateStorage.addTrustedCertificate(MainActivity.this, host, fingerprint, certData);
+                        sSessionAcceptedCerts.add(certKey);
+                        
+                        // 注入异常并重载
+                        try {
+                            Object sc = sRuntime.getClass().getMethod("getSecurityController").invoke(sRuntime);
+                            sc.getClass().getMethod("addTrustException", X509Certificate.class, int.class)
+                                    .invoke(sc, x509, 2);
+                        } catch (Exception ignored) {}
+                        
+                        session.reload();
+                        result.complete(null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        result.complete(null);
+                    }
+                });
+            }
+
+            builder.setNeutralButton(R.string.action_allow_once, (dialog, which) -> {
+                if (x509 != null && certKey != null) {
+                    sSessionAcceptedCerts.add(certKey);
+                    try {
+                        Object sc = sRuntime.getClass().getMethod("getSecurityController").invoke(sRuntime);
+                        sc.getClass().getMethod("addTrustException", X509Certificate.class, int.class)
+                                .invoke(sc, x509, 2);
+                    } catch (Exception ignored) {}
+                }
+                session.reload();
+                result.complete(null);
+            });
+
+            builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                result.complete("resource://android/assets/html/404.html");
+            });
+
+            builder.show();
+        });
+
+        return result;
     }
 }
