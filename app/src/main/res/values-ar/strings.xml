@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">انتهت مهلة تحميل الصفحة، توقف التحميل</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">تم إيقاف المهمة.</string>
-    <string name="title_ssl_error">تحذير أمان</string>
-    <string name="msg_ssl_error">شهادة SSL لـ \"%1$s\" غير صالحة أو منتهية الصلاحية. هل تريد المتابعة؟</string>
-    <string name="action_allow_once">السماح هذه المرة</string>
-    <string name="action_always_allow">الثقة دائماً</string>
-    <string name="title_trusted_certificates">الشهادات الموثوقة</string>
-    <string name="msg_trusted_certificates_desc">عرض وإدارة شهادات SSL الموثوقة يدوياً.</string>
-    <string name="msg_no_trusted_certificates">لا توجد شهادات موثوقة</string>
-    <string name="msg_confirm_delete_certificate">هل أنت متأكد أنك تريد إزالة الثقة لـ \"%1$s\"؟</string>
 </resources>

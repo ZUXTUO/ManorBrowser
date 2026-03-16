@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">Przekroczono czas ładowania strony, zatrzymano ładowanie</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Zadanie zatrzymane.</string>
-    <string name="title_ssl_error">Ostrzeżenie o zabezpieczeniach</string>
-    <string name="msg_ssl_error">Certyfikat SSL dla \"%1$s\" jest nieprawidłowy lub wygasł. Czy chcesz kontynuować?</string>
-    <string name="action_allow_once">Zezwól tym razem</string>
-    <string name="action_always_allow">Zawsze ufaj</string>
-    <string name="title_trusted_certificates">Zaufane certyfikaty</string>
-    <string name="msg_trusted_certificates_desc">Przeglądaj i zarządzaj ręcznie zaufanymi certyfikatami SSL.</string>
-    <string name="msg_no_trusted_certificates">Brak zaufanych certyfikatów</string>
-    <string name="msg_confirm_delete_certificate">Czy na pewno chcesz usunąć zaufanie dla \"%1$s\"?</string>
 </resources>

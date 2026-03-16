@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">Pagina laadtijd verstreken, laden gestopt</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Taak gestopt.</string>
-    <string name="title_ssl_error">Beveiligingswaarschuwing</string>
-    <string name="msg_ssl_error">Het SSL-certificaat voor \"%1$s\" is ongeldig of verlopen. Wilt u doorgaan?</string>
-    <string name="action_allow_once">Eenmalig toestaan</string>
-    <string name="action_always_allow">Altijd vertrouwen</string>
-    <string name="title_trusted_certificates">Vertrouwde certificaten</string>
-    <string name="msg_trusted_certificates_desc">Bekijk en beheer handmatig vertrouwde SSL-certificaten.</string>
-    <string name="msg_no_trusted_certificates">Geen vertrouwde certificaten</string>
-    <string name="msg_confirm_delete_certificate">Weet u zeker dat u het vertrouwen voor \"%1$s\" wilt verwijderen?</string>
 </resources>

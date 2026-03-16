@@ -386,12 +386,4 @@ URL: %1$s</string>
     <string name="action_remove">移除限制</string>
     <string name="msg_load_timeout">网页加载超时，已停止加载</string>
     <string name="ai_msg_stopped">任务已停止。</string>
-    <string name="title_ssl_error">安全警告</string>
-    <string name="msg_ssl_error">网站“%1$s”的 SSL 安全证书无效或已过期。这可能意味着您的通信正被拦截或该网站不安全。\n\n您是否仍要继续访问？</string>
-    <string name="action_allow_once">仅允许本次</string>
-    <string name="action_always_allow">始终信任 (保存到本地)</string>
-    <string name="title_trusted_certificates">已信任的密钥/证书</string>
-    <string name="msg_trusted_certificates_desc">查看和管理已手动允许的过期或私有证书。</string>
-    <string name="msg_no_trusted_certificates">暂无已信任的证书</string>
-    <string name="msg_confirm_delete_certificate">确定要取消对“%1$s”的信任吗？</string>
 </resources>

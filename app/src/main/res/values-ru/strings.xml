@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">Время ожидания загрузки страницы истекло, загрузка остановлена</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Задача остановлена.</string>
-    <string name="title_ssl_error">Предупреждение системы безопасности</string>
-    <string name="msg_ssl_error">SSL-сертификат для \"%1$s\" недействителен или просрочен. Вы хотите продолжить?</string>
-    <string name="action_allow_once">Разрешить один раз</string>
-    <string name="action_always_allow">Всегда доверять</string>
-    <string name="title_trusted_certificates">Доверенные сертификаты</string>
-    <string name="msg_trusted_certificates_desc">Просмотр и управление доверенными сертификатами SSL вручную.</string>
-    <string name="msg_no_trusted_certificates">Нет доверенных сертификатов</string>
-    <string name="msg_confirm_delete_certificate">Вы уверены, что хотите удалить доверие к \"%1$s\"?</string>
 </resources>

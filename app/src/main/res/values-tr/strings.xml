@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">Sayfa yükleme zaman aşımı, yükleme durduruldu</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Görev durduruldu.</string>
-    <string name="title_ssl_error">Güvenlik Uyarısı</string>
-    <string name="msg_ssl_error">\"%1$s\" için SSL sertifikası geçersiz veya süresi dolmuş. Devam etmek istiyor musunuz?</string>
-    <string name="action_allow_once">Bir kez izin ver</string>
-    <string name="action_always_allow">Her zaman güven</string>
-    <string name="title_trusted_certificates">Güvenilen Sertifikalar</string>
-    <string name="msg_trusted_certificates_desc">Gelişmiş manuel güvenilen SSL sertifikalarını görüntüleyin ve yönetin.</string>
-    <string name="msg_no_trusted_certificates">Güvenilen sertifika yok</string>
-    <string name="msg_confirm_delete_certificate">\"%1$s\" güvenini kaldırmak istediğinizden emin misiniz?</string>
 </resources>

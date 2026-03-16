@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">Tempo di caricamento della pagina scaduto, caricamento interrotto</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Attività interrotta.</string>
-    <string name="title_ssl_error">Avviso di sicurezza</string>
-    <string name="msg_ssl_error">Il certificato SSL per \"%1$s\" non è valido o è scaduto. Vuoi continuare?</string>
-    <string name="action_allow_once">Consenti una volta</string>
-    <string name="action_always_allow">Punta sempre</string>
-    <string name="title_trusted_certificates">Certificati attendibili</string>
-    <string name="msg_trusted_certificates_desc">Visualizza e gestisci manualmente i certificati SSL attendibili.</string>
-    <string name="msg_no_trusted_certificates">Nessun certificato attendibile</string>
-    <string name="msg_confirm_delete_certificate">Sei sicuro di voler rimuovere l\'attendibilità per \"%1$s\"?</string>
 </resources>

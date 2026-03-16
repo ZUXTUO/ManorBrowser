@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">पृष्ठ लोड होने का समय समाप्त, लोड होना बंद हो गया</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">कार्य रुक गया।</string>
-    <string name="title_ssl_error">सुरक्षा चेतावनी</string>
-    <string name="msg_ssl_error">\"%1$s\" के लिए SSL प्रमाण पत्र अमान्य है या समाप्त हो गया है। क्या आप जारी रखना चाहते हैं?</string>
-    <string name="action_allow_once">एक बार अनुमति दें</string>
-    <string name="action_always_allow">हमेशा विश्वास करें</string>
-    <string name="title_trusted_certificates">विश्वसनीय प्रमाण पत्र</string>
-    <string name="msg_trusted_certificates_desc">मैन्युअल रूप से विश्वसनीय SSL प्रमाण पत्रों को देखें और प्रबंधित करें।</string>
-    <string name="msg_no_trusted_certificates">कोई विश्वसनीय प्रमाण पत्र नहीं</string>
-    <string name="msg_confirm_delete_certificate">क्या आप निश्चित रूप से \"%1$s\" के लिए विश्वास हटाना चाहते हैं?</string>
 </resources>

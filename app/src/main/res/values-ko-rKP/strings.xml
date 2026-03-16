@@ -384,12 +384,4 @@
     <string name="msg_load_timeout">페지 적재 시간 초과, 적재가 중지되였습니다</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">사업이 중단되였습니다.</string>
-    <string name="title_ssl_error">보안 경고</string>
-    <string name="msg_ssl_error">\"%1$s\"의 보안증서가 유효하지 않거나 기한이 지났습니다. 계속하시겠습니까?</string>
-    <string name="action_allow_once">이번만 허용</string>
-    <string name="action_always_allow">항상 신뢰</string>
-    <string name="title_trusted_certificates">신뢰할 수 있는 증서</string>
-    <string name="msg_trusted_certificates_desc">수동으로 신뢰할 수 있는 보안증서를 보고 관리합니다.</string>
-    <string name="msg_no_trusted_certificates">신뢰할 수 있는 증서 없음</string>
-    <string name="msg_confirm_delete_certificate">\"%1$s\"에 대한 신뢰를 제거하시겠습니까?</string>
 </resources>
