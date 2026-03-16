@@ -386,4 +386,7 @@ URL: %1$s</string>
     <string name="action_remove">移除限制</string>
     <string name="msg_load_timeout">网页加载超时，已停止加载</string>
     <string name="ai_msg_stopped">任务已停止。</string>
+    <string name="title_ssl_error">证书风险提示</string>
+    <string name="msg_ssl_error">网站“%1$s”的证书不受信任或已过期，可能存在安全风险。为了保护您的安全，访问已停止。</string>
+    <string name="action_stop_visit">停止访问</string>
 </resources>

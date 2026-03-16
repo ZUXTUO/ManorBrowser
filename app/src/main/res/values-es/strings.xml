@@ -384,4 +384,7 @@
     <string name="msg_load_timeout">Tiempo de espera agotado, carga detenida</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tarea detenida.</string>
+    <string name="title_ssl_error">Advertencia de seguridad</string>
+    <string name="msg_ssl_error">El certificado SSL de \"%1$s\" no es válido o no es seguro. Para proteger sus datos, se ha detenido el acceso a este sitio.</string>
+    <string name="action_stop_visit">Detener visita</string>
 </resources>

@@ -384,4 +384,7 @@
     <string name="msg_load_timeout">انتهت مهلة تحميل الصفحة، توقف التحميل</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">تم إيقاف المهمة.</string>
+    <string name="title_ssl_error">تحذير أمني</string>
+    <string name="msg_ssl_error">شهادة SSL لـ \"%1$s\" غير صالحة أو غير آمنة. لحماية بياناتك، تم إيقاف الوصول إلى هذا الموقع.</string>
+    <string name="action_stop_visit">إيقاف الزيارة</string>
 </resources>

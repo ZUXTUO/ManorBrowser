@@ -384,4 +384,7 @@
     <string name="action_remove">制限を解除</string>
     <string name="msg_load_timeout">ページの読み込みがタイムアウトしました。読み込みを停止しました。</string>
     <string name="ai_msg_stopped">タスク已停止。</string>
+    <string name="title_ssl_error">セキュリティ警告</string>
+    <string name="msg_ssl_error">「%1$s」ぬSSL証明書ぬ無効やさ。データを守るんかい、アクセスを止めたん。</string>
+    <string name="action_stop_visit">アクセスを停止</string>
 </resources>

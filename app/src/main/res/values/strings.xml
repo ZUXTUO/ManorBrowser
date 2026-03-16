@@ -386,4 +386,7 @@ URL: %1$s</string>
     <string name="action_remove">Remove Restriction</string>
     <string name="msg_load_timeout">Page load timeout, stopped loading</string>
     <string name="ai_msg_stopped">Task stopped.</string>
+    <string name="title_ssl_error">Security Warning</string>
+    <string name="msg_ssl_error">The SSL certificate for \"%1$s\" is invalid or insecure. To protect your data, access to this site has been stopped.</string>
+    <string name="action_stop_visit">Stop Visiting</string>
 </resources>

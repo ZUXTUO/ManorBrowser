@@ -384,4 +384,7 @@
     <string name="msg_load_timeout">Время ожидания загрузки страницы истекло, загрузка остановлена</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Задача остановлена.</string>
+    <string name="title_ssl_error">Предупреждение о безопасности</string>
+    <string name="msg_ssl_error">SSL-сертификат для «%1$s» недействителен или небезопасен. Для защиты ваших данных доступ к этому сайту был остановлен.</string>
+    <string name="action_stop_visit">Прекратить посещение</string>
 </resources>

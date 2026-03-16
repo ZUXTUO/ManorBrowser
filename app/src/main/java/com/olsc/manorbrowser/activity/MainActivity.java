@@ -1173,6 +1173,32 @@ public class MainActivity extends AppCompatActivity {
                 if (uri != null && uri.startsWith("resource://android/assets/")) {
                     return GeckoResult.fromValue(null);
                 }
+
+                // --- 证书与安全错误拦截 ---
+                if (error.category == org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_SECURITY || error.certificate != null) {
+                    final GeckoResult<String> result = new GeckoResult<>();
+                    String tempHost = "unknown";
+                    try {
+                        if (uri != null) {
+                            android.net.Uri parsed = android.net.Uri.parse(uri);
+                            tempHost = parsed.getHost();
+                            if (tempHost == null) tempHost = parsed.getAuthority();
+                        }
+                    } catch (Exception ignored) {}
+                    final String host = tempHost != null ? tempHost : "unknown";
+
+                    runOnUiThread(() -> {
+                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle(R.string.title_ssl_error)
+                            .setMessage(getString(R.string.msg_ssl_error, host))
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.action_stop_visit, (dialog, which) -> {
+                                result.complete("resource://android/assets/html/404.html");
+                            })
+                            .show();
+                    });
+                    return result;
+                }
                 
                 // 根据错误类别分发不同的错误页面
                 switch (error.category) {
@@ -3774,7 +3800,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 
-                if (suggestions == null || suggestions.isEmpty()) {
+                if (suggestions.isEmpty()) {
                     recommendationsContainer.setVisibility(View.GONE);
                 } else {
                     recommendationAdapter.setItems(suggestions);
