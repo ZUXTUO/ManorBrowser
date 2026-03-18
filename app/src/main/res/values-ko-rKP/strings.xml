@@ -384,4 +384,7 @@
     <string name="msg_load_timeout">페지 적재 시간 초과, 적재가 중지되였습니다</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">사업이 중단되였습니다.</string>
+    <string name="title_ssl_error">보안 경고</string>
+    <string name="msg_ssl_error">\"%1$s\"의 SSL 인증서가 유효하지 않거나 안전하지 않습니다. 데이터를 보호하기 위해 이 사으트에 대한 접속을 중단했습니다.</string>
+    <string name="action_stop_visit">방문 중단</string>
 </resources>

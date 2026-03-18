@@ -384,4 +384,7 @@
     <string name="msg_load_timeout">O tempo de carregamento da página expirou, o carregamento foi interrompido</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tarefa interrompida.</string>
+    <string name="title_ssl_error">Aviso de segurança</string>
+    <string name="msg_ssl_error">O certificado SSL de \"%1$s\" é inválido ou inseguro. Para proteger seus dados, o acesso a este site foi interrompido.</string>
+    <string name="action_stop_visit">Parar visita</string>
 </resources>

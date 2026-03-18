@@ -384,4 +384,7 @@
     <string name="msg_load_timeout">पृष्ठ लोड होने का समय समाप्त, लोड होना बंद हो गया</string>
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">कार्य रुक गया।</string>
+    <string name="title_ssl_error">सुरक्षा चेतावनी</string>
+    <string name="msg_ssl_error">\"%1$s\" के लिए SSL प्रमाणपत्र अमान्य या असुरक्षित है। आपके डेटा की सुरक्षा के लिए, इस साइट तक पहुँच रोक दी गई है।</string>
+    <string name="action_stop_visit">साइट पर जाना बंद करें</string>
 </resources>
