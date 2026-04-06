@@ -47,6 +47,8 @@ public class Config {
     public static final String PREF_KEY_LORD_MODE_INTRO_SHOWN = "lord_mode_intro_shown";
     /** 地理位置访问受限网站列表 (Set<String>) */
     public static final String PREF_KEY_LOCATION_RESTRICTED_SITES = "location_restricted_sites";
+    /** SSL 证书受信任（已绕过警告）的网站列表 (Set<String>) */
+    public static final String PREF_KEY_SSL_OVERRIDE_SITES = "ssl_override_sites";
 
     // --- 按钮功能值 ---
     public static final String FUNC_HOME = "home";

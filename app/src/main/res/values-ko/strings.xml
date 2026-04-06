@@ -386,5 +386,7 @@
     <string name="ai_msg_stopped">작업이 중단되었습니다.</string>
     <string name="title_ssl_error">보안 경고</string>
     <string name="msg_ssl_error">\"%1$s\"의 SSL 인증서가 유효하지 않거나 안전하지 않습니다. 데이터를 보호하기 위해 이 사이트에 대한 접속을 중단했습니다.</string>
+    <string name="msg_ssl_warning_detail">이 사이트의 연결은 보안되지 않습니다. 이 웹사이트에서 제공한 인증서는 신뢰할 수 있는 인증 기관에서 발급하지 않았거나 연결이 가로채졌습니다。</string>
     <string name="action_stop_visit">방문 중단</string>
+    <string name="action_accept_risk">위험을 감수하고 계속하기</string>
 </resources>

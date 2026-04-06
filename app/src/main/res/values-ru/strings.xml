@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Поиск или ввод адреса</string>
@@ -386,5 +386,7 @@
     <string name="ai_msg_stopped">Задача остановлена.</string>
     <string name="title_ssl_error">Предупреждение о безопасности</string>
     <string name="msg_ssl_error">SSL-сертификат для «%1$s» недействителен или небезопасен. Для защиты ваших данных доступ к этому сайту был остановлен.</string>
+    <string name="msg_ssl_warning_detail">Подключение к этому сайту небезопасно. Сертификат, предоставленный этим веб-сайтом, не был выдан доверенным центром сертификации, либо соединение перехвачено.</string>
     <string name="action_stop_visit">Прекратить посещение</string>
+    <string name="action_accept_risk">Принять риск и продолжить</string>
 </resources>

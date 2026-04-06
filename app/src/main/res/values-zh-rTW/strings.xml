@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">领域浏览器</string>
     <string name="action_search">搜尋或輸入網址</string>
@@ -386,5 +386,7 @@
     <string name="ai_msg_stopped">任務已停止。</string>
     <string name="title_ssl_error">安全警告</string>
     <string name="msg_ssl_error">「%1$s」的 SSL 憑證無效或不安全。為了保護您的資料，存取此網站的操作已停止。</string>
+    <string name="msg_ssl_warning_detail">此站點的連接是不安全的。本網站提供的憑證並非由受信任的憑證頒發機構頒發，或者連接正在被攔截。</string>
     <string name="action_stop_visit">停止造訪</string>
+    <string name="action_accept_risk">接受風險並繼續</string>
 </resources>
