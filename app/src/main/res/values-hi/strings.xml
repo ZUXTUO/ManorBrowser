@@ -387,4 +387,6 @@
     <string name="title_ssl_error">सुरक्षा चेतावनी</string>
     <string name="msg_ssl_error">\"%1$s\" के लिए SSL प्रमाणपत्र अमान्य या असुरक्षित है। आपके डेटा की सुरक्षा के लिए, इस साइट तक पहुँच रोक दी गई है।</string>
     <string name="action_stop_visit">साइट पर जाना बंद करें</string>
+    <string name="msg_ssl_warning_detail">इस साइट से कनेक्शन सुरक्षित नहीं है। इस वेबसाइट द्वारा प्रदान किया गया प्रमाणपत्र एक विश्वसनीय प्रमाणपत्र प्राधिकारी द्वारा जारी नहीं किया गया था, या कनेक्शन को इंटरसेप्ट किया जा रहा है।</string>
+    <string name="action_accept_risk">जोखिम स्वीकार करें और जारी रखें</string>
 </resources>

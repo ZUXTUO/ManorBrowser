@@ -387,4 +387,5 @@
     <string name="title_ssl_error">Avertissement de sécurité</string>
     <string name="msg_ssl_error">Le certificat SSL pour « %1$s » est invalide ou non sécurisé. Pour protéger vos données, l\'accès à ce site a été arrêté.</string>
     <string name="action_stop_visit">Arrêter la visite</string>
+    <string name="msg_ssl_warning_detail">La connexion à ce site n'est pas sécurisée. Le certificat fourni par ce site n'a pas été émis par une autorité de certification de confiance ou la connexion est interceptée.</string>
 </resources>

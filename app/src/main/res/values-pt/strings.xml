@@ -387,4 +387,5 @@
     <string name="title_ssl_error">Aviso de segurança</string>
     <string name="msg_ssl_error">O certificado SSL de \"%1$s\" é inválido ou inseguro. Para proteger seus dados, o acesso a este site foi interrompido.</string>
     <string name="action_stop_visit">Parar visita</string>
+    <string name="msg_ssl_warning_detail">A conexão com este site não é segura. O certificado fornecido por este site não foi emitido por uma autoridade certificadora confiável, ou a conexão está sendo interceptada.</string>
 </resources>

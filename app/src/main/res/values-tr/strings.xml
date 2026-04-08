@@ -387,4 +387,5 @@
     <string name="title_ssl_error">Güvenlik Uyarısı</string>
     <string name="msg_ssl_error">\"%1$s\" için SSL sertifikası geçersiz veya güvenli değil. Verilerinizi korumak için bu siteye erişim durduruldu.</string>
     <string name="action_stop_visit">Ziyareti Durdur</string>
+    <string name="msg_ssl_warning_detail">Bu siteye bağlantı güvenli değil. Bu web sitesi tarafından sağlanan sertifika güvenilir bir sertifika otoritesi tarafından verilmemiş veya bağlantı engelleniyor olabilir.</string>
 </resources>
