@@ -386,6 +386,5 @@
     <string name="ai_msg_stopped">Taak gestopt.</string>
     <string name="title_ssl_error">Veiligheidswaarschuwing</string>
     <string name="msg_ssl_error">Het SSL-certificaat voor \"%1$s\" is ongeldig of onveilig. Om uw gegevens te beschermen, is de toegang tot deze site gestopt.</string>
-    <string name="action_stop_visit">Bezoek stoppen</string>
-    <string name="msg_ssl_warning_detail">De verbinding met deze site is niet veilig. Het certificaat dat door deze website is verstrekt, is niet uitgegeven door een vertrouwde certificeringsinstantie, of de verbinding wordt onderschept.</string>
+    <string name="action_stop_visit">Bezoek stoppen</string>    <string name="action_accept_risk">Accepteer het risico en ga door</string>    <string name="msg_ssl_warning_detail">De verbinding met deze site is niet veilig. Het certificaat dat door deze website is verstrekt, is niet uitgegeven door een vertrouwde certificeringsinstantie, of de verbinding wordt onderschept.</string>
 </resources>

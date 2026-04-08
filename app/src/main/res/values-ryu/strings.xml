@@ -387,5 +387,6 @@
     <string name="title_ssl_error">セキュリティ警告</string>
     <string name="msg_ssl_error">「%1$s」ぬSSL証明書ぬ無効やさ。データを守るんかい、アクセスを止めたん。</string>
     <string name="action_stop_visit">アクセスを停止</string>
+    <string name="action_accept_risk">リスクを承知で続行</string>
     <string name="msg_ssl_warning_detail">このサイトへの接続は安全ではありません。このウェブサイトが提供する証明書は信頼できる認証局によって発行されたものではないか、接続が傍受されている可能性があります。</string>
 </resources>

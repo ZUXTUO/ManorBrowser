@@ -386,6 +386,5 @@
     <string name="ai_msg_stopped">Nhiệm vụ đã dừng.</string>
     <string name="title_ssl_error">Cảnh báo bảo mật</string>
     <string name="msg_ssl_error">Chứng chỉ SSL cho \"%1$s\" không hợp lệ hoặc không an toàn. Để bảo vệ dữ liệu của bạn, việc truy cập vào trang web này đã bị dừng lại.</string>
-    <string name="action_stop_visit">Ngừng truy cập</string>
-    <string name="msg_ssl_warning_detail">Kết nối đến trang này không an toàn. Chứng chỉ do trang web này cung cấp không được cấp bởi một cơ quan chứng nhận đáng tin cậy, hoặc kết nối đang bị chặn.</string>
+    <string name="action_stop_visit">Ngừng truy cập</string>    <string name="action_accept_risk">Chấp nhận rủi ro và tiếp tục</string>    <string name="msg_ssl_warning_detail">Kết nối đến trang này không an toàn. Chứng chỉ do trang web này cung cấp không được cấp bởi một cơ quan chứng nhận đáng tin cậy, hoặc kết nối đang bị chặn.</string>
 </resources>
