@@ -385,6 +385,8 @@
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Aufgabe gestoppt.</string>
     <string name="title_ssl_error">Sicherheitswarnung</string>
-    <string name="msg_ssl_error">Das SSL-Zertifikat für „%1$s“ ist ungültig oder unsicher. Zum Schutz Ihrer Daten wurde der Zugriff auf diese Website gestoppt.</string>
+    <string name="msg_ssl_error">Das SSL-Zertifikat für „%1$s“ ist ungültig oder unsicher. Das Fortfahren kann Ihre Daten Angreifern aussetzen.</string>
+    <string name="msg_ssl_warning_detail">Die Verbindung zu dieser Website ist nicht sicher. Das von dieser Website bereitgestellte Zertifikat wurde nicht von einer vertrauenswürdigen Zertifizierungsstelle ausgestellt, oder die Verbindung wird abgefangen.</string>
     <string name="action_stop_visit">Besuch stoppen</string>
+    <string name="action_accept_risk">Das Risiko akzeptieren und fortfahren</string>
 </resources>

@@ -411,7 +411,8 @@ public class MainActivity extends AppCompatActivity {
         if (sRuntime == null) {
             // 首次创建 Runtime
             GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()
-                .loginAutofillEnabled(true);
+                .loginAutofillEnabled(true)
+                .enterpriseRootsEnabled(true);
             
             // 配置全域内容屏蔽与防追踪 (ETP)
             // 默认启用增强型追踪保护 (Strict)，有效屏蔽 90% 以上的广告脚本与弹窗脚本
@@ -1170,13 +1171,13 @@ public class MainActivity extends AppCompatActivity {
         session.setNavigationDelegate(new GeckoSession.NavigationDelegate() {
             @Override
             public GeckoResult<String> onLoadError(@NonNull GeckoSession session, @Nullable String uri, @NonNull org.mozilla.geckoview.WebRequestError error) {
-                if (uri != null && uri.startsWith("resource://android/assets/")) {
+                // 1. 允许内部资源和关于页通过（防止重定向到 404 或 offline 导致循环或拦截失效）
+                if (uri != null && (uri.startsWith("resource://") || uri.startsWith("about:") || uri.startsWith("view-source:"))) {
                     return GeckoResult.fromValue(null);
                 }
 
-                // --- 证书与安全错误拦截 ---
-                if (error.category == org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_SECURITY || error.certificate != null) {
-                    final GeckoResult<String> result = new GeckoResult<>();
+                // 2. 证书与安全错误拦截 (针对 HTTPS 不安全连接)
+                if (error.category == org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_SECURITY) {
                     String tempHost = "unknown";
                     try {
                         if (uri != null) {
@@ -1187,27 +1188,48 @@ public class MainActivity extends AppCompatActivity {
                     } catch (Exception ignored) {}
                     final String host = tempHost != null ? tempHost : "unknown";
 
+                    // 如果已经加入了白名单，返回 null 显示引擎默认的证书错误页
+                    // 用户可以在内置错误页点“高级”->“继续”来进入网页
+                    if (isSslOverridden(host)) {
+                        return GeckoResult.fromValue(null);
+                    }
+
+                    // 弹出原生 BottomSheet 告知安全问题
+                    final GeckoResult<String> result = new GeckoResult<>();
                     runOnUiThread(() -> {
-                        new com.google.android.material.dialog.MaterialAlertDialogBuilder(MainActivity.this)
-                            .setTitle(R.string.title_ssl_error)
-                            .setMessage(getString(R.string.msg_ssl_error, host))
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.action_stop_visit, (dialog, which) -> {
-                                result.complete("resource://android/assets/html/404.html");
-                            })
-                            .show();
+                        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(MainActivity.this);
+                        android.view.View view = getLayoutInflater().inflate(R.layout.bottom_sheet_security_warning, null);
+                        dialog.setContentView(view);
+                        
+                        android.widget.TextView tvHost = view.findViewById(R.id.tv_ssl_host);
+                        if (tvHost != null) tvHost.setText(host);
+                        
+                        view.findViewById(R.id.btn_stop_visit).setOnClickListener(v -> {
+                            dialog.dismiss();
+                            result.complete("resource://android/assets/html/404.html");
+                        });
+                        
+                        view.findViewById(R.id.btn_accept_risk).setOnClickListener(v -> {
+                            // 记录到内存/配置白名单
+                            addSslOverride(host);
+                            dialog.dismiss();
+                            // 刷新当前页面，下次 onLoadError 将进入白名单分支并显示引擎错误页以供用户点击“继续”
+                            session.loadUri(uri != null ? uri : "about:blank");
+                            result.complete(null);
+                        });
+                        
+                        dialog.show();
                     });
                     return result;
                 }
                 
-                // 根据错误类别分发不同的错误页面
+                // 3. 其他网络与 URI 错误分发
                 switch (error.category) {
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_NETWORK:
                         return GeckoResult.fromValue("resource://android/assets/html/offline.html");
                     case org.mozilla.geckoview.WebRequestError.ERROR_CATEGORY_URI:
                         return GeckoResult.fromValue("resource://android/assets/html/404.html");
                     default:
-                        // 其他错误检查是否是因为超时导致的
                         if (error.code == org.mozilla.geckoview.WebRequestError.ERROR_CONNECTION_REFUSED || 
                             error.code == org.mozilla.geckoview.WebRequestError.ERROR_NET_TIMEOUT) {
                             return GeckoResult.fromValue("resource://android/assets/html/timeout.html");
@@ -1217,13 +1239,27 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onLocationChange(@NonNull GeckoSession session, @Nullable String url, @NonNull java.util.List<org.mozilla.geckoview.GeckoSession.PermissionDelegate.ContentPermission> permissions, @NonNull Boolean hasUserGesture) {
+                if (url != null) {
+                    // 同步 URL 状态到内存中的标签模型
+                    tab.url = url;
+                    // 如果是当前活动标签，更新地址栏
+                    runOnUiThread(() -> {
+                        if (session == getCurrentSession()) {
+                            updateUrlBar();
+                        }
+                    });
+                }
+            }
+
+            @Override
             public GeckoResult<GeckoSession> onNewSession(@NonNull GeckoSession session, @NonNull String uri) {
-                // 1. 无效或基础跳转拦截：阻止空白或 data 协议开窗
+                // 1. 无效或基础跳转拦截
                 if (uri == null || uri.isEmpty() || "about:blank".equals(uri) || uri.startsWith("data:")) {
                     return GeckoResult.fromValue(null);
                 }
                 
-                // 2. 黑名单过滤（仅在领主模式下开启极致拦截）
+                // 2. 黑名单过滤
                 if (isLordMode && isAdUri(uri)) {
                     return GeckoResult.fromValue(null);
                 }
@@ -1236,7 +1272,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 lastPopupTime = currentTime;
                 
-                // 允许新表情页并跳转
+                // 允许新标签页
                 runOnUiThread(() -> {
                     try {
                         createNewTab(uri);
@@ -1250,7 +1286,6 @@ public class MainActivity extends AppCompatActivity {
             private boolean isAdUri(String uri) {
                 if (uri == null || uri.isEmpty()) return true;
                 String lower = uri.toLowerCase();
-                // 包含了主流非法广告联盟、点击劫持脚本、以及常见的广告特征路径
                 return lower.contains("popads") || lower.contains("onclickads") || 
                        lower.contains("onclickperformance") || lower.contains("clksite") || 
                        lower.contains("cpm") || lower.contains("adsterra") || 
@@ -1283,7 +1318,6 @@ public class MainActivity extends AppCompatActivity {
                     android.net.Uri parsedUri = android.net.Uri.parse(uri);
                     String host = parsedUri.getHost();
                     if (host != null && host.toLowerCase().endsWith(".onion")) {
-                        // 如果没有特殊的允许标记，则重定向到警告页面
                         if (!uri.contains("allow_onion=1")) {
                             String encodedUrl = android.net.Uri.encode(uri);
                             String warningUrl = "resource://android/assets/html/warning_onion.html?url=" + encodedUrl;
@@ -1295,18 +1329,15 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 
-                // 深度包过滤：基于域名的快速拦截（仅在领主模式下启用）
                 if (isLordMode && isAdUri(uri)) {
                     return GeckoResult.fromValue(AllowOrDeny.DENY);
                 }
                 
-                // 使用改进的IntentHelper处理外部应用跳转
                 if (com.olsc.manorbrowser.utils.IntentHelper.shouldInterceptUrl(uri)) {
                     boolean handled = com.olsc.manorbrowser.utils.IntentHelper.tryOpenExternalApp(MainActivity.this, uri);
                     if (handled) {
                         return GeckoResult.fromValue(AllowOrDeny.DENY);
                     } else if (uri.startsWith("intent://")) {
-                        // 处理 intent fallback
                         try {
                             android.content.Intent intent = android.content.Intent.parseUri(uri, android.content.Intent.URI_INTENT_SCHEME);
                             String fallbackUrl = intent.getStringExtra("browser_fallback_url");
@@ -3815,5 +3846,19 @@ public class MainActivity extends AppCompatActivity {
         if (imm != null && urlInput != null) {
             imm.hideSoftInputFromWindow(urlInput.getWindowToken(), 0);
         }
+    }
+    private boolean isSslOverridden(String host) {
+        if (host == null || host.equals("unknown")) return false;
+        android.content.SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        java.util.Set<String> overrides = prefs.getStringSet(Config.PREF_KEY_SSL_OVERRIDE_SITES, new java.util.HashSet<>());
+        return overrides.contains(host);
+    }
+
+    private void addSslOverride(String host) {
+        if (host == null || host.equals("unknown")) return;
+        android.content.SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        java.util.Set<String> overrides = new java.util.HashSet<>(prefs.getStringSet(Config.PREF_KEY_SSL_OVERRIDE_SITES, new java.util.HashSet<>()));
+        overrides.add(host);
+        prefs.edit().putStringSet(Config.PREF_KEY_SSL_OVERRIDE_SITES, overrides).apply();
     }
 }

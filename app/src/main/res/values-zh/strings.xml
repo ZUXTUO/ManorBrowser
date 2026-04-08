@@ -387,6 +387,8 @@ URL: %1$s</string>
     <string name="msg_load_timeout">网页加载超时，已停止加载</string>
     <string name="ai_msg_stopped">任务已停止。</string>
     <string name="title_ssl_error">证书风险提示</string>
-    <string name="msg_ssl_error">网站“%1$s”的证书不受信任或已过期，可能存在安全风险。为了保护您的安全，访问已停止。</string>
+    <string name="msg_ssl_error">网站“%1$s”的证书验证失败（自签名、已过期或域名不匹配）。继续访问可能导致您的数据被截获。是否确认继续？</string>
+    <string name="msg_ssl_warning_detail">此站点的连接是不安全的。本网站提供的证书不是由受信任的证书颁发机构颁发，或者连接正在被拦截。</string>
     <string name="action_stop_visit">停止访问</string>
+    <string name="action_accept_risk">接受风险并继续</string>
 </resources>

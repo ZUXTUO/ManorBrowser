@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Manor Browser</string>
     <string name="action_search">Szukaj lub wpisz adres</string>
@@ -385,6 +385,8 @@
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Zadanie zatrzymane.</string>
     <string name="title_ssl_error">Ostrzeżenie o bezpieczeństwie</string>
-    <string name="msg_ssl_error">Certyfikat SSL dla „%1$s” jest nieważny lub niezabezpieczony. Aby chronić Twoje dane, dostęp do tej witryny został zatrzymany.</string>
+    <string name="msg_ssl_error">Certyfikat SSL dla „%1$s” jest nieważny lub niezabezpieczony. Kontynuowanie może narazić Twoje dane na atak.</string>
+    <string name="msg_ssl_warning_detail">Połączenie z tą witryną nie jest bezpieczne. Certyfikat dostarczony przez tę witrynę nie został wystawiony przez zaufany urząd certyfikacji lub połączenie jest przechwytywane.</string>
     <string name="action_stop_visit">Przerwij wizytę</string>
+    <string name="action_accept_risk">Zaakceptuj ryzyko i kontynuuj</string>
 </resources>

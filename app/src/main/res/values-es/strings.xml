@@ -386,5 +386,5 @@
     <string name="ai_msg_stopped">Tarea detenida.</string>
     <string name="title_ssl_error">Advertencia de seguridad</string>
     <string name="msg_ssl_error">El certificado SSL de \"%1$s\" no es válido o no es seguro. Para proteger sus datos, se ha detenido el acceso a este sitio.</string>
-    <string name="action_stop_visit">Detener visita</string>
+    <string name="action_stop_visit">Detener visita</string>    <string name="action_accept_risk">Aceptar el riesgo y continuar</string>    <string name="msg_ssl_warning_detail">La conexión a este sitio no es segura. El certificado proporcionado por este sitio web no fue emitido por una autoridad certificadora de confianza, o la conexión está siendo interceptada.</string>
 </resources>

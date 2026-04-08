@@ -387,6 +387,8 @@ URL: %1$s</string>
     <string name="msg_load_timeout">Page load timeout, stopped loading</string>
     <string name="ai_msg_stopped">Task stopped.</string>
     <string name="title_ssl_error">Security Warning</string>
-    <string name="msg_ssl_error">The SSL certificate for \"%1$s\" is invalid or insecure. To protect your data, access to this site has been stopped.</string>
+    <string name="msg_ssl_error">The SSL certificate for \"%1$s\" is invalid or insecure. Continuing may expose your data to attackers.</string>
+    <string name="msg_ssl_warning_detail">The connection to this site is not secure. The certificate provided by this website was not issued by a trusted certificate authority, or the connection is being intercepted.</string>
     <string name="action_stop_visit">Stop Visiting</string>
+    <string name="action_accept_risk">Accept the Risk and Continue</string>
 </resources>

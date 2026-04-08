@@ -367,7 +367,7 @@
     <string name="msg_cookie_warning">&quot;Il sito web \&quot;%1$s\&quot; richiede di utilizzare cookie o memoria locale.\n\nIn Modalità Lord, puoi limitare questo comportamento. Vuoi consentire a questo sito di salvare i dati?&quot;</string>
     <string name="title_location_warning">&quot;Richiesta Posizione&quot;</string>
     <string name="msg_location_warning">&quot;Il sito web \&quot;%1$s\&quot; richiede la tua posizione attuale. Vuoi consentirlo?&quot;</string>
-    <string name="msg_no_location_permission">&quot;L'app non ha ottenuto il permesso per la posizione. Abilitalo in \&quot;Impostazioni -&gt; Informazioni app\&quot; e riprova.&quot;</string>
+    <string name="msg_no_location_permission">&quot;L\'app non ha ottenuto il permesso per la posizione. Abilitalo in \&quot;Impostazioni -&gt; Informazioni app\&quot; e riprova.&quot;</string>
     <string name="action_always_deny">&quot;Nega sempre&quot;</string>
     <string name="title_restricted_sites">&quot;Permessi Posizione&quot;</string>
     <string name="msg_restricted_sites_desc">&quot;Gestisci i siti impostati su \&quot;Nega sempre\&quot; per l'accesso alla posizione.&quot;</string>
@@ -385,6 +385,8 @@
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Attività interrotta.</string>
     <string name="title_ssl_error">Avviso di sicurezza</string>
-    <string name="msg_ssl_error">Il certificato SSL per \"%1$s\" non è valido o non è sicuro. Per proteggere i tuoi dati, l\'accesso a questo sito è stato interrotto.</string>
+    <string name="msg_ssl_error">Il certificato SSL per "%1$s" non è valido o non è sicuro. Continuare può esporre i tuoi dati ad attaccanti.</string>
+    <string name="msg_ssl_warning_detail">La connessione a questo sito non è sicura. Il certificato fornito da questo sito non è stato emesso da un’autorità di certificazione attendibile, oppure la connessione è intercettata.</string>
     <string name="action_stop_visit">Interrompi visita</string>
+    <string name="action_accept_risk">Accetta il rischio e continua</string>
 </resources>

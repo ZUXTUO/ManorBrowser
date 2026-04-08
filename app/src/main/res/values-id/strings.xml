@@ -385,6 +385,8 @@
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tugas dihentikan.</string>
     <string name="title_ssl_error">Peringatan Keamanan</string>
-    <string name="msg_ssl_error">Sertifikat SSL untuk \"%1$s\" tidak valid atau tidak aman. Untuk melindungi data Anda, akses ke situs ini telah dihentikan.</string>
+    <string name="msg_ssl_error">Sertifikat SSL untuk \"%1$s\" tidak valid atau tidak aman. Melanjutkan dapat mengekspos data Anda kepada penyerang.</string>
+    <string name="msg_ssl_warning_detail">Koneksi ke situs ini tidak aman. Sertifikat yang diberikan oleh situs web ini tidak diterbitkan oleh otoritas sertifikat tepercaya, atau koneksi sedang dicegat.</string>
     <string name="action_stop_visit">Berhenti Mengunjungi</string>
+    <string name="action_accept_risk">Terima Risiko dan Lanjutkan</string>
 </resources>

@@ -385,6 +385,8 @@
     <string name="language_ryu">Ryukyuan (Okinawan) (Incomplete)</string>
     <string name="ai_msg_stopped">Tâche arrêtée.</string>
     <string name="title_ssl_error">Avertissement de sécurité</string>
-    <string name="msg_ssl_error">Le certificat SSL pour « %1$s » est invalide ou non sécurisé. Pour protéger vos données, l\'accès à ce site a été arrêté.</string>
+    <string name="msg_ssl_error">Le certificat SSL de "%1$s" est invalide ou non sécurisé. Continuer peut exposer vos données à des attaquants.</string>
+    <string name="msg_ssl_warning_detail">La connexion à ce site n\'est pas sécurisée. Le certificat fourni par ce site web n\'a pas été émis par une autorité de certification de confiance, ou la connexion est interceptée.</string>
     <string name="action_stop_visit">Arrêter la visite</string>
+    <string name="action_accept_risk">Accepter le risque et continuer</string>
 </resources>

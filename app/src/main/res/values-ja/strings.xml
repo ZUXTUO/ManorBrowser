@@ -386,5 +386,7 @@
     <string name="ai_msg_stopped">タスクが停止されました。</string>
     <string name="title_ssl_error">セキュリティ警告</string>
     <string name="msg_ssl_error">「%1$s」のSSL証明書が無効または安全ではありません。 データを保護するため、このサイトへのアクセスを停止しました。</string>
+    <string name="msg_ssl_warning_detail">このサイトへの接続は安全ではありません。このウェブサイトから提供された証明書は、信頼できる認証局によって発行されていないか、接続が傍受されています。</string>
     <string name="action_stop_visit">アクセスを停止</string>
+    <string name="action_accept_risk">リスクを承知で続行</string>
 </resources>
