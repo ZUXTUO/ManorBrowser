@@ -387,5 +387,5 @@
     <string name="title_ssl_error">Avviso di sicurezza</string>
     <string name="msg_ssl_error">Il certificato SSL per \"%1$s\" non è valido o non è sicuro. Per proteggere i tuoi dati, l\'accesso a questo sito è stato interrotto.</string>
     <string name="action_stop_visit">Interrompi visita</string>
-    <string name="msg_ssl_warning_detail">La connessione a questo sito non è sicura. Il certificato fornito da questo sito non è stato emesso da un'autorità di certificazione affidabile oppure la connessione viene intercettata.</string>
+    <string name="msg_ssl_warning_detail">La connessione a questo sito non \u00E8 sicura. Il certificato fornito da questo sito non \u00E8 stato emesso da un'autorità di certificazione affidabile oppure la connessione viene intercettata.</string>
 </resources>
