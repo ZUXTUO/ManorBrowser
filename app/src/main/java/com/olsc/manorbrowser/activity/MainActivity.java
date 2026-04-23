@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
     
     // --- 远程控制 ---
     private BrowserCommandServer commandServer;
-    /** JS 标题桥调用: 待处理的回调和原始标题 */
     private volatile BrowserCommandServer.EvalCallback pendingJsCallback = null;
     private volatile String pendingJsOriginalTitle = null;
     private boolean isLordMode = false;
@@ -559,6 +558,8 @@ public class MainActivity extends AppCompatActivity {
         session.setProgressDelegate(new GeckoSession.ProgressDelegate() {
             @Override
             public void onPageStart(@NonNull GeckoSession session, @NonNull String url) {
+               // 导航开始时，清除该 session 所有的待处理 JS 摘要提取任务，防止延迟注入到新页面或导致引擎状态冲突
+               mainHandler.removeCallbacksAndMessages(session);
                updateTabInfo(session, url, null);
                // 页面重新加载时，清除该 session 的自动填充弹出记录，使刷新后可再次弹出
                mPromptedAutofillUrls.removeIf(key -> key.startsWith(session.hashCode() + "_"));
@@ -635,12 +636,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageStop(@NonNull GeckoSession session, boolean success) {
                updateTabInfo(session, null, null);
+               
+               // 页面停止加载后，提取摘要 (比在 onTitleChange 中提取更稳定，避开渲染高峰期)
+               TabInfo tabInfo = null;
                for (TabInfo t : tabs) {
                    if (t.session == session) {
-                       cancelPageLoadTimeout(t);
+                       tabInfo = t;
+                        cancelPageLoadTimeout(t);
                        break;
                    }
                }
+               
+               if (tabInfo != null && tabInfo.url != null && !tabInfo.url.equals("about:blank") && !isLordMode) {
+                   final TabInfo finalTab = tabInfo;
+                   mainHandler.removeCallbacksAndMessages(session);
+                   mainHandler.postAtTime(() -> {
+                       if (finalTab.session != null && finalTab.session == session) {
+                           // 注入更轻量的脚本。使用 textContent 替代 innerText 可避免触发昂贵的 native 布局计算，提升稳定性
+                           finalTab.session.loadUri("javascript:(function(){" +
+                               "try {" +
+                               "  if(document.body && document.body.textContent){" +
+                               "    alert('HISTORY_SNIPPET:' + document.body.textContent.substring(0, 500).replace(/\\n/g, ' '));" +
+                               "  }" +
+                               "} catch(e) {}" +
+                               "})()");
+                       }
+                   }, session, android.os.SystemClock.uptimeMillis() + 500);
+               }
+               
                runOnUiThread(() -> {
                    updateStopButtonVisibility(false);
                    if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
@@ -654,7 +677,6 @@ public class MainActivity extends AppCompatActivity {
         session.setContentDelegate(new GeckoSession.ContentDelegate() {
             @Override
             public void onTitleChange(@NonNull GeckoSession session, String title) {
-                // 原有的标题变更逻辑，不再用于 JS 桥接
                 updateTabInfo(session, null, title);
                 if (title != null && !title.isEmpty() && !title.equals(Config.URL_BLANK)) {
                    TabInfo tabInfo = null;
@@ -668,8 +690,6 @@ public class MainActivity extends AppCompatActivity {
                         if (!isLordMode) {
                             // 1. 记录基础历史并增加权重
                             HistoryStorage.addHistory(MainActivity.this, title, tabInfo.url);
-                            // 2. 尝试获取网页摘要（通过 alert 桥接异步传回提示，再由 onAlertPrompt 处理）
-                            session.loadUri("javascript:alert('HISTORY_SNIPPET:' + document.body.innerText.substring(0, 500))");
                         }
                    }
                 }
@@ -904,7 +924,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public GeckoResult<PromptResponse> onAlertPrompt(@NonNull GeckoSession session, @NonNull AlertPrompt prompt) {
                 String message = prompt.message;
-                if (message != null && message.startsWith("COPY_TEXT:")) {
+                if (message != null && message.startsWith("MANOR_SAVE_PASS|")) {
+                    // 兼容旧版本注入逻辑，防止遗漏
+                    handleSavePasswordRequest(message);
+                    return GeckoResult.fromValue(prompt.dismiss());
+                } else if (message != null && message.startsWith("COPY_TEXT:")) {
                     String textToCopy = message.substring("COPY_TEXT:".length());
                     runOnUiThread(() -> copyToClipboard(textToCopy));
                     return GeckoResult.fromValue(prompt.dismiss());
@@ -1209,14 +1233,11 @@ public class MainActivity extends AppCompatActivity {
                             result.complete("resource://android/assets/html/404.html");
                         });
                         
-                        view.findViewById(R.id.btn_accept_risk).setOnClickListener(v -> {
-                            // 记录到内存/配置白名单
-                            addSslOverride(host);
-                            dialog.dismiss();
-                            // 刷新当前页面，下次 onLoadError 将进入白名单分支并显示引擎错误页以供用户点击“继续”
-                            session.loadUri(uri != null ? uri : "about:blank");
-                            result.complete(null);
-                        });
+                        // 隐藏“继续访问”按钮，只保留停止访问选型
+                        android.view.View btnAccept = view.findViewById(R.id.btn_accept_risk);
+                        if (btnAccept != null) {
+                            btnAccept.setVisibility(android.view.View.GONE);
+                        }
                         
                         dialog.show();
                     });
@@ -2060,6 +2081,8 @@ public class MainActivity extends AppCompatActivity {
         TabInfo tab = tabs.get(position);
         if (tab.session != null) {
             cancelPageLoadTimeout(tab);
+            // 关闭标签前，清除该 session 所有待处理的 Handler 回调 (如 JS 摘要提取)，防止 native 崩溃
+            mainHandler.removeCallbacksAndMessages(tab.session);
             tab.session.close();
         }
         if (tab.thumbnail != null && !tab.thumbnail.isRecycled()) {
@@ -2293,6 +2316,7 @@ public class MainActivity extends AppCompatActivity {
         // 关闭所有标签页的session
         for (TabInfo tab : tabs) {
             if (tab.session != null) {
+                mainHandler.removeCallbacksAndMessages(tab.session);
                 tab.session.close();
             }
         }
